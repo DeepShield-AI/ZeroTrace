@@ -85,11 +85,16 @@ fn global_lock() -> &'static Mutex<()> {
 /// - `Ok((pid, exe_path))` if a "numad" process is found.
 /// - `Err(io::Error)` if no such process is found or if there is a failure reading /proc.
 fn find_numad_proc() -> io::Result<(i32, String)> {
+    // 遍历/proc目录下的所有进程
     for res in all_processes().map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))? {
         if let Ok(proc) = res {
+            // 获取进程状态
             if let Ok(stat) = proc.stat() {
+                // 判断进程名是否为numad
                 if stat.comm == "numad" {
+                    // 获取进程的可执行文件路径
                     if let Ok(exe) = proc.exe() {
+                        // 返回numad的PID和可执行文件路径
                         return Ok((proc.pid(), exe.to_string_lossy().to_string()));
                     }
                 }
@@ -134,14 +139,20 @@ fn find_numad_proc() -> io::Result<(i32, String)> {
 pub fn protect_cpu_affinity() -> io::Result<()> {
     let _guard = global_lock().lock().unwrap();
 
+    // 找到numad进程的pid和可执行文件路径
     let (numad_pid, numad_exe) = find_numad_proc()?;
+    // 获取当前进程的pid
     let agent_pid = std::process::id();
 
+    // 获取当前进程的mnt命名空间
     let self_pid_ns = std::fs::metadata("/proc/self/ns/mnt")?.ino();
+    // 获取numad进程的mnt命名空间
     let target_pid_ns = std::fs::metadata(format!("/proc/{}/ns/mnt", numad_pid))?.ino();
 
+    // 如果当前进程和numad进程不在同一个mnt命名空间中，说明agent在容器内，需切换命名空间
     let need_setns = self_pid_ns != target_pid_ns;
 
+    // 在numad进程的命名空间中执行numad -x <agent_pid>
     // Fork a helper process to run `numad -x <agent_pid>` inside the proper namespaces.
     //
     // Safety:
@@ -150,25 +161,32 @@ pub fn protect_cpu_affinity() -> io::Result<()> {
     // - In the child branch, only async-signal-safe functions are used (`setns`, `execve`, `_exit`).
     // - Rust destructors are avoided in the child by immediately calling `_exit` on any failure.
     unsafe {
+        // fork一个子进程
         match fork() {
             Ok(ForkResult::Parent { child }) => {
                 // Parent drops any state; wait for child to finish.
+                // 等待子进程结束，子进程出错直接返回
                 match waitpid(child, None).map_err(|e| io::Error::new(io::ErrorKind::Other, e))? {
+                    // 子进程返回0
                     WaitStatus::Exited(_, 0) => Ok(()),
+                    // 子进程返回除0之外的错误码，父进程返回错误
                     WaitStatus::Exited(_, code) => Err(io::Error::new(
                         io::ErrorKind::Other,
                         format!("helper exited with code {}", code),
                     )),
+                    // 子进程被意外终止，父进程返回错误
                     WaitStatus::Signaled(_, sig, _) => Err(io::Error::new(
                         io::ErrorKind::Other,
                         format!("helper killed by signal {:?}", sig),
                     )),
+                    // 其他情况返回未预期错误
                     other => Err(io::Error::new(
                         io::ErrorKind::Other,
                         format!("unexpected wait status: {:?}", other),
                     )),
                 }
             }
+            // 子进程中
             Ok(ForkResult::Child) => {
                 if need_setns {
                     // Since "numad" communicates via SysV message queues, the "ipc" namespace must also be included.
@@ -176,6 +194,10 @@ pub fn protect_cpu_affinity() -> io::Result<()> {
                     // System V message queues (msgget/msgrcv/msgsnd) cannot be shared.
                     // Joining the same IPC namespace ensures that both processes can access the same
                     // message queue identified by the common key (e.g., 0xdeadbeef).
+                    // 依次设置子进程的命名空间
+                    // ns/pid 看到宿主机的进程
+                    // ns/mnt 看到宿主机的文件系统
+                    // ns/ipc 看到宿主机的IPC，numad 使用 System V 消息队列通信。如果不切换到同一个 IPC 命名空间，numad 客户端发出的消息，守护进程收不到
                     for ns in ["pid", "mnt", "ipc"] {
                         let path = format!("/proc/{}/ns/{}", numad_pid, ns);
                         let file = match File::open(&path) {
@@ -200,11 +222,13 @@ pub fn protect_cpu_affinity() -> io::Result<()> {
 
                 let argv = &[arg0.as_c_str(), arg1.as_c_str(), arg2.as_c_str()];
                 let envp: &[&std::ffi::CStr] = &[];
-
+                // 执行 numad -x <agent_pid>
+                // 执行成功直接返回0，不会执行后续代码
                 execve(&prog, argv, envp).unwrap_or_else(|e| {
                     eprintln!("execve failed: {:?}", e);
                     libc::_exit(127);
                 });
+                // 如果numad执行失败，在这里子进程退出
                 #[allow(unreachable_code)]
                 libc::_exit(127);
             }

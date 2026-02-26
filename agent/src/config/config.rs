@@ -129,21 +129,24 @@ pub struct Config {
 
 impl Config {
     pub fn load_from_file<T: AsRef<Path>>(path: T) -> Result<Self, ConfigError> {
+        // 读取配置文件
         let contents =
             fs::read_to_string(path).map_err(|e| ConfigError::YamlConfigInvalid(e.to_string()))?;
+        // 加载配置
         Self::load(&contents)
     }
-
+    // 配置实际加载解析逻辑
     pub fn load<C: AsRef<str>>(contents: C) -> Result<Self, ConfigError> {
         let contents = contents.as_ref();
+        // 配置为空加载默认配置
         if contents.len() == 0 {
             // parsing empty string leads to EOF error
             Ok(Self::default())
         } else {
             let mut cfg: Self = serde_yaml::from_str(contents)
                 .map_err(|e| ConfigError::YamlConfigInvalid(e.to_string()))?;
-
             for i in 0..cfg.controller_ips.len() {
+                // 如果控制器地址是域名，解析为ip地址
                 if cfg.controller_ips[i].parse::<IpAddr>().is_err() {
                     let ip = resolve_domain(&cfg.controller_ips[i]);
                     if ip.is_none() {
@@ -157,6 +160,7 @@ impl Config {
             }
 
             // convert relative path to absolute
+            // 日志文件相对路径转为绝对路径
             if Path::new(&cfg.log_file).is_relative() {
                 let Ok(mut pb) = env::current_dir() else {
                     return Err(ConfigError::YamlConfigInvalid("get cwd failed".to_owned()));

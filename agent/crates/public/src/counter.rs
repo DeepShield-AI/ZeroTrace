@@ -17,91 +17,91 @@
 use std::{sync::Weak, time::Duration};
 
 use cadence::{
-    ext::{MetricValue, ToCounterValue, ToGaugeValue},
-    MetricResult,
+	ext::{MetricValue, ToCounterValue, ToGaugeValue},
+	MetricResult,
 };
 
 #[derive(Clone, Copy, Debug)]
 pub enum CounterType {
-    Counted,
-    Gauged,
+	Counted,
+	Gauged,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum CounterValue {
-    Signed(i64),
-    Unsigned(u64),
-    Float(f64),
+	Signed(i64),
+	Unsigned(u64),
+	Float(f64),
 }
 
 impl ToCounterValue for CounterValue {
-    fn try_to_value(self) -> MetricResult<MetricValue> {
-        Ok(match self {
-            CounterValue::Signed(v) => MetricValue::Signed(v),
-            // convert unsigned and float to signed for compatibility
-            CounterValue::Unsigned(v) => MetricValue::Signed(v as i64),
-            CounterValue::Float(v) => MetricValue::Signed(v as i64),
-        })
-    }
+	fn try_to_value(self) -> MetricResult<MetricValue> {
+		Ok(match self {
+			CounterValue::Signed(v) => MetricValue::Signed(v),
+			// convert unsigned and float to signed for compatibility
+			CounterValue::Unsigned(v) => MetricValue::Signed(v as i64),
+			CounterValue::Float(v) => MetricValue::Signed(v as i64),
+		})
+	}
 }
 
 impl ToGaugeValue for CounterValue {
-    fn try_to_value(self) -> MetricResult<MetricValue> {
-        Ok(match self {
-            CounterValue::Signed(v) => MetricValue::Signed(v),
-            // convert unsigned and float to signed for compatibility
-            CounterValue::Unsigned(v) => MetricValue::Signed(v as i64),
-            CounterValue::Float(v) => MetricValue::Signed(v as i64),
-        })
-    }
+	fn try_to_value(self) -> MetricResult<MetricValue> {
+		Ok(match self {
+			CounterValue::Signed(v) => MetricValue::Signed(v),
+			// convert unsigned and float to signed for compatibility
+			CounterValue::Unsigned(v) => MetricValue::Signed(v as i64),
+			CounterValue::Float(v) => MetricValue::Signed(v as i64),
+		})
+	}
 }
 
 pub type Counter = (&'static str, CounterType, CounterValue);
 
 pub trait RefCountable: Send + Sync {
-    fn get_counters(&self) -> Vec<Counter>;
+	fn get_counters(&self) -> Vec<Counter>;
 }
 
 pub trait OwnedCountable: Send + Sync {
-    fn get_counters(&self) -> Vec<Counter>;
-    fn closed(&self) -> bool;
+	fn get_counters(&self) -> Vec<Counter>;
+	fn closed(&self) -> bool;
 }
 
 pub enum Countable {
-    Owned(Box<dyn OwnedCountable>),
-    Ref(Weak<dyn RefCountable>),
+	Owned(Box<dyn OwnedCountable>),
+	Ref(Weak<dyn RefCountable>),
 }
 
 impl Countable {
-    pub fn get_counters(&self) -> Vec<Counter> {
-        match self {
-            Countable::Owned(c) => c.get_counters(),
-            Countable::Ref(c) => c.upgrade().map(|c| c.get_counters()).unwrap_or_default(),
-        }
-    }
+	pub fn get_counters(&self) -> Vec<Counter> {
+		match self {
+			Countable::Owned(c) => c.get_counters(),
+			Countable::Ref(c) => c.upgrade().map(|c| c.get_counters()).unwrap_or_default(),
+		}
+	}
 
-    pub fn closed(&self) -> bool {
-        match self {
-            Countable::Owned(c) => c.closed(),
-            Countable::Ref(c) => c.strong_count() == 0,
-        }
-    }
+	pub fn closed(&self) -> bool {
+		match self {
+			Countable::Owned(c) => c.closed(),
+			Countable::Ref(c) => c.strong_count() == 0,
+		}
+	}
 }
 
 pub enum StatsOption {
-    Tag(&'static str, String),
-    Interval(Duration),
+	Tag(&'static str, String),
+	Interval(Duration),
 }
 
 pub trait Module {
-    fn name(&self) -> &'static str;
+	fn name(&self) -> &'static str;
 
-    // instances of the implemented type must return the same set of tag keys
-    fn tags(&self) -> Vec<StatsOption> {
-        vec![]
-    }
+	// instances of the implemented type must return the same set of tag keys
+	fn tags(&self) -> Vec<StatsOption> {
+		vec![]
+	}
 
-    fn options(&self) -> Vec<StatsOption> {
-        vec![]
-    }
+	fn options(&self) -> Vec<StatsOption> {
+		vec![]
+	}
 }

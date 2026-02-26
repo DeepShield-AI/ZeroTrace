@@ -328,6 +328,8 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
     //    b) If not, find addresses on the ctrl interface
     // 2. Use env.K8S_NODE_IP_FOR_DEEPFLOW as the ctrl_ip reported by deepflow-agent if available
     // 3. Find ctrl ip and mac from controller address
+    // CTRL_NETWORK_INTERFACE 通常在 K8s DaemonSet yaml 中配置
+    // 如果有，直接查找该网卡
     if let Ok(name) = env::var(ENV_INTERFACE_NAME) {
         let Ok(link) = link_by_name(&name) else {
             return Err(Error::Environment(format!(
@@ -335,7 +337,9 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
                 name, ENV_INTERFACE_NAME
             )));
         };
+        // 确定 IP 地址
         let ips = match env::var(K8S_POD_IP_FOR_DEEPFLOW) {
+            // A. 优先使用 K8s Downward API 注入的 Pod IP
             Ok(ips) => ips
                 .split(",")
                 .filter_map(|s| match s.parse::<IpAddr>() {
@@ -346,10 +350,12 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
                     }
                 })
                 .collect(),
+            // B. 如果没有，遍历所有 IP
             _ => match addr_list() {
                 Ok(addrs) => addrs
                     .into_iter()
                     .filter_map(|addr| {
+                        // 收集网卡对应的所有ip
                         if addr.if_index == link.if_index {
                             Some(addr.ip_addr)
                         } else {
@@ -360,6 +366,7 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
                 _ => vec![],
             },
         };
+        // 筛选全局单播 IP (忽略 127.0.0.1 等本地地址)
         for ip in ips {
             if is_global(&ip) {
                 return Ok((ip, link.mac_addr));
@@ -370,6 +377,9 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
             name, ENV_INTERFACE_NAME
         )));
     };
+    // 使用 K8s Node IP
+    // Agent 以 HostNetwork 模式运行在 K8s Node 上，直接使用 Node IP。
+    // 也是使用K8S_POD_IP_FOR_DEEPFLOW环境变量
     if let Some(ip) = get_k8s_local_node_ip() {
         let ctrl_mac = get_mac_by_ip(ip);
         if let Ok(mac) = ctrl_mac {
@@ -378,7 +388,10 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
     }
 
     // FIXME: Getting ctrl_ip and ctrl_mac sometimes fails, increase three retry opportunities to ensure access to ctrl_ip and ctrl_mac
+    // 增加重试机制，防止网络瞬时抖动
+    // 传统物理机/虚拟机部署，或者上述环境变量未配置。
     for _ in 0..3 {
+        // 查询路由表： "如果要发包给dest，应该用哪个本地 IP？"
         let tuple = get_route_src_ip_and_mac(dest);
         if tuple.is_err() {
             warn!(
@@ -403,7 +416,9 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
         // interface of the default route.
         for link in links.unwrap().iter() {
             if link.mac_addr == mac {
+                // 如果网卡处于 DOWN 状态，说明这条路由虽然存在于表中，但实际上是不通的
                 if !link.flags.contains(LinkFlags::UP) {
+                    // 访问公网来寻找真正可用的出口网卡
                     let dest = if dest.is_ipv4() {
                         DNS_HOST_IPV4
                     } else {

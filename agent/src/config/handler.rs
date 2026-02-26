@@ -1928,6 +1928,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
     fn try_from(conf: (Config, UserConfig)) -> Result<Self, Self::Error> {
         let (static_config, conf) = conf;
         let controller_ip = static_config.controller_ips[0].parse::<IpAddr>().unwrap();
+        // 目标ip没设置就发送到本地回环
         let dest_ip = if conf.global.communication.ingester_ip.len() > 0 {
             conf.global.communication.ingester_ip.clone()
         } else {
@@ -1936,20 +1937,24 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 IpAddr::V6(_) => Ipv6Addr::UNSPECIFIED.to_string(),
             }
         };
+        // 代理控制器，用于在特殊网络环境下通过代理连接server
         let proxy_controller_ip = if conf.global.communication.proxy_controller_ip.len() > 0 {
             conf.global.communication.proxy_controller_ip.clone()
         } else {
             static_config.controller_ips[0].clone()
         };
-
+        // 最大内存
         let max_memory = conf.global.limits.max_memory;
+        // 高性能抓包套接字所需的内存块数量，方式抓包时内存爆炸
         let af_packet_blocks =
             conf.get_af_packet_blocks(conf.inputs.cbpf.common.capture_mode, max_memory);
         let capture_socket_type = conf.inputs.cbpf.af_packet.tunning.socket_version;
         let config = ModuleConfig {
             enabled: conf.global.common.enabled,
             user_config: conf.clone(),
+            // 抓包模式
             capture_mode: conf.inputs.cbpf.common.capture_mode,
+            // 诊断配置
             diagnose: DiagnoseConfig {
                 enabled: conf.global.common.enabled,
                 libvirt_xml_path: conf
@@ -1960,78 +1965,131 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .parse()
                     .unwrap_or_default(),
             },
+            // 环境配置
+            // 负责监控 Agent 运行环境的健康状态，并执行熔断保护
             environment: EnvironmentConfig {
+                /// 最大内存限制 (字节)
+                /// 限制 Agent 进程可使用的最大内存量，防止内存溢出
                 max_memory,
+                /// CPU 限制 (毫核)
+                /// 限制 Agent 进程可使用的最大 CPU 资源，防止 CPU 过载
                 max_millicpus: conf.global.limits.max_millicpus,
+                /// 进程数量告警阈值
+                /// 当 Agent 进程数量超过此阈值时，触发告警
                 process_threshold: conf.global.alerts.process_threshold,
+                /// 线程数量告警阈值
+                /// 当 Agent 线程数量超过此阈值时，触发告警
                 thread_threshold: conf.global.alerts.thread_threshold,
+                /// 系统内存熔断阈值 (百分比)
+                /// 当系统内存使用率超过此阈值时，触发熔断保护
                 sys_memory_limit: conf
                     .global
                     .circuit_breakers
                     .sys_memory_percentage
                     .trigger_threshold,
+                /// 系统内存指标类型 (used/available)
+                /// 指定系统内存使用率的计算方式
                 sys_memory_metric: conf.global.circuit_breakers.sys_memory_percentage.metric,
+                /// 本地日志文件大小限制 (字节)
+                /// 限制本地日志文件的最大大小，防止日志文件过大
                 log_file_size: conf.global.limits.max_local_log_file_size,
+                /// 抓包模式
+                /// 指定 Agent 的抓包模式
                 capture_mode: conf.inputs.cbpf.common.capture_mode,
+                /// 资源监控间隔 (秒)
+                /// 指定 Agent 监控资源的间隔时间
                 guard_interval: conf.global.tunning.resource_monitoring_interval,
+                /// 最大 Socket 数量限制
+                /// 限制 Agent 可打开的最大 Socket 数量，防止 Socket 泄漏
                 max_sockets: conf.global.limits.max_sockets,
+                /// Socket 数量超限容忍时间 (秒)
+                /// 当 Socket 数量超过最大限制时，允许的超限时间
+                // Socket 数量超限容忍时间
                 max_sockets_tolerate_interval: conf.global.limits.max_sockets_tolerate_interval,
+                // 系统负载熔断阈值
                 system_load_circuit_breaker_threshold: conf
                     .global
                     .circuit_breakers
                     .relative_sys_load
                     .trigger_threshold,
+                // 系统负载恢复阈值
                 system_load_circuit_breaker_recover: conf
                     .global
                     .circuit_breakers
                     .relative_sys_load
                     .recovery_threshold,
+                // 系统负载指标 (load1/load5/load15)
                 system_load_circuit_breaker_metric: conf
                     .global
                     .circuit_breakers
                     .relative_sys_load
                     .metric,
+                // Page Cache 回收百分比
                 page_cache_reclaim_percentage: conf.global.tunning.page_cache_reclaim_percentage,
+                // 磁盘剩余空间熔断阈值 (百分比)
                 free_disk_circuit_breaker_percentage_threshold: conf
                     .global
                     .circuit_breakers
                     .free_disk
                     .percentage_trigger_threshold,
+                // 磁盘剩余空间熔断阈值 (绝对值)
                 free_disk_circuit_breaker_absolute_threshold: conf
                     .global
                     .circuit_breakers
                     .free_disk
                     .absolute_trigger_threshold,
+                // 需要监控磁盘空间的目录
                 free_disk_circuit_breaker_directories: {
                     let mut v = conf.global.circuit_breakers.free_disk.directories.clone();
                     v.sort();
                     v.dedup();
                     v
                 },
+                // 是否在内存空闲时主动释放
                 idle_memory_trimming: conf.global.tunning.idle_memory_trimming,
             },
+            // 同步器
+            // 控制与 Server 同步配置的时间间隔 (sync_interval)。
+            // NTP 时间同步开关。
             synchronizer: SynchronizerConfig {
+                // 配置同步间隔
                 sync_interval: conf.global.communication.proactive_request_interval,
                 output_vlan: conf.outputs.npb.raw_udp_vlan_tag,
+                // 是否开启 NTP 时间同步
                 ntp_enabled: conf.global.ntp.enabled,
+                // 最大时间偏差容忍度
                 max_escape: conf.global.communication.max_escape_duration,
             },
+            // 自监控
+            // Agent 自身指标（如“抓了多少包”、“丢了多少包”）的汇报配置。
+            // analyzer_ip: 这些指标发给谁（通常就是 dest_ip）。
             stats: StatsConfig {
                 interval: stats::STATS_MIN_INTERVAL, // TODO: make it configurable
                 host: conf.global.self_monitoring.hostname.clone(),
+                // 监控数据发送目标 IP
                 analyzer_ip: dest_ip.clone(),
+                // 监控数据发送目标端口
                 analyzer_port: conf.global.communication.ingester_port,
             },
+            // 调度器与采集核心配置
+            // 负责流量的分发、过滤和预处理
             dispatcher: DispatcherConfig {
+                // 全局 PPS (包/秒) 限制
                 global_pps_threshold: conf.inputs.cbpf.tunning.max_capture_pps,
+                // 最大捕获包长 (Snaplen)
                 capture_packet_size: conf.inputs.cbpf.tunning.max_capture_packet_size,
+                // DPDK 捕获源
                 dpdk_source: conf.inputs.cbpf.special_network.dpdk.source,
+                // 是否开启调度队列
                 dispatcher_queue: conf.inputs.cbpf.tunning.dispatcher_queue_enabled,
+                // L7 日志截断长度
                 l7_log_packet_size: conf.processors.request_log.tunning.payload_truncation,
+                // 隧道解封装协议配置
                 tunnel_type_bitmap: TunnelTypeBitmap::from_slices(
                     &conf.inputs.cbpf.preprocess.tunnel_decap_protocols,
                     &conf.inputs.cbpf.preprocess.tunnel_trim_protocols,
                 ),
+                // 隧道裁剪协议配置
                 tunnel_type_trim_bitmap: TunnelTypeBitmap::from_strings(
                     &conf.inputs.cbpf.preprocess.tunnel_trim_protocols,
                 ),
@@ -2039,20 +2097,27 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 agent_id: conf.global.common.agent_id as u16,
                 capture_socket_type,
                 #[cfg(target_os = "linux")]
+                // 额外监控的网络命名空间正则
                 extra_netns_regex: conf.inputs.cbpf.af_packet.extra_netns_regex.clone(),
+                // 采集接口正则匹配
                 tap_interface_regex: conf.inputs.cbpf.af_packet.interface_regex.clone(),
+                // 是否采集容器内部接口
                 inner_interface_capture_enabled: conf
                     .inputs
                     .cbpf
                     .af_packet
                     .inner_interface_capture_enabled,
+                // 容器内部接口正则
                 inner_tap_interface_regex: conf.inputs.cbpf.af_packet.inner_interface_regex.clone(),
+                // NPB 流量是否跳过 BPF 过滤
                 skip_npb_bpf: conf.inputs.cbpf.af_packet.skip_npb_bpf,
+                // VM MAC 地址来源
                 if_mac_source: conf.inputs.resources.private_cloud.vm_mac_source.into(),
                 analyzer_ip: dest_ip.clone(),
                 analyzer_port: conf.global.communication.ingester_port,
                 proxy_controller_ip,
                 proxy_controller_port: conf.global.communication.proxy_controller_port,
+                // BPF 过滤规则
                 capture_bpf: conf.inputs.cbpf.af_packet.extra_bpf_filter.clone(),
                 max_memory,
                 af_packet_blocks,
@@ -2063,6 +2128,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 pod_cluster_id: conf.global.common.pod_cluster_id,
                 enabled: conf.global.common.enabled,
                 npb_dedup_enabled: conf.outputs.npb.traffic_global_dedup,
+                // Bond 接口聚合配置
                 bond_group: if conf.inputs.cbpf.af_packet.bond_interfaces.is_empty() {
                     vec![]
                 } else {
@@ -2072,44 +2138,63 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 },
                 #[cfg(any(target_os = "linux", target_os = "android"))]
                 cpu_set: CpuSet::new(),
+                // 原始包缓冲区大小
                 raw_packet_buffer_block_size: conf.inputs.cbpf.tunning.raw_packet_buffer_block_size,
+                // 原始包队列大小
                 raw_packet_queue_size: conf.inputs.cbpf.tunning.raw_packet_queue_size,
             },
+            // 发送模块
             sender: SenderConfig {
+                // 发送目标IP (Analyzer IP)
                 dest_ip: dest_ip.clone(),
                 agent_id: conf.global.common.agent_id as u16,
                 team_id: conf.global.common.team_id,
                 organize_id: conf.global.common.organize_id,
+                // 发送目标端口
                 dest_port: conf.global.communication.ingester_port,
+                // NPB (网络包分发) 目标端口
                 npb_port: conf.outputs.npb.target_port,
+                // 自定义 VXLAN Flags
                 vxlan_flags: conf.outputs.npb.custom_vxlan_flags,
+                // 是否开启 QoS Bypass
                 npb_enable_qos_bypass: conf.outputs.socket.raw_udp_qos_bypass,
+                // NPB VLAN 标签
                 npb_vlan: conf.outputs.npb.raw_udp_vlan_tag,
+                // NPB VLAN 模式
                 npb_vlan_mode: conf.outputs.npb.extra_vlan_header.into(),
+                // NPB 全局去重开关
                 npb_dedup_enabled: conf.outputs.npb.traffic_global_dedup,
+                // NPB 最大发送吞吐量
                 npb_bps_threshold: conf.outputs.npb.max_tx_throughput,
                 npb_socket_type: conf.outputs.socket.npb_socket_type,
+                // 发送带宽熔断阈值
                 server_tx_bandwidth_threshold: conf
                     .global
                     .circuit_breakers
                     .tx_throughput
                     .trigger_threshold,
+                // 带宽探测间隔
                 bandwidth_probe_interval: conf
                     .global
                     .circuit_breakers
                     .tx_throughput
                     .throughput_monitoring_interval,
+                // 是否使用多 Socket 发送数据
                 multiple_sockets_to_ingester: conf.outputs.socket.multiple_sockets_to_ingester,
+                // 最大发送吞吐量限制
                 max_throughput_to_ingester: conf.global.communication.max_throughput_to_ingester,
+                // 流量溢出策略 (丢弃/等待)
                 ingester_traffic_overflow_action: conf
                     .global
                     .communication
                     .ingester_traffic_overflow_action,
                 collector_socket_type: conf.outputs.socket.data_socket_type,
+                // Standalone 模式下文件大小和目录
                 standalone_data_file_size: conf.global.standalone_mode.max_data_file_size,
                 standalone_data_file_dir: conf.global.standalone_mode.data_file_dir.clone(),
                 enabled: conf.outputs.flow_metrics.enabled,
             },
+            // 网络包分发 (Net Packet Broker) 配置
             npb: NpbConfig {
                 mtu: conf.outputs.npb.max_mtu,
                 underlay_is_ipv6: controller_ip.is_ipv6(),
@@ -2123,22 +2208,30 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 socket_type: conf.outputs.socket.npb_socket_type,
                 queue_size: conf.outputs.flow_metrics.tunning.sender_queue_size,
             },
+            // 流日志/指标收集器配置
             collector: CollectorConfig {
                 enabled: conf.outputs.flow_metrics.enabled,
+                // 非活跃服务端端口聚合
                 inactive_server_port_aggregation: conf
                     .outputs
                     .flow_metrics
                     .filters
                     .inactive_server_port_aggregation,
+                // 非活跃 IP 聚合
                 inactive_ip_aggregation: conf.outputs.flow_metrics.filters.inactive_ip_aggregation,
+                // 开启秒级监控
                 vtap_flow_1s_enabled: conf.outputs.flow_metrics.filters.second_metrics,
+                // L4 流日志采集限速阈值
                 l4_log_collect_nps_threshold: conf.outputs.flow_log.throttles.l4_throttle,
+                // 开启应用性能指标 (APM)
                 l7_metrics_enabled: conf.outputs.flow_metrics.filters.apm_metrics,
                 agent_type: conf.global.common.agent_type,
                 agent_id: conf.global.common.agent_id as u16,
+                // L4 日志采集的 TAP 类型过滤
                 l4_log_store_tap_types: generate_tap_types_array(
                     &conf.outputs.flow_log.filters.l4_capture_network_types,
                 ),
+                // L4 日志忽略的观测点
                 l4_log_ignore_tap_sides: {
                     let mut tap_sides = [false; TapSide::MAX as usize + 1];
                     for t in conf
@@ -2153,31 +2246,38 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     }
                     tap_sides
                 },
+                // 是否聚合健康检查流量的 L4 日志
                 aggregate_health_check_l4_flow_log: conf
                     .outputs
                     .flow_log
                     .aggregators
                     .aggregate_health_check_l4_flow_log,
+                // 私有云网关流量标识
                 cloud_gateway_traffic: conf
                     .inputs
                     .cbpf
                     .physical_mirror
                     .private_cloud_gateway_traffic,
+                // 允许的最大包延迟 (乱序处理)
                 packet_delay: conf
                     .processors
                     .flow_log
                     .time_window
                     .max_tolerable_packet_delay,
+                // NPM 指标并发处理
                 npm_metrics_concurrent: conf.outputs.flow_metrics.filters.npm_metrics_concurrent,
             },
             handler: HandlerConfig {
                 npb_dedup_enabled: conf.outputs.npb.traffic_global_dedup,
                 agent_type: conf.global.common.agent_type,
             },
+            // PCAP 包捕获配置
             pcap: conf.processors.packet.pcap_stream,
+            // 平台集成配置 (K8s, 云平台等)
             platform: PlatformConfig {
                 sync_interval: conf.inputs.resources.push_interval,
                 kubernetes_cluster_id: static_config.kubernetes_cluster_id.clone(),
+                // 虚拟机 XML 定义文件路径 (Libvirt)
                 libvirt_xml_path: conf
                     .inputs
                     .resources
@@ -2185,6 +2285,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .vm_xml_directory
                     .parse()
                     .unwrap_or_default(),
+                // K8s 信息采集方式 (Poll/Watch)
                 kubernetes_poller_type: conf.inputs.resources.kubernetes.pod_mac_collection_method,
                 agent_id: conf.global.common.agent_id as u16,
                 enabled: conf
@@ -2194,6 +2295,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .hypervisor_resource_enabled,
                 agent_type: conf.global.common.agent_type,
                 epc_id: conf.global.common.vpc_id,
+                // 是否启用 K8s API 监听
                 kubernetes_api_enabled: conf.global.common.kubernetes_api_enabled,
                 kubernetes_api_list_limit: conf.inputs.resources.kubernetes.api_list_page_size,
                 kubernetes_api_list_interval: conf
@@ -2203,6 +2305,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .api_list_max_interval,
                 kubernetes_resources: conf.inputs.resources.kubernetes.api_resources.clone(),
                 max_memory,
+                // K8s 命名空间过滤
                 namespace: if conf
                     .inputs
                     .resources
@@ -2223,15 +2326,20 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 thread_threshold: conf.global.alerts.thread_threshold,
                 capture_mode: conf.inputs.cbpf.common.capture_mode,
                 #[cfg(any(target_os = "linux", target_os = "android"))]
+                // 操作系统进程扫描配置
                 os_proc_scan_conf: OsProcScanConfig {
                     os_proc_root: conf.inputs.proc.proc_dir_path.clone(),
+                    // Socket 信息同步间隔
                     os_proc_socket_sync_interval: conf
                         .inputs
                         .proc
                         .socket_info_sync_interval
                         .as_secs() as u32,
+                    // Socket 最小生存时间
                     os_proc_socket_min_lifetime: conf.inputs.proc.min_lifetime.as_secs() as u32,
+                    // 提取进程用户名的脚本/命令
                     os_app_tag_exec_user: conf.inputs.proc.tag_extraction.exec_username.clone(),
+                    // 提取进程 Tag 的脚本/命令
                     os_app_tag_exec: conf.inputs.proc.tag_extraction.script_command.clone(),
                     os_proc_sync_enabled: conf.inputs.proc.enabled,
                 },
@@ -2242,9 +2350,12 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 extra_netns_regex: conf.inputs.cbpf.af_packet.extra_netns_regex.to_string(),
             },
             flow: (&conf).into(),
+            // L7 应用日志解析配置
             log_parser: LogParserConfig {
+                // L7 日志限速
                 l7_log_collect_nps_threshold: conf.outputs.flow_log.throttles.l7_throttle,
                 l7_log_session_aggr_max_timeout: conf.processors.request_log.timeouts.max(),
+                // 会话聚合超时配置
                 l7_log_session_aggr_timeout: conf
                     .processors
                     .request_log
@@ -2253,12 +2364,14 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .iter()
                     .map(|app| (app.protocol.clone(), app.timeout))
                     .collect(),
+                // 会话聚合最大条目数
                 l7_log_session_aggr_max_entries: conf
                     .processors
                     .request_log
                     .tunning
                     .session_aggregate_max_entries,
                 l7_log_dynamic: L7LogDynamicConfigBuilder::from(&conf).into(),
+                // L7 日志忽略的观测点
                 l7_log_ignore_tap_sides: {
                     let mut tap_sides = [false; TapSide::MAX as usize + 1];
                     for t in conf
@@ -2273,15 +2386,18 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     }
                     tap_sides
                 },
+                // 是否禁用 HTTP Endpoint 提取
                 http_endpoint_disabled: conf
                     .processors
                     .request_log
                     .tag_extraction
                     .http_endpoint
                     .extraction_disabled,
+                // HTTP Endpoint 匹配规则 (Trie 树)
                 http_endpoint_trie: HttpEndpointTrie::from(
                     &conf.processors.request_log.tag_extraction.http_endpoint,
                 ),
+                // 需要脱敏的协议
                 obfuscate_enabled_protocols: L7ProtocolBitmap::from(
                     conf.processors
                         .request_log
@@ -2289,6 +2405,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                         .obfuscate_protocols
                         .as_slice(),
                 ),
+                // L7 日志黑名单
                 l7_log_blacklist_trie: {
                     let mut blacklist_trie = HashMap::new();
                     for (k, v) in conf.processors.request_log.filters.tag_filters.iter() {
@@ -2303,6 +2420,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     }
                     blacklist_trie
                 },
+                // DNS NXDOMAIN 忽略规则
                 unconcerned_dns_nxdomain_trie: DomainNameTrie::from(
                     &conf
                         .processors
@@ -2310,6 +2428,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                         .filters
                         .unconcerned_dns_nxdomain_response_suffixes,
                 ),
+                // MySQL 压缩载荷解压
                 mysql_decompress_payload: conf
                     .processors
                     .request_log
@@ -2336,6 +2455,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     },
                 },
             },
+            // 调试与自监控配置
             debug: DebugConfig {
                 agent_id: conf.global.common.agent_id as u16,
                 enabled: conf.global.self_monitoring.debug.enabled,
@@ -2348,6 +2468,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 controller_port: static_config.controller_port,
                 agent_mode: static_config.agent_mode,
             },
+            // 日志配置
             log: LogConfig {
                 log_level: conf.global.self_monitoring.log.log_level.clone(),
                 log_threshold: conf.global.limits.max_log_backhaul_rate,
@@ -2365,6 +2486,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 host: conf.global.self_monitoring.hostname.clone(),
             },
             #[cfg(all(unix, feature = "libtrace"))]
+            // eBPF 采集配置
             ebpf: EbpfConfig {
                 collector_enabled: conf.outputs.flow_metrics.enabled,
                 l7_metrics_enabled: conf.outputs.flow_metrics.filters.apm_metrics,
@@ -2386,6 +2508,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                     .application_protocol_inference
                     .inference_result_ttl
                     .as_secs() as usize,
+                // 控制器 MAC 地址获取 (用于 eBPF 里的网络拓扑关联)
                 ctrl_mac: if is_tt_workload(conf.global.common.agent_type) {
                     fn get_ctrl_mac(ip: &IpAddr) -> MacAddr {
                         // use host mac
@@ -2438,16 +2561,24 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 io_event: conf.inputs.ebpf.file.io_event,
                 dpdk_enabled: conf.inputs.cbpf.special_network.dpdk.source == DpdkSource::Ebpf,
             },
+            // 集成指标服务 (用于接收 StatsD/Prometheus 数据)
+            // 集成指标服务 (用于接收 StatsD/Prometheus/OpenTelemetry 数据)
             metric_server: MetricServerConfig {
                 enabled: conf.inputs.integration.enabled,
                 port: conf.inputs.integration.listen_port,
+                // Trace 数据压缩
                 compressed: conf.inputs.integration.compression.trace,
+                // Profile 数据压缩
                 profile_compressed: conf.inputs.integration.compression.profile,
+                // 应用日志压缩
                 application_log_compressed: conf.outputs.compression.application_log,
+                // L7 流日志压缩
                 l7_flow_log_compressed: conf.outputs.compression.l7_flow_log,
+                // L4 流日志压缩
                 l4_flow_log_compressed: conf.outputs.compression.l4_flow_log,
             },
             agent_type: conf.global.common.agent_type,
+            // 端口配置
             port_config: PortConfig {
                 analyzer_port: conf.global.communication.ingester_port,
                 proxy_controller_port: conf.global.communication.proxy_controller_port,
@@ -2470,7 +2601,9 @@ pub struct ConfigHandler {
 }
 
 impl ConfigHandler {
+    // 配置管理模块
     pub fn new(config: Config, ctrl_ip: IpAddr, ctrl_mac: MacAddr) -> Self {
+        // 运行配置，合并简单配置和全量配置
         let candidate_config =
             ModuleConfig::try_from((config.clone(), UserConfig::standalone_default())).unwrap();
         let current_config = Arc::new(ArcSwap::from_pointee(candidate_config.clone()));

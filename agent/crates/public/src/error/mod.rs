@@ -20,18 +20,18 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
-    #[error("timeout")]
-    Timeout,
-    #[cfg(any(target_os = "linux", target_os = "android"))]
-    #[error("afpacket error")]
-    AfPacketError(#[from] af_packet::Error),
-    #[cfg(any(target_os = "linux", target_os = "android"))]
-    #[error("create raw socket error")]
-    CreateRawSocketError(#[from] std::io::Error),
-    #[error("libpcap error {0}")]
-    LibpcapError(String),
-    #[error("vhost user error {0}")]
-    VhostUserError(String),
+	#[error("timeout")]
+	Timeout,
+	#[cfg(any(target_os = "linux", target_os = "android"))]
+	#[error("afpacket error")]
+	AfPacketError(#[from] af_packet::Error),
+	#[cfg(any(target_os = "linux", target_os = "android"))]
+	#[error("create raw socket error")]
+	CreateRawSocketError(#[from] std::io::Error),
+	#[error("libpcap error {0}")]
+	LibpcapError(String),
+	#[error("vhost user error {0}")]
+	VhostUserError(String),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
