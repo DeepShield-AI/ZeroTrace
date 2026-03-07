@@ -18,36 +18,39 @@ use std::error::Error;
 use std::process::Command;
 
 fn generate_protobuf() -> Result<(), Box<dyn Error>> {
-	tonic_build::configure().build_server(false).out_dir("src/proto").compile(
-		&[
-			"../../../message/metric.proto",
-			"../../../message/flow_log.proto",
-			"../../../message/stats.proto",
-			"../../../message/k8s_event.proto",
-		],
-		&["../../../message"],
-	)?;
-	tonic_build::configure()
-		.build_server(true)
-		.out_dir("src/proto")
-		.compile(&["../../../message/agent.proto"], &["../../../message"])?;
-	tonic_build::configure()
-		.build_server(false)
-		.out_dir("src/proto/integration")
-		.compile(
-			&["../../../message/opentelemetry/opentelemetry/proto/trace/v1/trace.proto"],
-			&["../../../message/opentelemetry"],
-		)?;
+    tonic_build::configure()
+        .build_server(false)
+        .out_dir("src/proto")
+        .compile(
+            &[
+                "../../../message/metric.proto",
+                "../../../message/flow_log.proto",
+                "../../../message/stats.proto",
+                "../../../message/k8s_event.proto",
+            ],
+            &["../../../message"],
+        )?;
+    tonic_build::configure()
+        .build_server(true)
+        .out_dir("src/proto")
+        .compile(&["../../../message/agent.proto"], &["../../../message"])?;
+    tonic_build::configure()
+        .build_server(false)
+        .out_dir("src/proto/integration")
+        .compile(
+            &["../../../message/opentelemetry/opentelemetry/proto/trace/v1/trace.proto"],
+            &["../../../message/opentelemetry"],
+        )?;
 
-	// FIXME: Wait for the rustfmt ignore attribute to be removed in stable rust support
-	Command::new("cargo")
-		.args(["fmt", "--", "src/proto/*.rs", "src/proto/integration/*.rs"])
-		.spawn()?;
+    // FIXME: Wait for the rustfmt ignore attribute to be removed in stable rust support
+    Command::new("cargo")
+        .args(["fmt", "--", "src/proto/*.rs", "src/proto/integration/*.rs"])
+        .spawn()?;
 
-	Ok(())
+    Ok(())
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-	generate_protobuf()?;
-	Ok(())
+    generate_protobuf()?;
+    Ok(())
 }

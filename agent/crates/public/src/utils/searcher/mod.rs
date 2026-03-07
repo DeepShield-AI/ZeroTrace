@@ -21,40 +21,42 @@ use std::str::from_utf8;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum SearchError {
-	KeyNotFound,
-	InvalidUTF8String,
-	InvalidInputFormat,
+    KeyNotFound,
+    InvalidUTF8String,
+    InvalidInputFormat,
 }
 
 fn find_bytes_case_sensitive(haystack: &[u8], needle: &[u8]) -> Option<usize> {
-	haystack.windows(needle.len()).position(|window| window == needle)
+    haystack
+        .windows(needle.len())
+        .position(|window| window == needle)
 }
 
 fn find_bytes_ignore_case(haystack: &[u8], needle: &[u8]) -> Option<usize> {
-	haystack
-		.windows(needle.len())
-		.position(|window| window.eq_ignore_ascii_case(needle))
+    haystack
+        .windows(needle.len())
+        .position(|window| window.eq_ignore_ascii_case(needle))
 }
 
 fn find_byte(haystack: &[u8], needle: u8) -> Option<usize> {
-	haystack.iter().position(|&b| b == needle)
+    haystack.iter().position(|&b| b == needle)
 }
 
 pub fn skip_whitespace(s: &str) -> &str {
-	s.trim_start_matches(|c: char| matches!(c, ' ' | '\t' | '\n' | '\r'))
+    s.trim_start_matches(|c: char| matches!(c, ' ' | '\t' | '\n' | '\r'))
 }
 
 fn skip_whitespace_from_bytes(bytes: &[u8]) -> &[u8] {
-	let start = bytes
-		.iter()
-		.position(|&b| !matches!(b, b' ' | b'\t' | b'\n' | b'\r'))
-		.unwrap_or(bytes.len());
-	&bytes[start..]
+    let start = bytes
+        .iter()
+        .position(|&b| !matches!(b, b' ' | b'\t' | b'\n' | b'\r'))
+        .unwrap_or(bytes.len());
+    &bytes[start..]
 }
 
 fn bytes_to_string(payload: &[u8], start: usize, end: usize) -> Result<String, SearchError> {
-	match from_utf8(&payload[start..end]) {
-		Ok(s) => Ok(s.to_string()),
-		Err(_) => Err(SearchError::InvalidUTF8String),
-	}
+    match from_utf8(&payload[start..end]) {
+        Ok(s) => Ok(s.to_string()),
+        Err(_) => Err(SearchError::InvalidUTF8String),
+    }
 }

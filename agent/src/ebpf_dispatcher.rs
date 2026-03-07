@@ -1346,22 +1346,24 @@ impl EbpfCollector {
     pub fn new(
         dispatcher_id: usize,
         time_diff: Arc<AtomicI64>,
-        config: EbpfAccess,
-        log_parser_config: LogParserAccess,
+        config: EbpfAccess, // eBPF 配置访问器
+        log_parser_config: LogParserAccess, // L7 日志解析配置
         flow_map_config: FlowAccess,
         collector_config: CollectorAccess,
-        policy_getter: PolicyGetter,
-        dpdk_senders: Vec<DebugSender<Box<packet::Packet<'static>>>>,
-        output: DebugSender<AppProto>,
-        l7_stats_output: DebugSender<BatchedBox<L7Stats>>,
-        proc_event_output: DebugSender<BoxedProcEvents>,
-        ebpf_profile_sender: DebugSender<Profile>,
+        policy_getter: PolicyGetter, // 策略获取器 (获取容器/Pod信息)
+        dpdk_senders: Vec<DebugSender<Box<packet::Packet<'static>>>>, // DPDK 发送队列
+        output: DebugSender<AppProto>, // L7 应用协议数据输出
+        l7_stats_output: DebugSender<BatchedBox<L7Stats>>, // L7 统计数据输出
+        proc_event_output: DebugSender<BoxedProcEvents>, // 进程事件输出
+        ebpf_profile_sender: DebugSender<Profile>, // 性能剖析 (Profile) 输出
         queue_debugger: &QueueDebugger,
         stats_collector: Arc<stats::Collector>,
         exception_handler: ExceptionHandler,
-        process_listener: &Arc<ProcessListener>,
+        process_listener: &Arc<ProcessListener>, // 进程监听器
     ) -> Result<Box<Self>> {
         let ebpf_config = config.load();
+        // 检查内核是否触发了 eBPF 熔断机制 (Meltdown)
+        // 如果内核 eBPF 模块崩溃或版本不支持，这里会直接禁用 EbpfCollector，防止影响系统稳定性。
         let is_ebpf_meltdown = crate::utils::guard::is_kernel_ebpf_meltdown();
         let is_uprobe_meltdown = crate::utils::guard::is_kernel_ebpf_uprobe_meltdown();
 
@@ -1373,6 +1375,10 @@ impl EbpfCollector {
             "ebpf collector init... uprobe_meltdown: {}",
             is_uprobe_meltdown
         );
+        // 创建内部缓冲队列 "0-ebpf-to-ebpf-collector"
+        // eBPF C 代码中的回调函数 (Callback) 会将内核 RingBuffer 中的数据写入这个队列。
+        // 然后 Rust 端的 EbpfDispatcher 线程从这个队列读取并处理数据。
+        // 典型的 "Producer-Consumer" 模型，用于解耦 C 回调和 Rust 处理逻辑。
         let queue_name = "0-ebpf-to-ebpf-collector";
         let (sender, receiver, counter) =
             bounded_with_debug(ebpf_config.queue_size, queue_name, queue_debugger);
@@ -1394,6 +1400,8 @@ impl EbpfCollector {
             &stats_collector,
         );
 
+        // 初始化 eBPF 底层环境 (C/C++ FFI)
+        // 调用 C 接口加载 eBPF 程序、挂载探针 (Probes)、设置 Map 等。
         let config_handle = Self::ebpf_init(
             &ebpf_config,
             sender,
@@ -1410,6 +1418,8 @@ impl EbpfCollector {
 
         info!("ebpf collector initialized.");
         Ok(Box::new(EbpfCollector {
+            // EbpfDispatcher: 真正干活的线程逻辑
+            // 它会从上面的 receiver 中收数据，进行 L7 协议解析，然后发送到 output 队列。
             thread_dispatcher: EbpfDispatcher {
                 dispatcher_id,
                 time_diff,

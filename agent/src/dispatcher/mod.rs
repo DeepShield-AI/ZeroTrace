@@ -949,7 +949,8 @@ impl DispatcherBuilder {
     pub fn build(mut self) -> Result<Dispatcher> {
         #[cfg(target_os = "linux")]
         let netns = self.netns.unwrap_or_default();
-        // set ns before creating af packet socket
+        // 在创建 AF_PACKET socket 之前切换到指定的网络命名空间 (NetNS)
+        // 这样 Dispatcher 才能在容器或虚拟网络环境中抓到正确的包。
         #[cfg(target_os = "linux")]
         let _ = netns.open_and_setns()?;
         let options = self
@@ -961,6 +962,9 @@ impl DispatcherBuilder {
             .queue_debugger
             .ok_or(Error::ConfigIncomplete("no queue debugger".into()))?;
         let dispatcher_queue = options.lock().unwrap().dispatcher_queue;
+        
+        // 1. 创建收包引擎 (RecvEngine)
+        // 根据配置 (AF_PACKET, DPDK, Libpcap) 初始化底层的收包模块。
         let engine = Self::get_engine(
             &self.pcap_interfaces,
             &self.src_interface,
@@ -972,6 +976,7 @@ impl DispatcherBuilder {
         let kernel_counter = engine.get_counter_handle();
         let id = self.id.ok_or(Error::ConfigIncomplete("no id".into()))?;
         let terminated = Arc::new(AtomicBool::new(false));
+        // 创建统计计数器，用于监控丢包、包量等
         let stat_counter = Arc::new(PacketCounter::new(terminated.clone(), kernel_counter));
         let collector = self
             .stats_collector
@@ -986,6 +991,9 @@ impl DispatcherBuilder {
         let local_tap_interfaces = public::netns::link_list_in_netns(&netns).unwrap_or_default();
         #[cfg(any(target_os = "windows", target_os = "android"))]
         let local_tap_interfaces = public::utils::net::link_list().unwrap_or_default();
+        
+        // 处理 Bond 接口 (链路聚合)
+        // 需要建立物理接口与 Bond 接口的映射关系，以便正确标记流量来源。
         let bond_group = self
             .bond_group
             .take()
@@ -1010,6 +1018,8 @@ impl DispatcherBuilder {
             .take()
             .ok_or(Error::ConfigIncomplete("no platform poller".into()))?;
 
+        // 2. 初始化 Dispatcher 内部状态 (InternalState)
+        // 包含所有运行时需要的上下文：队列、配置、限速器、映射表等。
         let is = InternalState {
             log_id: {
                 let mut lid = vec![id.to_string()];
@@ -1127,6 +1137,7 @@ impl DispatcherBuilder {
             promisc_if_indices: vec![],
         };
         let base = BaseDispatcher { engine, is };
+        // 注册监控指标
         collector.register_countable(
             &stats::SingleTagModule("dispatcher", "id", base.is.id),
             stats::Countable::Ref(Arc::downgrade(&stat_counter) as Weak<dyn stats::RefCountable>),

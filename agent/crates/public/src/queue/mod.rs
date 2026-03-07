@@ -25,10 +25,10 @@ use thiserror::Error;
 
 #[derive(Debug, Error, PartialEq)]
 pub enum Error<T> {
-	#[error("the queue sending operation has timed out")]
-	Timeout,
-	#[error("the queue has terminated")]
-	Terminated(Option<T>, Option<Vec<T>>),
-	#[error("the quantity for batch sending to the queue is too large, you can consider adjusting the corresponding queue size")]
-	BatchTooLarge(Option<Vec<T>>),
+    #[error("the queue sending operation has timed out")]
+    Timeout,
+    #[error("the queue has terminated")]
+    Terminated(Option<T>, Option<Vec<T>>),
+    #[error("the quantity for batch sending to the queue is too large, you can consider adjusting the corresponding queue size")]
+    BatchTooLarge(Option<Vec<T>>),
 }

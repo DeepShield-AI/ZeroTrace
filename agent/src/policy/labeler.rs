@@ -69,8 +69,15 @@ impl EpcNetIpKey {
 
     fn clone_by_masklen(&self, masklen: usize, is_ipv4: bool) -> Self {
         let max_prefix = if is_ipv4 { IPV4_BITS } else { IPV6_BITS };
+        let shift = max_prefix.saturating_sub(masklen);
+        let mask = if shift >= 128 {
+            0
+        } else {
+            u128::MAX << shift
+        };
+
         Self {
-            ip: self.ip & (u128::MAX << max_prefix.saturating_sub(masklen)),
+            ip: self.ip & mask,
             epc_id: self.epc_id,
             masklen: masklen as u8,
         }
@@ -1367,5 +1374,12 @@ mod tests {
         assert_eq!(endpoints.src_info.is_local_ip, true);
         assert_eq!(endpoints.src_info.l2_epc_id, 10);
         assert_eq!(endpoints.src_info.l3_epc_id, 10);
+    }
+
+    #[test]
+    fn test_clone_by_masklen_panic() {
+        let ip6 = "2002:2002::10";
+        let key = EpcNetIpKey::new(&ip6.parse().unwrap(), 128, 10);
+        let _ = key.clone_by_masklen(0, false);
     }
 }
