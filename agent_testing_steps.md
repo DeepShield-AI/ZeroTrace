@@ -18,7 +18,95 @@ deepflow-agent-ctl -p <AGENT_DEBUGGER_PORT> <SUBCOMMAND> [ARGS]
 
 ## 2. 环境准备与启动
 
-### 2.1 配置 Docker (支持私有镜像仓库)
+### 2.1 安装 Docker
+
+如果系统尚未安装 Docker，请按以下步骤安装。
+
+#### Ubuntu / Debian
+
+```bash
+# 更新包索引
+sudo apt-get update
+
+# 安装依赖包
+sudo apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# 添加 Docker 官方 GPG 密钥
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# 添加 Docker APT 源
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 安装 Docker Engine
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+#### CentOS / RHEL / Fedora
+
+```bash
+# 安装 yum-utils
+sudo yum install -y yum-utils
+
+# 添加 Docker 仓库
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# 安装 Docker Engine
+sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+#### 国内镜像源（可选，网络不通时使用）
+
+如果无法访问 Docker 官方源，可替换为阿里云镜像：
+
+```bash
+# Ubuntu
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# CentOS
+sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+```
+
+#### 启动 Docker 并设置开机自启
+
+```bash
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+#### 验证安装
+
+```bash
+# 查看版本
+docker --version
+
+# 运行测试容器
+sudo docker run --rm hello-world
+```
+
+#### （可选）免 sudo 使用 Docker
+
+```bash
+# 将当前用户加入 docker 组
+sudo usermod -aG docker $USER
+
+# 重新登录后生效，或执行：
+newgrp docker
+```
+
+### 2.2 配置 Docker (支持私有镜像仓库)
 
 由于编译镜像位于私有仓库（HTTP 协议），需要修改 Docker 配置以允许不安全的镜像库。
 
@@ -35,7 +123,7 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-### 2.2 获取代码
+### 2.3 获取代码
 
 拉取代码时需要包含子模块：
 ```bash
@@ -43,7 +131,7 @@ git clone --recurse-submodules https://github.com/DeepShield-AI/deepflow.git
 cd deepflow
 ```
 
-### 2.3 编译代码 (使用 Docker)
+### 2.4 编译代码 (使用 Docker)
 
 在开始测试之前，需要先编译 `deepflow-agent` 和 `deepflow-agent-ctl`。推荐使用 Docker 进行编译，无需配置本地 Rust 环境。
 
@@ -59,7 +147,7 @@ docker run --privileged --rm -it -v \
 - Agent: `agent/target/debug/deepflow-agent`
 - Ctl: `agent/target/debug/deepflow-agent-ctl`
 
-### 2.4 启动 Agent (Standalone 模式)
+### 2.5 启动 Agent (Standalone 模式)
 在后台启动 Agent，并开启 INFO 级别日志以便查看调试端口。
 
 ```bash
@@ -70,7 +158,7 @@ sudo pkill deepflow-agent
 sudo RUST_LOG=info ./agent/target/debug/deepflow-agent --standalone > agent.log 2>&1 &
 ```
 
-### 2.3 获取调试端口
+### 2.6 获取调试端口
 Agent 启动后会随机监听一个 UDP 端口用于调试。需要从日志中获取该端口号。
 
 ```bash
@@ -83,7 +171,7 @@ grep "debugger listening on" agent.log
 ```
 *记下这个端口号（例如 48522），后续命令中将用 `<PORT>` 代替。*
 
-### 2.4 生成测试流量 (可选)
+### 2.7 生成测试流量 (可选)
 为了测试 `ebpf` 和 `policy monitor` 功能，建议在本地生成一些网络流量。
 
 ```bash
