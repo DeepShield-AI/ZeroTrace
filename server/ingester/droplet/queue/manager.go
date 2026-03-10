@@ -38,6 +38,12 @@ import (
 
 var log = logging.MustGetLogger("queue_manager")
 
+// 这个 Manager 结构体是 DeepFlow 中队列调试系统的核心管理器，用于统一管理和监控多个队列实例
+// queues: 一个映射表，键是队列名称（字符串），值是实现了 MonitorOperator 接口的队列对象
+// 通过这个映射，Manager 可以按名称查找和操作不同的队列
+// 每个队列都实现了 MonitorOperator 接口，支持：
+// TurnOnDebug(): 开启调试模式，开始向指定客户端发送队列数据
+// TurnOffDebug(): 关闭调试模式
 type Manager struct {
 	queues map[string]MonitorOperator
 }
@@ -49,17 +55,32 @@ const (
 	QUEUE_CMD_CLEAR
 )
 
+// NewManager 创建一个新的队列监控管理器实例
+// 参数 module 是调试模块ID，用于标识不同的调试模块
+// 返回初始化完成的 Manager 实例指针
 func NewManager(module debug.ModuleId) *Manager {
+	// 创建 Manager 结构体实例
+	// Manager 负责管理多个队列监控器，提供统一的调试接口
 	manager := &Manager{}
+
+	// 初始化队列映射表，用于存储队列名称到监控操作器的映射关系
+	// 键：队列名称（字符串），值：MonitorOperator 接口实例
+	// 支持动态添加和管理多个队列的监控功能
 	manager.queues = make(map[string]MonitorOperator)
+
+	// 将管理器注册到调试系统中
+	// 使管理器能够接收和处理调试命令，如开启/关闭队列调试
+	// module 参数用于区分不同模块的调试请求
 	debug.Register(module, manager)
+
+	// 返回初始化完成的管理器实例
 	return manager
 }
 
 func (m *Manager) RecvCommand(conn *net.UDPConn, remote *net.UDPAddr, operate uint16, arg *bytes.Buffer) {
 	buffer := bytes.Buffer{}
 	switch operate {
-	case QUEUE_CMD_SHOW:
+	case QUEUE_CMD_SHOW: // 显示所有队列名称
 		names := make([]string, 0, len(m.queues))
 		for name, _ := range m.queues {
 			names = append(names, name)
@@ -71,7 +92,7 @@ func (m *Manager) RecvCommand(conn *net.UDPConn, remote *net.UDPAddr, operate ui
 		}
 		debug.SendToClient(conn, remote, 0, &buffer)
 		break
-	case QUEUE_CMD_MONITOR_ON:
+	case QUEUE_CMD_MONITOR_ON: // 开启指定队列的调试监控
 		name := ""
 		decoder := gob.NewDecoder(arg)
 		if err := decoder.Decode(&name); err != nil {
@@ -85,7 +106,7 @@ func (m *Manager) RecvCommand(conn *net.UDPConn, remote *net.UDPAddr, operate ui
 		m.queues[name].TurnOnDebug(conn, remote)
 		debug.SendToClient(conn, remote, 0, nil)
 		break
-	case QUEUE_CMD_MONITOR_OFF:
+	case QUEUE_CMD_MONITOR_OFF: // 关闭指定队列的调试监控
 		name := ""
 		decoder := gob.NewDecoder(arg)
 		if err := decoder.Decode(&name); err != nil {
@@ -98,7 +119,7 @@ func (m *Manager) RecvCommand(conn *net.UDPConn, remote *net.UDPAddr, operate ui
 		}
 		m.queues[name].TurnOffDebug()
 		break
-	case QUEUE_CMD_CLEAR:
+	case QUEUE_CMD_CLEAR: // 关闭所有队列的调试状态
 		for _, queue := range m.queues {
 			queue.TurnOffDebug()
 		}
@@ -118,7 +139,7 @@ func (m *Manager) NewQueue(name string, size int, options ...queue.Option) *Queu
 func (m *Manager) NewQueues(name string, size, count, userCount int, options ...queue.Option) *MultiQueue {
 	q := &MultiQueue{}
 	q.Init(name, size, count, userCount, nil, options...)
-	m.queues[name] = q
+	m.queues[name] = q // 把队列加入到队列管理器的map中
 	return q
 }
 

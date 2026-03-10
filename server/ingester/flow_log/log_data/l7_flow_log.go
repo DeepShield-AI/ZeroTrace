@@ -153,67 +153,180 @@ func L7BaseColumns() []*ckdb.Column {
 	return columns
 }
 
+// L7FlowLog 应用层流日志结构体
+// 用于记录应用层协议的详细通信信息，是DeepFlow可观测性系统的核心数据结构
 type L7FlowLog struct {
+	// 继承引用计数，支持对象池管理，提高内存使用效率
 	pool.ReferenceCount
+
+	// 流日志唯一标识符，用于区分不同的流日志记录
 	_id uint64 `json:"_id" category:"$tag" sub:"flow_info"`
 
+	// 嵌入L7基础结构体，包含网络层、传输层等基础信息
 	L7Base
 
-	L7Protocol  uint8  `json:"l7_protocol" category:"$tag" sub:"application_layer" enumfile:"l7_protocol"`
+	// ===== 应用层协议信息 =====
+
+	// 应用层协议类型，如HTTP、DNS、MySQL、Redis等
+	// 使用枚举值标识不同的应用协议
+	L7Protocol uint8 `json:"l7_protocol" category:"$tag" sub:"application_layer" enumfile:"l7_protocol"`
+
+	// 业务协议标识，用于标识自定义的业务协议
 	BizProtocol string `json:"biz_protocol" category:"$tag" sub:"application_layer"`
-	Version     string `json:"version" category:"$tag" sub:"application_layer"`
-	Type        uint8  `json:"type" category:"$tag" sub:"application_layer" enumfile:"l7_log_type"`
-	IsTLS       uint8  `json:"is_tls" category:"$tag" sub:"application_layer"`
-	IsAsync     uint8  `json:"is_async" category:"$tag" sub:"application_layer"`
-	IsReversed  uint8  `json:"is_reversed" category:"$tag" sub:"application_layer"`
 
-	RequestType     string `json:"request_type" category:"$tag" sub:"application_layer"`
-	RequestDomain   string `json:"request_domain" category:"$tag" sub:"application_layer"`
+	// 协议版本信息，如HTTP/1.1、HTTP/2等
+	Version string `json:"version" category:"$tag" sub:"application_layer"`
+
+	// 日志类型：0-请求、1-响应、2-会话
+	Type uint8 `json:"type" category:"$tag" sub:"application_layer" enumfile:"l7_log_type"`
+
+	// 是否使用TLS加密：0-否、1-是
+	IsTLS uint8 `json:"is_tls" category:"$tag" sub:"application_layer"`
+
+	// 是否为异步调用：0-否、1-是
+	IsAsync uint8 `json:"is_async" category:"$tag" sub:"application_layer"`
+
+	// 是否为反向流：0-否、1-是（用于标识流的方向）
+	IsReversed uint8 `json:"is_reversed" category:"$tag" sub:"application_layer"`
+
+	// ===== 请求详情信息 =====
+
+	// 请求类型，如HTTP方法(GET、POST)、SQL命令(SELECT、INSERT)等
+	RequestType string `json:"request_type" category:"$tag" sub:"application_layer"`
+
+	// 请求域名，如HTTP的Host头、RPC服务名、DNS查询域名等
+	RequestDomain string `json:"request_domain" category:"$tag" sub:"application_layer"`
+
+	// 请求资源，如HTTP路径、RPC方法名、SQL具体语句等
 	RequestResource string `json:"request_resource" category:"$tag" sub:"application_layer"`
-	Endpoint        string `json:"end_point" category:"$tag" sub:"service_info"`
 
-	// 数据库nullabled类型的字段, 需使用指针传值写入。如果值无意义，应传递nil.
+	// API端点信息，用于标识具体的接口
+	Endpoint string `json:"end_point" category:"$tag" sub:"service_info"`
+
+	// ===== 可空字段（使用指针类型支持数据库NULL值） =====
+
+	// 请求ID，用于关联请求和响应，如HTTP请求ID、RPC调用ID等
+	// 使用指针类型，无意义时传递nil
 	RequestId *uint64 `json:"request_id" category:"$tag" sub:"application_layer" data_type:"*uint64"`
+
+	// 内部存储字段，不直接对外暴露
 	requestId uint64
 
-	ResponseStatus    uint8  `json:"response_status" category:"$tag" sub:"application_layer" enumfile:"response_status"`
-	ResponseCode      *int32 `json:"response_code" category:"$tag" sub:"application_layer" data_type:"*int32"`
-	responseCode      int32
+	// ===== 响应详情信息 =====
+
+	// 响应状态：0-正常、1-异常、2-不存在、3-服务端异常、4-客户端异常
+	ResponseStatus uint8 `json:"response_status" category:"$tag" sub:"application_layer" enumfile:"response_status"`
+
+	// 响应码，如HTTP状态码、RPC响应码、SQL错误码等
+	// 使用指针类型支持NULL值
+	ResponseCode *int32 `json:"response_code" category:"$tag" sub:"application_layer" data_type:"*int32"`
+
+	// 内部存储字段
+	responseCode int32
+
+	// 响应异常信息，记录具体的异常描述
 	ResponseException string `json:"response_exception" category:"$tag" sub:"application_layer"`
-	ResponseResult    string `json:"response_result" category:"$tag" sub:"application_layer"`
 
+	// 响应结果，如DNS解析结果等
+	ResponseResult string `json:"response_result" category:"$tag" sub:"application_layer"`
+
+	// ===== 分布式追踪信息 =====
+
+	// HTTP代理客户端IP，记录经过代理前的真实客户端IP
 	HttpProxyClient string `json:"http_proxy_client" category:"$tag" sub:"tracing_info"`
-	XRequestId0     string `json:"x_request_id_0" category:"$tag" sub:"tracing_info"`
-	XRequestId1     string `json:"x_request_id_1" category:"$tag" sub:"tracing_info"`
-	TraceId         string `json:"trace_id" category:"$tag" sub:"tracing_info"`
-	TraceId2        string `json:"trace_id_2" category:"$tag" sub:"tracing_info"`
-	TraceIdIndex    uint64
-	SpanId          string `json:"span_id" category:"$tag" sub:"tracing_info"`
-	ParentSpanId    string `json:"parent_span_id" category:"$tag" sub:"tracing_info"`
-	SpanKind        uint8
-	spanKind        *uint8 `json:"span_kind" category:"$tag" sub:"tracing_info" enumfile:"span_kind" data_type:"*uint8"`
-	AppService      string `json:"app_service" category:"$tag" sub:"service_info"`
-	AppInstance     string `json:"app_instance" category:"$tag" sub:"service_info"`
 
+	// 请求方的X-Request-ID，用于链路追踪
+	XRequestId0 string `json:"x_request_id_0" category:"$tag" sub:"tracing_info"`
+
+	// 响应方的X-Request-ID，用于链路追踪
+	XRequestId1 string `json:"x_request_id_1" category:"$tag" sub:"tracing_info"`
+
+	// 分布式追踪ID，用于关联整个调用链
+	TraceId string `json:"trace_id" category:"$tag" sub:"tracing_info"`
+
+	// 辅助追踪ID，用于优化查询性能
+	TraceId2 string `json:"trace_id_2" category:"$tag" sub:"tracing_info"`
+
+	// 追踪ID索引，用于优化ClickHouse查询性能
+	TraceIdIndex uint64
+
+	// Span标识，标识分布式追踪中的具体操作单元
+	SpanId string `json:"span_id" category:"$tag" sub:"tracing_info"`
+
+	// 父Span标识，标识调用链中的上级操作
+	ParentSpanId string `json:"parent_span_id" category:"$tag" sub:"tracing_info"`
+
+	// Span类型，标识Span的角色（客户端、服务端等）
+	SpanKind uint8
+
+	// Span类型的指针版本，支持NULL值
+	spanKind *uint8 `json:"span_kind" category:"$tag" sub:"tracing_info" enumfile:"span_kind" data_type:"*uint8"`
+
+	// 应用服务名称，用于服务发现和拓扑
+	AppService string `json:"app_service" category:"$tag" sub:"service_info"`
+
+	// 应用实例标识，标识具体的服务实例
+	AppInstance string `json:"app_instance" category:"$tag" sub:"service_info"`
+
+	// ===== 性能指标信息 =====
+
+	// 响应延迟，单位：微秒
 	ResponseDuration uint64 `json:"response_duration" category:"$metrics" sub:"delay"`
-	RequestLength    *int64 `json:"request_length" category:"$metrics" sub:"throughput" data_type:"*int64"`
-	requestLength    int64
-	ResponseLength   *int64 `json:"response_length" category:"$metrics" sub:"throughput" data_type:"*int64"`
-	responseLength   int64
-	SqlAffectedRows  *uint64 `json:"sql_affected_rows" category:"$metrics" sub:"throughput" data_type:"*uint64"`
-	sqlAffectedRows  uint64
-	DirectionScore   uint8 `json:"direction_score" category:"$metrics" sub:"l4_throughput"`
 
-	// For Packet signal sources, it represents the packet length captured by AF_PACKET, excluding the layer 4 headers; for eBPF signal sources, it indicates the number of bytes for a single system call, and note that when TCP stream reassembly is enabled, it represents the total number of bytes from multiple system calls.
-	CapturedRequestByte  uint32 `json:"captured_request_byte" category:"$metrics" sub:"throughput"`
+	// 请求长度，单位：字节
+	// 使用指针类型支持NULL值
+	RequestLength *int64 `json:"request_length" category:"$metrics" sub:"throughput" data_type:"*int64"`
+
+	// 内部存储字段
+	requestLength int64
+
+	// 响应长度，单位：字节
+	// 使用指针类型支持NULL值
+	ResponseLength *int64 `json:"response_length" category:"$metrics" sub:"throughput" data_type:"*int64"`
+
+	// 内部存储字段
+	responseLength int64
+
+	// SQL影响行数，用于数据库操作统计
+	// 使用指针类型支持NULL值
+	SqlAffectedRows *uint64 `json:"sql_affected_rows" category:"$metrics" sub:"throughput" data_type:"*uint64"`
+
+	// 内部存储字段
+	sqlAffectedRows uint64
+
+	// 方向得分，用于标识网络流的方向
+	DirectionScore uint8 `json:"direction_score" category:"$metrics" sub:"l4_throughput"`
+
+	// ===== 捕获字节数信息 =====
+
+	// 捕获的请求字节数
+	// 对于Packet信号源：表示AF_PACKET捕获的数据包长度（不包括L4头部）
+	// 对于eBPF信号源：表示单个系统调用的字节数
+	// 启用TCP流重组时：表示多个系统调用的总字节数
+	CapturedRequestByte uint32 `json:"captured_request_byte" category:"$metrics" sub:"throughput"`
+
+	// 捕获的响应字节数，含义同上
 	CapturedResponseByte uint32 `json:"captured_response_byte" category:"$metrics" sub:"throughput"`
 
-	AttributeNames  []string `json:"attribute_names" category:"$tag" sub:"native_tag" data_type:"[]string"`
+	// ===== 扩展属性信息 =====
+
+	// 自定义属性名称数组，支持业务扩展
+	AttributeNames []string `json:"attribute_names" category:"$tag" sub:"native_tag" data_type:"[]string"`
+
+	// 自定义属性值数组，与AttributeNames一一对应
 	AttributeValues []string `json:"attribute_values" category:"$tag" sub:"native_tag" data_type:"[]string"`
 
-	MetricsNames  []string  `json:"metrics_names" category:"$metrics" data_type:"[]string"`
+	// ===== 自定义指标信息 =====
+
+	// 自定义指标名称数组，支持业务指标扩展
+	MetricsNames []string `json:"metrics_names" category:"$metrics" data_type:"[]string"`
+
+	// 自定义指标值数组，与MetricsNames一一对应
 	MetricsValues []float64 `json:"metrics_values" category:"$metrics" data_type:"[]float64"`
 
+	// ===== 事件信息 =====
+
+	// 事件信息，记录OpenTelemetry等系统的事件数据
 	Events string `json:"events" category:"$tag" sub:"application_layer"`
 }
 
@@ -643,22 +756,36 @@ func ProtoLogToL7FlowLog(orgId, teamId uint16, l *pb.AppProtoLogsData, platformD
 
 var extraFieldNamesNeedWriteFlowTag = [3]string{"app_service", "endpoint", "app_instance"}
 
+// GenerateNewFlowTags 为L7流日志生成流标签
+// 该方法将流日志中的属性和指标转换为可缓存的标签，用于优化查询性能和数据分类
 func (h *L7FlowLog) GenerateNewFlowTags(cache *flow_tag.FlowTagCache) {
+	// 初始化端点数量，默认为2（客户端和服务端）
 	l := 2
+	// 提取流两端的VPC ID数组
 	L3EpcIDs := [2]int32{h.L3EpcID0, h.L3EpcID1}
+	// 提取流两端的Pod命名空间ID数组
 	PodNSIDs := [2]uint16{h.PodNSID0, h.PodNSID1}
+
+	// 如果流的两端在同一个VPC和同一个Pod命名空间中，则只需要处理1个端点
+	// 这种优化避免了重复处理相同的标签信息
 	if h.L3EpcID0 == h.L3EpcID1 && h.PodNSID0 == h.PodNSID1 {
 		l = 1
 	}
 
+	// 将结束时间从微秒转换为秒，作为标签的时间戳
 	time := uint32(h.L7Base.EndTime / US_TO_S_DEVISOR)
 
+	// 需要写入流标签的额外字段值（应用服务、端点、应用实例）
+	// 这些是DeepFlow内置的重要字段，需要特殊处理
 	extraFieldValuesNeedWriteFlowTag := [3]string{h.AppService, h.Endpoint, h.AppInstance}
 
+	// 将用户自定义属性与内置字段合并，生成完整的属性名列表
 	attributeNames := append(h.AttributeNames, extraFieldNamesNeedWriteFlowTag[:]...)
+	// 对应地合并属性值列表
 	attributeValues := append(h.AttributeValues, extraFieldValuesNeedWriteFlowTag[:]...)
 
-	// avoid panic caused by different attributes lengths
+	// 安全检查：避免因属性名和值数量不匹配导致的panic
+	// 这种情况可能发生在数据异常或配置错误时
 	namesLen, valuesLen := len(attributeNames), len(attributeValues)
 	minNamesLen := namesLen
 	if namesLen != valuesLen {
@@ -668,46 +795,58 @@ func (h *L7FlowLog) GenerateNewFlowTags(cache *flow_tag.FlowTagCache) {
 		}
 	}
 
+	// 重置缓存缓冲区，复用内存避免频繁分配
 	cache.Fields = cache.Fields[:0]
 	cache.FieldValues = cache.FieldValues[:0]
 
+	// 遍历每个需要处理的端点（1个或2个）
 	for idx := 0; idx < l; idx++ {
-		// reset temporary buffers
+		// 重置临时缓冲区，准备构建流标签信息
 		flowTagInfo := &cache.FlowTagInfoBuffer
 		*flowTagInfo = flow_tag.FlowTagInfo{
-			Table:   common.L7_FLOW_ID.String(),
-			VpcId:   L3EpcIDs[idx],
-			PodNsId: PodNSIDs[idx],
-			OrgId:   h.OrgId,
-			TeamID:  h.TeamID,
+			Table:   common.L7_FLOW_ID.String(), // 表名标识
+			VpcId:   L3EpcIDs[idx],              // 当前端点的VPC ID
+			PodNsId: PodNSIDs[idx],              // 当前端点的Pod命名空间ID
+			OrgId:   h.OrgId,                    // 组织ID（多租户隔离）
+			TeamID:  h.TeamID,                   // 团队ID（细粒度权限控制）
 		}
 
+		// 处理所有属性名值对
 		for i, name := range attributeNames[:minNamesLen] {
 			flowTagInfo.FieldName = name
 
-			// tag + value
+			// ===== 处理标签值（Tag + Value）=====
+			// 用于存储具体的标签值，支持精确查询
 			flowTagInfo.FieldValue = attributeValues[i]
 
+			// 检查缓存中是否已存在相同的标签值
+			// 使用LRU缓存避免重复写入相同的标签，提高性能
 			if old, ok := cache.FieldValueCache.AddOrGet(*flowTagInfo, time); ok {
+				// 如果缓存未过期且存在，则跳过处理
 				if old+cache.CacheFlushTimeout >= time {
-					// If there is no new fieldValue, of course there will be no new field.
-					// So we can just skip the rest of the process in the loop.
+					// 如果没有新的fieldValue，当然也不会有新的field
+					// 因此可以跳过循环中的其余处理
 					continue
 				} else {
+					// 缓存已过期，更新缓存
 					cache.FieldValueCache.Add(*flowTagInfo, time)
 				}
 			}
+			// 创建新的标签值对象并添加到缓存
 			tagFieldValue := flow_tag.AcquireFlowTag(flow_tag.TagFieldValue)
 			tagFieldValue.Timestamp = time
 			tagFieldValue.FlowTagInfo = *flowTagInfo
 			cache.FieldValues = append(cache.FieldValues, tagFieldValue)
 
-			// The tag key in extraFieldNamesNeedWriteFlowTag does not need to be written into flow_tag.
+			// ===== 处理标签名（Only Tag）=====
+			// extraFieldNamesNeedWriteFlowTag中的标签键不需要写入flow_tag表
+			// 这些是内置字段，已经通过其他方式处理
 			if i >= len(h.AttributeNames) {
 				continue
 			}
-			// only tag
+			// 清空字段值，只保留字段名用于标签名索引
 			flowTagInfo.FieldValue = ""
+			// 检查标签名缓存
 			if old, ok := cache.FieldCache.AddOrGet(*flowTagInfo, time); ok {
 				if old+cache.CacheFlushTimeout >= time {
 					continue
@@ -715,17 +854,20 @@ func (h *L7FlowLog) GenerateNewFlowTags(cache *flow_tag.FlowTagCache) {
 					cache.FieldCache.Add(*flowTagInfo, time)
 				}
 			}
+			// 创建新的标签名对象并添加到缓存
 			tagField := flow_tag.AcquireFlowTag(flow_tag.TagField)
 			tagField.Timestamp = time
 			tagField.FlowTagInfo = *flowTagInfo
 			cache.Fields = append(cache.Fields, tagField)
 		}
 
-		// metrics
+		// ===== 处理指标名称 =====
+		// 指标只需要记录名称，不需要记录值（值存储在原始数据中）
 		flowTagInfo.FieldType = flow_tag.FieldMetrics
 		flowTagInfo.FieldValue = ""
 		for _, name := range h.MetricsNames {
 			flowTagInfo.FieldName = name
+			// 检查指标名称缓存
 			if old, ok := cache.FieldCache.AddOrGet(*flowTagInfo, time); ok {
 				if old+cache.CacheFlushTimeout >= time {
 					continue
@@ -733,11 +875,11 @@ func (h *L7FlowLog) GenerateNewFlowTags(cache *flow_tag.FlowTagCache) {
 					cache.FieldCache.Add(*flowTagInfo, time)
 				}
 			}
+			// 创建指标标签对象
 			tagField := flow_tag.AcquireFlowTag(flow_tag.TagField)
 			tagField.Timestamp = time
 			tagField.FlowTagInfo = *flowTagInfo
 			cache.Fields = append(cache.Fields, tagField)
 		}
-
 	}
 }

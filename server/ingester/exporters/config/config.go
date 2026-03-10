@@ -437,47 +437,94 @@ type StructTags struct {
 	IsExportedField bool // gen from 'ExporterCfg.ExportFields'
 }
 
-// ExporterCfg holds configs of different exporters.
+// ExporterCfg 定义了导出器的配置参数，用于控制遥测数据的导出行为
 type ExporterCfg struct {
-	Protocol        string         `yaml:"protocol"`
-	Enabled         bool           `yaml:"enabled"`
-	ExportProtocol  ExportProtocol // gen by `Protocol`
-	DataSources     []string       `yaml:"data-sources"`
-	DataSourceBits  uint32         // gen by `DataSources`
-	Endpoints       []string       `yaml:"endpoints"`
-	RandomEndpoints []string       // gen by `Endpoints`     `
+	// Protocol 指定导出协议类型，支持 "opentelemetry"、"prometheus"、"kafka"
+	Protocol string `yaml:"protocol"`
 
-	QueueCount  int `yaml:"queue-count"`
-	QueueSize   int `yaml:"queue-size"`
-	BatchSize   int `yaml:"batch-size"`
+	// Enabled 控制是否启用此导出器
+	Enabled bool `yaml:"enabled"`
+
+	// ExportProtocol 是根据 Protocol 字段生成的枚举值，用于内部协议判断
+	ExportProtocol ExportProtocol // gen by `Protocol`
+
+	// DataSources 指定要导出的数据源列表，如 "network_1m"、"application_1s" 等
+	DataSources []string `yaml:"data-sources"`
+
+	// DataSourceBits 是根据 DataSources 生成的位掩码，用于快速数据源匹配
+	DataSourceBits uint32 // gen by `DataSources`
+
+	// Endpoints 指定导出目标端点列表，如 Kafka brokers 或 Prometheus 网关地址
+	Endpoints []string `yaml:"endpoints"`
+
+	// RandomEndpoints 是 Endpoints 的随机化版本，用于负载均衡
+	RandomEndpoints []string // gen by `Endpoints`
+
+	// QueueCount 指定队列数量，用于并发处理导出数据
+	QueueCount int `yaml:"queue-count"`
+
+	// QueueSize 指定每个队列的最大大小
+	QueueSize int `yaml:"queue-size"`
+
+	// BatchSize 指定批量发送的数据条数
+	BatchSize int `yaml:"batch-size"`
+
+	// FlusTimeout 指定刷新超时时间（毫秒），控制数据发送频率
 	FlusTimeout int `yaml:"flush-timeout"`
 
-	ExportEmptyTag                      bool `yaml:"export-empty-tag"`
-	ExportEmptyMetricsDisabled          bool `yaml:"export-empty-metrics-disabled"`
-	EnumTranslateToNameDisabled         bool `yaml:"enum-translate-to-name-disabled"`
+	// ExportEmptyTag 控制是否导出空标签值
+	ExportEmptyTag bool `yaml:"export-empty-tag"`
+
+	// ExportEmptyMetricsDisabled 控制是否禁用导出空指标值
+	ExportEmptyMetricsDisabled bool `yaml:"export-empty-metrics-disabled"`
+
+	// EnumTranslateToNameDisabled 控制是否禁用枚举值到名称的转换
+	EnumTranslateToNameDisabled bool `yaml:"enum-translate-to-name-disabled"`
+
+	// UniversalTagTranslateToNameDisabled 控制是否禁用通用标签到名称的转换
 	UniversalTagTranslateToNameDisabled bool `yaml:"universal-tag-translate-to-name-disabled"`
 
+	// TagFilterCondition 标签过滤条件（已弃用，建议使用 tag-filters-groups）
 	// Deprecated, use 'tag-filters-groups'
 	TagFilterCondition TagFilterCondition `yaml:"tag-filter-condition"`
+
+	// TagFilters 标签过滤器列表（已弃用，建议使用 tag-filters-groups）
 	// Deprecated, use 'tag-filters-groups'
 	TagFilters []TagFilter `yaml:"tag-filters"`
 
-	TagFiltersGroups        []TagFiltersGroup `yaml:"tag-filters-groups"`
-	ExportFields            []string          `yaml:"export-fields"`
-	ExportFieldCategoryBits uint64            // gen by `ExportFields`
-	ExportFieldNames        []string          // gen by `ExportFields`
-	ExportFieldK8s          []string          // gen by `ExportFields`
+	// TagFiltersGroups 标签过滤器组，支持更复杂的过滤逻辑
+	TagFiltersGroups []TagFiltersGroup `yaml:"tag-filters-groups"`
 
-	ExportFieldStructTags      [MAX_DATASOURCE_ID][]StructTags   // gen by `ExportFields` and init when exporting item first time
-	TagFiltersStructTags       [MAX_DATASOURCE_ID][]StructTags   // gen by `TagFilters`  and init when exporting item first time
-	TagFiltersGroupsStructTags [MAX_DATASOURCE_ID][][]StructTags // gen by `TagFiltersGroups` and init when exporting item first time
+	// ExportFields 指定要导出的字段列表，如 "$service_info"、"$tracing_info" 等
+	ExportFields []string `yaml:"export-fields"`
 
-	// private configuration
+	// ExportFieldCategoryBits 是根据 ExportFields 生成的类别位掩码
+	ExportFieldCategoryBits uint64 // gen by `ExportFields`
+
+	// ExportFieldNames 是 ExportFields 的副本，用于字段名称匹配
+	ExportFieldNames []string // gen by `ExportFields`
+
+	// ExportFieldK8s 是从 ExportFields 中提取的 Kubernetes 标签配置
+	ExportFieldK8s []string // gen by `ExportFields`
+
+	// ExportFieldStructTags 是运行时生成的结构标签，用于字段映射和导出
+	// 在首次导出项目时根据 ExportFields 初始化
+	ExportFieldStructTags [MAX_DATASOURCE_ID][]StructTags // gen by `ExportFields` and init when exporting item first time
+
+	// TagFiltersStructTags 是标签过滤器的结构标签，运行时生成
+	// 在首次导出项目时根据 TagFilters 初始化
+	TagFiltersStructTags [MAX_DATASOURCE_ID][]StructTags // gen by `TagFilters` and init when exporting item first time
+
+	// TagFiltersGroupsStructTags 是标签过滤器组的结构标签，运行时生成
+	// 在首次导出项目时根据 TagFiltersGroups 初始化
+	TagFiltersGroupsStructTags [MAX_DATASOURCE_ID][][]StructTags // gen by `TagFiltersGroups' and init when exporting item first time
+
+	// ExtraHeaders 用于存储协议特定的额外头部信息
 	ExtraHeaders map[string]string `yaml:"extra-headers"`
 
-	// kafka private configuration
-	Sasl  Sasl   `yaml:"sasl"`
-	Topic string `yaml:"topic"`
+	// Kafka 协议专用配置
+	Sasl  Sasl   `yaml:"sasl"`  // Kafka SASL 认证配置
+	Topic string `yaml:"topic"` // Kafka 主题名称
 }
 
 type Sasl struct {

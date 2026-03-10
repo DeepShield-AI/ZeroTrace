@@ -40,12 +40,29 @@ type ReferenceCountable interface {
 
 type Unmarshaller func(interface{}) (interface{}, error)
 
+// 这个 Monitor 结构体主要用于队列系统的调试功能 monitor.go:43-50 。
+// 它通过通道机制收集队列数据，并提供调试开关控制。当启用调试时，队列中的数据会被发送到 ch 通道，
+// 然后通过 sendDebug 方法发送给调试客户端
+// 该 Monitor 结构体实现了 MonitorOperator 接口，提供 TurnOnDebug 和 TurnOffDebug 方法
 type Monitor struct {
+	// ch 是一个缓冲通道，用于在调试模式下接收和传递队列中的数据项
+	// 当 DebugOn 为 true 时，队列中的数据会被发送到此通道供调试使用
+	// 通道容量为 1000，在 TurnOnDebug 方法中初始化
 	ch chan []interface{}
 
+	// DebugOn 控制调试模式的开关
+	// 为 true 时启用调试，会将队列数据发送到 ch 通道
+	// 为 false 时关闭调试，停止数据收集
+	// 调试模式会在 60 秒后自动超时关闭
 	DebugOn bool
-	Name    string
 
+	// Name 标识监控器的名称，用于日志输出和调试信息
+	// 通常与队列名称相关，便于区分不同的监控器实例
+	Name string
+
+	// unmarshaller 是一个函数类型，用于将接口{}类型的数据转换为可调试的字符串格式
+	// 如果为 nil，则直接使用原始数据；否则会调用此函数进行数据转换
+	// 转换后的数据需要实现 fmt.Stringer 接口
 	unmarshaller Unmarshaller
 }
 

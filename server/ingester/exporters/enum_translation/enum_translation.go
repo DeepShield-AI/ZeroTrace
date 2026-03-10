@@ -27,9 +27,11 @@ import (
 
 var log = logging.MustGetLogger("exporters.translation")
 
+// EnumTranslation 枚举值翻译器，用于将枚举值转换为可读的字符串
+// 支持整数枚举和字符串枚举两种类型的翻译映射
 type EnumTranslation struct {
-	intMaps    map[string]map[int]string
-	stringMaps map[string]map[string]string
+	intMaps    map[string]map[int]string    // 整数枚举映射表，key为枚举文件名，value为整数到字符串的映射
+	stringMaps map[string]map[string]string // 字符串枚举映射表，key为枚举文件名，value为字符串到字符串的映射
 }
 
 func NewEnumTranslation() *EnumTranslation {
