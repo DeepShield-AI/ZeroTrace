@@ -139,7 +139,7 @@ cd deepflow
 
 ```bash
 docker run --privileged --rm -it -v \
-    $(pwd):/deepflow 47.97.67.233:5000/deepshield/rust-build bash -c \
+    $(pwd):/deepflow 47.97.67.233:5000/deepshield/rust-build:cached bash -c \
     "cd /deepflow/agent && cargo build"
 ```
 
