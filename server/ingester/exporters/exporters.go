@@ -52,16 +52,16 @@ type Exporter interface {
 	Put(items ...interface{})
 }
 
-type ExportersCache []interface{}
+type ExportersCache []interface{} //整体表示一个可以存储任意类型元素的切片
 
 type Exporters struct {
-	config                  *config.Config
-	universalTagsManagerMap map[string]*universal_tag.UniversalTagsManager
-	translation             *enum_translation.EnumTranslation
-	exporters               []Exporter
-	dataSourceExporters     [config.MAX_DATASOURCE_ID][]Exporter
-	dataSourceExporterCfgs  [config.MAX_DATASOURCE_ID][]*config.ExporterCfg
-	putCaches               []ExportersCache // cache for batch put to exporter, has multi decoders call Put(), and put to multi exporters
+	config                  *config.Config                                  // 导出器配置参数，包含所有导出器的全局配置
+	universalTagsManagerMap map[string]*universal_tag.UniversalTagsManager  // 通用标签管理器映射，按K8s字段分组管理标签转换
+	translation             *enum_translation.EnumTranslation               // 枚举值翻译器，用于将内部枚举转换为外部系统格式
+	exporters               []Exporter                                      // 导出器实例列表，存储所有已初始化的导出器
+	dataSourceExporters     [config.MAX_DATASOURCE_ID][]Exporter            // 按数据源ID分组的导出器数组，支持快速查找
+	dataSourceExporterCfgs  [config.MAX_DATASOURCE_ID][]*config.ExporterCfg // 按数据源ID分组的导出器配置数组
+	putCaches               []ExportersCache                                // 批量提交缓存，支持多解码器并发调用Put()方法
 }
 
 func NewExporters(cfg *config.Config) *Exporters {
@@ -85,11 +85,17 @@ func NewExporters(cfg *config.Config) *Exporters {
 		}
 		// If the ExportFieldK8s are the same, you can use the same universalTagManager
 		uTagKey := strings.Join(exporterCfg.ExportFieldK8s, "-")
+		// 根据导出器的K8s字段创建或复用通用标签管理器
 		universalTagManager = uTagManagerMap[uTagKey]
 		if universalTagManager == nil {
 			universalTagManager = universal_tag.NewUniversalTagsManager(exporterCfg.ExportFieldK8s, cfg.Base)
 			uTagManagerMap[uTagKey] = universalTagManager
 		}
+		// 根据协议类型创建对应的导出器实例：
+		// OTLP协议：创建 otlp_exporter
+		// Prometheus协议：创建 prometheus_exporter
+		// Kafka协议：创建 kafka_exporter
+		// 其他协议：记录警告并跳过
 		switch exporterCfg.ExportProtocol {
 		case config.PROTOCOL_OTLP:
 			exporter = otlp_exporter.NewOtlpExporter(i, &cfg.Exporters[i], universalTagManager)

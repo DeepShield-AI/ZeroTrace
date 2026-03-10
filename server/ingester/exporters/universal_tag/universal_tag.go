@@ -179,20 +179,22 @@ func (t DeviceType) String() string {
 
 type Labels map[string]string
 
+// UniversalTagMaps 通用标签映射表，存储单个组织的所有资源ID到名称的映射关系
+// 用于将数据中的资源ID转换为可读的资源名称，为可观测性数据提供上下文信息
 type UniversalTagMaps struct {
-	podK8SLabelMap map[uint32]Labels
-	regionMap      map[uint16]string
-	azMap          map[uint16]string
-	deviceMap      map[uint64]string //deviceId+deviceType -> deviceName
-	podNodeMap     map[uint32]string
-	podNsMap       map[uint16]string
-	podGroupMap    map[uint32]string
-	podMap         map[uint32]string
-	podClusterMap  map[uint16]string
-	l3EpcMap       map[uint32]string
-	subnetMap      map[uint16]string
-	gprocessMap    map[uint32]string
-	vtapMap        map[uint16]string
+	podK8SLabelMap map[uint32]Labels // Pod的K8s标签映射表，key为PodID，value为标签键值对
+	regionMap      map[uint16]string // 区域映射表，key为区域ID，value为区域名称
+	azMap          map[uint16]string // 可用区映射表，key为可用区ID，value为可用区名称
+	deviceMap      map[uint64]string // 设备映射表，key为(设备类型<<32|设备ID)，value为设备名称
+	podNodeMap     map[uint32]string // Pod节点映射表，key为节点ID，value为节点名称
+	podNsMap       map[uint16]string // Pod命名空间映射表，key为命名空间ID，value为命名空间名称
+	podGroupMap    map[uint32]string // Pod组映射表，key为Pod组ID，value为Pod组名称
+	podMap         map[uint32]string // Pod映射表，key为PodID，value为Pod名称
+	podClusterMap  map[uint16]string // Pod集群映射表，key为集群ID，value为集群名称
+	l3EpcMap       map[uint32]string // L3 EPC/VPC映射表，key为EPC ID，value为EPC名称
+	subnetMap      map[uint16]string // 子网映射表，key为子网ID，value为子网名称
+	gprocessMap    map[uint32]string // 全局进程映射表，key为进程ID，value为进程名称
+	vtapMap        map[uint16]string // VTAP映射表，key为VTAP ID，value为VTAP名称
 }
 
 func (u *UniversalTagsManager) QueryUniversalTags(
@@ -273,15 +275,17 @@ func (u *UniversalTagsManager) QueryCustomK8sLabels(orgId uint16, podID uint32) 
 	return u.universalTagMaps[orgId].podK8SLabelMap[podID]
 }
 
+// UniversalTagsManager 通用标签管理器，负责管理和查询云原生资源的标签信息
+// 支持多租户环境下的标签统一管理和查询，为数据导出提供资源上下文信息
 type UniversalTagsManager struct {
-	universalTagMaps [grpc.MAX_ORG_COUNT]*UniversalTagMaps
-	tapPortNameMap   map[uint64]string
+	universalTagMaps [grpc.MAX_ORG_COUNT]*UniversalTagMaps // 多组织标签映射表，每个组织维护独立的标签映射
+	tapPortNameMap   map[uint64]string                     // TAP端口名称映射表，key为端口ID，value为端口名称
 
-	k8sLabelFields  []string
-	k8sLabelRegexps []*regexp.Regexp
+	k8sLabelFields  []string         // K8s标签字段列表，用于指定需要导出的具体标签字段
+	k8sLabelRegexps []*regexp.Regexp // K8s标签正则表达式列表，用于匹配需要导出的标签模式
 
-	grpcSession             *grpc.GrpcSession
-	versionUniversalTagMaps [grpc.MAX_ORG_COUNT]uint32
+	grpcSession             *grpc.GrpcSession          // gRPC会话，用于与Controller通信同步标签数据
+	versionUniversalTagMaps [grpc.MAX_ORG_COUNT]uint32 // 各组织标签映射版本号，用于检测数据更新
 }
 
 func NewUniversalTagsManager(k8sLabelConfig []string, baseCfg *config.Config) *UniversalTagsManager {

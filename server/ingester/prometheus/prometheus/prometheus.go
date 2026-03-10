@@ -36,14 +36,15 @@ import (
 	"github.com/deepflowio/deepflow/server/libs/receiver"
 )
 
+// PrometheusHandler负责接收、解码和存储Prometheus格式的监控指标数据，是DeepFlow支持Prometheus生态系统的关键组件
 type PrometheusHandler struct {
-	Config               *config.Config
-	LabelTable           *decoder.PrometheusLabelTable
-	Decoders             []*decoder.Decoder
-	SlowDecoders         []*decoder.SlowDecoder
-	PlatformDatas        []*grpc.PlatformInfoTable
-	SlowPlatformDatas    []*grpc.PlatformInfoTable
-	prometheusLabelTable *decoder.PrometheusLabelTable
+	Config               *config.Config                // Prometheus处理器配置参数
+	LabelTable           *decoder.PrometheusLabelTable // 标签表缓存（已废弃，使用prometheusLabelTable），
+	Decoders             []*decoder.Decoder            //  常规解码器数组，处理标签已知的Prometheus指标数据
+	SlowDecoders         []*decoder.SlowDecoder        // 慢速解码器数组，处理包含新标签需要查询Controller的指标数据
+	PlatformDatas        []*grpc.PlatformInfoTable     // 为常规解码器提供平台信息，用于数据丰富和标签补充
+	SlowPlatformDatas    []*grpc.PlatformInfoTable     // 为慢速解码器提供独立的平台信息表
+	prometheusLabelTable *decoder.PrometheusLabelTable // Prometheus标签表，管理指标名称和标签ID映射，核心标签表，负责管理Prometheus指标名称、标签名称和值的ID映射
 }
 
 func NewPrometheusHandler(config *config.Config, recv *receiver.Receiver, platformDataManager *grpc.PlatformDataManager) (*PrometheusHandler, error) {

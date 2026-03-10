@@ -75,29 +75,49 @@ func newFlowLogTable(id common.FlowLogID, columns []*ckdb.Column, engine ckdb.En
 	}
 }
 
+// GetFlowLogTables 创建流日志表的配置
+// 返回包含L4流日志、L7流日志和L4数据包表的表配置数组
 func GetFlowLogTables(engine ckdb.EngineType, cluster, storagePolicy, ckdbType string, l4LogTtl, l7LogTtl, l4PacketTtl int, coldStorages map[string]*ckdb.ColdStorage) []*ckdb.Table {
 	return []*ckdb.Table{
+		// 创建L4流日志表配置，包含网络层流数据
 		newFlowLogTable(common.L4_FLOW_ID, logdata.L4FlowLogColumns(), engine, cluster, storagePolicy, ckdbType, l4LogTtl, ckdb.GetColdStorage(coldStorages, common.FLOW_LOG_DB, common.L4_FLOW_ID.String())),
+
+		// 创建L7流日志表配置，包含应用层流数据
 		newFlowLogTable(common.L7_FLOW_ID, logdata.L7FlowLogColumns(), engine, cluster, storagePolicy, ckdbType, l7LogTtl, ckdb.GetColdStorage(coldStorages, common.FLOW_LOG_DB, common.L7_FLOW_ID.String())),
+
+		// 创建L4数据包表配置，包含数据包级别的详细数据
 		newFlowLogTable(common.L4_PACKET_ID, logdata.L4PacketColumns(), engine, cluster, storagePolicy, ckdbType, l4PacketTtl, ckdb.GetColdStorage(coldStorages, common.FLOW_LOG_DB, common.L4_PACKET_ID.String())),
 	}
 }
 
+// NewFlowLogWriter 创建流日志写入器
+// 为每种类型的流日志表创建对应的CKWriter实例，用于写入ClickHouse
 func NewFlowLogWriter(addrs []string, user, password, cluster, storagePolicy, timeZone, ckdbType string, ckWriterCfg config.CKWriterConfig, flowLogTtl flowlogconfig.FlowLogTTL, coldStorages map[string]*ckdb.ColdStorage, ckdbWatcher *config.Watcher) (*FlowLogWriter, error) {
+	// 创建CKWriter数组，大小为流日志类型总数
 	ckwriters := make([]*ckwriter.CKWriter, common.FLOWLOG_ID_MAX)
 	var err error
+
+	// 获取所有流日志表的配置
 	tables := GetFlowLogTables(ckdb.MergeTree, cluster, storagePolicy, ckdbType, flowLogTtl.L4FlowLog, flowLogTtl.L7FlowLog, flowLogTtl.L4Packet, coldStorages)
+
+	// 为每个表创建对应的CKWriter
 	for i, table := range tables {
+		// 使用表ID作为计数器名称
 		counterName := common.FlowLogID(table.ID).String()
+
+		// 创建CKWriter实例，配置队列、批处理等参数
 		ckwriters[i], err = ckwriter.NewCKWriter(addrs, user, password, counterName, timeZone, table,
 			ckWriterCfg.QueueCount, ckWriterCfg.QueueSize, ckWriterCfg.BatchSize, ckWriterCfg.FlushTimeout, ckdbWatcher)
 		if err != nil {
 			log.Error(err)
 			return nil, err
 		}
+
+		// 启动CKWriter，开始处理数据写入
 		ckwriters[i].Run()
 	}
 
+	// 返回FlowLogWriter实例，包含所有CKWriter
 	return &FlowLogWriter{
 		ckwriters: ckwriters,
 	}, nil

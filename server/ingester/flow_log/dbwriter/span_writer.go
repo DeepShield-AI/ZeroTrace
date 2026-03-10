@@ -129,61 +129,71 @@ func (t *SpanWithTraceID) Encode() {
 	t.EncodedSpan = encoder.Bytes()
 }
 
+// GenSpanWithTraceIDCKTable 生成Span表的ClickHouse配置
+// 定义了span_with_trace_id表的结构和存储参数
 func GenSpanWithTraceIDCKTable(cluster, storagePolicy, ckdbType string, ttl int, coldStorage *ckdb.ColdStorage) *ckdb.Table {
-	table := SPAN_WITH_TRACE_ID_TABLE
-	timeKey := "time"
-	engine := ckdb.MergeTree
-	orderKeys := []string{"search_index", "time"}
+	table := SPAN_WITH_TRACE_ID_TABLE             // 表名常量
+	timeKey := "time"                             // 时间分区键
+	engine := ckdb.MergeTree                      // 使用MergeTree引擎
+	orderKeys := []string{"search_index", "time"} // 排序键
 
 	return &ckdb.Table{
-		Version:         basecommon.CK_VERSION,
-		Database:        common.FLOW_LOG_DB,
-		DBType:          ckdbType,
-		LocalName:       table + ckdb.LOCAL_SUBFFIX,
-		GlobalName:      table,
-		Columns:         SpanWithTraceIDColumns(),
-		TimeKey:         timeKey,
-		TTL:             ttl,
-		PartitionFunc:   DefaultPartition,
-		Engine:          engine,
-		Cluster:         cluster,
-		StoragePolicy:   storagePolicy,
-		ColdStorage:     *coldStorage,
-		OrderKeys:       orderKeys,
-		PrimaryKeyCount: len(orderKeys),
+		Version:         basecommon.CK_VERSION,      // 表版本
+		Database:        common.FLOW_LOG_DB,         // 数据库名
+		DBType:          ckdbType,                   // 数据库类型
+		LocalName:       table + ckdb.LOCAL_SUBFFIX, // 本地表名
+		GlobalName:      table,                      // 全局表名
+		Columns:         SpanWithTraceIDColumns(),   // 表列定义
+		TimeKey:         timeKey,                    // 时间键
+		TTL:             ttl,                        // 数据保留时间
+		PartitionFunc:   DefaultPartition,           // 分区函数
+		Engine:          engine,                     // 存储引擎
+		Cluster:         cluster,                    // 集群配置
+		StoragePolicy:   storagePolicy,              // 存储策略
+		ColdStorage:     *coldStorage,               // 冷存储配置
+		OrderKeys:       orderKeys,                  // 排序键
+		PrimaryKeyCount: len(orderKeys),             // 主键数量
 	}
 }
 
+// 负责将链路追踪的 Span 数据写入 ClickHouse 数据库
 type SpanWriter struct {
-	ckdbAddrs         *[]string
-	ckdbUsername      string
-	ckdbPassword      string
-	ckdbCluster       string
-	ckdbStoragePolicy string
-	ckdbColdStorages  map[string]*ckdb.ColdStorage
-	ttl               int
-	writerConfig      baseconfig.CKWriterConfig
+	ckdbAddrs         *[]string                    // ClickHouse数据库地址列表，支持多节点集群
+	ckdbUsername      string                       // ClickHouse数据库用户名，用于身份验证
+	ckdbPassword      string                       // ClickHouse数据库密码，用于身份验证
+	ckdbCluster       string                       // ClickHouse集群名称，用于分布式部署
+	ckdbStoragePolicy string                       // ClickHouse存储策略，控制数据存储和分层
+	ckdbColdStorages  map[string]*ckdb.ColdStorage // 冷存储配置映射，用于数据生命周期管理
+	ttl               int                          // 数据生存时间（TTL），自动清理过期数据
+	writerConfig      baseconfig.CKWriterConfig    // ClickHouse写入器配置，包含队列、批次等参数
 
-	traceWriter *ckwriter.CKWriter
+	traceWriter *ckwriter.CKWriter // 实际的ClickHouse写入器实例，负责数据写入操作
 }
 
+// NewSpanWriter 创建Span写入器，用于将追踪数据写入ClickHouse
+// 如果追踪树功能未启用，则返回nil
 func NewSpanWriter(config *config.Config) (*SpanWriter, error) {
+	// 检查追踪树功能是否启用
 	if !*config.TraceTreeEnabled {
 		return nil, nil
 	}
+
+	// 初始化SpanWriter结构体，配置ClickHouse连接参数
 	w := &SpanWriter{
-		ckdbAddrs:         config.Base.CKDB.ActualAddrs,
-		ckdbUsername:      config.Base.CKDBAuth.Username,
-		ckdbPassword:      config.Base.CKDBAuth.Password,
-		ckdbCluster:       config.Base.CKDB.ClusterName,
-		ckdbStoragePolicy: config.Base.CKDB.StoragePolicy,
-		ckdbColdStorages:  config.Base.GetCKDBColdStorages(),
-		ttl:               config.FlowLogTTL.L7FlowLog,
-		writerConfig:      config.CKWriterConfig,
+		ckdbAddrs:         config.Base.CKDB.ActualAddrs,      // ClickHouse地址列表
+		ckdbUsername:      config.Base.CKDBAuth.Username,     // 数据库用户名
+		ckdbPassword:      config.Base.CKDBAuth.Password,     // 数据库密码
+		ckdbCluster:       config.Base.CKDB.ClusterName,      // 集群名称
+		ckdbStoragePolicy: config.Base.CKDB.StoragePolicy,    // 存储策略
+		ckdbColdStorages:  config.Base.GetCKDBColdStorages(), // 冷存储配置
+		ttl:               config.FlowLogTTL.L7FlowLog,       // 数据保留时间
+		writerConfig:      config.CKWriterConfig,             // 写入器配置
 	}
 
+	// 生成Span表的ClickHouse配置
 	ckTable := GenSpanWithTraceIDCKTable(w.ckdbCluster, w.ckdbStoragePolicy, config.Base.CKDB.Type, w.ttl, ckdb.GetColdStorage(w.ckdbColdStorages, common.FLOW_LOG_DB, SPAN_WITH_TRACE_ID_TABLE))
 
+	// 创建CKWriter实例，用于实际的数据写入
 	ckwriter, err := ckwriter.NewCKWriter(*w.ckdbAddrs, w.ckdbUsername, w.ckdbPassword,
 		SPAN_WITH_TRACE_ID_TABLE, config.Base.CKDB.TimeZone, ckTable, w.writerConfig.QueueCount, w.writerConfig.QueueSize, w.writerConfig.BatchSize, w.writerConfig.FlushTimeout, config.Base.CKDB.Watcher)
 	if err != nil {
