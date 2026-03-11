@@ -59,7 +59,7 @@ import (
 	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/prometheus"
 )
 
-var log = logging.MustGetLogger("ingester")
+var log = logging.MustGetLogger("ingester") // 创建一个名为 "ingester" 的 Logger 实例，用于输出 Ingester 模块的日志
 
 const (
 	PROFILER_PORT                = 9526
@@ -67,6 +67,7 @@ const (
 )
 
 func Start(configPath string, shared *servercommon.ControllerIngesterShared) []io.Closer {
+	//读取配置、设置日志级别、注册对象池与 GC 监控
 	cfg := config.Load(configPath)
 	bytes, _ := yaml.Marshal(cfg)
 
@@ -78,24 +79,29 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 	log.Info("==================== Launching ZeroTrace-Server-Ingester ====================")
 	log.Infof("ingester base config:\n%s", string(bytes))
 
+	//为对象池（pool）注册监控指标，让每个对象池的使用情况（如正在使用的对象数、字节数）能被统计系统收集并上报
+	// 设置一个全局回调，当内存池内部初始化一个新的 Counter 时，会自动调用这个传入的函数
 	pool.SetCounterRegisterCallback(func(counter *pool.Counter) {
-		tags := stats.OptionStatTags{
+		tags := stats.OptionStatTags{ //回调从 pool.Counter 中提取池的名称、对象大小、每CPU池大小、初始满池大小，构造成统计标签
 			"name":                counter.Name,
-			"object_size":         strconv.Itoa(int(counter.ObjectSize)),
+			"object_size":         strconv.Itoa(int(counter.ObjectSize)), //池中单个对象的大小（字节）。
 			"pool_size_per_cpu":   strconv.Itoa(int(counter.PoolSizePerCPU)),
 			"init_full_pool_size": strconv.Itoa(int(counter.InitFullPoolSize)),
 		}
 		common.RegisterCountableForIngester("pool", counter, tags)
+		//通过 common.RegisterCountableForIngester 将计数器注册到 Ingester 的统计系统，指标会带上 "pool" 模块名和上述标签
 	})
-	stats.SetHostname(cfg.MyNodeName)
-	stats.RegisterGcMonitor()
-	stats.SetMinInterval(time.Duration(cfg.StatsInterval) * time.Second)
-	stats.SetRemoteType(stats.REMOTE_TYPE_DFSTATSD)
-	stats.SetDFRemote(net.JoinHostPort("127.0.0.1", strconv.Itoa(int(cfg.ListenPort))))
+	//初始化 Ingester 的统计上报系统，配置指标标识、GC 监控、上报间隔与目标
+	stats.SetHostname(cfg.MyNodeName)                                                   //设置所有统计指标的主机名标签，用于多实例区分
+	stats.RegisterGcMonitor()                                                           //注册 Go 运行时 GC 监控指标（如堆大小、GC 次数等）到统计系统
+	stats.SetMinInterval(time.Duration(cfg.StatsInterval) * time.Second)                //设置指标上报的最小间隔，实际会上对齐到 10 秒的倍数
+	stats.SetRemoteType(stats.REMOTE_TYPE_DFSTATSD)                                     //DFSTATSD 模式使用 UDP 将 Protobuf 编码的指标批量发送到 SetDFRemote 指定的地址
+	stats.SetDFRemote(net.JoinHostPort("127.0.0.1", strconv.Itoa(int(cfg.ListenPort)))) //Ingester 将指标发往本地端口，由本地 statsd 收集器或 Querier 的 statsd 服务接收并转发到时序库
 
+	//创建 Ingester 的网络接收器，用于监听 UDP/TCP 端口并接收来自 Agent 的数据，但此时仅初始化对象，尚未启动监听
 	receiver := receiver.NewReceiver(int(cfg.ListenPort), cfg.UDPReadBuffer, cfg.TCPReadBuffer, cfg.TCPReaderBuffer)
 
-	ingesterOrgHandler := NewOrgHandler(cfg)
+	ingesterOrgHandler := NewOrgHandler(cfg) //创建 Ingester 的多组织处理器，负责组织级数据库删除、缓存清理与原生标签管理
 	closers := []io.Closer{}
 
 	if cfg.IngesterEnabled {
@@ -138,9 +144,12 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 		var issu *ckissu.Issu
 		if !cfg.StorageDisabled {
 			var err error
-			// 创建、修改、删除数据源及其存储时长
-			ds := datasource.NewDatasourceManager(cfg, flowMetricsConfig.CKReadTimeout)
-			ds.Start()
+			// 版本检查：比较当前数据库版本与期望版本
+			// 差异识别：确定需要应用的schema变更
+			// 批量执行：按版本顺序执行必要的变更操作
+			// 版本更新：更新数据库版本记录
+			ds := datasource.NewDatasourceManager(cfg, flowMetricsConfig.CKReadTimeout) //提供 HTTP API（/v1/rpadd、/v1/rpmod、/v1/rpdel）用于增删改数据源及其 TTL，并维护 ClickHouse 连接
+			ds.Start()                                                                  //启动 HTTP 服务器监听 cfg.DatasourceListenPort（默认 19311），并注册路由处理器
 			closers = append(closers, ds)
 
 			// clickhouse表结构变更处理
@@ -160,6 +169,7 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 		}
 
 		// platformData manager init
+		//初始化平台数据管理器（用于从 Controller 拉取资源元数据）和初始化并启动导出器（用于将数据转发到外部系统）
 		controllers := make([]net.IP, len(cfg.ControllerIPs))
 		for i, ipString := range cfg.ControllerIPs {
 			controllers[i] = net.ParseIP(ipString)
@@ -167,6 +177,7 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 				controllers[i] = controllers[i].To4()
 			}
 		}
+		//创建一个从 Controller 拉取平台元数据（如 IP、Pod、服务信息）的客户端，供各管道进行标签注入
 		platformDataManager := grpc.NewPlatformDataManager(
 			controllers,
 			int(cfg.ControllerPort),
@@ -174,7 +185,7 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 			cfg.GrpcBufferSize,
 			cfg.NodeIP,
 			receiver)
-
+		//根据配置创建导出器实例（支持 Kafka、Prometheus、OTLP）
 		exporters := exporters.NewExporters(exportersConfig)
 		if exporters != nil {
 			exporters.Start()
@@ -182,6 +193,7 @@ func Start(configPath string, shared *servercommon.ControllerIngesterShared) []i
 		}
 
 		// 写流日志数据
+		//创建并启动流日志处理管道，负责接收、解码、标签注入并写入 L4/L7 流日志与追踪数据
 		flowLog, err := flowlog.NewFlowLog(flowLogConfig, shared.TraceTreeQueue, receiver, platformDataManager, exporters)
 		checkError(err)
 		flowLog.Start()

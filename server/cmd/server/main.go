@@ -53,14 +53,14 @@ const (
 	PROFILER_PORT = 9526
 )
 
-var flagSet = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-var configPath = flagSet.String("f", "/etc/server.yaml", "Specify config file location")
-var version = flagSet.Bool("v", false, "Display the version")
-
 var Branch, RevCount, Revision, CommitDate, goVersion, CompileTime string
 
+var configPath = flag.String("f", "/etc/server.yaml", "Specify config file location")
+var version = flag.Bool("version", false, "Display the version")
+
+
 func main() {
-	flagSet.Parse(os.Args[1:])
+	flag.Parse()
 	if *version {
 		fmt.Printf(
 			"%s\n%s\n%s\n%s\n%s\n%s\n",

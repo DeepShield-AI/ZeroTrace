@@ -21,4 +21,4 @@ import (
 	_ "github.com/gogo/protobuf/proto"
 )
 
-//go:generate protoc -I=. -I=$GOPATH/src -I=$GOPATH/src/github.com/gogo/protobuf/protobuf --gogo_out=plugins=grpc:.  ./flow_log.proto
+//go:generate protoc -I=. -I=../../../vendor -I=$GOPATH/src --gogo_out=plugins=grpc:.  ./flow_log.proto

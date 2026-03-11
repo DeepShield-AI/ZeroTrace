@@ -108,81 +108,138 @@ func (d *Decoder) GetCounter() interface{} {
 	return counter
 }
 
+// Run 启动解码器主循环
+// 该方法是解码器的核心入口，负责从队列中获取数据并分发到相应的处理函数
+// 它在一个独立的goroutine中运行，持续处理来自接收器的指标数据
 func (d *Decoder) Run() {
+	// 注册解码器到监控系统，用于收集性能指标
+	// 标签包含线程索引和消息类型，便于区分不同的解码器实例
 	common.RegisterCountableForIngester("decoder", d, stats.OptionStatTags{
 		"thread":   strconv.Itoa(d.index),
 		"msg_type": d.msgType.String()})
 
+	// 创建缓冲区用于批量从队列中获取数据
+	// BUFFER_SIZE=128，适合外部指标数据通常较大的特点
 	buffer := make([]interface{}, BUFFER_SIZE)
 	decoder := &codec.SimpleDecoder{}
+
+	// 主处理循环，持续从队列中读取并处理数据
 	for {
+		// 批量从输入队列中获取数据，提高处理效率
 		n := d.inQueue.Gets(buffer)
+
+		// 遍历获取到的数据项
 		for i := 0; i < n; i++ {
 			if buffer[i] == nil {
 				continue
 			}
+
+			// 增加输入计数器，用于监控处理量
 			d.counter.InCount++
+
+			// 类型断言，确保数据是RecvBuffer类型
 			recvBytes, ok := buffer[i].(*receiver.RecvBuffer)
 			if !ok {
 				log.Warning("get decode queue data type wrong")
 				continue
 			}
+
+			// 初始化解码器，处理实际的数据部分
 			decoder.Init(recvBytes.Buffer[recvBytes.Begin:recvBytes.End])
+
+			// 提取组织和团队ID，用于多租户数据隔离
 			d.orgId, d.teamId = uint16(recvBytes.OrgID), uint16(recvBytes.TeamID)
+
+			// 根据消息类型分发到不同的处理函数
 			if d.msgType == datatype.MESSAGE_TYPE_TELEGRAF {
+				// 处理Telegraf格式的指标数据
 				d.handleTelegraf(recvBytes.VtapID, decoder)
 			} else if d.msgType == datatype.MESSAGE_TYPE_DFSTATS || d.msgType == datatype.MESSAGE_TYPE_SERVER_DFSTATS {
 				d.handleZerotraceStats(recvBytes.VtapID, decoder)
 			}
+
+			// 释放接收缓冲区，便于内存复用
 			receiver.ReleaseRecvBuffer(recvBytes)
 		}
 	}
 }
 
+// handleTelegraf 处理Telegraf格式的指标数据
+// Telegraf使用influxdb行协议格式，该函数负责解析并转换为内部格式
+// 参数:
+//   - vtapID: VTap实例ID，用于标识数据来源
+//   - decoder: 解码器实例，用于读取二进制数据
 func (d *Decoder) handleTelegraf(vtapID uint16, decoder *codec.SimpleDecoder) {
+	// 循环处理解码器中的所有数据
 	for !decoder.IsEnd() {
+		// 读取一个完整的指标数据块
 		bytes := decoder.ReadBytes()
+
+		// 检查解码过程是否出错
 		if decoder.Failed() {
+			// 只在第一次出错时记录详细错误信息，避免日志刷屏
 			if d.counter.ErrorCount == 0 {
 				log.Errorf("telegraf decode failed, offset=%d len=%d", decoder.Offset(), len(decoder.Bytes()))
 			}
 			d.counter.ErrorCount++
 			return
 		}
+
+		// 使用influxdb库解析行协议格式的指标数据
 		points, err := models.ParsePoints(bytes)
 		if err != nil {
+			// 只在第一次出错时记录警告信息
 			if d.counter.ErrorCount == 0 {
 				log.Warningf("telegraf parse failed, err msg: %s", err)
 			}
 			d.counter.ErrorCount++
 		}
 
+		// 逐个处理解析出的指标点
 		for _, point := range points {
 			d.sendTelegraf(vtapID, point)
 		}
 	}
 }
 
+// sendTelegraf 发送单个Telegraf指标点
+// 该函数将influxdb格式的指标点转换为DeepFlow内部格式并写入数据库
+// 参数:
+//   - vtapID: VTap实例ID
+//   - point: influxdb格式的指标点
 func (d *Decoder) sendTelegraf(vtapID uint16, point models.Point) {
+	// 调试模式下记录接收到的指标点
 	if d.debugEnabled {
 		log.Debugf("decoder %d vtap %d recv telegraf point: %v", d.index, vtapID, point)
 	}
+
+	// 将influxdb格式转换为DeepFlow外部指标格式
 	extMetrics, err := d.PointToExtMetrics(vtapID, point)
 	if err != nil || !extMetrics.IsValid() {
+		// 只在第一次出错时记录警告
 		if d.counter.ErrMetrics == 0 {
 			log.Warning(err)
 		}
 		d.counter.ErrMetrics++
 		return
 	}
+
+	// 写入到外部指标数据库
 	d.extMetricsWriters[int(dbwriter.EXT_METRICS_DB_ID)].Write(extMetrics)
+
+	// 增加输出计数器
 	d.counter.OutCount++
 }
 
 func (d *Decoder) handleZerotraceStats(vtapID uint16, decoder *codec.SimpleDecoder) {
 	for !decoder.IsEnd() {
+		// 创建统计数据结构体
 		pbStats := &pb.Stats{}
+
+		// 读取序列化的统计数据
 		bytes := decoder.ReadBytes()
+
+		// 检查解码过程是否出错
 		if decoder.Failed() {
 			if d.counter.ErrorCount == 0 {
 				log.Errorf("zerotrace stats decode failed, offset=%d len=%d", decoder.Offset(), len(decoder.Bytes()))
@@ -190,6 +247,8 @@ func (d *Decoder) handleZerotraceStats(vtapID uint16, decoder *codec.SimpleDecod
 			d.counter.ErrorCount++
 			return
 		}
+
+		// 反序列化protobuf格式的统计数据
 		if err := pbStats.Unmarshal(bytes); err != nil || pbStats.Name == "" {
 			if d.counter.ErrorCount == 0 {
 				log.Warningf("zerotrace stats parse failed, err msg: %s", err)
@@ -198,9 +257,12 @@ func (d *Decoder) handleZerotraceStats(vtapID uint16, decoder *codec.SimpleDecod
 			continue
 		}
 
+		// 调试模式下记录接收到的统计数据
 		if d.debugEnabled {
 			log.Debugf("decoder %d vtap %d recv zerotrace stats: %v", d.index, vtapID, pbStats)
 		}
+
+		// 转换为外部指标格式，并确定目标数据库
 		metrics, dbId := d.StatsToExtMetrics(vtapID, pbStats)
 		if !metrics.IsValid() {
 			if d.counter.ErrMetrics == 0 {
@@ -209,7 +271,11 @@ func (d *Decoder) handleZerotraceStats(vtapID uint16, decoder *codec.SimpleDecod
 			d.counter.ErrMetrics++
 			continue
 		}
+
+		// 根据数据库ID写入相应的数据库（管理库或租户库）
 		d.extMetricsWriters[dbId].Write(metrics)
+
+		// 增加输出计数器
 		d.counter.OutCount++
 	}
 }

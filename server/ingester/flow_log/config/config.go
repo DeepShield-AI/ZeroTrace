@@ -43,17 +43,18 @@ type FlowLogTTL struct {
 	L4Packet  int `yaml:"l4-packet"`
 }
 
+// 流日志处理模块的核心配置结构，用于控制流日志数据的接收、解码、限流和存储行为
 type Config struct {
-	Base              *config.Config
-	CKWriterConfig    config.CKWriterConfig `yaml:"flowlog-ck-writer"`
-	Throttle          int                   `yaml:"throttle"`
-	ThrottleBucket    int                   `yaml:"throttle-bucket"`
-	L4Throttle        int                   `yaml:"l4-throttle"`
-	L7Throttle        int                   `yaml:"l7-throttle"`
-	FlowLogTTL        FlowLogTTL            `yaml:"flow-log-ttl-hour"`
-	DecoderQueueCount int                   `yaml:"flow-log-decoder-queue-count"`
-	DecoderQueueSize  int                   `yaml:"flow-log-decoder-queue-size"`
-	TraceTreeEnabled  *bool                 `yaml:"flow-log-trace-tree-enabled"`
+	Base              *config.Config        // 基础配置，包含数据库连接、认证等通用配置
+	CKWriterConfig    config.CKWriterConfig `yaml:"flowlog-ck-writer"`            // ClickHouse写入器配置，控制队列、批次等写入参数
+	Throttle          int                   `yaml:"throttle"`                     // 全局流日志限流阈值，每秒处理的最大记录数
+	ThrottleBucket    int                   `yaml:"throttle-bucket"`              // 限流桶大小，用于采样算法的精度控制
+	L4Throttle        int                   `yaml:"l4-throttle"`                  // 四层流日志专用限流阈值，为0时使用全局限流
+	L7Throttle        int                   `yaml:"l7-throttle"`                  // 七层流日志专用限流阈值，为0时使用全局限流
+	FlowLogTTL        FlowLogTTL            `yaml:"flow-log-ttl-hour"`            // 流日志数据保留时间配置，单位为小时
+	DecoderQueueCount int                   `yaml:"flow-log-decoder-queue-count"` // 解码器队列数量，控制并行处理度
+	DecoderQueueSize  int                   `yaml:"flow-log-decoder-queue-size"`  // 解码器队列大小，控制缓冲容量
+	TraceTreeEnabled  *bool                 `yaml:"flow-log-trace-tree-enabled"`  // 是否启用调用链树功能，用于分布式追踪
 }
 
 type FlowLogConfig struct {

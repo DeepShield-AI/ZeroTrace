@@ -23,12 +23,35 @@ import (
 )
 
 type AppServiceTag struct {
-	Time        uint32 // s
-	Table       string
-	AppService  string
+	// Time 时间戳（秒），记录标签的生成时间
+	// 用于数据分区和时间序列分析
+	// 在ClickHouse中作为时间分区的依据
+	Time uint32 // s
+
+	// Table 数据表名称，标识标签所属的数据表
+	// 用于区分不同类型的数据，如流日志、流指标、事件等
+	// 支持多表存储，便于数据管理和查询优化
+	Table string
+
+	// AppService 应用服务名称，标识应用程序的服务
+	// 用于服务拓扑分析和应用性能监控
+	// 通常与应用程序的业务功能相关，如"user-service"、"order-service"
+	AppService string
+
+	// AppInstance 应用实例名称，标识服务的具体实例
+	// 用于区分同一服务的多个部署实例
+	// 支持实例级别的监控和故障排查
 	AppInstance string
-	TeamID      uint16
-	OrgId       uint16
+
+	// TeamID 团队ID，用于多租户环境下的团队隔离
+	// 支持基于团队的数据访问控制和资源配额管理
+	// 在企业级多团队环境中使用
+	TeamID uint16
+
+	// OrgId 组织ID，用于多租户环境下的组织隔离
+	// 支持基于组织的数据隔离和权限管理
+	// 确保不同组织的数据安全性和隐私性
+	OrgId uint16
 }
 
 func (t *AppServiceTag) NativeTagVersion() uint32 {

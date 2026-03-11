@@ -140,17 +140,17 @@ type CKWriterConfig struct {
 }
 
 type CKDB struct {
-	External            bool     `yaml:"external"`
-	Type                string   `yaml:"type"`
-	Host                string   `yaml:"host"`
-	actualAddrsValue    []string // the maximum length must not exceed MaxClickHouseEndpointsPerServer.
-	ActualAddrs         *[]string
-	Watcher             *Watcher
-	Port                int    `yaml:"port"`
-	EndpointTCPPortName string `yaml:"endpoint-tcp-port-name"`
-	ClusterName         string `yaml:"cluster-name"`
-	StoragePolicy       string `yaml:"storage-policy"`
-	TimeZone            string `yaml:"time-zone"`
+	External            bool      `yaml:"external"` // 是否使用外部ClickHouse实例
+	Type                string    `yaml:"type"`     // 数据库类型：clickhouse或byconity
+	Host                string    `yaml:"host"`     // ClickHouse服务地址
+	actualAddrsValue    []string  // 实际的ClickHouse端点地址列表，长度不超过MaxClickHouseEndpointsPerServer
+	ActualAddrs         *[]string // 指向实际地址列表的指针，供运行时使用
+	Watcher             *Watcher  // Kubernetes端点监视器，用于动态发现ClickHouse实例
+	Port                int       `yaml:"port"`                   // ClickHouse服务端口
+	EndpointTCPPortName string    `yaml:"endpoint-tcp-port-name"` // Kubernetes服务TCP端口名称
+	ClusterName         string    `yaml:"cluster-name"`           // ClickHouse集群名称
+	StoragePolicy       string    `yaml:"storage-policy"`         // 存储策略名称
+	TimeZone            string    `yaml:"time-zone"`              // 时区设置
 }
 
 func (c *CKDB) updateActualAddrs(endpoints []Endpoint) {
@@ -164,32 +164,113 @@ func (c *CKDB) updateActualAddrs(endpoints []Endpoint) {
 	c.ActualAddrs = &c.actualAddrsValue
 }
 
+// Ingester 组件的核心配置
 type Config struct {
-	IsRunningModeStandalone  bool
-	StorageDisabled          bool            `yaml:"storage-disabled"`
-	ListenPort               uint16          `yaml:"listen-port"`
-	CKDB                     CKDB            `yaml:"ckdb"`
-	ControllerIPs            []string        `yaml:"controller-ips,flow"`
-	ControllerPort           uint16          `yaml:"controller-port"`
-	CKDBAuth                 Auth            `yaml:"ckdb-auth"`
-	IngesterEnabled          bool            `yaml:"ingester-enabled"`
-	UDPReadBuffer            int             `yaml:"udp-read-buffer"`
-	TCPReadBuffer            int             `yaml:"tcp-read-buffer"`
-	TCPReaderBuffer          int             `yaml:"tcp-reader-buffer"`
-	CKDiskMonitor            CKDiskMonitor   `yaml:"ck-disk-monitor"`
-	ColdStorage              CKDBColdStorage `yaml:"ckdb-cold-storage"`
-	ckdbColdStorages         map[string]*ckdb.ColdStorage
-	NodeIP                   string `yaml:"node-ip"`
-	GrpcBufferSize           int    `yaml:"grpc-buffer-size"`
-	ServiceLabelerLruCap     int    `yaml:"service-labeler-lru-cap"`
-	StatsInterval            int    `yaml:"stats-interval"`
+	// IsRunningModeStandalone 标识是否为独立运行模式
+	// 独立模式下不支持水平扩展，只能单节点运行
+	IsRunningModeStandalone bool
+
+	// StorageDisabled 禁用数据存储功能
+	// 为 true 时 Ingester 不再将数据写入 ClickHouse
+	StorageDisabled bool `yaml:"storage-disabled"`
+
+	// ListenPort Ingester 监听端口，用于接收来自 Agent 的数据
+	// 默认值: 20033
+	ListenPort uint16 `yaml:"listen-port"`
+
+	// CKDB ClickHouse 数据库连接配置
+	// 包含主机、端口、集群名、存储策略等参数
+	CKDB CKDB `yaml:"ckdb"`
+
+	// ControllerIPs Controller 组件的 IP 地址列表
+	// 用于建立 gRPC 连接获取平台数据和配置信息
+	ControllerIPs []string `yaml:"controller-ips,flow"`
+
+	// ControllerPort Controller 组件的监听端口
+	// 默认值: 20035
+	ControllerPort uint16 `yaml:"controller-port"`
+
+	// CKDBAuth ClickHouse 数据库认证信息
+	// 包含用户名和密码
+	CKDBAuth Auth `yaml:"ckdb-auth"`
+
+	// IngesterEnabled 是否启用 Ingester 功能
+	// false 时表示该节点仅作为 Controller 运行
+	IngesterEnabled bool `yaml:"ingester-enabled"`
+
+	// UDPReadBuffer UDP socket 接收缓冲区大小（字节）
+	// 默认值: 64MB，用于优化大数据包接收性能
+	UDPReadBuffer int `yaml:"udp-read-buffer"`
+
+	// TCPReadBuffer TCP socket 接收缓冲区大小（字节）
+	// 默认值: 4MB
+	TCPReadBuffer int `yaml:"tcp-read-buffer"`
+
+	// TCPReaderBuffer TCP 读取缓冲区大小（字节）
+	// 默认值: 1MB
+	TCPReaderBuffer int `yaml:"tcp-reader-buffer"`
+
+	// CKDiskMonitor ClickHouse 磁盘监控配置
+	// 监控磁盘使用率，自动清理过期数据防止磁盘满
+	CKDiskMonitor CKDiskMonitor `yaml:"ck-disk-monitor"`
+
+	// ColdStorage ClickHouse 冷存储配置
+	// 用于数据生命周期管理，将热数据迁移到冷存储
+	ColdStorage CKDBColdStorage `yaml:"ckdb-cold-storage"`
+
+	// ckdbColdStorages 内部冷存储映射表
+	// 存储数据库表到冷存储策略的映射关系
+	ckdbColdStorages map[string]*ckdb.ColdStorage
+
+	// NodeIP 当前节点的 IP 地址
+	// 用于标识 Ingester 节点，支持多租户路由
+	NodeIP string `yaml:"node-ip"`
+
+	// GrpcBufferSize gRPC 消息缓冲区大小（字节）
+	// 用于 Controller 与 Ingester 之间的数据同步
+	// 默认值: 100MB
+	GrpcBufferSize int `yaml:"grpc-buffer-size"`
+
+	// ServiceLabelerLruCap 服务标签缓存 LRU 容量
+	// 用于缓存服务标签信息，提升查询性能
+	// 默认值: 4M
+	ServiceLabelerLruCap int `yaml:"service-labeler-lru-cap"`
+
+	// StatsInterval 统计信息上报间隔（秒）
+	// 控制性能指标收集和上报频率
+	// 默认值: 10秒
+	StatsInterval int `yaml:"stats-interval"`
+
+	// FlowTagCacheFlushTimeout 流标签缓存刷新超时时间（秒）
+	// 控制流标签缓存的刷新频率
+	// 默认值: 1800秒（30分钟）
 	FlowTagCacheFlushTimeout uint32 `yaml:"flow-tag-cache-flush-timeout"`
-	FlowTagCacheMaxSize      uint32 `yaml:"flow-tag-cache-max-size"`
-	DatasourceListenPort     uint16 `yaml:"datasource-listen-port"`
-	LogFile                  string
-	LogLevel                 string
-	MyNodeName               string
-	TraceIdWithIndex         TraceIdWithIndex
+
+	// FlowTagCacheMaxSize 流标签缓存最大大小
+	// 限制缓存条目数量，防止内存溢出
+	// 默认值: 256K
+	FlowTagCacheMaxSize uint32 `yaml:"flow-tag-cache-max-size"`
+
+	// DatasourceListenPort 数据源服务监听端口
+	// 提供数据源管理 API
+	// 默认值: 20106
+	DatasourceListenPort uint16 `yaml:"datasource-listen-port"`
+
+	// LogFile 日志文件路径
+	// 控制日志输出位置
+	LogFile string
+
+	// LogLevel 日志级别
+	// 支持: error, warn, info, debug
+	LogLevel string
+
+	// MyNodeName 当前节点名称
+	// 通常为 Kubernetes 节点名或主机名
+	MyNodeName string
+
+	// TraceIdWithIndex Trace ID 配置
+	// 控制 Trace ID 的生成和索引策略
+	TraceIdWithIndex TraceIdWithIndex
 }
 
 type Location struct {
@@ -219,6 +300,12 @@ func sleepAndExit() {
 }
 
 func (c *Config) Validate() error {
+	//1. 选举机制
+	// 独立模式: 不启动选举机制，因为没有Kubernetes模块 controller.go:81-83
+	// 非独立模式: 启动Leader选举实现高可用
+	//2. ClickHouse连接
+	// 独立模式: 只支持单个ClickHouse节点，直接使用配置的host:port config.go:305-308
+	// 非独立模式: 通过Kubernetes服务发现动态获取ClickHouse端点 config.go:405-412
 	runningMode, _ := os.LookupEnv(EnvRunningMode)
 	// in standalone mode, only supports single node and does not support horizontal expansion
 	c.IsRunningModeStandalone = runningMode == RunningModeStandalone
@@ -307,7 +394,7 @@ func (c *Config) Validate() error {
 		actualAddrs = append(actualAddrs, net.JoinHostPort(c.CKDB.Host, strconv.Itoa(c.CKDB.Port)))
 		c.CKDB.ActualAddrs = &actualAddrs
 	} else {
-		if c.NodeIP == "" && c.ControllerIPs[0] == DefaultLocalIP {
+		if c.NodeIP == "" && len(c.ControllerIPs) > 0 && c.ControllerIPs[0] == DefaultLocalIP {
 			nodeIP, exist := os.LookupEnv(EnvK8sNodeIP)
 			if !exist {
 				log.Errorf("Can't get env %s", EnvK8sNodeIP)

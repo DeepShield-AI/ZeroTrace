@@ -67,7 +67,7 @@ func Start(configPath, serverLogFile string, shared *servercommon.ControllerInge
 	err := ckClient.Init("")
 	if err != nil {
 		log.Error(err)
-		os.Exit(0)
+		return
 	}
 	config.Cfg.Clickhouse.Version = ckClient.Version
 
@@ -79,7 +79,7 @@ func Start(configPath, serverLogFile string, shared *servercommon.ControllerInge
 	err = Load()
 	if err != nil {
 		log.Error(err)
-		os.Exit(0)
+		return
 	}
 
 	// prometheus dict cache

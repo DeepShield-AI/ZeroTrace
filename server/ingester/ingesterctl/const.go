@@ -23,23 +23,27 @@ const (
 	DEBUG_LISTEN_PORT = 39527
 )
 
+// 这些常量是 DeepFlow Ingester 组件的调试模块标识符，用于构建统一的调试和监控系统。
+// 每个模块ID对应一个特定的功能组件：
+// 核心基础设施模块 (0-5): 包括适配器、队列、标签器、RPC、日志级别和配置管理
+// 数据处理队列模块 (6-13): 涵盖了所有主要的数据处理管道，包括流量指标、流量日志、外部指标、PCAP、事件、Prometheus、性能分析和应用日志
 const (
-	INGESTERCTL_ADAPTER debug.ModuleId = iota
-	INGESTERCTL_QUEUE
-	INGESTERCTL_LABELER
-	INGESTERCTL_RPC
-	INGESTERCTL_LOGLEVEL
-	INGESTERCTL_CONFIG
-	INGESTERCTL_FLOW_METRICS_QUEUE
-	INGESTERCTL_FLOW_LOG_QUEUE
-	INGESTERCTL_EXTMETRICS_QUEUE
-	INGESTERCTL_PCAP_QUEUE
-	INGESTERCTL_EVENT_QUEUE
-	INGESTERCTL_PROMETHEUS_QUEUE
-	INGESTERCTL_PROFILE_QUEUE
-	INGESTERCTL_APPLICATION_LOG_QUEUE
+	INGESTERCTL_ADAPTER               debug.ModuleId = iota // 适配器模块，用于数据适配和转换
+	INGESTERCTL_QUEUE                                       // 队列管理模块，用于调试和监控队列状态
+	INGESTERCTL_LABELER                                     // 标签处理模块，用于数据标签的添加和管理
+	INGESTERCTL_RPC                                         // RPC通信模块，用于远程过程调用调试
+	INGESTERCTL_LOGLEVEL                                    // 日志级别控制模块，用于动态调整日志级别
+	INGESTERCTL_CONFIG                                      // 配置管理模块，用于配置信息的调试和管理
+	INGESTERCTL_FLOW_METRICS_QUEUE                          // 流量指标队列模块，用于网络流量指标数据的处理
+	INGESTERCTL_FLOW_LOG_QUEUE                              // 流量日志队列模块，用于网络流日志数据的处理
+	INGESTERCTL_EXTMETRICS_QUEUE                            // 外部指标队列模块，用于Prometheus等外部指标数据的处理
+	INGESTERCTL_PCAP_QUEUE                                  // 数据包捕获队列模块，用于PCAP数据包的处理
+	INGESTERCTL_EVENT_QUEUE                                 // 事件队列模块，用于各类事件数据的处理
+	INGESTERCTL_PROMETHEUS_QUEUE                            // Prometheus队列模块，专门用于Prometheus指标数据处理
+	INGESTERCTL_PROFILE_QUEUE                               // 性能分析队列模块，用于连续性能分析数据的处理
+	INGESTERCTL_APPLICATION_LOG_QUEUE                       // 应用日志队列模块，用于应用日志数据的处理
 
-	INGESTERCTL_MAX
+	INGESTERCTL_MAX // 模块总数，用于边界检查和数组大小定义
 )
 
 // simple cmds

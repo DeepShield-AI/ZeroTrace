@@ -43,6 +43,8 @@ const (
 
 type DBs []*sql.DB
 
+// 这是一个批量执行SQL语句的方法，它会在多个数据库连接上执行相同的SQL查询。
+// 如果任何一个连接执行失败，它会立即返回错误；否则，它会返回最后一个连接的执行结果。
 func (s DBs) Exec(query string, args ...any) (sql.Result, error) {
 	var result sql.Result
 	var err error
@@ -58,6 +60,8 @@ func (s DBs) Exec(query string, args ...any) (sql.Result, error) {
 	return result, nil
 }
 
+// 接收一个SQL查询字符串和参数，然后在多个数据库连接上并行执行这个查询
+// 只返回第一个成功执行的结果和错误信息
 func (s DBs) ExecParallel(query string, args ...any) (sql.Result, error) {
 	var result sql.Result
 	var err error
@@ -103,6 +107,10 @@ func (s DBs) Close() error {
 	return nil
 }
 
+// 用于批量创建并管理多个 ClickHouse 数据库连接
+// addrs []string：ClickHouse 服务器地址列表
+// username string：数据库用户名
+// password string：数据库密码
 func NewCKConnections(addrs []string, username, password string) (DBs, error) {
 	sqlDBs := DBs{}
 	for _, addr := range addrs {
@@ -115,17 +123,20 @@ func NewCKConnections(addrs []string, username, password string) (DBs, error) {
 	return sqlDBs, nil
 }
 
+// 函数接受三个字符串参数：addr（数据库地址）、username（用户名）和password（密码）
+// 返回一个*sql.DB指针（数据库连接对象）
 func NewCKConnection(addr, username, password string) (*sql.DB, error) {
 	connect, err := sql.Open("clickhouse", fmt.Sprintf("//%s@%s?dial_timeout=10s&max_execution_time=120", url.UserPassword(username, password), addr))
 	if err != nil {
 		return nil, fmt.Errorf("new ck connection to %s failed: %s", addr, err)
 	}
-	if err := connect.Ping(); err != nil {
+	if err := connect.Ping(); err != nil { //使用Ping()方法测试连接是否有效
 		if exception, ok := err.(*clickhouse.Exception); ok {
 			log.Warningf("[%d] %s \n%s\n", exception.Code, exception.Message, exception.StackTrace)
 		}
 		return nil, fmt.Errorf("ck connection ping (%s) failed: %s", addr, err)
 	}
+	//如果一切正常，返回数据库连接对象和nil错误
 	return connect, nil
 }
 

@@ -167,9 +167,9 @@ sleep 15
 
 # 查找监听端口
 grep "debugger listening on" agent.log
-# 输出示例: [INFO] debugger listening on: [::]:48522
+# 输出示例: [INFO] debugger listening on: [::]:3314
 ```
-*记下这个端口号（例如 48522），后续命令中将用 `<PORT>` 代替。*
+*记下这个端口号（例如 3314），后续命令中将用 `3314` 代替。*
 
 ### 2.7 生成测试流量 (可选)
 为了测试 `ebpf` 和 `policy monitor` 功能，建议在本地生成一些网络流量。

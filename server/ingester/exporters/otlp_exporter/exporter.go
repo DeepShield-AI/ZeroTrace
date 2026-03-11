@@ -47,20 +47,45 @@ const (
 	QUEUE_BATCH_COUNT = 1024
 )
 
+// OtlpExporter 实现 OpenTelemetry 协议的数据导出器，用于将遥测数据发送到 OTLP 兼容的后端系统
 type OtlpExporter struct {
-	index                int
-	Addr                 string
-	dataQueues           queue.FixedMultiQueue
-	queueCount           int
-	grpcExporters        []ptraceotlp.GRPCClient
-	grpcConns            []*grpc.ClientConn
-	grpcFailedCounters   []int
-	universalTagsManager *utag.UniversalTagsManager
-	config               *exporters_cfg.ExporterCfg
-	counter              *Counter
-	lastCounter          Counter
-	running              bool
+	// index 导出器的唯一标识符，用于在多个导出器实例中进行区分
+	index int
 
+	// Addr 目标 OTLP 服务器的地址，格式通常为 "host:port"
+	Addr string
+
+	// dataQueues 多队列数据缓冲区，用于并发处理待导出的数据项
+	dataQueues queue.FixedMultiQueue
+
+	// queueCount 队列数量，控制并发处理的级别
+	queueCount int
+
+	// grpcExporters gRPC 客户端数组，每个客户端对应一个到 OTLP 后端的连接
+	grpcExporters []ptraceotlp.GRPCClient
+
+	// grpcConns gRPC 连接池，管理与 OTLP 服务器的底层网络连接
+	grpcConns []*grpc.ClientConn
+
+	// grpcFailedCounters 每个 gRPC 连接的失败计数器，用于监控连接健康状态
+	grpcFailedCounters []int
+
+	// universalTagsManager 通用标签管理器，负责处理和转换通用标签数据
+	universalTagsManager *utag.UniversalTagsManager
+
+	// config 导出器的配置参数，包含协议、端点、批处理等设置
+	config *exporters_cfg.ExporterCfg
+
+	// counter 性能计数器，记录导出过程中的各种统计信息
+	counter *Counter
+
+	// lastCounter 上一次的计数器快照，用于计算增量统计
+	lastCounter Counter
+
+	// running 导出器运行状态标志，控制启动和停止逻辑
+	running bool
+
+	// Closable 嵌入的可关闭接口，提供优雅关闭功能
 	utils.Closable
 }
 

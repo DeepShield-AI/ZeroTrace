@@ -28,12 +28,22 @@ import (
 	"github.com/zerotraceio/zerotrace/server/libs/debug"
 	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
 )
+"""
+在 DeepFlow 中，“组织”是多租户体系的核心隔离单元，通过独立的元数据库、时序库前缀、运行时实例与 ID 空间实现数据与资源隔离。
+每个组织在 MySQL/PostgreSQL 中由 ORG 表记录，包含自增 ID、显示名称、业务标识 ORGID、全局唯一 lcuuid、所有者与软删除标记
+server/controller/db/metadb/model/model.go
 
+元数据库：默认组织用 deepflow，租户组织用 deepflow_tenant_{org_id}（如 deepflow_tenant_1）
+ClickHouse：默认组织用无前库名（如 flow_log），租户组织用 {org_id-1:03d}_ 前缀（如 001_flow_log）
+"""
+
+//定义了需要删除的数据库名列表（如 flow_log、flow_metrics 等
 var CleanDatabaseList = []string{
 	"application_log", "zerotrace_admin", "zerotrace_tenant", "event", "ext_metrics",
 	"flow_log", "flow_metrics", "flow_tag",
 	"profile", "prometheus"}
 
+// 负责多租户组织数据管理的核心处理器，主要用于处理组织级别的数据清理和标签管理
 type OrgHandler struct {
 	cfg        *config.Config
 	promHander *prometheus.PrometheusHandler
@@ -61,6 +71,7 @@ func (o *OrgHandler) SetPromHandler(promHandler *prometheus.PrometheusHandler) {
 	o.promHander = promHandler
 }
 
+// DropOrg方法负责删除指定组织的所有数据
 func (o *OrgHandler) DropOrg(orgId uint16) error {
 	log.Info("drop org id:", orgId)
 	o.dropOrgCaches(orgId)

@@ -698,9 +698,9 @@ impl Client {
     pub fn new(addr: SocketAddr) -> Result<Self> {
         // 在相应的接口（IPv4/IPv6）上绑定随机端口
         let sock = if addr.is_ipv4() {
-            UdpSocket::bind((IpAddr::from(Ipv4Addr::UNSPECIFIED), DEFAULT_CONTROLLER_PORT))?
+            UdpSocket::bind((IpAddr::from(Ipv4Addr::UNSPECIFIED), 0))?
         } else {
-            UdpSocket::bind((IpAddr::from(Ipv6Addr::UNSPECIFIED), DEFAULT_CONTROLLER_PORT))?
+            UdpSocket::bind((IpAddr::from(Ipv6Addr::UNSPECIFIED), 0))?
         };
         Ok(Self {
             sock,

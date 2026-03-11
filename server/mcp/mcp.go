@@ -18,7 +18,6 @@ package mcp
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -69,6 +68,6 @@ func (s *MCPServer) Start() {
 	httpServer := server.NewStreamableHTTPServer(s.server)
 	if err := httpServer.Start(fmt.Sprintf(":%d", s.port)); err != nil {
 		log.Errorf("failed to start mcp server: %s", err.Error())
-		os.Exit(1)
+		return
 	}
 }

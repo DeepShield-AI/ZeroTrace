@@ -48,132 +48,133 @@ const (
 	MIN_ORG_PER_JOB = 8
 )
 
+// Ingester中CKISSU（ClickHouse Schema Manager）的核心组件，负责管理数据库schema的版本控制和迁移操作
 type Issu struct {
-	cfg                *config.Config
-	tableRenames       []*TableRename
-	columnRenames      []*ColumnRename
-	columnMods         []*ColumnMod
-	columnAdds         []*ColumnAdd
-	indexAdds          []*IndexAdd
-	columnDrops        []*ColumnDrop
-	tableRecreates     []*Tables
-	modTTLs            []*TableModTTL
-	datasourceInfo     map[string]*DatasourceInfo
-	Connections        common.DBs
-	VersionMaps        []map[string]string
-	Addrs              []string
-	username, password string
-	ckdbType           string
-	exit               bool
+	cfg                *config.Config             // CKISSU配置参数
+	tableRenames       []*TableRename             // 表重命名操作列表
+	columnRenames      []*ColumnRename            // 列重命名操作列表
+	columnMods         []*ColumnMod               // 列类型修改操作列表
+	columnAdds         []*ColumnAdd               // 列添加操作列表
+	indexAdds          []*IndexAdd                // 索引添加操作列表
+	columnDrops        []*ColumnDrop              // 列删除操作列表
+	tableRecreates     []*Tables                  // 表重建操作列表
+	modTTLs            []*TableModTTL             // TTL修改操作列表
+	datasourceInfo     map[string]*DatasourceInfo // 数据源信息缓存
+	Connections        common.DBs                 // ClickHouse数据库连接池
+	VersionMaps        []map[string]string        // 每个连接的表版本映射
+	Addrs              []string                   // ClickHouse服务器地址列表
+	username, password string                     // 数据库认证信息
+	ckdbType           string                     // ClickHouse类型(clickhouse/byconity)
+	exit               bool                       // 退出标志
 }
 
 type TableRename struct {
-	OldDb     string
-	OldTables []string
-	NewDb     string
-	NewTables []string
+	OldDb     string   // 原数据库名称，包含需要重命名的表
+	OldTables []string // 原表名列表，支持批量重命名多个表
+	NewDb     string   // 目标数据库名称，表将移动到此数据库
+	NewTables []string // 新表名列表，与OldTables一一对应
 }
 
 type TableModTTL struct {
-	Db     string
-	Table  string
-	NewTTL int
+	Db     string // 数据库名称
+	Table  string // 表名
+	NewTTL int    // 新的TTL值（小时）
 }
 
 type ColumnRenames struct {
-	Db              string
-	Tables          []string
-	OldColumnNames  []string
-	CheckColumnType bool
-	OldColumnTypes  []ckdb.ColumnType
-	NewColumnNames  []string
-	DropIndex       bool
-	DropMvTable     bool
+	Db              string            // 数据库名称
+	Tables          []string          // 要修改的表名列表
+	OldColumnNames  []string          // 原列名列表
+	CheckColumnType bool              // 是否检查列类型
+	OldColumnTypes  []ckdb.ColumnType // 原列类型列表
+	NewColumnNames  []string          // 新列名列表
+	DropIndex       bool              // 是否删除相关索引
+	DropMvTable     bool              // 是否删除物化视图
 }
 
 type ColumnRename struct {
-	Db              string
-	Table           string
-	OldColumnName   string
-	CheckColumnType bool
-	OldColumnType   ckdb.ColumnType
-	NewColumnName   string
-	DropIndex       bool
-	DropMvTable     bool
+	Db              string          // 数据库名称
+	Table           string          // 表名
+	OldColumnName   string          // 原列名
+	CheckColumnType bool            // 是否检查列类型
+	OldColumnType   ckdb.ColumnType // 原列类型
+	NewColumnName   string          // 新列名
+	DropIndex       bool            // 是否删除相关索引
+	DropMvTable     bool            // 是否删除物化视图
 }
 
 type ColumnMod struct {
-	Db            string
-	Table         string
-	ColumnName    string
-	NewColumnType ckdb.ColumnType
-	DropIndex     bool
+	Db            string          // 数据库名称
+	Table         string          // 表名
+	ColumnName    string          // 列名
+	NewColumnType ckdb.ColumnType // 新的列类型
+	DropIndex     bool            // 是否删除相关索引
 }
 
 type ColumnAdd struct {
-	Db           string
-	Table        string
-	ColumnName   string
-	ColumnType   ckdb.ColumnType
-	DefaultValue string
-	IsMetrics    bool
-	AggrFunc     string
+	Db           string          // 数据库名称
+	Table        string          // 表名
+	ColumnName   string          // 列名
+	ColumnType   ckdb.ColumnType // 列类型
+	DefaultValue string          // 默认值
+	IsMetrics    bool            // 是否为指标列
+	AggrFunc     string          // 聚合函数
 }
 
 type ColumnAdds struct {
-	Dbs          []string
-	Tables       []string
-	ColumnNames  []string
-	ColumnType   ckdb.ColumnType
-	DefaultValue string
-	IsMetrics    bool
-	AggrFunc     string
+	Dbs          []string        // 数据库名称列表
+	Tables       []string        // 表名列表
+	ColumnNames  []string        // 列名列表
+	ColumnType   ckdb.ColumnType // 列类型
+	DefaultValue string          // 默认值
+	IsMetrics    bool            // 是否为指标列
+	AggrFunc     string          // 聚合函数
 }
 
 type ColumnDrop struct {
-	Db         string
-	Table      string
-	ColumnName string
+	Db         string // 数据库名称
+	Table      string // 表名
+	ColumnName string // 要删除的列名
 }
 
 type ColumnDrops struct {
-	Dbs         []string
-	Tables      []string
-	ColumnNames []string
+	Dbs         []string // 数据库名称列表
+	Tables      []string // 表名列表
+	ColumnNames []string // 要删除的列名列表
 }
 
 type IndexAdds struct {
-	Dbs         []string
-	Tables      []string
-	ColumnNames []string
-	IndexType   ckdb.IndexType
+	Dbs         []string       // 数据库名称列表
+	Tables      []string       // 表名列表
+	ColumnNames []string       // 列名列表
+	IndexType   ckdb.IndexType // 索引类型
 }
 
 type IndexAdd struct {
-	Db         string
-	Table      string
-	ColumnName string
-	IndexType  ckdb.IndexType
+	Db         string         // 数据库名称
+	Table      string         // 表名
+	ColumnName string         // 列名
+	IndexType  ckdb.IndexType // 索引类型
 }
 
 type ColumnDatasourceAdds struct {
-	ColumnNames                                  []string
-	OldColumnNames                               []string
-	ColumnTypes                                  []ckdb.ColumnType
-	OnlyMapTable, OnlyAppTable, OnlyNetworkTable bool
-	DefaultValue                                 string
-	IsMetrics                                    bool
-	IsSummable                                   bool
+	ColumnNames                                  []string          // 列名列表
+	OldColumnNames                               []string          // 原列名列表
+	ColumnTypes                                  []ckdb.ColumnType // 列类型列表
+	OnlyMapTable, OnlyAppTable, OnlyNetworkTable bool              // 表类型限制标志
+	DefaultValue                                 string            // 默认值
+	IsMetrics                                    bool              // 是否为指标列
+	IsSummable                                   bool              // 是否为可累加指标
 }
 
 type ColumnDatasourceAdd struct {
-	ColumnName                                   string
-	OldColumnName                                string
-	ColumnType                                   ckdb.ColumnType
-	OnlyMapTable, OnlyAppTable, OnlyNetworkTable bool
-	DefaultValue                                 string
-	IsMetrics                                    bool
-	IsSummable                                   bool
+	ColumnName                                   string          // 列名
+	OldColumnName                                string          // 原列名
+	ColumnType                                   ckdb.ColumnType // 列类型
+	OnlyMapTable, OnlyAppTable, OnlyNetworkTable bool            // 表类型限制标志
+	DefaultValue                                 string          // 默认值
+	IsMetrics                                    bool            // 是否为指标列
+	IsSummable                                   bool            // 是否为可累加指标
 }
 
 type Tables struct {
@@ -218,12 +219,12 @@ func getMvTables(connect *sql.DB, db, tablePrefix string) ([]string, error) {
 }
 
 type DatasourceInfo struct {
-	db         string
-	name       string
-	baseTable  string
-	summable   string
-	unsummable string
-	interval   ckdb.TimeFuncType
+	db         string            // 数据库名称，存储数据源所在的ClickHouse数据库
+	name       string            // 数据源名称，通常是聚合表的名称（不含_mv后缀）
+	baseTable  string            // 基础表名，数据聚合的原始数据源表
+	summable   string            // 可累加指标的聚合函数（如sum、max、min）
+	unsummable string            // 非累加指标的聚合函数（如avg、max、min）
+	interval   ckdb.TimeFuncType // 聚合时间间隔类型（小时/天）
 }
 
 func (i *Issu) getDatasourceInfo(connect *sql.DB, db, mvTableName string) (*DatasourceInfo, error) {
@@ -440,6 +441,7 @@ func NewCKIssu(cfg *config.Config) (*Issu, error) {
 		ckdbType:       cfg.CKDB.Type,
 	}
 
+	//从 updates.go 中加载所有预定义的 schema 变更操作
 	i.columnAdds = []*ColumnAdd{}
 	for _, versionAdd := range AllColumnAdds {
 		for _, adds := range versionAdd {
@@ -470,6 +472,7 @@ func NewCKIssu(cfg *config.Config) (*Issu, error) {
 	}
 
 	if i.ckdbType == ckdb.CKDBTypeByconity {
+		//如果数据库类型是CKDBTypeByconity，则调用updateTablesForByConity()方法对表进行特殊处理
 		i.updateTablesForByConity()
 	}
 
@@ -518,10 +521,12 @@ func (i *Issu) updateTablesForByConity() {
 }
 
 // called in server/ingester/ingester/ingester.go, executed before Start()
+// 负责删除需要重建的数据库表
 func (i *Issu) RunRecreateTables() error {
 	for _, tables := range i.tableRecreates {
 		db := tables.Db
 		for _, table := range tables.Tables {
+			//DropTable 方法包含版本检查逻辑，只对特定版本以下的数据库执行删除操作
 			i.DropTable(db, table)
 		}
 	}
@@ -535,6 +540,7 @@ func (i *Issu) DropTable(db, table string) {
 			continue
 		}
 
+		// 只有当版本小于"v7.1.4.0"且不为空时，才会继续执行删除操作
 		sql := fmt.Sprintf("DROP TABLE IF EXISTS %s.\"%s\"", db, table)
 		log.Info("drop table: ", sql)
 		_, err := Exec(connect, sql)
@@ -550,25 +556,31 @@ func (i *Issu) DropTable(db, table string) {
 }
 
 // called in server/ingester/ingester/ingester.go, executed before Start()
+// 负责执行数据库表重命名操作，这是 schema 迁移过程的关键步骤
+// 它处理版本兼容性问题，确保从旧版本升级到新版本时，表结构能够正确迁移。
 func (i *Issu) RunRenameTable(ds *datasource.DatasourceManager) error {
-	err := i.renameTablesV65(ds)
+	err := i.renameTablesV65(ds) //首先执行 v6.5 版本特有的表重命名操作
 	if err != nil {
 		log.Warningf("renameTablesV65 err: %s", err)
 	}
-	if len(AllTableRenames) == 0 {
+	if len(AllTableRenames) == 0 { //检查是否存在需要重命名的表，如果没有则直接返回
 		return nil
 	}
 	i.tableRenames = AllTableRenames
 	for idx, connection := range i.Connections {
+		// 检查 l4_flow_log_local 表的版本, 只有版本低于 v6.5 的数据库才执行重命名操作, 这确保了迁移操作只在新版本升级时执行
+		//向后兼容：旧版本的表结构能够正确迁移到新版本
 		oldVersion, _ := i.getTableVersion(idx, "flow_log", "l4_flow_log_local")
 		if strings.Compare(oldVersion, "v6.5") >= 0 || oldVersion == "" {
 			continue
 		}
 		for _, tableRename := range i.tableRenames {
+			//对符合条件的数据库执行所有预定义的表重命名操作
 			if err := i.renameTable(connection, tableRename); err != nil {
 				return err
 			}
 		}
+		//重命名用户自定义的数据源表，确保自定义数据也能正确迁移
 		if err := i.renameUserDefineDatasource(connection, ckdb.DEFAULT_ORG_ID, ds); err != nil {
 			log.Warning(err)
 		}
@@ -578,6 +590,8 @@ func (i *Issu) RunRenameTable(ds *datasource.DatasourceManager) error {
 
 func (i *Issu) renameTablesV65(ds *datasource.DatasourceManager) error {
 	for index, connection := range i.Connections {
+		//对于每个连接，通过i.getTableVersion(index, "flow_log", "l7_flow_log_local")获取l7_flow_log_local表的版本信息。
+		// 如果版本已经是"v6.5.1"或更高，则跳过该连接的重命名操作
 		oldVersion, _ := i.getTableVersion(index, "flow_log", "l7_flow_log_local")
 		if strings.Compare(oldVersion, "v6.5.1") >= 0 {
 			continue
@@ -615,6 +629,9 @@ func (i *Issu) renameTablesV65(ds *datasource.DatasourceManager) error {
 
 func (i *Issu) renameTable(connect *sql.DB, c *TableRename) error {
 	for i := range c.OldTables {
+		// 方法通过遍历c.OldTables切片，对每个需要重命名的表执行以下操作：
+		// 首先检查并创建目标数据库（如果不存在）
+		// 然后执行RENAME TABLE语句将表从旧数据库移动到新数据库，并重命名
 		createDb := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", c.NewDb)
 		_, err := Exec(connect, createDb)
 		if err != nil {
@@ -1348,6 +1365,7 @@ func (i *Issu) getOrgIDPrefixsWithoutDefault(connect *sql.DB) ([]string, error) 
 
 }
 
+// 负责协调多租户环境下的数据库 schema 迁移
 func (i *Issu) Start() error {
 	connects := i.Connections
 	if len(connects) == 0 {
@@ -1367,6 +1385,7 @@ func (i *Issu) Start() error {
 	orgIDPrefixs := make([][]string, len(i.Connections))
 	nativeTags := nativetag.GetAllNativeTags()
 	// update default organization databases first
+	//首先处理默认组织（ID=0）的数据库，确保核心表结构正确
 	for index, connect := range i.Connections {
 		err = i.startOrg(index, "", connect)
 		if err != nil {

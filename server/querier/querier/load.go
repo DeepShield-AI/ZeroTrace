@@ -17,9 +17,10 @@
 package querier
 
 import (
-	"github.com/zerotraceio/zerotrace/server/querier/common"
-	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
-	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
+	"os"
+	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
+	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
 )
 
 /*
@@ -45,6 +46,13 @@ import (
 // 加载文件中的metrics及tags等内容
 func Load() error {
 	dir := "/etc/db_descriptions"
+	if v, ok := os.LookupEnv("DEEPFLOW_DB_DESCRIPTIONS_DIR"); ok && v != "" {
+		dir = v
+	} else {
+		if _, err := os.Stat(dir); err != nil {
+			dir = "./querier/db_descriptions"
+		}
+	}
 	dbDescriptions, err := common.LoadDbDescriptions(dir)
 	if err != nil {
 		return err

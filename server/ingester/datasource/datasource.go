@@ -40,21 +40,21 @@ const (
 )
 
 type DatasourceManager struct {
-	ckAddrs          *[]string // 需要修改数据源的clickhouse地址, 支持多个
-	currentCkAddrs   []string
-	user             string
-	password         string
-	readTimeout      int
-	replicaEnabled   bool
-	ckdbColdStorages map[string]*ckdb.ColdStorage
-	isModifyingFlags [ckdb.MAX_ORG_ID + 1][MAX_DATASOURCE_COUNT]bool
-	cks              common.DBs
+	ckAddrs          *[]string                                       // 需要修改数据源的clickhouse地址, 支持多个
+	currentCkAddrs   []string                                        // 当前使用的ClickHouse地址列表
+	user             string                                          // ClickHouse数据库用户名
+	password         string                                          // ClickHouse数据库密码
+	readTimeout      int                                             // 数据库读取超时时间(秒)
+	replicaEnabled   bool                                            // 是否启用副本功能
+	ckdbColdStorages map[string]*ckdb.ColdStorage                    // 冷存储配置映射
+	isModifyingFlags [ckdb.MAX_ORG_ID + 1][MAX_DATASOURCE_COUNT]bool // 数据源修改状态标记
+	cks              common.DBs                                      // ClickHouse数据库连接池
 
-	ckdbCluster       string
-	ckdbStoragePolicy string
-	ckdbType          string
+	ckdbCluster       string // ClickHouse集群名称
+	ckdbStoragePolicy string // ClickHouse存储策略
+	ckdbType          string // ClickHouse类型(clickhouse/byconity)
 
-	server *http.Server
+	server *http.Server // HTTP服务器，用于接收数据源管理请求
 }
 
 func NewDatasourceManager(cfg *config.Config, readTimeout int) *DatasourceManager {
@@ -113,14 +113,14 @@ func respPending(w http.ResponseWriter, desc string) {
 }
 
 type AddBody struct {
-	OrgID        int    `json:"org-id"`
-	BaseRP       string `json:"base-rp"`
-	DB           string `json:"db"`
-	Interval     int    `json:"interval"`
-	Name         string `json:"name"`
-	Duration     int    `json:"retention-time"`
-	SummableOP   string `json:"summable-metrics-op"`
-	UnsummableOP string `json:"unsummable-metrics-op"`
+	OrgID        int    `json:"org-id"`                // 组织ID，用于多租户数据隔离
+	BaseRP       string `json:"base-rp"`               // 基础保留策略名称，作为聚合数据源
+	DB           string `json:"db"`                    // 目标数据库名称
+	Interval     int    `json:"interval"`              // 数据聚合间隔（分钟）
+	Name         string `json:"name"`                  // 数据源名称
+	Duration     int    `json:"retention-time"`        // 数据保留时间（小时）
+	SummableOP   string `json:"summable-metrics-op"`   // 可累加指标的聚合函数（Sum/Max/Min）
+	UnsummableOP string `json:"unsummable-metrics-op"` // 非累加指标的聚合函数（Avg/Max/Min）
 }
 
 type ModBody struct {
@@ -137,6 +137,7 @@ type DelBody struct {
 }
 
 func (m *DatasourceManager) rpAdd(w http.ResponseWriter, r *http.Request) {
+	//接收包含组织ID、数据库名、基础表、聚合操作等参数的请求体
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Errorf("read body err, %v", err)
@@ -212,15 +213,20 @@ func (m *DatasourceManager) rpDel(w http.ResponseWriter, r *http.Request) {
 
 func (m *DatasourceManager) RegisterHandlers() {
 	router := m.server.Handler.(*mux.Router)
+	//在 HTTP 服务器上注册三个处理不同请求的 API 端点
 	router.HandleFunc("/v1/rpadd/", m.rpAdd).Methods("POST")
 	router.HandleFunc("/v1/rpmod/", m.rpMod).Methods("PATCH")
 	router.HandleFunc("/v1/rpdel/", m.rpDel).Methods("DELETE")
+	///v1/rpadd/：处理 POST 请求，调用 m.rpAdd 方法
+	///v1/rpmod/：处理 PATCH 请求，调用 m.rpMod 方法
+	///v1/rpdel/：处理 DELETE 请求，调用 m.rpDel 方法
 }
 
 func (m *DatasourceManager) Start() {
 	m.RegisterHandlers()
 
 	go func() {
+		//启动一个新的 goroutine 来运行 HTTP 服务器，以便它能够同时处理其他任务
 		if err := m.server.ListenAndServe(); err != http.ErrServerClosed {
 			log.Fatalf("ListenAndServe() failed: %v", err)
 		}
