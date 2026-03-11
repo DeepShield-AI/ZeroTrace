@@ -17,9 +17,9 @@
 package tagrecorder
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
 )
 
 type ChIntEnum struct {

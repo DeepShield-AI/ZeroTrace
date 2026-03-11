@@ -32,12 +32,12 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/clickhouse"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metaDBCommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/clickhouse"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metaDBCommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var (
@@ -267,10 +267,10 @@ func (c *Dictionary) update(clickHouseCfg *clickhouse.ClickHouseConfig) {
 			log.Error(err, logger.NewORGPrefix(orgID))
 			return
 		}
-		// 删除deepflow数据库
-		// Drop database deepflow
-		if slices.Contains(databases, "deepflow") {
-			dropSql := "DROP DATABASE IF EXISTS deepflow"
+		// 删除zerotrace数据库
+		// Drop database zerotrace
+		if slices.Contains(databases, "zerotrace") {
+			dropSql := "DROP DATABASE IF EXISTS zerotrace"
 			_, err = ckDb.Exec(dropSql)
 			if err != nil {
 				log.Error(err, logger.NewORGPrefix(orgID))

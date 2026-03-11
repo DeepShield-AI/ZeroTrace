@@ -22,10 +22,10 @@ import (
 	"time"
 
 	"github.com/bitly/go-simplejson"
-	"github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/expand"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/expand"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (k *KubernetesGather) getPods() (pods []model.Pod, err error) {

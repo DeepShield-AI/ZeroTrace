@@ -24,7 +24,7 @@
 #include "tracer.h"
 #include "socket.h"
 
-#define DF_BPF_NAME           "deepflow-ebpfctl"
+#define DF_BPF_NAME           "zerotrace-ebpfctl"
 #define DF_BPF_VERSION        "v1.0.0"
 #define LINUX_VER_LEN         128
 #define CMD_BUF_SZ	      256
@@ -229,7 +229,7 @@ static unsigned int count_lines_in_file(const char *filepath)
 }
 
 #define DATADUMP_PREFIX "datadump-"
-#define LOG_PREFIX "deepflow-agent_rCURRENT"
+#define LOG_PREFIX "zerotrace-agent_rCURRENT"
 static int display_files(const char *prefix, const char *path)
 {
 	DIR *dir = opendir(path);
@@ -925,8 +925,8 @@ static int datadump_do_cmd(struct df_bpf_obj *obj, df_bpf_cmd_t cmd,
 		} else {
 			display_files("", DATADUMP_SAVE_DIR);
 			printf("\n");
-			display_files("deepflow-agent/",
-				      "/var/log/deepflow-agent");
+			display_files("zerotrace-agent/",
+				      "/var/log/zerotrace-agent");
 		}
 		break;
 	case DF_BPF_CMD_FLUSH:
@@ -958,7 +958,7 @@ static int datadump_do_cmd(struct df_bpf_obj *obj, df_bpf_cmd_t cmd,
 			     && strlen(conf->file_name) > 0
 			     && (strstr(conf->file_name, "datadump-")
 				 || strstr(conf->file_name,
-					   "deepflow-agent_rCURRENT")))
+					   "zerotrace-agent_rCURRENT")))
 			    && conf->start_line > 0 && conf->end_line > 0) {
 				if (match_str == NULL) {
 					snprintf(cmdbuf, sizeof(cmdbuf),
@@ -984,8 +984,8 @@ static int datadump_do_cmd(struct df_bpf_obj *obj, df_bpf_cmd_t cmd,
 				       "'start-line' and 'end-line' numbers:\n");
 				display_files("", DATADUMP_SAVE_DIR);
 				printf("\n");
-				display_files("deepflow-agent/",
-					      "/var/log/deepflow-agent");
+				display_files("zerotrace-agent/",
+					      "/var/log/zerotrace-agent");
 				return ETR_OK;
 				//snprintf(cmdbuf, sizeof(cmdbuf),
 				//	 "ls " DATADUMP_SAVE_DIR

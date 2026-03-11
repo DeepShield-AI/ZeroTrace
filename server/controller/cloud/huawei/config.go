@@ -21,9 +21,9 @@ import (
 
 	"github.com/bitly/go-simplejson"
 
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var DEFAULT_DOMAIN = "myhuaweicloud.com"
@@ -39,7 +39,7 @@ type Config struct {
 	IAMHostPrefix  string
 	ProjectID      string
 	ProjectName    string
-	Domain         string // 用于构造访问华为云的endpoint，需与DeepFlow自身domain做区分
+	Domain         string // 用于构造访问华为云的endpoint，需与ZeroTrace自身domain做区分
 	IncludeRegions map[string]bool
 }
 

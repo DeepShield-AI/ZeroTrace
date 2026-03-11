@@ -52,8 +52,8 @@ event_type            , Event Type                   ,
 
 process_kname         , System Process               ,
 app_instance          , Application Instance         ,
-vtap                  , DeepFlow Agent               , Deprecated，please use agent.
-agent                 , DeepFlow Agent               ,
+vtap                  , ZeroTrace Agent               , Deprecated，please use agent.
+agent                 , ZeroTrace Agent               ,
 signal_source         , Signal Source                ,
 
 mount_source          , Mount Source                 , Mount source: for example, `/dev/sda1` represents a block device, `proc` (and others such as `sysfs`, `tmpfs`) represent virtual file systems, `10.1.2.3:/path` represents an NFS file system, `/var/lib/docker/...` or `overlay` represents the mount source of a directory inside a container.

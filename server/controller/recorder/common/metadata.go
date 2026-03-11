@@ -17,8 +17,8 @@
 package common
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/common/metadata"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/controller/common/metadata"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
 )
 
 type Metadata struct {

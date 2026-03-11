@@ -21,13 +21,13 @@ import (
 	"strings"
 	"time"
 
-	pb "github.com/deepflowio/deepflow/message/k8s_event"
-	ingestercommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/event/dbwriter"
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	pb "github.com/zerotraceio/zerotrace/message/k8s_event"
+	ingestercommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/event/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func (d *Decoder) WriteK8sEvent(vtapId uint16, e *pb.KubernetesEvent) {

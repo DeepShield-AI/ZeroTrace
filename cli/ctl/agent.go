@@ -27,15 +27,15 @@ import (
 	"strings"
 
 	"github.com/bitly/go-simplejson"
-	agentpb "github.com/deepflowio/deepflow/message/trident"
+	agentpb "github.com/zerotraceio/zerotrace/message/trident"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/jsonparser"
-	"github.com/deepflowio/deepflow/cli/ctl/common/printutil"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
-	"github.com/deepflowio/deepflow/cli/ctl/example"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/jsonparser"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/printutil"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/example"
 )
 
 type RebalanceType string
@@ -57,7 +57,7 @@ func RegisterAgentCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list [name]",
 		Short:   "list agent info",
-		Example: "deepflow-ctl agent list deepflow-agent -o yaml",
+		Example: "zerotrace-ctl agent list zerotrace-agent -o yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			listAgent(cmd, args, listOutput)
 		},
@@ -67,7 +67,7 @@ func RegisterAgentCommand() *cobra.Command {
 	delete := &cobra.Command{
 		Use:     "delete [name]",
 		Short:   "delete agent",
-		Example: "deepflow-ctl agent delete deepflow-agent",
+		Example: "zerotrace-ctl agent delete zerotrace-agent",
 		Run: func(cmd *cobra.Command, args []string) {
 			deleteAgent(cmd, args)
 		},
@@ -77,7 +77,7 @@ func RegisterAgentCommand() *cobra.Command {
 	update := &cobra.Command{
 		Use:     "update -f <filename>",
 		Short:   "update agent",
-		Example: "deepflow-ctl agent update -f agent.yaml",
+		Example: "zerotrace-ctl agent update -f agent.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			updateAgent(cmd, args, updateFilename)
 		},
@@ -88,7 +88,7 @@ func RegisterAgentCommand() *cobra.Command {
 	updateExample := &cobra.Command{
 		Use:     "update-example",
 		Short:   "example agent update yaml",
-		Example: "deepflow-ctl agent update-example",
+		Example: "zerotrace-ctl agent update-example",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Printf(string(example.YamlVtapUpdateConfig))
 		},
@@ -99,9 +99,9 @@ func RegisterAgentCommand() *cobra.Command {
 	rebalanceCmd := &cobra.Command{
 		Use:   "rebalance",
 		Short: "rebalance controller or analyzer",
-		Example: `deepflow-ctl agent rebalance (rebalance controller and analyzer)
-deepflow-ctl agent rebalance --type=controller
-deepflow-ctl agent rebalance --type=analyzer`,
+		Example: `zerotrace-ctl agent rebalance (rebalance controller and analyzer)
+zerotrace-ctl agent rebalance --type=controller
+zerotrace-ctl agent rebalance --type=analyzer`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if typeStr != "" {
 				if err := rebalance(cmd, RebalanceType(typeStr), typeStr); err != nil {
@@ -134,9 +134,9 @@ func RegisterAgentUpgradeCommand() *cobra.Command {
 	agentUpgrade := &cobra.Command{
 		Use:   "agent-upgrade",
 		Short: "agent upgrade operation commands",
-		Example: "deepflow-ctl agent-upgrade list\n" +
-			"deepflow-ctl agent-upgrade agent-name --image-name=deepflow-agent\n" +
-			"deepflow-ctl agent-upgrade cancel agent-name\n",
+		Example: "zerotrace-ctl agent-upgrade list\n" +
+			"zerotrace-ctl agent-upgrade agent-name --image-name=zerotrace-agent\n" +
+			"zerotrace-ctl agent-upgrade cancel agent-name\n",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 2 {
 				if args[0] == "cancel" {
@@ -150,8 +150,8 @@ func RegisterAgentUpgradeCommand() *cobra.Command {
 				} else if imageName != "" {
 					if filepath.IsAbs(imageName) {
 						printutil.ErrorfWithColor(
-							"invalid image name(%s), please use command `deepflow-ctl repo agent list` to get image name\n"+
-								"reference doc: https://deepflow.io/docs/zh/install/upgrade/",
+							"invalid image name(%s), please use command `zerotrace-ctl repo agent list` to get image name\n"+
+								"reference doc: https://zerotrace.io/docs/zh/install/upgrade/",
 							imageName,
 						)
 						return

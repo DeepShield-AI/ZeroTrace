@@ -46,7 +46,7 @@ pub enum SendMessageType {
     Prometheus = 7,
     Telegraf = 8,
     PacketSequenceBlock = 9, // Enterprise Edition Feature: packet-sequence
-    DeepflowStats = 10,
+    ZerotraceStats = 10,
     OpenTelemetryCompressed = 11,
     RawPcap = 12, // Enterprise Edition Feature: pcap
     Profile = 13,
@@ -72,7 +72,7 @@ impl fmt::Display for SendMessageType {
             Self::Prometheus => write!(f, "prometheus"),
             Self::Telegraf => write!(f, "telegraf"),
             Self::PacketSequenceBlock => write!(f, "packet_sequence_block"), // Enterprise Edition Feature: packet-sequence
-            Self::DeepflowStats => write!(f, "deepflow_stats"),
+            Self::ZerotraceStats => write!(f, "zerotrace_stats"),
             Self::OpenTelemetryCompressed => write!(f, "open_telemetry compressed"),
             Self::RawPcap => write!(f, "raw_pcap"), // Enterprise Edition Feature: pcap
             Self::Profile => write!(f, "profile"),

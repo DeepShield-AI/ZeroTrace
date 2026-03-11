@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
 )
 
 func DecodePB(decoder *codec.SimpleDecoder, pbDoc *pb.Document) (Document, error) {

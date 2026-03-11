@@ -31,11 +31,11 @@ import (
 
 	"github.com/google/gopacket/layers"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	utag "github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	utag "github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func putStrWithoutEmpty(attrs pcommon.Map, key, value string) {
@@ -247,7 +247,7 @@ func (l7 *L7FlowLog) EncodeToOtlp(utags *utag.UniversalTagsManager, dataTypeBits
 
 	if dataTypeBits&config.APPLICATION_LAYER != 0 {
 		putStrWithoutEmpty(resAttrs, "df.application.l7_protocol", datatype.L7Protocol(l7.L7Protocol).String(l7.IsTLS == 1))
-		putStrWithoutEmpty(resAttrs, "telemetry.sdk.name", "deepflow")
+		putStrWithoutEmpty(resAttrs, "telemetry.sdk.name", "zerotrace")
 		putStrWithoutEmpty(resAttrs, "telemetry.sdk.version", common.CK_VERSION)
 		span.Status().SetCode(responseStatusToSpanStatus(l7.ResponseStatus))
 

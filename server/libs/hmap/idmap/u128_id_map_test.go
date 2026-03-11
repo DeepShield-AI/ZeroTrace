@@ -21,7 +21,7 @@ import (
 	"encoding/binary"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/libs/hmap"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap"
 )
 
 func TestU128IDMapAddOrGet(t *testing.T) {

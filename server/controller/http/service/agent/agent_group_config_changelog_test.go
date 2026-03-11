@@ -20,8 +20,8 @@ import (
 	"testing"
 	"time"
 
-	agentconf "github.com/deepflowio/deepflow/server/agent_config"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
+	agentconf "github.com/zerotraceio/zerotrace/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
 	"github.com/stretchr/testify/assert"
 )
 

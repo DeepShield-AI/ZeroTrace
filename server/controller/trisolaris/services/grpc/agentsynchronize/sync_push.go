@@ -26,14 +26,14 @@ import (
 	"github.com/knadh/koanf/v2"
 	context "golang.org/x/net/context"
 
-	api "github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/pushmanager"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/vtap"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	api "github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/pushmanager"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/vtap"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.agentsynchronize")

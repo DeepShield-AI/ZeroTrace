@@ -19,8 +19,8 @@ package service
 import (
 	"context"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/prompb"
 	"github.com/prometheus/prometheus/promql"
@@ -212,7 +212,7 @@ func (o *OffloadQuerier) Select(sortSeries bool, hints *storage.SelectHints, mat
 		}
 		startS, endS := queryReq.GetStart()/1e3, queryReq.GetEnd()/1e3
 		// when use offloading query, it's always prometheus native metrics, with df_ prefix
-		ctx = context.WithValue(ctx, ctxKeyPrefixType{}, prefixDeepFlow)
+		ctx = context.WithValue(ctx, ctxKeyPrefixType{}, prefixZeroTrace)
 		resp, err := o.querierable.reader.respTransToProm(ctx, queryReq.GetMetric(), startS, endS, result)
 		if err != nil {
 			log.Error(err)

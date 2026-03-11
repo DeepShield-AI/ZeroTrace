@@ -17,7 +17,7 @@
 package config
 
 import (
-	eventConfig "github.com/deepflowio/deepflow/server/controller/recorder/event/config"
+	eventConfig "github.com/zerotraceio/zerotrace/server/controller/recorder/event/config"
 )
 
 var cfg *RecorderConfig

@@ -19,9 +19,9 @@ package dbwriter
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const (

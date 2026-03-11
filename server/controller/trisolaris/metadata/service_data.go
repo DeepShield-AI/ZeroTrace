@@ -25,11 +25,11 @@ import (
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/golang/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbcache"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbcache"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type ServiceRawData struct {

@@ -29,8 +29,8 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/message/trident"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/message/trident"
 )
 
 type ParamData struct {
@@ -50,7 +50,7 @@ type CmdExecute func(response *trident.SyncResponse)
 func regiterCommand() []*cobra.Command {
 	platformDataCmd := &cobra.Command{
 		Use:   "platform-data",
-		Short: "get platform-data from deepflow-server",
+		Short: "get platform-data from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{platformData})
 		},
@@ -58,7 +58,7 @@ func regiterCommand() []*cobra.Command {
 
 	ipGroupsCmd := &cobra.Command{
 		Use:   "ip-groups",
-		Short: "get ip groups from deepflow-servr",
+		Short: "get ip groups from zerotrace-servr",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{ipGroups})
 		},
@@ -66,7 +66,7 @@ func regiterCommand() []*cobra.Command {
 
 	flowAclsCmd := &cobra.Command{
 		Use:   "flow-acls",
-		Short: "get flow-acls from deepflow-server",
+		Short: "get flow-acls from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{flowAcls})
 		},
@@ -74,7 +74,7 @@ func regiterCommand() []*cobra.Command {
 
 	tapTypesCmd := &cobra.Command{
 		Use:   "tap-types",
-		Short: "get tap-types from deepflow-server",
+		Short: "get tap-types from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{tapTypes})
 		},
@@ -82,7 +82,7 @@ func regiterCommand() []*cobra.Command {
 
 	segmentsCmd := &cobra.Command{
 		Use:   "segments",
-		Short: "get segments from deepflow-server",
+		Short: "get segments from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{segments})
 		},
@@ -90,7 +90,7 @@ func regiterCommand() []*cobra.Command {
 
 	containersCmd := &cobra.Command{
 		Use:   "containers",
-		Short: "get containers from deepflow-server",
+		Short: "get containers from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{containers})
 		},
@@ -98,7 +98,7 @@ func regiterCommand() []*cobra.Command {
 
 	vpcIPCmd := &cobra.Command{
 		Use:   "vpc-ip",
-		Short: "get vpc-ip from deepflow-server",
+		Short: "get vpc-ip from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{vpcIP})
 		},
@@ -106,7 +106,7 @@ func regiterCommand() []*cobra.Command {
 
 	skipInterfaceCmd := &cobra.Command{
 		Use:   "skip-interface",
-		Short: "get skip-interface from deepflow-server",
+		Short: "get skip-interface from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{skipInterface})
 		},
@@ -114,7 +114,7 @@ func regiterCommand() []*cobra.Command {
 
 	localServersCmd := &cobra.Command{
 		Use:   "local-servers",
-		Short: "get local-servers from deepflow-server",
+		Short: "get local-servers from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{localServers})
 		},
@@ -122,7 +122,7 @@ func regiterCommand() []*cobra.Command {
 
 	allCmd := &cobra.Command{
 		Use:   "all",
-		Short: "get all data from deepflow-server",
+		Short: "get all data from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{platformData, ipGroups, flowAcls, tapTypes,
 				segments, containers, vpcIP, skipInterface, localServers})
@@ -131,7 +131,7 @@ func regiterCommand() []*cobra.Command {
 
 	universalTagNameCmd := &cobra.Command{
 		Use:   "universal-tag-name",
-		Short: "get universal tag name map from deepflow-server",
+		Short: "get universal tag name map from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			universalTagName(cmd)
 		},
@@ -139,7 +139,7 @@ func regiterCommand() []*cobra.Command {
 
 	orgIDsCmd := &cobra.Command{
 		Use:   "orgIDs",
-		Short: "get orgIDs from deepflow-server",
+		Short: "get orgIDs from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			orgIDs(cmd)
 		},
@@ -154,7 +154,7 @@ func regiterCommand() []*cobra.Command {
 func RegisterTrisolarisCommand() *cobra.Command {
 	trisolarisCmd := &cobra.Command{
 		Use:   "trisolaris.ingester-check",
-		Short: "pull grpc data from deepflow-server",
+		Short: "pull grpc data from zerotrace-server",
 	}
 	trisolarisCmd.PersistentFlags().StringVarP(&paramData.CtrlIP, "cip", "", "", "ctrl ip")
 	trisolarisCmd.PersistentFlags().StringVarP(&paramData.ProcessName, "pname", "", "analyzer", "process name")
@@ -319,7 +319,7 @@ func skipInterface(response *trident.SyncResponse) {
 
 func localServers(response *trident.SyncResponse) {
 	fmt.Println("localServers:")
-	for index, entry := range response.GetDeepflowServerInstances() {
+	for index, entry := range response.GetZerotraceServerInstances() {
 		JsonFormat(index+1, entry)
 	}
 }

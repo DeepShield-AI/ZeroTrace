@@ -608,7 +608,7 @@ impl EbpfCollector {
                 };
 
                 if queue_id >= DPDK_SENDER_BUFFERS.len() {
-                    error!("dpdk is not initialized, deepflow-agent restart...");
+                    error!("dpdk is not initialized, zerotrace-agent restart...");
                     crate::utils::clean_and_exit(1);
                 }
 
@@ -618,7 +618,7 @@ impl EbpfCollector {
                         .send_all(&mut DPDK_SENDER_BUFFERS[queue_id])
                     {
                         Err(Terminated(a, b)) => {
-                            error!("dpdk init error: {:?}, deepflow-agent restart...", (a, b));
+                            error!("dpdk init error: {:?}, zerotrace-agent restart...", (a, b));
                             crate::utils::clean_and_exit(1);
                         }
                         Err(e) => {

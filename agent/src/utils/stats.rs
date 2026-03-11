@@ -36,7 +36,7 @@ use public::{
     sender::{SendMessageType, Sendable},
 };
 
-const STATS_PREFIX: &'static str = "deepflow_agent";
+const STATS_PREFIX: &'static str = "zerotrace_agent";
 const TICK_CYCLE: Duration = Duration::from_secs(1);
 pub const STATS_MIN_INTERVAL: Duration = Duration::from_secs(10);
 const STATS_SENDER_QUEUE_SIZE: usize = 4096;
@@ -125,7 +125,7 @@ impl Sendable for ArcBatch {
     }
 
     fn message_type(&self) -> SendMessageType {
-        SendMessageType::DeepflowStats
+        SendMessageType::ZerotraceStats
     }
 }
 

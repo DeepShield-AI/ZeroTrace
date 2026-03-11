@@ -17,7 +17,7 @@
 package metadata
 
 import (
-	"github.com/deepflowio/deepflow/message/trident"
+	"github.com/zerotraceio/zerotrace/message/trident"
 )
 
 type DomainCIDRProto struct {

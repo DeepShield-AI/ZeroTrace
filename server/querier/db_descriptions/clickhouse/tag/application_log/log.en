@@ -36,7 +36,7 @@ chost_hostname        , Cloud Host                   , The hostname of Cloud Hos
 pod_node_ip           , K8s Node                     , The primary IP address of K8s Node.
 pod_node_hostname     , K8s Node                     , The hostname of K8s Node.
 user                  , User                         , 
-agent                 , DeepFlow Agent               ,
+agent                 , ZeroTrace Agent               ,
 
 attribute             , Attribute                    ,
 k8s.label             , K8s Label                    ,

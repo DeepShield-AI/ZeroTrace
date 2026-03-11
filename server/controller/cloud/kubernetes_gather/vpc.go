@@ -17,9 +17,9 @@
 package kubernetes_gather
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (k *KubernetesGather) getVPC() (model.VPC, error) {

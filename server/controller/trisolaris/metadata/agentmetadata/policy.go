@@ -25,13 +25,13 @@ import (
 	"sync/atomic"
 
 	mapset "github.com/deckarep/golang-set"
-	"github.com/deepflowio/deepflow/message/agent"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 	"github.com/golang/protobuf/proto"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type PolicyRawData struct {

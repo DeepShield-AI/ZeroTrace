@@ -17,8 +17,8 @@
 package pb
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 func (s *Stats) Encode(encoder *codec.SimpleEncoder) {

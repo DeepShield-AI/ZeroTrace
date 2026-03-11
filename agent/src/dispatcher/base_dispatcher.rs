@@ -320,7 +320,7 @@ impl BaseDispatcher {
     pub(super) fn init(&mut self) -> Result<()> {
         if let Err(e) = self.engine.init() {
             error!(
-                "dispatcher recv_engine init error: {}, deepflow-agent restart...",
+                "dispatcher recv_engine init error: {}, zerotrace-agent restart...",
                 e
             );
             return Err(e.into());
@@ -468,7 +468,7 @@ impl BaseDispatcher {
             }
             Err(e) => {
                 error!(
-                    "dispatcher recv_engine init error: {}, deepflow-agent restart...",
+                    "dispatcher recv_engine init error: {}, zerotrace-agent restart...",
                     e
                 );
                 Err(e.into())
@@ -577,7 +577,7 @@ impl InternalState {
             .iter()
             .map(|i| i.if_index as i32)
             .collect::<Vec<i32>>();
-        // When the configuration is changed, the deepflow-agent will restart,
+        // When the configuration is changed, the zerotrace-agent will restart,
         // and the NIC configured in promiscuous mode will be retired
         if self.options.lock().unwrap().promisc && self.promisc_if_indices != if_indices {
             if let Err(e) = engine.set_promisc(&self.promisc_if_indices, false) {
@@ -978,7 +978,7 @@ impl BaseDispatcherListener {
     fn on_afpacket_change(&mut self, config: &DispatcherConfig) {
         if self.options.lock().unwrap().af_packet_version != config.capture_socket_type.into() {
             // TODO：目前通过进程退出的方式修改AfPacket版本，后面需要支持动态修改
-            info!("Afpacket version update, deepflow-agent restart...");
+            info!("Afpacket version update, zerotrace-agent restart...");
             crate::utils::clean_and_exit(1);
         }
     }

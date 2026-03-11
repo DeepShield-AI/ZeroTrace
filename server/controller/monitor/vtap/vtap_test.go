@@ -30,12 +30,12 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	mysql "github.com/deepflowio/deepflow/server/controller/db/metadb"
-	mysqlconfig "github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	mysqlmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/monitor/config"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	mysql "github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	mysqlconfig "github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	mysqlmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/config"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 const (

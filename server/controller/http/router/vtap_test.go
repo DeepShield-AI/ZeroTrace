@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 func Test_getVtapCSVData(t *testing.T) {

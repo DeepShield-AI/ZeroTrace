@@ -23,10 +23,10 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/deepflowio/deepflow/server/libs/lru"
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/statsd"
+	"github.com/zerotraceio/zerotrace/server/libs/lru"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/statsd"
 	"github.com/prometheus/prometheus/prompb"
 )
 

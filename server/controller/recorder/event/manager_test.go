@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/libs/eventapi"
+	"github.com/zerotraceio/zerotrace/server/libs/eventapi"
 )
 
 func TestEventManagerBase_convertToEventBeEnqueued(t *testing.T) {
@@ -55,7 +55,7 @@ func TestEventManagerBase_convertToEventBeEnqueued(t *testing.T) {
 					Type:               eventapi.RESOURCE_EVENT_TYPE_CREATE,
 					InstanceType:       10,
 					InstanceID:         29024,
-					InstanceName:       "slave-deepflow-ck",
+					InstanceName:       "slave-zerotrace-ck",
 					AttributeSubnetIDs: []uint32{7158},
 					AttributeIPs:       []string{"127.0.0.1"},
 					Description:        "description...",
@@ -85,7 +85,7 @@ func TestEventManagerBase_convertToEventBeEnqueued(t *testing.T) {
 				Type:               eventapi.RESOURCE_EVENT_TYPE_CREATE,
 				InstanceType:       10,
 				InstanceID:         29024,
-				InstanceName:       "slave-deepflow-ck",
+				InstanceName:       "slave-zerotrace-ck",
 				AttributeSubnetIDs: []uint32{7158},
 				AttributeIPs:       []string{"127.0.0.1"},
 				Description:        "description...",

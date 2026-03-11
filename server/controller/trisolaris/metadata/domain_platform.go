@@ -17,7 +17,7 @@
 package metadata
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type DomainPlatformData map[string]*PlatformData

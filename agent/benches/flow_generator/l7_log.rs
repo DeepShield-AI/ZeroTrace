@@ -20,7 +20,7 @@ use std::{cell::RefCell, rc::Rc, sync::Arc};
 
 use criterion::*;
 
-use deepflow_agent::{
+use zerotrace_agent::{
     _FlowPerfCounter as FlowPerfCounter, _L7PerfCache as L7PerfCache,
     _PacketDirection as PacketDirection, _TcpPerf as TcpPerf,
     _benchmark_report as benchmark_report,

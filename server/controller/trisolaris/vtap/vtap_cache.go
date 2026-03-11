@@ -33,17 +33,17 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/mohae/deepcopy"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/agent_config"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/metadata"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/metadata/agentmetadata"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils/atomicbool"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata/agentmetadata"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils/atomicbool"
 )
 
 type VTapConfig struct {
@@ -491,7 +491,7 @@ func (c *VTapCache) unsetLicenseFunctionEnable() {
 func (c *VTapCache) convertLicenseFunctions() {
 	v := c.vTapInfo
 	c.unsetLicenseFunctionEnable()
-	if c.GetVTapType() == common.VTAP_TYPE_DEDICATED || c.GetOwner() == common.VTAP_OWNER_DEEPFLOW {
+	if c.GetVTapType() == common.VTAP_TYPE_DEDICATED || c.GetOwner() == common.VTAP_OWNER_ZEROTRACE {
 		c.enabledNetNpb.Set()
 		c.enabledNetNpmd.Set()
 		c.enabledNetDpdk.Set()
@@ -892,7 +892,7 @@ func (c *VTapCache) updateVTapID(vtapID int) {
 }
 
 func (c *VTapCache) GetFunctions() mapset.Set {
-	if c.GetOwner() == common.VTAP_OWNER_DEEPFLOW {
+	if c.GetOwner() == common.VTAP_OWNER_ZEROTRACE {
 		functionSet := mapset.NewSet()
 		for _, functionStr := range strings.Split(common.AGENT_ALL_LICENSE_FUNCTIONS, ",") {
 			function, err := strconv.Atoi(functionStr)
@@ -930,7 +930,7 @@ func (c *VTapCache) UpdateOwner(isOwnerCluster bool) {
 	if !isOwnerCluster {
 		return
 	}
-	c.owner = proto.String(common.VTAP_OWNER_DEEPFLOW)
+	c.owner = proto.String(common.VTAP_OWNER_ZEROTRACE)
 }
 
 func (c *VTapCache) GetVTapHost() string {

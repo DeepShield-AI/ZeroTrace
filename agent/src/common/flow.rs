@@ -1537,7 +1537,7 @@ fn get_direction(
             }
             _ => {
                 // 采集器类型不正确，不应该发生
-                error!("invalid agent type, deepflow-agent restart...");
+                error!("invalid agent type, zerotrace-agent restart...");
                 crate::utils::clean_and_exit(1);
             }
         }
@@ -1578,7 +1578,7 @@ fn get_direction(
     // 双方向都有统计位置优先级为：client/server侧 > L2End侧 > IsLocalMac侧 > 其他
     if src_direct != Direction::None && dst_direct != Direction::None {
         if let CaptureNetworkType::Idc(_) = flow_key.tap_type {
-            // When the IDC traffic collected by the dedicated deepflow-agent cannot distinguish between Directions,
+            // When the IDC traffic collected by the dedicated zerotrace-agent cannot distinguish between Directions,
             // L4FlowLog and Doc data to count a Rest record.
             // ======================================================================================================
             // 当专属采集器采集的 IDC 流量无法区分 Direction 时，L4FlowLog 和 Doc数据中统计一份 Rest 记录。

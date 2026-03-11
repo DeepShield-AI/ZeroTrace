@@ -404,7 +404,7 @@ fn main() {
         .format_timestamp(Some(env_logger::TimestampPrecision::Millis))
         .init();
 
-    let log_file = CString::new("/var/log/deepflow-ebpf.log".as_bytes()).unwrap();
+    let log_file = CString::new("/var/log/zerotrace-ebpf.log".as_bytes()).unwrap();
     let log_file_c = log_file.as_c_str();
     match trace_utils::protect_cpu_affinity() {
         Ok(()) => info!("CPU affinity protected successfully"),
@@ -725,7 +725,7 @@ fn main() {
         //set_feature_regex(
         //    ebpf::FEATURE_PROFILE_ONCPU,
         //    CString::new(
-        //        "^(java|nginx|profiler|telegraf|mysqld|.*deepflow.*|socket_tracer)$".as_bytes(),
+        //        "^(java|nginx|profiler|telegraf|mysqld|.*zerotrace.*|socket_tracer)$".as_bytes(),
         //    )
         //    .unwrap()
         //    .as_c_str()

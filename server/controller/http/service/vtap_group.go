@@ -26,16 +26,16 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	agentconf "github.com/deepflowio/deepflow/server/agent_config"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/service/agentlicense"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
+	agentconf "github.com/zerotraceio/zerotrace/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/agentlicense"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
 )
 
 const VTAP_GROUP_SHORT_UUID_PREFIX = "g-"
@@ -201,7 +201,7 @@ func (a *AgentGroup) Create(vtapGroupCreate model.VtapGroupCreate) (resp model.V
 
 	shortUUID := VTAP_GROUP_SHORT_UUID_PREFIX + common.GenerateShortUUID()
 	groupID := vtapGroupCreate.GroupID
-	// verify vtap group id in deepflow-ctl command model
+	// verify vtap group id in zerotrace-ctl command model
 	if err := verifyGroupID(db, groupID); err != nil {
 		return model.VtapGroup{}, response.ServiceError(httpcommon.INVALID_POST_DATA, err.Error())
 	}

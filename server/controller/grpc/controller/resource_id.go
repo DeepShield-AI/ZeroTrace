@@ -19,8 +19,8 @@ package controller
 import (
 	"golang.org/x/net/context"
 
-	api "github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/server/controller/recorder/db/idmng"
+	api "github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/db/idmng"
 )
 
 type IDEvent struct{}

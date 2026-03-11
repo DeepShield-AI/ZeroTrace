@@ -19,14 +19,14 @@ package synchronize
 import (
 	"time"
 
-	api "github.com/deepflowio/deepflow/message/trident"
+	api "github.com/zerotraceio/zerotrace/message/trident"
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	grpcserver "github.com/deepflowio/deepflow/server/controller/grpc"
-	"github.com/deepflowio/deepflow/server/controller/grpc/statsd"
-	prometheus "github.com/deepflowio/deepflow/server/controller/prometheus/service/grpc"
-	trisolaris "github.com/deepflowio/deepflow/server/controller/trisolaris/services/grpc/synchronize"
+	grpcserver "github.com/zerotraceio/zerotrace/server/controller/grpc"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc/statsd"
+	prometheus "github.com/zerotraceio/zerotrace/server/controller/prometheus/service/grpc"
+	trisolaris "github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/grpc/synchronize"
 )
 
 type service struct {

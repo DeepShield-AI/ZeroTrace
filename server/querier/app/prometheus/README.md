@@ -19,7 +19,7 @@
 
 | db                                                        | metrics                                          |
 |-----------------------------------------------------------|--------------------------------------------------|
-| `flow_log`, `event`, `deepflow_admin`, `deepflow_tenant`  | `{db}__{table}__{metricsName}`                   |
+| `flow_log`, `event`, `zerotrace_admin`, `zerotrace_tenant`  | `{db}__{table}__{metricsName}`                   |
 | `flow_metrics`                                            | `{db}__{table}__{metricsName}__{datasource}`     |
 | `prometheus` (ingested by prometheus)                     | `prometheus__samples__{metricsName}`             |
 | `ext_metrics` (TODO, ingested by influxdb)                | `ext_metrics__metrics__influxdb_{metricsName}`   |
@@ -37,7 +37,7 @@ go build -o ./cmd/promql-compliance-tester .
 ```
 测试命令：
 ```bash
-./promql-compliance-tester --config-file=promql-deepflow-metrics-query.yaml
+./promql-compliance-tester --config-file=promql-zerotrace-metrics-query.yaml
 ```
 
 ## 附：Prometheus RemoteRead API 文档

@@ -78,7 +78,7 @@ func fillHeader(req *http.Request) {
 	}
 }
 
-// CURLPerform 调用 deepflow 其他服务 API 并获取返回结果，Content-Type 为 application/json
+// CURLPerform 调用 zerotrace 其他服务 API 并获取返回结果，Content-Type 为 application/json
 func CURLPerform(method string, url string, body map[string]interface{}, options ...HeaderOption) (*simplejson.Json, error) {
 	log.Debugf("curl perform: %s %s %+v", method, url, body)
 	bodyStr, _ := json.Marshal(&body)
@@ -91,7 +91,7 @@ func CURLPerform(method string, url string, body map[string]interface{}, options
 	return doRequest(req, url, options...)
 }
 
-// CURLPerform2 调用 deepflow 其他服务, 如 querier API 并获取返回结果，Content-Type 为 application/x-www-form-urlencoded
+// CURLPerform2 调用 zerotrace 其他服务, 如 querier API 并获取返回结果，Content-Type 为 application/x-www-form-urlencoded
 func CURLPerform2(method string, url string, postData map[string]string, options ...HeaderOption) (*simplejson.Json, error) {
 	log.Debugf("curl perform: %s %s %+v", method, url, postData)
 	body := new(bytes.Buffer)
@@ -165,7 +165,7 @@ func doRequest(req *http.Request, url string, options ...HeaderOption) (*simplej
 }
 
 // TODO optimize
-// CURLForm 调用 deepflow 其他服务 API 并获取返回结果，Content-Type 为 application/x-www-form-urlencoded
+// CURLForm 调用 zerotrace 其他服务 API 并获取返回结果，Content-Type 为 application/x-www-form-urlencoded
 func CURLForm(method string, url string, values url.Values, options ...HeaderOption) (*simplejson.Json, error) {
 	log.Debugf("curl form: %s %s %+v", method, url, values)
 	req, err := http.NewRequest(method, url, strings.NewReader(values.Encode()))

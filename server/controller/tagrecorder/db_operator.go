@@ -19,8 +19,8 @@ package tagrecorder
 import (
 	"gorm.io/gorm/clause"
 
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
 )
 
 // UpdateMode 定义更新时的对象定位策略

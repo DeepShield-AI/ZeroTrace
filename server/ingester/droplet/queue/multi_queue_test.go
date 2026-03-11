@@ -20,7 +20,7 @@ import (
 	"sync"
 	"testing"
 
-	rawqueue "github.com/deepflowio/deepflow/server/libs/queue"
+	rawqueue "github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 func TestSingleQueueSingleUserPuts(t *testing.T) {

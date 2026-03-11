@@ -1,4 +1,4 @@
-MESSAGE = github.com/deepflowio/deepflow/message
+MESSAGE = github.com/zerotraceio/zerotrace/message
 
 afpacket-debug:
 	go build -gcflags 'all=-N -l' -o benchTest_afpacket ./afpacket/main.go

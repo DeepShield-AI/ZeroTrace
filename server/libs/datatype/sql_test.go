@@ -19,7 +19,7 @@ package datatype
 import (
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 type TestCase struct {

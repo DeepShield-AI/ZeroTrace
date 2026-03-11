@@ -19,9 +19,9 @@ package metadata
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func NewPlatform(orgID int, options ...func(*Platform)) (Platform, error) {

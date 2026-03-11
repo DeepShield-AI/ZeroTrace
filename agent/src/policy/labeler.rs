@@ -26,7 +26,7 @@ use log::warn;
 
 use super::bit::count_trailing_zeros32;
 use crate::common::decapsulate::TunnelInfo;
-use crate::common::endpoint::{EndpointData, EndpointInfo, EPC_DEEPFLOW, EPC_INTERNET};
+use crate::common::endpoint::{EndpointData, EndpointInfo, EPC_ZEROTRACE, EPC_INTERNET};
 use crate::common::lookup_key::LookupKey;
 use crate::common::platform_data::{IfType, PlatformData};
 use crate::common::policy::{Cidr, CidrType, Container, PeerConnection};
@@ -177,7 +177,7 @@ impl Labeler {
 
         for interface in interfaces {
             let mut epc_id = interface.epc_id;
-            if epc_id == EPC_DEEPFLOW {
+            if epc_id == EPC_ZEROTRACE {
                 epc_id = 0;
             }
 
@@ -280,7 +280,7 @@ impl Labeler {
         for item in cidrs {
             let mut epc_id = item.epc_id;
             if item.cidr_type == CidrType::Wan {
-                epc_id = EPC_DEEPFLOW;
+                epc_id = EPC_ZEROTRACE;
             }
             let key = EpcNetIpKey::new(&item.ip.network(), item.ip.prefix_len(), epc_id);
 
@@ -349,7 +349,7 @@ impl Labeler {
     }
 
     // 函数通过EPC+IP查询对应的CIDR，获取EPC标记
-    // 注意当查询外网时必须给epc参数传递EPC_DEEPFLOW值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
+    // 注意当查询外网时必须给epc参数传递EPC_ZEROTRACE值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
     fn set_epc_by_cidr(&self, ip: IpAddr, epc_id: i32, endpoint: &mut EndpointInfo) -> bool {
         let (min, max) = self.get_cidr_masklen_range(epc_id);
         let cidr_key = EpcNetIpKey::new(&ip, max as u8, epc_id);
@@ -367,7 +367,7 @@ impl Labeler {
     }
 
     // 函数通过EPC+IP查询对应的CIDR，获取EPC和VIP标记
-    // 注意当查询外网时必须给epc参数传递EPC_DEEPFLOW值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
+    // 注意当查询外网时必须给epc参数传递EPC_ZEROTRACE值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
     #[inline]
     fn set_epc_vip_by_tunnel(
         &self,
@@ -542,8 +542,8 @@ impl Labeler {
                         info.set_l3_data(&interface);
                         is_wan = interface.if_type == IfType::WAN;
                     } else {
-                        // step 3: 查询DEEPFLOW添加的WAN监控网段(cidr)
-                        is_wan = self.set_epc_by_cidr(ip, EPC_DEEPFLOW, &mut info);
+                        // step 3: 查询ZEROTRACE添加的WAN监控网段(cidr)
+                        is_wan = self.set_epc_by_cidr(ip, EPC_ZEROTRACE, &mut info);
                     }
                     return (info, is_wan);
                 }
@@ -571,7 +571,7 @@ impl Labeler {
             }
         }
 
-        // step 2: 使用L2EpcId + IP查询L3，如果L2EpcId为0，会查询到DEEPFLOW添加的监控IP
+        // step 2: 使用L2EpcId + IP查询L3，如果L2EpcId为0，会查询到ZEROTRACE添加的监控IP
         if let Some(interface) = self.get_interface_by_epc_ip(ip, info.l2_epc_id) {
             info.set_l3_data(&interface);
             is_wan = interface.if_type == IfType::WAN;
@@ -644,8 +644,8 @@ impl Labeler {
                 src_data.set_l3_data(&interface);
                 found_src = true;
             } else {
-                // step 2: 查询DEEPFLOW添加的WAN监控网段(cidr)
-                found_src = self.set_epc_by_cidr(src, EPC_DEEPFLOW, src_data);
+                // step 2: 查询ZEROTRACE添加的WAN监控网段(cidr)
+                found_src = self.set_epc_by_cidr(src, EPC_ZEROTRACE, src_data);
             }
         }
         if dst_data.l3_epc_id == 0 {
@@ -654,8 +654,8 @@ impl Labeler {
                 dst_data.set_l3_data(&interface);
                 fount_dst = true;
             } else {
-                // step 2: 查询DEEPFLOW添加的WAN监控网段(cidr)
-                fount_dst = self.set_epc_by_cidr(dst, EPC_DEEPFLOW, dst_data);
+                // step 2: 查询ZEROTRACE添加的WAN监控网段(cidr)
+                fount_dst = self.set_epc_by_cidr(dst, EPC_ZEROTRACE, dst_data);
             }
         }
         return (found_src, fount_dst);
@@ -676,7 +676,7 @@ impl Labeler {
             if !is_src_wan {
                 self.set_vip_by_cidr(key.src_ip, src_data.l3_epc_id, &mut src_data);
             } else {
-                self.set_vip_by_cidr(key.src_ip, EPC_DEEPFLOW, &mut src_data);
+                self.set_vip_by_cidr(key.src_ip, EPC_ZEROTRACE, &mut src_data);
             }
         }
         if src_data.is_vip {
@@ -688,7 +688,7 @@ impl Labeler {
             if !is_dst_wan {
                 self.set_vip_by_cidr(key.dst_ip, dst_data.l3_epc_id, &mut dst_data);
             } else {
-                self.set_vip_by_cidr(key.dst_ip, EPC_DEEPFLOW, &mut dst_data);
+                self.set_vip_by_cidr(key.dst_ip, EPC_ZEROTRACE, &mut dst_data);
             }
         }
         if dst_data.is_vip {
@@ -775,7 +775,7 @@ impl Labeler {
         self.get_l3_by_peer(key.src_ip, key.dst_ip, &mut endpoint);
         // l3: WAN查询，包括以下两种查询
         // 1) ip查询平台数据WAN接口
-        // 2) ip查询DEEPFLOW添加的WAN监控网段(cidr)
+        // 2) ip查询ZEROTRACE添加的WAN监控网段(cidr)
         let (found_src, found_dst) = self.get_l3_by_wan(key.src_ip, key.dst_ip, &mut endpoint);
         if found_src || found_dst {
             self.modify_endpoint_data(&mut endpoint, key);
@@ -833,7 +833,7 @@ impl Labeler {
         self.get_l3_by_peer(key.src_ip, key.dst_ip, &mut endpoint);
         // l3: WAN查询，包括以下两种查询
         // 1) ip查询平台数据WAN接口
-        // 2) ip查询DEEPFLOW添加的WAN监控网段(cidr)
+        // 2) ip查询ZEROTRACE添加的WAN监控网段(cidr)
         let (found_src, found_dst) = self.get_l3_by_wan(key.src_ip, key.dst_ip, &mut endpoint);
         if found_src || found_dst {
             self.modify_endpoint_data(&mut endpoint, key);
@@ -905,7 +905,7 @@ mod tests {
                 raw_ip: "192.168.10.200".parse().unwrap(),
                 ..Default::default()
             }],
-            epc_id: EPC_DEEPFLOW,
+            epc_id: EPC_ZEROTRACE,
             if_type: IfType::WAN,
             ..Default::default()
         };
@@ -915,7 +915,7 @@ mod tests {
         let ret = labeler.get_interface_by_epc_ip("192.168.10.100".parse().unwrap(), 1);
         assert_eq!(ret.is_some(), true);
 
-        let ret = labeler.get_interface_by_epc_ip("192.168.10.200".parse().unwrap(), EPC_DEEPFLOW);
+        let ret = labeler.get_interface_by_epc_ip("192.168.10.200".parse().unwrap(), EPC_ZEROTRACE);
         assert_eq!(ret.is_some(), false);
 
         let ret = labeler.get_interface_by_epc_ip("192.168.10.200".parse().unwrap(), 0);
@@ -1158,7 +1158,7 @@ mod tests {
 
         labeler.set_epc_by_cidr(
             "192.168.10.100".parse().unwrap(),
-            EPC_DEEPFLOW,
+            EPC_ZEROTRACE,
             &mut endpoint,
         );
         assert_eq!(endpoint.l3_epc_id, 10);

@@ -24,9 +24,9 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("prometheus.synchronizer.cache")

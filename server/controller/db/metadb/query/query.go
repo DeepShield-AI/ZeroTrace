@@ -18,7 +18,7 @@ package query
 import (
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
 )
 
 // FindInBatches gets all data that meets the query conditions in batches

@@ -31,11 +31,11 @@ import (
 
 	//"github.com/k0kubun/pp"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
-	"github.com/deepflowio/deepflow/server/querier/parse"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/parse"
 )
 
 /* var (
@@ -186,9 +186,9 @@ var (
 		output: []string{"SELECT if(indexOf(metrics_float_names, 'storageclass_annotations')=0,null,metrics_float_values[indexOf(metrics_float_names, 'storageclass_annotations')]) AS `job_info` FROM ext_metrics.`metrics` WHERE (virtual_table_name='prometheus_kube') LIMIT 10000"},
 		db:     "ext_metrics",
 	}, {
-		input:  "select Sum(`metrics.pending`) from `deepflow_server.queue`",
-		output: []string{"SELECT SUM(if(indexOf(metrics_float_names, 'pending')=0,null,metrics_float_values[indexOf(metrics_float_names, 'pending')])) AS `Sum(metrics.pending)` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_server.queue') LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "select Sum(`metrics.pending`) from `zerotrace_server.queue`",
+		output: []string{"SELECT SUM(if(indexOf(metrics_float_names, 'pending')=0,null,metrics_float_values[indexOf(metrics_float_names, 'pending')])) AS `Sum(metrics.pending)` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_server.queue') LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
 		input:  "select `k8s.label_0` from l7_flow_log",
 		output: []string{"SELECT if(dictGetOrDefault('flow_tag.pod_service_k8s_labels_map', 'labels', toUInt64(service_id_0),'{}')!='{}', dictGetOrDefault('flow_tag.pod_service_k8s_labels_map', 'labels', toUInt64(service_id_0),'{}'), dictGetOrDefault('flow_tag.pod_k8s_labels_map', 'labels', toUInt64(pod_id_0),'{}'))  AS `k8s.label_0` FROM flow_log.`l7_flow_log` LIMIT 10000"},
@@ -258,25 +258,25 @@ var (
 		output: []string{"WITH toStartOfInterval(time, toIntervalSecond(2)) + toIntervalSecond(arrayJoin([0]) * 2) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(byte_tx)/(2/1) AS `Avg(byte_tx)` FROM flow_metrics.`network_map` GROUP BY `toi` LIMIT 1"},
 		db:     "flow_metrics",
 	}, {
-		input:  "SELECT time(time,5,1,0) as toi, AAvg(`metrics.dropped`) AS `AAvg(metrics.dropped)` FROM `deepflow_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
-		output: []string{"WITH toStartOfInterval(_time, toIntervalSecond(5)) + toIntervalSecond(arrayJoin([0]) * 5) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, AVG(`_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])`) AS `AAvg(metrics.dropped)` FROM (WITH toStartOfInterval(time, toIntervalSecond(1)) AS `_time` SELECT _time, SUM(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')])) AS `_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_agent_collect_sender') GROUP BY `_time`) GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "SELECT time(time,5,1,0) as toi, AAvg(`metrics.dropped`) AS `AAvg(metrics.dropped)` FROM `zerotrace_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
+		output: []string{"WITH toStartOfInterval(_time, toIntervalSecond(5)) + toIntervalSecond(arrayJoin([0]) * 5) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, AVG(`_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])`) AS `AAvg(metrics.dropped)` FROM (WITH toStartOfInterval(time, toIntervalSecond(1)) AS `_time` SELECT _time, SUM(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')])) AS `_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_agent_collect_sender') GROUP BY `_time`) GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
-		input:  "SELECT time(time,5,1,0) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `deepflow_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
-		output: []string{"WITH toStartOfInterval(time, toIntervalSecond(5)) + toIntervalSecond(arrayJoin([0]) * 5) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(5/1) AS `Avg(metrics.dropped)` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "SELECT time(time,5,1,0) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `zerotrace_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
+		output: []string{"WITH toStartOfInterval(time, toIntervalSecond(5)) + toIntervalSecond(arrayJoin([0]) * 5) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(5/1) AS `Avg(metrics.dropped)` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
-		input:  "SELECT time(time,120,1,0) as toi, AAvg(`metrics.dropped`) AS `AAvg(metrics.dropped)` FROM `deepflow_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
-		output: []string{"WITH toStartOfInterval(_time, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, AVG(`_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])`) AS `AAvg(metrics.dropped)` FROM (WITH toStartOfInterval(time, toIntervalSecond(1)) AS `_time` SELECT _time, SUM(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')])) AS `_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_agent_collect_sender') GROUP BY `_time`) GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "SELECT time(time,120,1,0) as toi, AAvg(`metrics.dropped`) AS `AAvg(metrics.dropped)` FROM `zerotrace_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
+		output: []string{"WITH toStartOfInterval(_time, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, AVG(`_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])`) AS `AAvg(metrics.dropped)` FROM (WITH toStartOfInterval(time, toIntervalSecond(1)) AS `_time` SELECT _time, SUM(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')])) AS `_sum_if(indexOf(metrics_float_names, dropped)=0,null,metrics_float_values[indexOf(metrics_float_names, dropped)])` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_agent_collect_sender') GROUP BY `_time`) GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
-		input:  "SELECT time(time,120,1,0) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `deepflow_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
-		output: []string{"WITH toStartOfInterval(time, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(120/1) AS `Avg(metrics.dropped)` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "SELECT time(time,120,1,0) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `zerotrace_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
+		output: []string{"WITH toStartOfInterval(time, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(120/1) AS `Avg(metrics.dropped)` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
-		input:  "SELECT time(time,120,1,0,30) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `deepflow_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
-		output: []string{"WITH toStartOfInterval(time-30, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) + 30 AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(120/1) AS `Avg(metrics.dropped)` FROM deepflow_tenant.`deepflow_collector` WHERE (virtual_table_name='deepflow_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
-		db:     "deepflow_tenant",
+		input:  "SELECT time(time,120,1,0,30) as toi, Avg(`metrics.dropped`) AS `Avg(metrics.dropped)` FROM `zerotrace_agent_collect_sender` GROUP BY  toi ORDER BY toi desc",
+		output: []string{"WITH toStartOfInterval(time-30, toIntervalSecond(120)) + toIntervalSecond(arrayJoin([0]) * 120) + 30 AS `_toi` SELECT toUnixTimestamp(`_toi`) AS `toi`, sum(if(indexOf(metrics_float_names, 'dropped')=0,null,metrics_float_values[indexOf(metrics_float_names, 'dropped')]))/(120/1) AS `Avg(metrics.dropped)` FROM zerotrace_tenant.`zerotrace_collector` WHERE (virtual_table_name='zerotrace_agent_collect_sender') GROUP BY `toi` ORDER BY `toi` desc LIMIT 10000"},
+		db:     "zerotrace_tenant",
 	}, {
 		input:  "SELECT chost_id_0 from l4_flow_log WHERE NOT exist(chost_0) LIMIT 1",
 		output: []string{"SELECT if(l3_device_type_0=1,l3_device_id_0, 0) AS `chost_id_0` FROM flow_log.`l4_flow_log` WHERE NOT (l3_device_type_0=1) LIMIT 1"},
@@ -584,21 +584,21 @@ var (
 		output: []string{"SELECT id AS `value`, name AS `display_name` FROM flow_tag.`region_map` WHERE (display_name = '1') GROUP BY `value`, `display_name` ORDER BY `value` asc LIMIT 10000"},
 	}, {
 		name:  "test_showsql",
-		db:    "deepflow_tenant",
-		input: "SHOW tags from deepflow_agent_queue",
+		db:    "zerotrace_tenant",
+		input: "SHOW tags from zerotrace_agent_queue",
 		output: []string{
 			"SELECT key FROM (SELECT key FROM flow_tag.pod_service_k8s_label_map UNION ALL SELECT key FROM flow_tag.pod_k8s_label_map) GROUP BY key",
 			"SELECT key FROM (SELECT key FROM flow_tag.pod_k8s_annotation_map UNION ALL SELECT key FROM flow_tag.pod_service_k8s_annotation_map) GROUP BY key",
 			"SELECT key FROM flow_tag.pod_k8s_env_map GROUP BY key",
 			"SELECT key FROM (SELECT key FROM flow_tag.chost_cloud_tag_map UNION ALL SELECT key FROM flow_tag.pod_ns_cloud_tag_map) GROUP BY key",
 			"SELECT key FROM flow_tag.os_app_tag_map GROUP BY key",
-			"SELECT field_name AS tag_name, table FROM flow_tag.deepflow_tenant_custom_field WHERE table='deepflow_agent_queue' AND field_type='tag' GROUP BY tag_name, table ORDER BY tag_name ASC LIMIT 10000",
+			"SELECT field_name AS tag_name, table FROM flow_tag.zerotrace_tenant_custom_field WHERE table='zerotrace_agent_queue' AND field_type='tag' GROUP BY tag_name, table ORDER BY tag_name ASC LIMIT 10000",
 		},
 	}, {
 		name:   "test_showsql",
-		db:     "deepflow_tenant",
+		db:     "zerotrace_tenant",
 		input:  "SHOW tables",
-		output: []string{"SELECT table FROM flow_tag.deepflow_tenant_custom_field GROUP BY table"},
+		output: []string{"SELECT table FROM flow_tag.zerotrace_tenant_custom_field GROUP BY table"},
 	}, {
 		name:   "test_showsql",
 		db:     "_prometheus",

@@ -19,8 +19,8 @@ package resource
 import (
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 func Test_convertTagsToString(t *testing.T) {

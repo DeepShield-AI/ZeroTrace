@@ -18,8 +18,8 @@ package aliyun
 
 import (
 	ecs "github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (a *Aliyun) getRegions() ([]model.Region, error) {

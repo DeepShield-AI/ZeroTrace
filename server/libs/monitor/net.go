@@ -21,8 +21,8 @@ import (
 
 	"github.com/shirou/gopsutil/net"
 
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var (

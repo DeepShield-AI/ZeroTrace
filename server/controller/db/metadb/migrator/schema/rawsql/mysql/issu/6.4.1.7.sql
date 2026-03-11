@@ -26,8 +26,8 @@ BEGIN
     END IF;
 END;
 
-CALL AddColumnIfNotExists('deepflow', 'vtap_group_configuration', 'wasm_plugins', 'TEXT');
-CALL AddColumnIfNotExists('deepflow', 'vtap_group_configuration', 'so_plugins', 'TEXT');
+CALL AddColumnIfNotExists('zerotrace', 'vtap_group_configuration', 'wasm_plugins', 'TEXT');
+CALL AddColumnIfNotExists('zerotrace', 'vtap_group_configuration', 'so_plugins', 'TEXT');
 
 DROP PROCEDURE AddColumnIfNotExists;
 

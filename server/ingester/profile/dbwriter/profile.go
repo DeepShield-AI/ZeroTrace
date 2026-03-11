@@ -24,13 +24,13 @@ import (
 
 	"github.com/google/gopacket/layers"
 
-	basecommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	basecommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (
@@ -126,7 +126,7 @@ type InProcessProfile struct {
 | alloc_outside_tlab_bytes(java)   | bytes            | byte                                                     |
 | lock_count(java)                 | lock_samples     | count                                                    |
 | lock_duration(java)              | lock_nanoseconds | ns                                                       |
-| on-cpu(eBPF)                     | microseconds     | cpu time, DeepFlow-Agent as profiler                     |
+| on-cpu(eBPF)                     | microseconds     | cpu time, ZeroTrace-Agent as profiler                     |
 */
 
 func ProfileColumns() []*ckdb.Column {
@@ -144,7 +144,7 @@ func ProfileColumns() []*ckdb.Column {
 		ckdb.NewColumn("profile_value_unit", ckdb.LowCardinalityString).SetComment("profile value 的单位").SetIgnoredInAggrTable(),
 		ckdb.NewColumn("profile_event_type", ckdb.LowCardinalityString).SetComment("剖析类型").SetGroupBy(),
 		ckdb.NewColumn("profile_create_timestamp", ckdb.DateTime64us).SetIndex(ckdb.IndexSet).SetComment("client 端聚合时间").SetIgnoredInAggrTable(),
-		ckdb.NewColumn("profile_in_timestamp", ckdb.DateTime64us).SetComment("DeepFlow 的写入时间，同批上报的批次数据具备相同的值").SetIgnoredInAggrTable(),
+		ckdb.NewColumn("profile_in_timestamp", ckdb.DateTime64us).SetComment("ZeroTrace 的写入时间，同批上报的批次数据具备相同的值").SetIgnoredInAggrTable(),
 		ckdb.NewColumn("profile_language_type", ckdb.LowCardinalityString).SetComment("语言类型").SetGroupBy(),
 		ckdb.NewColumn("profile_id", ckdb.String).SetComment("含义等同 l7_flow_log 的 span_id").SetIgnoredInAggrTable(),
 		ckdb.NewColumn("trace_id", ckdb.String).SetComment("含义等同 l7_flow_log 的 trace_id").SetIgnoredInAggrTable(),

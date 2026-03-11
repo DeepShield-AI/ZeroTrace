@@ -281,7 +281,7 @@ impl TunnelInfo {
         }
 
         // NOTE:
-        //     In this scenario, other components of DeepFlow set the destination MAC address to FF:FF
+        //     In this scenario, other components of ZeroTrace set the destination MAC address to FF:FF
         // in advance, and in order to improve the balance of VXLAN traffic, the UDP port was changed
         // to a port number that supports the hash according to the inner ip.
         if mac_prefix_0 == 0xff && mac_prefix_1 == 0xff && tunnel_types.has(TunnelType::Vxlan) {
@@ -629,7 +629,7 @@ impl TunnelInfo {
         }
 
         // NOTE:
-        //     In this scenario, other components of DeepFlow set the destination MAC address to FF:FF
+        //     In this scenario, other components of ZeroTrace set the destination MAC address to FF:FF
         // in advance, and in order to improve the balance of VXLAN traffic, the UDP port was changed
         // to a port number that supports the hash according to the inner ip.
         if mac_prefix_0 == 0xff && mac_prefix_1 == 0xff && tunnel_types.has(TunnelType::Vxlan) {

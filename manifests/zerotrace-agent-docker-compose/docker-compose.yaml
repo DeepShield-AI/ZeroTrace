@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+  zerotrace-agent:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotrace-agent:latest
+    container_name: zerotrace-agent
+    restart: always
+    cap_add:
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - SYS_PTRACE
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYSLOG
+    volumes:
+      - /etc/zerotrace-agent.yaml:/etc/zerotrace-agent/zerotrace-agent.yaml:ro
+      - /sys/kernel/debug:/sys/kernel/debug:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    network_mode: "host"
+    pid: "host"

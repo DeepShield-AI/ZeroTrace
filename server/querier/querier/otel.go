@@ -39,9 +39,9 @@ func initTraceProvider(endpoint string) *otelTrace.TracerProvider {
 		resource.WithHost(),
 		resource.WithAttributes(
 			// the service name used to display traces in backends
-			semconv.ServiceNameKey.String("deepflow-server-querier"),
+			semconv.ServiceNameKey.String("zerotrace-server-querier"),
 			// env=running environment
-			semconv.DeploymentEnvironmentKey.String("namespace-deepflow"),
+			semconv.DeploymentEnvironmentKey.String("namespace-zerotrace"),
 		),
 	)
 

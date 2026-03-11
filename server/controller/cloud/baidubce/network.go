@@ -21,9 +21,9 @@ import (
 
 	"github.com/baidubce/bce-sdk-go/services/vpc"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (b *BaiduBce) getNetworks(zoneNameToAZLcuuid map[string]string, vpcIdToLcuuid map[string]string) ([]model.Network, []model.Subnet, map[string]string, error) {

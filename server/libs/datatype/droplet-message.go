@@ -20,7 +20,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 )
 
 // 本消息格式仅用于同droplet通信:
@@ -63,7 +63,7 @@ const (
 var MessageTypeString = [MESSAGE_TYPE_MAX]string{
 	MESSAGE_TYPE_COMPRESS:       "compressed_pcap",
 	MESSAGE_TYPE_SYSLOG:         "syslog",
-	MESSAGE_TYPE_SERVER_DFSTATS: "deepflow_server_stats",
+	MESSAGE_TYPE_SERVER_DFSTATS: "zerotrace_server_stats",
 
 	MESSAGE_TYPE_METRICS:        "metrics",
 	MESSAGE_TYPE_TAGGEDFLOW:     "l4_log",
@@ -73,7 +73,7 @@ var MessageTypeString = [MESSAGE_TYPE_MAX]string{
 	MESSAGE_TYPE_TELEGRAF:       "telegraf",
 	MESSAGE_TYPE_PACKETSEQUENCE: "l4_packet",
 
-	MESSAGE_TYPE_DFSTATS:                  "deepflow_stats",
+	MESSAGE_TYPE_DFSTATS:                  "zerotrace_stats",
 	MESSAGE_TYPE_OPENTELEMETRY_COMPRESSED: "open_telemetry_compressed",
 	MESSAGE_TYPE_RAW_PCAP:                 "raw_pcap",
 	MESSAGE_TYPE_PROFILE:                  "profile",

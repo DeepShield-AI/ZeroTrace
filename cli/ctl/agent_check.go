@@ -33,9 +33,9 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type AgentParamData struct {
@@ -62,7 +62,7 @@ type AgentCmdExecute func(response *agent.SyncResponse)
 func agentRegiterCommand() []*cobra.Command {
 	agentCacheCmd := &cobra.Command{
 		Use:   "agent-cache",
-		Short: "get agent-cache from deepflow-server",
+		Short: "get agent-cache from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentCache(agentParamData.TeamID, agentParamData.CtrlIP, agentParamData.CtrlMac, cmd)
 		},
@@ -70,49 +70,49 @@ func agentRegiterCommand() []*cobra.Command {
 
 	platformDataCmd := &cobra.Command{
 		Use:   "platform-data",
-		Short: "get platform-data from deepflow-server",
+		Short: "get platform-data from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AplatformData})
 		},
 	}
 	ipGroupsCmd := &cobra.Command{
 		Use:   "ip-groups",
-		Short: "get ip groups from deepflow-servr",
+		Short: "get ip groups from zerotrace-servr",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AipGroups})
 		},
 	}
 	flowAclsCmd := &cobra.Command{
 		Use:   "flow-acls",
-		Short: "get flow-acls from deepflow-server",
+		Short: "get flow-acls from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AflowAcls})
 		},
 	}
 	tapTypesCmd := &cobra.Command{
 		Use:   "capture-network-types",
-		Short: "get capture-network-types from deepflow-server",
+		Short: "get capture-network-types from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			initCmd(cmd, []CmdExecute{tapTypes})
 		},
 	}
 	segmentsCmd := &cobra.Command{
 		Use:   "segments",
-		Short: "get segments from deepflow-server",
+		Short: "get segments from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{Asegments})
 		},
 	}
 	containersCmd := &cobra.Command{
 		Use:   "containers",
-		Short: "get containers from deepflow-server",
+		Short: "get containers from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{Acontainers})
 		},
 	}
 	configCmd := &cobra.Command{
 		Use:   "config",
-		Short: "get config from deepflow-server",
+		Short: "get config from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AconfigData})
 		},
@@ -126,14 +126,14 @@ func agentRegiterCommand() []*cobra.Command {
 	}
 	skipInterfaceCmd := &cobra.Command{
 		Use:   "skip-interface",
-		Short: "get skip-interface from deepflow-server",
+		Short: "get skip-interface from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AskipInterface})
 		},
 	}
 	CustomAppConfigCmd := &cobra.Command{
 		Use:   "custom-app-config",
-		Short: "get custom app config from deepflow-server",
+		Short: "get custom app config from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AGRPCCustomAppConfig})
 		},
@@ -141,21 +141,21 @@ func agentRegiterCommand() []*cobra.Command {
 
 	gpidAgentResponseCmd := &cobra.Command{
 		Use:   "gpid-agent-response",
-		Short: "get gpid-agent-response from deepflow-server",
+		Short: "get gpid-agent-response from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			AgpidAgentResponse(cmd)
 		},
 	}
 	gpidGlobalTableCmd := &cobra.Command{
 		Use:   "gpid-global-table",
-		Short: "get gpid-global-table from deepflow-server",
+		Short: "get gpid-global-table from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			AgpidGlobalTable(cmd)
 		},
 	}
 	gpidAgentRequestCmd := &cobra.Command{
 		Use:   "gpid-agent-request",
-		Short: "get gpid-agent-request from deepflow-server",
+		Short: "get gpid-agent-request from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			AgpidAgentRequest(cmd)
 		},
@@ -163,7 +163,7 @@ func agentRegiterCommand() []*cobra.Command {
 
 	realGlobalCmd := &cobra.Command{
 		Use:   "realclient-to-realserver",
-		Short: "get realclient-to-realserver from deepflow-server",
+		Short: "get realclient-to-realserver from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			ArealGlobal(cmd)
 		},
@@ -171,7 +171,7 @@ func agentRegiterCommand() []*cobra.Command {
 
 	ripToVipCmd := &cobra.Command{
 		Use:   "rip-to-vip",
-		Short: "get rip-to-vip from deepflow-server",
+		Short: "get rip-to-vip from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			AripToVip(cmd)
 		},
@@ -179,7 +179,7 @@ func agentRegiterCommand() []*cobra.Command {
 
 	pluginCmd := &cobra.Command{
 		Use:   "plugin",
-		Short: "get plugin from deepflow-server",
+		Short: "get plugin from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			Aplugin(cmd)
 		},
@@ -187,7 +187,7 @@ func agentRegiterCommand() []*cobra.Command {
 
 	allCmd := &cobra.Command{
 		Use:   "all",
-		Short: "get all data from deepflow-server",
+		Short: "get all data from zerotrace-server",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInitCmd(cmd, []AgentCmdExecute{AplatformData, AipGroups, AflowAcls,
 				Asegments, AtapTypes, Acontainers, AconfigData, AGRPCBufferSize,
@@ -205,7 +205,7 @@ func agentRegiterCommand() []*cobra.Command {
 func AgentCheckRegisterCommand() *cobra.Command {
 	trisolarisCmd := &cobra.Command{
 		Use:   "trisolaris.agent-check",
-		Short: "pull grpc data from deepflow-server",
+		Short: "pull grpc data from zerotrace-server",
 	}
 	trisolarisCmd.PersistentFlags().Int32VarP(&agentParamData.K8SWatchPolicy, "kwp", "", 0, "agent k8s watch policy: 0.normal 1.only 2.disabled")
 	trisolarisCmd.PersistentFlags().Uint64VarP(&agentParamData.GRPCBufferSize, "size", "", 0, "agent current grpc buffer size, Unit: MB")

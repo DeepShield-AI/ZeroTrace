@@ -24,13 +24,13 @@ import (
 	mapset "github.com/deckarep/golang-set"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/dbcache"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/metadata/agentmetadata"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/pushmanager"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbcache"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata/agentmetadata"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/pushmanager"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.metadata")

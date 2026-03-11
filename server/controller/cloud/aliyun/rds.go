@@ -18,9 +18,9 @@ package aliyun
 
 import (
 	rds "github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (a *Aliyun) getRDSInstances(region model.Region) (

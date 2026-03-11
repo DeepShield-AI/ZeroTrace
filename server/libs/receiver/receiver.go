@@ -35,15 +35,15 @@ import (
 	"github.com/klauspost/compress/zstd"
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/libs/app"
-	"github.com/deepflowio/deepflow/server/libs/cache"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/app"
+	"github.com/zerotraceio/zerotrace/server/libs/cache"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (

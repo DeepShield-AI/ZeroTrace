@@ -17,10 +17,10 @@
 package controller
 
 import (
-	api "github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	grpcserver "github.com/deepflowio/deepflow/server/controller/grpc"
-	prometheus "github.com/deepflowio/deepflow/server/controller/prometheus/service/grpc"
+	api "github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	grpcserver "github.com/zerotraceio/zerotrace/server/controller/grpc"
+	prometheus "github.com/zerotraceio/zerotrace/server/controller/prometheus/service/grpc"
 
 	"github.com/op/go-logging"
 	"golang.org/x/net/context"

@@ -1,4 +1,4 @@
-module github.com/deepflowio/deepflow/cli
+module github.com/zerotraceio/zerotrace/cli
 
 go 1.24.0
 
@@ -6,8 +6,8 @@ toolchain go1.24.4
 
 require (
 	github.com/bitly/go-simplejson v0.5.0
-	github.com/deepflowio/deepflow/message v0.0.0-20260128034251-1f75015861fc
-	github.com/deepflowio/deepflow/server v1.6.66-0.20260130111132-75df54dc67d2
+	github.com/zerotraceio/zerotrace/message v0.0.0-20260128034251-1f75015861fc
+	github.com/zerotraceio/zerotrace/server v1.6.66-0.20260130111132-75df54dc67d2
 	github.com/golang/protobuf v1.5.4
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/olekukonko/tablewriter v0.0.5
@@ -19,8 +19,8 @@ require (
 
 replace (
 	cloud.google.com/go => cloud.google.com/go v0.103.0
-	github.com/deepflowio/deepflow/message => ../message
-	github.com/deepflowio/deepflow/server => ../server
+	github.com/zerotraceio/zerotrace/message => ../message
+	github.com/zerotraceio/zerotrace/server => ../server
 )
 
 require (
@@ -31,7 +31,7 @@ require (
 	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/cornelk/hashmap v1.0.8 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/deepflowio/deepflow/server/libs/logger/blocker v0.0.0-20240822020041-cdaf0f82ce6f // indirect
+	github.com/zerotraceio/zerotrace/server/libs/logger/blocker v0.0.0-20240822020041-cdaf0f82ce6f // indirect
 	github.com/dmarkham/enumer v1.6.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect

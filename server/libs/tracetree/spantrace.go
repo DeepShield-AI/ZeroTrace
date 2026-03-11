@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const SPAN_TRACE_VERSION_0x12 = 0x12 // before 20251027

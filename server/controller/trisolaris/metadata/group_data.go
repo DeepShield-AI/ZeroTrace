@@ -25,11 +25,11 @@ import (
 	"sync/atomic"
 
 	mapset "github.com/deckarep/golang-set"
-	"github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 	"github.com/golang/protobuf/proto"
 )
 

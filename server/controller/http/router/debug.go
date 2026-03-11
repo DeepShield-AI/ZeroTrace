@@ -23,15 +23,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	gcommon "github.com/deepflowio/deepflow/server/controller/genesis/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	routercommon "github.com/deepflowio/deepflow/server/controller/http/router/common"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
-	"github.com/deepflowio/deepflow/server/controller/manager"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	gcommon "github.com/zerotraceio/zerotrace/server/controller/genesis/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	routercommon "github.com/zerotraceio/zerotrace/server/controller/http/router/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
+	"github.com/zerotraceio/zerotrace/server/controller/manager"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 type Debug struct {

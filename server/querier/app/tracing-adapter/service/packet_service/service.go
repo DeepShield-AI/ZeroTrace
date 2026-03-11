@@ -16,7 +16,7 @@
 
 package packet_service
 
-import "github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/model"
+import "github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/model"
 
 func GetPacketServices() map[string]model.TraceAdapter {
 	return nil

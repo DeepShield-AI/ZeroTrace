@@ -17,9 +17,9 @@
 package querier
 
 import (
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
 )
 
 /*

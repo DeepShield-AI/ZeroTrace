@@ -27,7 +27,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
 )
 
 func getMySQLConnector(cfg config.SessionConfig) (driver.Connector, error) {

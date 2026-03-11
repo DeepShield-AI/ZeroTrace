@@ -19,7 +19,7 @@ package queue
 import (
 	"time"
 
-	"github.com/deepflowio/deepflow/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
 )
 
 const MAX_QUEUE_COUNT = 16

@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
 	"github.com/prometheus/prometheus/model/labels"
 )
 
@@ -51,7 +51,7 @@ type CacheKeyGenerator struct {
 }
 
 // generate key without query time (start/end) for cache query
-func (k *CacheKeyGenerator) GenerateCacheKey(req *model.DeepFlowPromRequest) string {
+func (k *CacheKeyGenerator) GenerateCacheKey(req *model.ZeroTracePromRequest) string {
 	return fmt.Sprintf(
 		"df:%s:%s:%s:%s:%d:%d:%d:%s",
 		req.OrgID,

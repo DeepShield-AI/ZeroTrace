@@ -23,17 +23,17 @@ import (
 	_ "golang.org/x/net/context"
 	_ "google.golang.org/grpc"
 
-	dropletqueue "github.com/deepflowio/deepflow/server/ingester/droplet/queue"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/config"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/dbwriter"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/decoder"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	libqueue "github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
+	dropletqueue "github.com/zerotraceio/zerotrace/server/ingester/droplet/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/decoder"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	libqueue "github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
 )
 
 const (
@@ -43,8 +43,8 @@ const (
 type ExtMetrics struct {
 	Config             *config.Config
 	Telegraf           *Metricsor
-	DeepflowAgentStats *Metricsor
-	DeepflowStats      *Metricsor
+	ZerotraceAgentStats *Metricsor
+	ZerotraceStats      *Metricsor
 }
 
 type Metricsor struct {
@@ -62,19 +62,19 @@ func NewExtMetrics(config *config.Config, recv *receiver.Receiver, platformDataM
 	if err != nil {
 		return nil, err
 	}
-	deepflowAgentStats, err := NewMetricsor(datatype.MESSAGE_TYPE_DFSTATS, []dbwriter.WriterDBID{dbwriter.DEEPFLOW_ADMIN_DB_ID, dbwriter.DEEPFLOW_TENANT_DB_ID}, config, platformDataManager, manager, recv, false)
+	zerotraceAgentStats, err := NewMetricsor(datatype.MESSAGE_TYPE_DFSTATS, []dbwriter.WriterDBID{dbwriter.ZEROTRACE_ADMIN_DB_ID, dbwriter.ZEROTRACE_TENANT_DB_ID}, config, platformDataManager, manager, recv, false)
 	if err != nil {
 		return nil, err
 	}
-	deepflowStats, err := NewMetricsor(datatype.MESSAGE_TYPE_SERVER_DFSTATS, []dbwriter.WriterDBID{dbwriter.DEEPFLOW_ADMIN_DB_ID, dbwriter.DEEPFLOW_TENANT_DB_ID}, config, platformDataManager, manager, recv, false)
+	zerotraceStats, err := NewMetricsor(datatype.MESSAGE_TYPE_SERVER_DFSTATS, []dbwriter.WriterDBID{dbwriter.ZEROTRACE_ADMIN_DB_ID, dbwriter.ZEROTRACE_TENANT_DB_ID}, config, platformDataManager, manager, recv, false)
 	if err != nil {
 		return nil, err
 	}
 	return &ExtMetrics{
 		Config:             config,
 		Telegraf:           telegraf,
-		DeepflowAgentStats: deepflowAgentStats,
-		DeepflowStats:      deepflowStats,
+		ZerotraceAgentStats: zerotraceAgentStats,
+		ZerotraceStats:      zerotraceStats,
 	}, nil
 }
 
@@ -149,13 +149,13 @@ func (m *Metricsor) Close() {
 
 func (s *ExtMetrics) Start() {
 	s.Telegraf.Start()
-	s.DeepflowAgentStats.Start()
-	s.DeepflowStats.Start()
+	s.ZerotraceAgentStats.Start()
+	s.ZerotraceStats.Start()
 }
 
 func (s *ExtMetrics) Close() error {
 	s.Telegraf.Close()
-	s.DeepflowAgentStats.Close()
-	s.DeepflowStats.Close()
+	s.ZerotraceAgentStats.Close()
+	s.ZerotraceStats.Close()
 	return nil
 }

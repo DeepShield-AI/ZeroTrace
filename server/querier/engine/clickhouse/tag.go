@@ -22,13 +22,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/packet_batch"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/packet_batch"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 func GetMultiTag(stmts []Statement, name string) []Statement {

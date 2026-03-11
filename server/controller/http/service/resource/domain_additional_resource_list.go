@@ -24,11 +24,11 @@ import (
 
 	"gorm.io/gorm"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 func ListDomainAdditionalResource(resourceType, resourceName string, orgDB *metadb.DB) (map[string]interface{}, error) {

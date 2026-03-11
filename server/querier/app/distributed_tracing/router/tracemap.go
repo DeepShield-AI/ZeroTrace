@@ -21,11 +21,11 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/common"
-	"github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/model"
-	"github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/service/tracemap"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/router"
+	"github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/common"
+	"github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/service/tracemap"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/router"
 )
 
 var log = logging.MustGetLogger("tracemap")

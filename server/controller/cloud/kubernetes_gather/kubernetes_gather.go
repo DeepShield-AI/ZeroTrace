@@ -25,16 +25,16 @@ import (
 	mapset "github.com/deckarep/golang-set"
 	"gorm.io/gorm"
 
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/cloud/config"
-	"github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/model"
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	"github.com/deepflowio/deepflow/server/controller/statsd"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/model"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	"github.com/zerotraceio/zerotrace/server/controller/statsd"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("cloud.kubernetes_gather")

@@ -20,9 +20,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 
 	vpc "github.com/aliyun/alibaba-cloud-sdk-go/services/vpc"
 )

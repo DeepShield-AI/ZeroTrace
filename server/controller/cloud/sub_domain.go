@@ -23,11 +23,11 @@ import (
 
 	"inet.af/netaddr"
 
-	kubernetes_model "github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/model"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	kubernetes_model "github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/model"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 // 合并附属容器集群的资源到云平台资源中

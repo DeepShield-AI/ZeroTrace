@@ -24,9 +24,9 @@ import (
 
 	. "github.com/google/gopacket/layers"
 
-	"github.com/deepflowio/deepflow/server/libs/bit"
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/bit"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (
@@ -100,7 +100,7 @@ func NewCloudPlatformLabeler(queueCount int, mapSize uint32) *CloudPlatformLabel
 	return cloud
 }
 
-func PortInDeepflowExporter(inPort uint32) bool {
+func PortInZerotraceExporter(inPort uint32) bool {
 	return PACKET_SOURCE_TOR == ((inPort) & PACKET_SOURCE_TOR)
 }
 
@@ -309,7 +309,7 @@ func (l *CloudPlatformLabeler) GenerateEpcIpData(platformDatas []PlatformData) (
 		platformData := &platformDatas[i]
 		for _, ipData := range platformData.Ips {
 			epcId := uint64(platformData.EpcId)
-			if platformData.EpcId == EPC_FROM_DEEPFLOW {
+			if platformData.EpcId == EPC_FROM_ZEROTRACE {
 				epcId = 0
 			}
 			if len(ipData.RawIp) == 4 {
@@ -378,9 +378,9 @@ func (l *CloudPlatformLabeler) UpdateCidr(cidrs []*Cidr) {
 	tunnelCidr := make(map[uint32][]*Cidr, len(cidrs))
 	for _, cidr := range cidrs {
 		epc := cidr.EpcId
-		// WAN的CIDR都存在EPC_FROM_DEEPFLOW表中
+		// WAN的CIDR都存在EPC_FROM_ZEROTRACE表中
 		if cidr.Type == CIDR_TYPE_WAN {
-			epc = EPC_FROM_DEEPFLOW
+			epc = EPC_FROM_ZEROTRACE
 		}
 		cidrs := epcCidr[epc]
 		if cidrs == nil {
@@ -417,7 +417,7 @@ func (l *CloudPlatformLabeler) UpdateCidr(cidrs []*Cidr) {
 }
 
 // 函数通过EPC+IP查询对应的CIDR，获取EPC标记
-// 注意当查询外网时必须给epc参数传递EPC_FROM_DEEPFLOW值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
+// 注意当查询外网时必须给epc参数传递EPC_FROM_ZEROTRACE值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
 func (l *CloudPlatformLabeler) setEpcByCidr(ip net.IP, epc int32, endpointInfo *EndpointInfo) bool {
 	for _, cidr := range l.epcCidrMapData[epc] {
 		if cidr.IpNet.Contains(ip) {
@@ -430,7 +430,7 @@ func (l *CloudPlatformLabeler) setEpcByCidr(ip net.IP, epc int32, endpointInfo *
 }
 
 // 函数通过EPC+IP查询对应的CIDR，获取EPC和VIP标记
-// 注意当查询外网时必须给epc参数传递EPC_FROM_DEEPFLOW值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
+// 注意当查询外网时必须给epc参数传递EPC_FROM_ZEROTRACE值，表示在所有WAN CIDR范围内搜索，并返回该CIDR的真实EPC
 func (l *CloudPlatformLabeler) setEpcAndVIPByTunnelCidr(ip net.IP, tunnelId uint32, endpointInfo *EndpointInfo) (bool, bool) {
 	cidrs := l.tunnelIdCidrMapData[tunnelId]
 	for _, cidr := range cidrs {
@@ -476,8 +476,8 @@ func (l *CloudPlatformLabeler) GetEndpointInfo(mac uint64, ip net.IP, tapType Ta
 					endpointInfo.SetL3Data(platformData)
 					isWAN = platformData.IfType == IF_TYPE_WAN
 				} else {
-					// step 3: 查询DEEPFLOW添加的WAN监控网段(cidr)
-					isWAN = l.setEpcByCidr(ip, EPC_FROM_DEEPFLOW, endpointInfo)
+					// step 3: 查询ZEROTRACE添加的WAN监控网段(cidr)
+					isWAN = l.setEpcByCidr(ip, EPC_FROM_ZEROTRACE, endpointInfo)
 				}
 			}
 			return endpointInfo, isWAN
@@ -498,7 +498,7 @@ func (l *CloudPlatformLabeler) GetEndpointInfo(mac uint64, ip net.IP, tapType Ta
 			return endpointInfo, isWAN
 		}
 	}
-	// step 2: 使用L2EpcId + IP查询L3，如果L2EpcId为0，会查询到DEEPFLOW添加的监控IP
+	// step 2: 使用L2EpcId + IP查询L3，如果L2EpcId为0，会查询到ZEROTRACE添加的监控IP
 	if platformData = l.GetDataByEpcIp(endpointInfo.L2EpcId, ip); platformData != nil {
 		endpointInfo.SetL3Data(platformData)
 		isWAN = platformData.IfType == IF_TYPE_WAN
@@ -602,8 +602,8 @@ func (l *CloudPlatformLabeler) GetL3ByWanIp(srcIp, dstIp net.IP, endpointData *E
 			srcData.SetL3Data(platformData)
 			found0 = true
 		} else {
-			// step 2: 查询DEEPFLOW添加的WAN监控网段(cidr)
-			found0 = l.setEpcByCidr(srcIp, EPC_FROM_DEEPFLOW, srcData)
+			// step 2: 查询ZEROTRACE添加的WAN监控网段(cidr)
+			found0 = l.setEpcByCidr(srcIp, EPC_FROM_ZEROTRACE, srcData)
 		}
 	}
 	if dstData.L3EpcId == 0 {
@@ -612,8 +612,8 @@ func (l *CloudPlatformLabeler) GetL3ByWanIp(srcIp, dstIp net.IP, endpointData *E
 			dstData.SetL3Data(platformData)
 			found1 = true
 		} else {
-			// step 2: 查询DEEPFLOW添加的WAN监控网段(cidr)
-			found1 = l.setEpcByCidr(dstIp, EPC_FROM_DEEPFLOW, dstData)
+			// step 2: 查询ZEROTRACE添加的WAN监控网段(cidr)
+			found1 = l.setEpcByCidr(dstIp, EPC_FROM_ZEROTRACE, dstData)
 		}
 	}
 	return found0, found1
@@ -636,7 +636,7 @@ func (l *CloudPlatformLabeler) GetVIP(mac uint64, ip net.IP, isWAN bool, endpoin
 		if !isWAN {
 			l.setVIPByCidr(ip, endpoint.L3EpcId, endpoint)
 		} else {
-			l.setVIPByCidr(ip, EPC_FROM_DEEPFLOW, endpoint)
+			l.setVIPByCidr(ip, EPC_FROM_ZEROTRACE, endpoint)
 		}
 	}
 	if endpoint.IsVIP {
@@ -666,7 +666,7 @@ func (l *CloudPlatformLabeler) GetEndpointData(key *LookupKey) *EndpointData {
 	l.GetL3ByPeerConnection(srcIp, dstIp, endpoint)
 	// l3: WAN查询，包括以下两种查询
 	// 1) ip查询平台数据WAN接口
-	// 2) ip查询DEEPFLOW添加的WAN监控网段(cidr)
+	// 2) ip查询ZEROTRACE添加的WAN监控网段(cidr)
 	found0, found1 := l.GetL3ByWanIp(srcIp, dstIp, endpoint)
 	if found0 || found1 {
 		// 成功查询到WAN后，重新在内部路由和对等连接中查询

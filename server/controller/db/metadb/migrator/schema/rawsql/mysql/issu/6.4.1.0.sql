@@ -6,7 +6,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO pod_group_type_column
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'ch_pod_group'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'ch_pod_group'
     AND COLUMN_NAME = 'pod_group_type';
 
     IF pod_group_type_column = '' THEN

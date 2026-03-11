@@ -28,9 +28,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 const (

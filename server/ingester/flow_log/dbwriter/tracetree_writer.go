@@ -17,14 +17,14 @@
 package dbwriter
 
 import (
-	basecommon "github.com/deepflowio/deepflow/server/ingester/common"
-	baseconfig "github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_log/common"
-	"github.com/deepflowio/deepflow/server/ingester/flow_log/config"
-	"github.com/deepflowio/deepflow/server/ingester/pkg/ckwriter"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/tracetree"
+	basecommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	baseconfig "github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_log/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_log/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/pkg/ckwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/tracetree"
 )
 
 const (

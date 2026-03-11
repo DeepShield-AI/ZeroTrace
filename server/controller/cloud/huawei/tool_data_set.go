@@ -17,7 +17,7 @@
 package huawei
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
 )
 
 type ToolDataSet struct {

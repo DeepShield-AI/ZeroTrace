@@ -18,10 +18,10 @@ package dbwriter
 import (
 	"github.com/ClickHouse/ch-go/proto"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
 )
 
 type ExtMetricsBlock struct {
@@ -84,10 +84,10 @@ func (n *ExtMetrics) NewColumnBlock() ckdb.CKColumnBlock {
 		ColMetricsFloatValues: new(proto.ColFloat64).Array(),
 	}
 	switch n.TableName() {
-	case DEEPFLOW_TENANT_COLLECTOR_TABLE:
-		b.NativeTagsBlock = nativetag.GetTableNativeTagsColumnBlock(n.OrgId, nativetag.DEEPFLOW_TENANT)
-	case DEEPFLOW_ADMIN_SERVER_TABLE:
-		b.NativeTagsBlock = nativetag.GetTableNativeTagsColumnBlock(n.OrgId, nativetag.DEEPFLOW_ADMIN)
+	case ZEROTRACE_TENANT_COLLECTOR_TABLE:
+		b.NativeTagsBlock = nativetag.GetTableNativeTagsColumnBlock(n.OrgId, nativetag.ZEROTRACE_TENANT)
+	case ZEROTRACE_ADMIN_SERVER_TABLE:
+		b.NativeTagsBlock = nativetag.GetTableNativeTagsColumnBlock(n.OrgId, nativetag.ZEROTRACE_ADMIN)
 	case EXT_METRICS_TABLE:
 		b.NativeTagsBlock = nativetag.GetTableNativeTagsColumnBlock(n.OrgId, nativetag.EXT_METRICS)
 	}

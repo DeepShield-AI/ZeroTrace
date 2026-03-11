@@ -833,7 +833,7 @@ $defs:
       - `Base64 Decode` (`base64_decode`): Decodes the value as Base64. The result must be valid UTF-8 or GBK.
       - `Unescape` (`unescape`): Unescapes the value. The result must be valid UTF-8 or GBK.
 
-        For example, when encountering a string with unicode encoding "DeepFlow \u91C7\u96C6\u5668", you can use this configuration to unescape it as "DeepFlow 采集器".
+        For example, when encountering a string with unicode encoding "ZeroTrace \u91C7\u96C6\u5668", you can use this configuration to unescape it as "ZeroTrace 采集器".
 
       - `Parse JSON Value` (`parse_json_value`): Parses the value as JSON and extracts by key or path. Configuration supported:
         - keyword: Field(s) to search for.
@@ -877,7 +877,7 @@ $defs:
       - `Base64 解码` (`base64_decode`)：对值进行Base64解码，结果须为合法 UTF-8 或 GBK。
       - `反转义` (`unescape`)：对值进行反转义，结果须为合法 UTF-8 或 GBK。
 
-        例如遇到以 unicode 编码的字符串“DeepFlow \u91C7\u96C6\u5668”时，可以配置 unescape 将其反转义为“DeepFlow 采集器”。
+        例如遇到以 unicode 编码的字符串“ZeroTrace \u91C7\u96C6\u5668”时，可以配置 unescape 将其反转义为“ZeroTrace 采集器”。
 
       - `JSON 提取` (`parse_json_value`)：将值作为JSON解析，并根据key或路径提取。支持配置为：
           - keyword：要查找的字段。

@@ -1,10 +1,10 @@
-# DeepFlow Agent Ctl 测试指南
+# ZeroTrace Agent Ctl 测试指南
 
-本文档整合了 `deepflow-agent-ctl` 的命令详解与实际测试步骤，用于指导对 Agent 进行功能验证。
+本文档整合了 `zerotrace-agent-ctl` 的命令详解与实际测试步骤，用于指导对 Agent 进行功能验证。
 
 ## 1. 概述
 
-`deepflow-agent-ctl` 是 DeepFlow Agent 的命令行调试工具，通过 UDP 协议与 Agent 通信。
+`zerotrace-agent-ctl` 是 ZeroTrace Agent 的命令行调试工具，通过 UDP 协议与 Agent 通信。
 
 **工作原理**:
 - Agent 启动时会随机监听一个 UDP 端口（日志中显示为 `debugger listening on`）。
@@ -13,7 +13,7 @@
 
 **基本使用方式**:
 ```bash
-deepflow-agent-ctl -p <AGENT_DEBUGGER_PORT> <SUBCOMMAND> [ARGS]
+zerotrace-agent-ctl -p <AGENT_DEBUGGER_PORT> <SUBCOMMAND> [ARGS]
 ```
 
 ## 2. 环境准备与启动
@@ -127,35 +127,35 @@ sudo systemctl restart docker
 
 拉取代码时需要包含子模块：
 ```bash
-git clone --recurse-submodules https://github.com/DeepShield-AI/deepflow.git
-cd deepflow
+git clone --recurse-submodules https://github.com/DeepShield-AI/zerotrace.git
+cd zerotrace
 ```
 
 ### 2.4 编译代码 (使用 Docker)
 
-在开始测试之前，需要先编译 `deepflow-agent` 和 `deepflow-agent-ctl`。推荐使用 Docker 进行编译，无需配置本地 Rust 环境。
+在开始测试之前，需要先编译 `zerotrace-agent` 和 `zerotrace-agent-ctl`。推荐使用 Docker 进行编译，无需配置本地 Rust 环境。
 
-确保当前位于项目根目录 `deepflow/`。
+确保当前位于项目根目录 `zerotrace/`。
 
 ```bash
 docker run --privileged --rm -it -v \
-    $(pwd):/deepflow 47.97.67.233:5000/deepshield/rust-build bash -c \
-    "cd /deepflow/agent && cargo build"
+    $(pwd):/zerotrace 47.97.67.233:5000/deepshield/rust-build:cached bash -c \
+    "cd /zerotrace/agent && cargo build"
 ```
 
 编译产物位于 `agent/target/debug/`：
-- Agent: `agent/target/debug/deepflow-agent`
-- Ctl: `agent/target/debug/deepflow-agent-ctl`
+- Agent: `agent/target/debug/zerotrace-agent`
+- Ctl: `agent/target/debug/zerotrace-agent-ctl`
 
 ### 2.5 启动 Agent (Standalone 模式)
 在后台启动 Agent，并开启 INFO 级别日志以便查看调试端口。
 
 ```bash
 # 杀死可能存在的旧进程
-sudo pkill deepflow-agent
+sudo pkill zerotrace-agent
 
 # 启动 Agent
-sudo RUST_LOG=info ./agent/target/debug/deepflow-agent --standalone > agent.log 2>&1 &
+sudo RUST_LOG=info ./agent/target/debug/zerotrace-agent --standalone -f ./agent/config/zerotrace-agent.yaml > agent.log 2>&1 &
 ```
 
 ### 2.6 获取调试端口
@@ -189,21 +189,21 @@ nohup bash -c "while true; do curl -s http://127.0.0.1:8080 > /dev/null; sleep 0
 ### 3.1 基础用法与帮助
 
 ```bash
-./agent/target/debug/deepflow-agent-ctl --help
+./agent/target/debug/zerotrace-agent-ctl --help
 ```
 ```text
 USAGE:
-    deepflow-agent-ctl [OPTIONS] <SUBCOMMAND>
+    zerotrace-agent-ctl [OPTIONS] <SUBCOMMAND>
 
 OPTIONS:
-    -a, --address <ADDRESS>    remote deepflow-agent host ip [default: 127.0.0.1]
-    -p, --port <PORT>          remote deepflow-agent listening port
+    -a, --address <ADDRESS>    remote zerotrace-agent host ip [default: 127.0.0.1]
+    -p, --port <PORT>          remote zerotrace-agent listening port
     -h, --help                 Print help information
 
 SUBCOMMANDS:
-    list        get information about the deepflow-agent
+    list        get information about the zerotrace-agent
     rpc         get information about the rpc synchronizer
-    queue       monitor various queues of the selected deepflow-agent
+    queue       monitor various queues of the selected zerotrace-agent
     platform    get information about the k8s platform
     policy      get information about the policy
     ebpf        get information about the ebpf
@@ -216,7 +216,7 @@ SUBCOMMANDS:
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl list
+    zerotrace-agent-ctl list
 
 OPTIONS:
     -h, --help    Print help information
@@ -224,12 +224,12 @@ OPTIONS:
 
 **测试命令**:
 ```bash
-./agent/target/debug/deepflow-agent-ctl list
+./agent/target/debug/zerotrace-agent-ctl list
 ```
 
 **预期结果**:
 ```text
-deepflow-agent-ctl listening udp port 30035 to find deepflow-agent
+zerotrace-agent-ctl listening udp port 30035 to find zerotrace-agent
 ...
 ```
 *(注：在 Standalone 模式或本地回环环境下，广播包可能无法被正确接收，导致列表为空，但这不代表程序错误)*
@@ -252,7 +252,7 @@ deepflow-agent-ctl listening udp port 30035 to find deepflow-agent
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl rpc --get <GET>
+    zerotrace-agent-ctl rpc --get <GET>
 
 OPTIONS:
     --get <GET>    Get data from RPC
@@ -262,7 +262,7 @@ OPTIONS:
 
 **测试命令 (Version)**:
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> rpc --get version
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> rpc --get version
 ```
 
 **预期结果**:
@@ -275,7 +275,7 @@ flowAcls version: 0
 
 **测试命令 (Config)**:
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> rpc --get config
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> rpc --get config
 ```
 **预期结果**:
 可能返回 `grpc client not connected` 错误。
@@ -284,7 +284,7 @@ flowAcls version: 0
 **测试命令 (其他类型)**:
 可以尝试获取其他类型数据，但在 Standalone 模式下通常为空或报错。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> rpc --get acls
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> rpc --get acls
 ```
 
 ### 3.4 `queue` 命令
@@ -300,7 +300,7 @@ flowAcls version: 0
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl queue [OPTIONS]
+    zerotrace-agent-ctl queue [OPTIONS]
 
 OPTIONS:
     --show                   show queue list
@@ -313,13 +313,13 @@ OPTIONS:
 **测试命令 (Show)**:
 列出所有队列及其状态。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> queue --show
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> queue --show
 ```
 
 **测试命令 (Monitor)**:
 开启指定队列监控（例如 `1-tagged-flow-to-quadruple-generator`）。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> queue --on 1-tagged-flow-to-quadruple-generator --duration 5
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> queue --on 1-tagged-flow-to-quadruple-generator --duration 5
 ```
 
 **预期结果**:
@@ -331,13 +331,13 @@ MSG-177 TaggedFlow { flow: Flow { ... } }
 **测试命令 (Off)**:
 手动关闭指定队列的监控。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> queue --off 1-tagged-flow-to-quadruple-generator
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> queue --off 1-tagged-flow-to-quadruple-generator
 ```
 
 **测试命令 (Clear)**:
 如果监控非正常中断，可能会遗留开启状态，可以使用 clear 命令重置。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> queue --clear
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> queue --clear
 ```
 
 ### 3.5 `platform` 命令
@@ -355,7 +355,7 @@ MSG-177 TaggedFlow { flow: Flow { ... } }
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl platform [OPTIONS]
+    zerotrace-agent-ctl platform [OPTIONS]
 
 OPTIONS:
     -m, --mac-mappings       show k8s container mac to global interface index mappings
@@ -366,9 +366,9 @@ OPTIONS:
 
 **测试命令**:
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> platform --mac-mappings
-./agent/target/debug/deepflow-agent-ctl -p <PORT> platform --k8s-get node
-./agent/target/debug/deepflow-agent-ctl -p <PORT> platform --k8s-get version
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> platform --mac-mappings
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> platform --k8s-get node
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> platform --k8s-get version
 ```
 
 **预期结果**:
@@ -381,7 +381,7 @@ OPTIONS:
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl policy <SUBCOMMAND>
+    zerotrace-agent-ctl policy <SUBCOMMAND>
 
 SUBCOMMANDS:
     monitor      
@@ -393,7 +393,7 @@ SUBCOMMANDS:
 实时监控流的查表结果。
 ```bash
 # 该命令会阻塞输出流日志，按 Ctrl+C 停止，或等待超时
-./agent/target/debug/deepflow-agent-ctl -p <PORT> policy monitor
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> policy monitor
 ```
 
 **预期结果**:
@@ -427,7 +427,7 @@ SUBCOMMANDS:
 **帮助信息**:
 ```text
 USAGE:
-    deepflow-agent-ctl ebpf <SUBCOMMAND>
+    zerotrace-agent-ctl ebpf <SUBCOMMAND>
 
 SUBCOMMANDS:
     cpdbg       monitor cpdbg
@@ -438,7 +438,7 @@ SUBCOMMANDS:
 抓取 HTTP 流量数据的 eBPF 日志。
 ```bash
 # --proto 20 代表 HTTP1
-./agent/target/debug/deepflow-agent-ctl -p <PORT> ebpf datadump --pid 0 --name "" --proto 20 --duration 5
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> ebpf datadump --pid 0 --name "" --proto 20 --duration 5
 ```
 
 **预期结果**:
@@ -450,7 +450,7 @@ SEQ 849: ... HTTP/1.1 200 OK ...
 **测试命令 (Profiler)**:
 调试持续剖析器 (Continuous Profiler)。
 ```bash
-./agent/target/debug/deepflow-agent-ctl -p <PORT> ebpf cpdbg --duration 5
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> ebpf cpdbg --duration 5
 ```
 
 ## 4. 清理环境
@@ -459,7 +459,7 @@ SEQ 849: ... HTTP/1.1 200 OK ...
 
 ```bash
 # 停止 Agent
-sudo pkill deepflow-agent
+sudo pkill zerotrace-agent
 
 # 停止流量生成进程
 pkill -f "python3 -m http.server"

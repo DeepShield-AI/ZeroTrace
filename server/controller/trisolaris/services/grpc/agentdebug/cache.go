@@ -17,7 +17,7 @@
 package synchronize
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/vtap"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/vtap"
 )
 
 func NewAgentCacheDebug(vtapCache *vtap.VTapCache) ([]byte, error) {

@@ -17,7 +17,7 @@
 package dbwriter
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 
 	"github.com/ClickHouse/ch-go/proto"
 )

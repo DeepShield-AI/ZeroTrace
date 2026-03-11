@@ -403,7 +403,7 @@ enum cfg_feature_idx {
 #define STACKMAP_CLEANUP_THRESHOLD 50
 
 /*
- * When the deepflow-agent is started, to avoid the sudden generation of Java symbol
+ * When the zerotrace-agent is started, to avoid the sudden generation of Java symbol
  * tables:
  * - Introduce an additional random value for each process's delay, on top of
  *   the configuration specified above, to prevent the abrupt generation of symbol file

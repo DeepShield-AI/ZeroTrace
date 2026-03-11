@@ -1,4 +1,4 @@
-USE deepflow;
+USE zerotrace;
 
 CREATE TABLE IF NOT EXISTS ch_os_app_tag (
     `pid`           INTEGER NOT NULL,

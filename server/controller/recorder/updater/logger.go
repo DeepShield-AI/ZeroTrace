@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/constraint"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/constraint"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.updater")

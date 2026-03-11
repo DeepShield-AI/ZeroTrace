@@ -19,7 +19,7 @@ package healer
 import (
 	"time"
 
-	metadbModel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	metadbModel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 type dataGeneratorModel interface {

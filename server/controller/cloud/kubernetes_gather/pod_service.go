@@ -22,11 +22,11 @@ import (
 
 	"github.com/bitly/go-simplejson"
 	mapset "github.com/deckarep/golang-set"
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/expand"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/expand"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (k *KubernetesGather) getPodServices() (services []model.PodService, servicePorts []model.PodServicePort, podGroupPorts []model.PodGroupPort, network model.Network, subnets []model.Subnet, vinterfaces []model.VInterface, ips []model.IP, err error) {

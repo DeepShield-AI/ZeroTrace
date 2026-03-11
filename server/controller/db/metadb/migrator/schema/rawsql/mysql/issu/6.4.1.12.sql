@@ -6,7 +6,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_direction
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'npb_policy'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'npb_policy'
     AND COLUMN_NAME = 'direction';
 
     IF column_direction = '' THEN

@@ -20,8 +20,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/schema"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/schema"
 )
 
 type EditionInitTablesFunc func(dc *DBConfig) error // TODO

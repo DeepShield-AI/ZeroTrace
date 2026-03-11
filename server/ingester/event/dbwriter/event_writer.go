@@ -21,13 +21,13 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	baseconfig "github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/ingester/event/common"
-	"github.com/deepflowio/deepflow/server/ingester/event/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/ingester/pkg/ckwriter"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
+	baseconfig "github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/event/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/event/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/ingester/pkg/ckwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 var log = logging.MustGetLogger("event.dbwriter")

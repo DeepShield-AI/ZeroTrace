@@ -20,8 +20,8 @@ import (
 	"math"
 	"net"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (
@@ -173,7 +173,7 @@ func (g *IpResourceGroup) GenerateIpNetmaskMap(ipgroupData []*IpGroupData) {
 	for _, group := range ipgroupData {
 		g.AddAnonymousGroupId(anonymousGroupIds, group)
 		epcId := group.EpcId
-		if group.EpcId == EPC_FROM_DEEPFLOW {
+		if group.EpcId == EPC_FROM_ZEROTRACE {
 			epcId = 0
 		}
 		id := group.Id

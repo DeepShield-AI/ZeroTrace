@@ -26,11 +26,11 @@ import (
 	"sync"
 	"time"
 
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/service/vtap"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/vtap"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 type VTapInterface struct {
@@ -106,7 +106,7 @@ func (v *VTapInterface) downloadVTapInterfaces() gin.HandlerFunc {
 			dataBytes, err := convertVTapInterfacesToCSV(data, fields)
 			response.DownloadCSV(
 				c,
-				fmt.Sprintf("deepflow-%s-%s-%s.csv", "vtap-interfaces",
+				fmt.Sprintf("zerotrace-%s-%s-%s.csv", "vtap-interfaces",
 					time.Now().Format("20060102"), time.Now().Format("150405")),
 				response.SetData(dataBytes),
 				response.SetError(err),

@@ -19,7 +19,7 @@ package edition
 import (
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/common"
 )
 
 var log = logging.MustGetLogger("db.metadb.migrator.edition")

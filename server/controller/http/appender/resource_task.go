@@ -17,7 +17,7 @@
 package appender
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/http/common/rsctask"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/rsctask"
 )
 
 func GetResourceTaskManager() rsctask.ResourceTaskManager {

@@ -39,15 +39,15 @@ import (
 	"gorm.io/gorm"
 	"inet.af/netaddr"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/config"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	controllermodel "github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	controllermodel "github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("cloud.common")

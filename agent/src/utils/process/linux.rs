@@ -113,7 +113,7 @@ pub fn get_thread_num() -> Result<u32> {
     ))
 }
 
-// Get the number of processes with the same name of the deepflow-agent
+// Get the number of processes with the same name of the zerotrace-agent
 pub fn get_process_num_by_name(name: &str) -> Result<u32> {
     get_num_from_status_file("Name:", name)
 }

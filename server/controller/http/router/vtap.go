@@ -30,15 +30,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/election"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	routercommon "github.com/deepflowio/deepflow/server/controller/http/router/common"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/election"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	routercommon "github.com/zerotraceio/zerotrace/server/controller/http/router/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 type Vtap struct {
@@ -332,7 +332,7 @@ func (v *Vtap) getVtapCSV() gin.HandlerFunc {
 		}
 		w.Flush()
 		c.Writer.Header().Add("Content-type", "application/octet-stream")
-		fileName := fmt.Sprintf("DeepFlow-采集器列表-%s.csv", time.Now().Format("2006-01-02"))
+		fileName := fmt.Sprintf("ZeroTrace-采集器列表-%s.csv", time.Now().Format("2006-01-02"))
 		fileName = url.QueryEscape(fileName)
 		c.Writer.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename*=utf-8''%s", fileName))
 		_, err = io.Copy(c.Writer, buf)

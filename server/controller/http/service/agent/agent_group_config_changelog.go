@@ -22,12 +22,12 @@ import (
 
 	"gorm.io/gorm"
 
-	agentconf "github.com/deepflowio/deepflow/server/agent_config"
-	ctrlcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/model"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
+	agentconf "github.com/zerotraceio/zerotrace/server/agent_config"
+	ctrlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/model"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
 )
 
 func NewAgentGroupConfigChangelogService(userInfo *model.UserInfo, fpermitCfg ctrlcommon.FPermit) *ConfigChangelog {

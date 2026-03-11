@@ -17,9 +17,9 @@
 package event
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type WholeDomain struct {

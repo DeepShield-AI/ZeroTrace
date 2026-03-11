@@ -19,9 +19,9 @@ package router
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
 	"github.com/gin-gonic/gin"
 )
 

@@ -21,9 +21,9 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 // Kubernetes平台直接使用对应kubernetesgather的resource作为cloud的resource

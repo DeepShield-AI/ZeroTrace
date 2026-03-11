@@ -16,7 +16,7 @@
 
 package model
 
-// deepflow-app use `signal_source` to divide flows, all comes from apm use `4`
+// zerotrace-app use `signal_source` to divide flows, all comes from apm use `4`
 const L7_FLOW_SIGNAL_SOURCE_OTEL = 4
 
 type ExSpan struct {

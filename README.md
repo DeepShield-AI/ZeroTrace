@@ -1,74 +1,74 @@
 <p align="center">
-  <img src="./docs/deepflow-logo.png" alt="DeepFlow" width="300" />
+  <img src="./docs/zerotrace-logo.png" alt="ZeroTrace" width="300" />
 
   <p align="center">Instant Observability for Cloud & AI Applications</p>
   <p align="center">Zero Code, Full Stack, eBPF & Wasm</p>
 </p>
 <p align="center">
     <a href="https://zenodo.org/badge/latestdoi/448599559"><img src="https://zenodo.org/badge/448599559.svg" alt="DOI"></a>
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/deepflowio/deepflow"> </a>
-    <img alt="GitCode" src="https://gitcode.com/DeepFlow/deepflow/star/badge.svg"> </a>
-    <img alt="docker pulls" src="https://img.shields.io/docker/pulls/deepflowce/deepflow-agent?color=green?label=docker pulls"> </a>
-    <img alt="License" src="https://img.shields.io/github/license/deepflowio/deepflow?color=purple"> </a>
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/zerotraceio/zerotrace"> </a>
+    <img alt="GitCode" src="https://gitcode.com/ZeroTrace/zerotrace/star/badge.svg"> </a>
+    <img alt="docker pulls" src="https://img.shields.io/docker/pulls/zerotracece/zerotrace-agent?color=green?label=docker pulls"> </a>
+    <img alt="License" src="https://img.shields.io/github/license/zerotraceio/zerotrace?color=purple"> </a>
 </p>
 
 -------------
 
 English | [简体中文](./README-CN.md) | [日本語](./README-JP.md)
 
-# What is DeepFlow
+# What is ZeroTrace
 
-The DeepFlow open-source project aims to provide deep observability for complex cloud-native and AI applications. DeepFlow implemented **Zero Code** data collection with eBPF for metrics, distributed tracing, request logs and function profiling, and is further integrated with **SmartEncoding** to achieve **Full Stack** correlation and efficient access to all observability data. With DeepFlow, cloud-native and AI applications automatically gain deep observability, removing the heavy burden of developers continually instrumenting code and providing monitoring and diagnostic capabilities covering everything from code to infrastructure for DevOps/SRE teams.
+The ZeroTrace open-source project aims to provide deep observability for complex cloud-native and AI applications. ZeroTrace implemented **Zero Code** data collection with eBPF for metrics, distributed tracing, request logs and function profiling, and is further integrated with **SmartEncoding** to achieve **Full Stack** correlation and efficient access to all observability data. With ZeroTrace, cloud-native and AI applications automatically gain deep observability, removing the heavy burden of developers continually instrumenting code and providing monitoring and diagnostic capabilities covering everything from code to infrastructure for DevOps/SRE teams.
 
 # Key Features
 
-- **Universal Map** for **Any** Service: DeepFlow provides a universal map with **Zero Code** by eBPF for production environments, including application services, AI services, and infrastructure services in any language. In addition to analyzing common protocols, Wasm plugins are supported for your private protocols. **Full Stack** golden signals of applications and infrastructures are calculated, pinpointing performance bottlenecks at ease.
+- **Universal Map** for **Any** Service: ZeroTrace provides a universal map with **Zero Code** by eBPF for production environments, including application services, AI services, and infrastructure services in any language. In addition to analyzing common protocols, Wasm plugins are supported for your private protocols. **Full Stack** golden signals of applications and infrastructures are calculated, pinpointing performance bottlenecks at ease.
 - **Distributed Tracing** for **Any** Request: **Zero Code** distributed tracing powered by eBPF supports applications in any language and infrastructures including gateways, service meshes, databases, message queues, DNS and NICs, leaving no blind spots. **Full Stack** network performance metrics and file I/O events are automatically collected for each Span. Distributed tracing enters a new era: Zero Instrumentation.
-- **Continuous Profiling** for **Any** Function: DeepFlow collects profiling data at a cost of below 1% with **Zero Code**, plots OnCPU/OffCPU/GPU/Memory/Network function call stack flame graphs, locates **Full Stack** performance bottleneck in business functions, library and framework functions, runtime functions, shared library functions, kernel function, CUDA functions, and automatically relates them to distrubuted tracing data.
-- **Seamless Integration** with Popular Stack: DeepFlow can serve as storage backed for Prometheus, OpenTelemetry, SkyWalking and Pyroscope. It also provides **SQL, PromQL and OLTP** APIs to work as data source in popular observability stacks. It injects meta tags for all observability signals including cloud resource, K8s container, K8s labels, K8s annotations, CMDB business attributes, etc., eliminating data silos.
+- **Continuous Profiling** for **Any** Function: ZeroTrace collects profiling data at a cost of below 1% with **Zero Code**, plots OnCPU/OffCPU/GPU/Memory/Network function call stack flame graphs, locates **Full Stack** performance bottleneck in business functions, library and framework functions, runtime functions, shared library functions, kernel function, CUDA functions, and automatically relates them to distrubuted tracing data.
+- **Seamless Integration** with Popular Stack: ZeroTrace can serve as storage backed for Prometheus, OpenTelemetry, SkyWalking and Pyroscope. It also provides **SQL, PromQL and OLTP** APIs to work as data source in popular observability stacks. It injects meta tags for all observability signals including cloud resource, K8s container, K8s labels, K8s annotations, CMDB business attributes, etc., eliminating data silos.
 - **Performance 10x ClickHouse**: **SmartEncoding** injects standardized and pre-encoded meta tags into all observability data, reducing storage overhead by 10x compared to ClickHouse String or LowCard method. Custom tags and observability data are stored separately, making tags available for almost unlimited dimensions and cardinalities with uncompromised query experience like **BigTable**.
 
 # Documentation
 
-For more information, please visit [the documentation website](https://deepflow.io/docs/?from=github).
+For more information, please visit [the documentation website](https://zerotrace.io/docs/?from=github).
 
 # Quick start
 
-There are three editions of DeepFlow:
-- DeepFlow Community: for developers
-- DeepFlow Enterprise: for organizations, solving team collaboration problems
-- DeepFlow Cloud: SaaS service, currently in beta
+There are three editions of ZeroTrace:
+- ZeroTrace Community: for developers
+- ZeroTrace Enterprise: for organizations, solving team collaboration problems
+- ZeroTrace Cloud: SaaS service, currently in beta
 
-The DeepFlow Community Edition consists of the core components of the Enterprise Edition.
+The ZeroTrace Community Edition consists of the core components of the Enterprise Edition.
 
-## DeepFlow Community
+## ZeroTrace Community
 
-Please refer to [the deployment documentation](https://deepflow.io/docs/ce-install/all-in-one/?from=github).
+Please refer to [the deployment documentation](https://zerotrace.io/docs/ce-install/all-in-one/?from=github).
 
-At the same time, we have also built a complete [DeepFlow Community Demo](https://ce-demo.deepflow.yunshan.net/?from=github), welcome to experience it. Login account/password: deepflow / deepflow-2026
+At the same time, we have also built a complete [ZeroTrace Community Demo](https://ce-demo.zerotrace.yunshan.net/?from=github), welcome to experience it. Login account/password: zerotrace / zerotrace-2026
 
-## DeepFlow Enterprise
+## ZeroTrace Enterprise
 
-You can visit the [DeepFlow Enterprise Demo](https://deepflow.io/), currently available in Chinese only.
+You can visit the [ZeroTrace Enterprise Demo](https://zerotrace.io/), currently available in Chinese only.
 
-# Compile DeepFlow from Source
+# Compile ZeroTrace from Source
 
-- [compile deepflow-agent](./agent/build.md)
+- [compile zerotrace-agent](./agent/build.md)
 
 # Software Architecture
 
-DeepFlow Community Edition consists of two components, Agent and Server. An Agent runs in each K8s node, legacy host and cloud host, and is responsible for AutoMetrics and AutoTracing data collection of all application processes on the host. Server runs in a K8s cluster and provides Agent management, tag injection, data ingest and query services.
+ZeroTrace Community Edition consists of two components, Agent and Server. An Agent runs in each K8s node, legacy host and cloud host, and is responsible for AutoMetrics and AutoTracing data collection of all application processes on the host. Server runs in a K8s cluster and provides Agent management, tag injection, data ingest and query services.
 
-![DeepFlow Architecture](./docs/deepflow-architecture.png)
+![ZeroTrace Architecture](./docs/zerotrace-architecture.png)
 
 # Milestones
 
-Here is our [future feature plan](https://deepflow.io/docs/about/milestone/?from=github). Issues and Pull Requests are welcome.
+Here is our [future feature plan](https://zerotrace.io/docs/about/milestone/?from=github). Issues and Pull Requests are welcome.
 
 # Contact Us
 
 - Discord：Click [here](https://discord.gg/QJ7Dyj4wWM) to join our discussion.
-- Twitter：[DeepFlow](https://twitter.com/deepflowio)
+- Twitter：[ZeroTrace](https://twitter.com/zerotraceio)
 - WeChat Group：
 <img src=./docs/wechat-group-keeper.png width=30% />
 
@@ -79,7 +79,7 @@ Here is our [future feature plan](https://deepflow.io/docs/about/milestone/?from
 
 # Honors
 
-- The paper [Network-Centric Distributed Tracing with DeepFlow: Troubleshooting Your Microservices in Zero Code](https://dl.acm.org/doi/10.1145/3603269.3604823) has been accepted by ACM SIGCOMM 2023.
-- DeepFlow enriches the <a href="https://landscape.cncf.io/?selected=deep-flow">CNCF CLOUD NATIVE Landscape</a>.
-- DeepFlow enriches the <a href="https://landscape.cncf.io/?selected=deep-flow&group=cnai&item=cnai--model-llm-observability--deepflow">CNCF CNAI (Cloud-Native AI) Landscape</a>.
-- DeepFlow enriches the <a href="https://ebpf.io/applications#deepflow">eBPF Project Landscape</a>.
+- The paper [Network-Centric Distributed Tracing with ZeroTrace: Troubleshooting Your Microservices in Zero Code](https://dl.acm.org/doi/10.1145/3603269.3604823) has been accepted by ACM SIGCOMM 2023.
+- ZeroTrace enriches the <a href="https://landscape.cncf.io/?selected=deep-flow">CNCF CLOUD NATIVE Landscape</a>.
+- ZeroTrace enriches the <a href="https://landscape.cncf.io/?selected=deep-flow&group=cnai&item=cnai--model-llm-observability--zerotrace">CNCF CNAI (Cloud-Native AI) Landscape</a>.
+- ZeroTrace enriches the <a href="https://ebpf.io/applications#zerotrace">eBPF Project Landscape</a>.

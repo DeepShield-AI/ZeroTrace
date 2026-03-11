@@ -17,7 +17,7 @@
 package main
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/controller"
 )
 
 func main() {

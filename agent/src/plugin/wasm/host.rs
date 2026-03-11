@@ -40,7 +40,7 @@ use super::{
     HOOK_POINT_HTTP_RESP, HOOK_POINT_ON_CUSTOM_MESSAGE, HOOK_POINT_PAYLOAD_PARSE,
 };
 
-pub(super) const WASM_MODULE_NAME: &str = "deepflow";
+pub(super) const WASM_MODULE_NAME: &str = "zerotrace";
 
 pub(super) const EXPORT_FUNC_CHECK_PAYLOAD: &str = "check_payload";
 pub(super) const EXPORT_FUNC_PARSE_PAYLOAD: &str = "parse_payload";

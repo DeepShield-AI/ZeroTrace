@@ -23,7 +23,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
 )
 
 func RegisterRecorderCommand() *cobra.Command {
@@ -43,7 +43,7 @@ func RegisterRecorderCommand() *cobra.Command {
 	cache := &cobra.Command{
 		Use:     "cache domain-lcuuid",
 		Short:   "get recorder cache of one domain by lcuuid",
-		Example: "deepflow-ctl recorder cache bcb21453-0833-5d94-b4cf-adb3879400c9",
+		Example: "zerotrace-ctl recorder cache bcb21453-0833-5d94-b4cf-adb3879400c9",
 		Run: func(cmd *cobra.Command, args []string) {
 			getCache(cmd, args, subDomain, onlyDiffBase, onlyToolMap, resourceType, field)
 		},

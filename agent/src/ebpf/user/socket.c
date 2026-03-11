@@ -620,8 +620,8 @@ static int kernel_offset_infer_init(void)
 			     " port %d is not occupied by other services.\n\n"
 			     "If port %d is occupied by other services, you can either"
 			     " change the port number of the other service or wait until"
-			     " the deepflow-agent is started before starting this service."
-			     "This is because the deepflow-agent only temporarily uses "
+			     " the zerotrace-agent is started before starting this service."
+			     "This is because the zerotrace-agent only temporarily uses "
 			     "port %d during its startup phase and will close the service"
 			     "once it is started.\n\n",
 			     OFFSET_INFER_SERVER_ADDR,
@@ -951,9 +951,9 @@ static void process_event(struct process_event_t *e)
 
 		/*
 		 * To prevent 'numad' from interfering with the CPU
-		 * affinity settings of deepflow-agent, the following
+		 * affinity settings of zerotrace-agent, the following
 		 * actions are taken:
-		 * If deepflow-agent starts before numad, use eBPF
+		 * If zerotrace-agent starts before numad, use eBPF
 		 * process monitor to detect numad startup and run
 		 * "numad -x " to exclude the agent.
 		 */

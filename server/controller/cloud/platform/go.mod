@@ -1,3 +1,3 @@
-module github.com/deepflowio/deepflow/server/controller/cloud/platform
+module github.com/zerotraceio/zerotrace/server/controller/cloud/platform
 
 go 1.18

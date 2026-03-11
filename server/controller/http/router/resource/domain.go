@@ -29,15 +29,15 @@ import (
 	"github.com/op/go-logging"
 	"gopkg.in/yaml.v2"
 
-	ctrlCommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/router/common"
-	"github.com/deepflowio/deepflow/server/controller/http/service/resource"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/controller/monitor/license"
+	ctrlCommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/router/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/resource"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/license"
 )
 
 var log = logging.MustGetLogger("controller.resource")

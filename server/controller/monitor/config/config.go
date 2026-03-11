@@ -17,7 +17,7 @@
 package config
 
 import (
-	configs "github.com/deepflowio/deepflow/server/controller/config/common"
+	configs "github.com/zerotraceio/zerotrace/server/controller/config/common"
 )
 
 type MonitorConfig struct {

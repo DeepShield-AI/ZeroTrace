@@ -20,9 +20,9 @@ import (
 	"time"
 
 	"github.com/baidubce/bce-sdk-go/services/vpc"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (b *BaiduBce) getRouterAndTables(vpcIdToLcuuid map[string]string, vpcIdToName map[string]string) ([]model.VRouter, []model.RoutingTable, error) {

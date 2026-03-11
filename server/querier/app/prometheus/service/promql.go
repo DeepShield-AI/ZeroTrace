@@ -38,19 +38,19 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/lru"
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/cache"
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	tagdescription "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/lru"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/cache"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	tagdescription "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
 )
 
 // The Series API supports returning the following time series (metrics):
 // - Prometheus native metrics: directly return the existing metrics in Prometheus in the format of ${metrics_name}, for example
 //    - demo_cpu_usage_seconds_total
-// - DeepFlow metrics: Return all metrics by ${db_name}__${table_name}__${time_granularity}__${metrics_name}, where you need to replace . in metrics_name with _ to return, for example
+// - ZeroTrace metrics: Return all metrics by ${db_name}__${table_name}__${time_granularity}__${metrics_name}, where you need to replace . in metrics_name with _ to return, for example
 //    - flow_log__l7_flow_log__rrt
 //    - flow_metrics__network__rtt__1m
 //    - prometheus__samples__demo_cpu_usage_seconds_total
@@ -61,16 +61,16 @@ import (
 // For the above two types of metrics, return the labels they support:
 // - Prometheus native metrics
 //    - Return the tag that has been injected in the Prometheus data, that is, the tag name in the tag_names column in ClickHouse, without the prefix `tag_`, for example: instance, pod
-//    - Return the resource tags automatically injected by DeepFlow, including cloud resources, K8s pod resources, etc., and add `df_` prefix before the original tag name, for example: df_vpc, df_pod
-//    - Return the automatically associated business labels in DeepFlow, including K8s label, etc., and add `df_` prefix before the original label name (and replace . with _), for example: df_k8s_label_env
-// - DeepFlow metrics: use the tag name returned by the show tag API and replace . with _
+//    - Return the resource tags automatically injected by ZeroTrace, including cloud resources, K8s pod resources, etc., and add `df_` prefix before the original tag name, for example: df_vpc, df_pod
+//    - Return the automatically associated business labels in ZeroTrace, including K8s label, etc., and add `df_` prefix before the original label name (and replace . with _), for example: df_k8s_label_env
+// - ZeroTrace metrics: use the tag name returned by the show tag API and replace . with _
 //    - Return the injected tags in Prometheus/InfluxDB data, for example: tag_instance, tag_pod
-//    - Returns the resource tags automatically injected by DeepFlow, including cloud resources, K8s pod resources, etc., for example: vpc, pod
-//    - Returns the automatically associated business labels in DeepFlow, including K8s label, etc., for example: k8s_label_env
+//    - Returns the resource tags automatically injected by ZeroTrace, including cloud resources, K8s pod resources, etc., for example: vpc, pod
+//    - Returns the automatically associated business labels in ZeroTrace, including K8s label, etc., for example: k8s_label_env
 
 // Through this design, we mainly hope to achieve the following goals:
-// - The Grafana Dashboard of Prometheus does not need to be modified, and the tags automatically added in DeepFlow can be used in these Dashboards
-// - The Dashboard created by the user can directly use DeepFlow metrics, and there is no need to change the label name automatically added by DeepFlow when switching between different metrics
+// - The Grafana Dashboard of Prometheus does not need to be modified, and the tags automatically added in ZeroTrace can be used in these Dashboards
+// - The Dashboard created by the user can directly use ZeroTrace metrics, and there is no need to change the label name automatically added by ZeroTrace when switching between different metrics
 
 const _SUCCESS = "success"
 
@@ -273,7 +273,7 @@ func (p *prometheusExecutor) offloadRangeQueryExecute(ctx context.Context, args 
 		addExternalTagToCache:   p.addExtraLabelsToCache,
 	}
 	queryRequests := analyzer.parsePromQL(args.Promql, start, end, step)
-	promRequest := &model.DeepFlowPromRequest{
+	promRequest := &model.ZeroTracePromRequest{
 		Slimit:       args.Slimit,
 		Start:        start.UnixMilli(),
 		End:          end.UnixMilli(),
@@ -419,7 +419,7 @@ func (p *prometheusExecutor) offloadInstantQueryExecute(ctx context.Context, arg
 		}
 	}
 
-	promRequest := &model.DeepFlowPromRequest{
+	promRequest := &model.ZeroTracePromRequest{
 		Slimit:       args.Slimit,
 		Start:        minStart,
 		End:          maxEnd,
@@ -563,7 +563,7 @@ func (p *prometheusExecutor) promRemoteReadOffloadingExecute(ctx context.Context
 		}
 		// use query seconds for query
 		// when use offloading query, it's always prometheus native metrics, with df_ prefix
-		ctx = context.WithValue(ctx, ctxKeyPrefixType{}, prefixDeepFlow)
+		ctx = context.WithValue(ctx, ctxKeyPrefixType{}, prefixZeroTrace)
 		resp, err = reader.respTransToProm(ctx, queryReq.GetMetric(), query.Hints.GetStartMs()/1e3, query.Hints.GetEndMs()/1e3, result)
 		if err != nil {
 			log.Error(err)
@@ -864,7 +864,7 @@ func (p *prometheusExecutor) getAllOrganizations() []string {
 }
 
 func (p *prometheusExecutor) loadExtraLabelsCache(orgID string) {
-	// DeepFlow Source have same tag collections, so just try query 1 table to add all external tags
+	// ZeroTrace Source have same tag collections, so just try query 1 table to add all external tags
 	showTags := fmt.Sprintf("show tags from %s", NETWORK_TABLE)
 	data, err := tagdescription.GetTagDescriptions(chCommon.DB_NAME_FLOW_METRICS, NETWORK_TABLE, showTags, config.Cfg.Clickhouse.QueryCacheTTL, orgID, config.Cfg.Clickhouse.UseQueryCache, context.Background(), nil)
 	if err != nil {

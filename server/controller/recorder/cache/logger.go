@@ -21,7 +21,7 @@ import (
 
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.cache")

@@ -27,8 +27,8 @@ BEGIN
     END IF;
 END;
 
-CALL AddColumnIfNotExists('deepflow', 'alarm_endpoint', 'topic', 'TEXT');
-CALL AddColumnIfNotExists('deepflow', 'alarm_endpoint', 'sasl', 'TEXT');
+CALL AddColumnIfNotExists('zerotrace', 'alarm_endpoint', 'topic', 'TEXT');
+CALL AddColumnIfNotExists('zerotrace', 'alarm_endpoint', 'sasl', 'TEXT');
 
 DROP PROCEDURE AddColumnIfNotExists;
 

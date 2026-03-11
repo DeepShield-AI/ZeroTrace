@@ -22,12 +22,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/server/http"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/server/http/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/server/http"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/server/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.cache")

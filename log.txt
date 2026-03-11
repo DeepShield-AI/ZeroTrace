@@ -1,0 +1,2625 @@
+[2026-03-05 10:40:11.098428 +00:00] INFO [/zerotrace/agent/src/trident.rs:665] static_config Config {
+    controller_ips: [
+        "127.0.0.1",
+    ],
+    controller_port: 30035,
+    controller_tls_port: 30135,
+    controller_cert_file_prefix: "",
+    log_file: "/var/log/zerotrace-agent/zerotrace-agent.log",
+    kubernetes_cluster_id: "",
+    kubernetes_cluster_name: None,
+    vtap_group_id_request: "",
+    controller_domain_name: [],
+    agent_mode: Standalone,
+    override_os_hostname: None,
+    async_worker_thread_number: 16,
+    agent_unique_identifier: IpMac,
+    pid_file: "",
+    team_id: "",
+    cgroups_disabled: false,
+}
+[2026-03-05 10:40:11.099723 +00:00] INFO [src/trident.rs:742] ==================== Launching ZeroTrace-Agent ====================
+[2026-03-05 10:40:11.099899 +00:00] INFO [src/trident.rs:743] Brief tag: CE|main|354351dfda50cbb7eae840f511da87df7f76b3a3
+[2026-03-05 10:40:11.099990 +00:00] INFO [src/trident.rs:744] Environment variables: "K8S_NODE_IP_FOR_DEEPFLOW= CTRL_NETWORK_INTERFACE= K8S_POD_IP_FOR_DEEPFLOW= IN_CONTAINER= K8S_WATCH_POLICY= K8S_NAMESPACE_FOR_DEEPFLOW="
+[2026-03-05 10:40:11.134554 +00:00] INFO [src/trident.rs:787] agent 127.0.0.1/00:00:00:00:00:00 running in Standalone mode, ctrl_ip 127.0.0.1 ctrl_mac 00:00:00:00:00:00
+[2026-03-05 10:40:11.157552 +00:00] INFO [src/utils/cgroups/linux.rs:174] cgroups controller started
+[2026-03-05 10:40:11.161139 +00:00] INFO [src/monitor.rs:761] monitor started
+[2026-03-05 10:40:11.161314 +00:00] INFO [src/platform/libvirt_xml_extractor.rs:104] libvirt_xml_extractor started
+[2026-03-05 10:41:11.186553 +00:00] INFO [src/config/handler.rs:3117] UserConfig {
+    global: Global {
+        limits: Limits {
+            max_millicpus: 1000,
+            max_memory: 805306368,
+            max_log_backhaul_rate: 36000,
+            max_local_log_file_size: 1048576000,
+            local_log_retention: 25920000s,
+            max_sockets: 1024,
+            max_sockets_tolerate_interval: 60s,
+        },
+        alerts: Alerts {
+            thread_threshold: 500,
+            process_threshold: 10,
+            check_core_file_disabled: false,
+        },
+        circuit_breakers: CircuitBreakers {
+            sys_memory_percentage: SysMemoryPercentage {
+                trigger_threshold: 0,
+                metric: Free,
+            },
+            relative_sys_load: RelativeSysLoad {
+                trigger_threshold: 1.0,
+                recovery_threshold: 0.9,
+                metric: Load15,
+            },
+            tx_throughput: TxThroughput {
+                trigger_threshold: 0,
+                throughput_monitoring_interval: 10s,
+            },
+            free_disk: FreeDisk {
+                percentage_trigger_threshold: 15,
+                absolute_trigger_threshold: 10737418240,
+                directories: [
+                    "/",
+                ],
+            },
+        },
+        tunning: Tunning {
+            cpu_affinity: [],
+            process_scheduling_priority: 0,
+            idle_memory_trimming: true,
+            swap_disabled: false,
+            page_cache_reclaim_percentage: 100,
+            resource_monitoring_interval: 10s,
+        },
+        ntp: Ntp {
+            enabled: false,
+            max_drift: 300s,
+            min_drift: 10s,
+        },
+        communication: Communication {
+            proactive_request_interval: 60s,
+            max_escape_duration: 3600s,
+            ingester_ip: "127.0.0.1",
+            ingester_port: 30033,
+            grpc_buffer_size: 5242880,
+            max_throughput_to_ingester: 100,
+            ingester_traffic_overflow_action: Waiting,
+            request_via_nat_ip: false,
+            proxy_controller_ip: "127.0.0.1",
+            proxy_controller_port: 30035,
+        },
+        self_monitoring: SelfMonitoring {
+            log: Log {
+                log_level: "INFO",
+                log_file: "/var/log/zerotrace-agent/zerotrace-agent.log",
+                log_backhaul_enabled: true,
+            },
+            profile: Profile {
+                enabled: false,
+            },
+            debug: Debug {
+                enabled: true,
+                local_udp_port: 0,
+            },
+            hostname: "",
+            interval: 10s,
+        },
+        standalone_mode: StandaloneMode {
+            max_data_file_size: 209715200,
+            data_file_dir: "/var/log/zerotrace-agent/",
+        },
+        common: GlobalCommon {
+            kubernetes_api_enabled: false,
+            enabled: true,
+            region_id: 0,
+            pod_cluster_id: 0,
+            vpc_id: 3302,
+            agent_id: 3302,
+            team_id: 0,
+            organize_id: 0,
+            agent_type: TtProcess,
+            secret_key: "",
+        },
+    },
+    inputs: Inputs {
+        proc: Proc {
+            enabled: true,
+            proc_dir_path: "/proc",
+            socket_info_sync_interval: 0ns,
+            min_lifetime: 3s,
+            tag_extraction: TagExtraction {
+                script_command: [],
+                exec_username: "zerotrace",
+            },
+            process_blacklist: [
+                "awk",
+                "bash",
+                "curl",
+                "grep",
+                "pause",
+                "runc",
+                "sed",
+                "sh",
+                "sleep",
+            ],
+            process_matcher: [
+                ProcessMatcher {
+                    match_regex: \bjava( +\S+)* +-jar +(\S*/)*([^ /]+\.jar),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$3",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \bpython(\S)*( +-\S+)* +(\S*/)*([^ /]+),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$4",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \bphp(\d+)?(-fpm|-cli|-cgi)?( +-\S+)* +(\S*/)*([^ /]+\.php),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$5",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \b(node|nodejs)( +--\S+)* +(\S*/)*([^ /]+\.js),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$4",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: ^zerotrace-,
+                    match_type: ProcessName,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: .*,
+                    match_type: ProcessName,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: true,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "",
+                    enabled_features: [
+                        "proc.gprocess_info",
+                    ],
+                },
+            ],
+            symbol_table: SymbolTable {
+                golang_specific: GolangSpecific {
+                    enabled: false,
+                },
+                java: Java {
+                    refresh_defer_duration: 60s,
+                },
+            },
+        },
+        cbpf: Cbpf {
+            common: Common {
+                capture_mode: Local,
+            },
+            af_packet: AfPacket {
+                interface_regex: "^(tap.*|cali.*|veth.*|eth.*|en[osipx].*|lxc.*|lo|[0-9a-f]+_h)$",
+                inner_interface_capture_enabled: false,
+                inner_interface_regex: "^eth\\d+$",
+                bond_interfaces: [],
+                extra_netns_regex: "",
+                extra_bpf_filter: "",
+                src_interfaces: [],
+                vlan_pcp_in_physical_mirror_traffic: 0,
+                bpf_filter_disabled: false,
+                skip_npb_bpf: false,
+                tunning: AfPacketTunning {
+                    socket_version: Auto,
+                    ring_blocks_enabled: false,
+                    ring_blocks: 128,
+                    packet_fanout_count: 1,
+                    packet_fanout_mode: 0,
+                    promisc: false,
+                },
+            },
+            special_network: SpecialNetwork {
+                dpdk: Dpdk {
+                    source: None,
+                    reorder_cache_window_size: 60ms,
+                },
+                libpcap: Libpcap {
+                    enabled: false,
+                },
+                vhost_user: VhostUser {
+                    vhost_socket_path: "",
+                },
+                physical_switch: PhysicalSwitch {
+                    sflow_ports: [],
+                    netflow_ports: [],
+                },
+            },
+            tunning: CbpfTunning {
+                dispatcher_queue_enabled: false,
+                max_capture_packet_size: 65535,
+                raw_packet_buffer_block_size: 65536,
+                raw_packet_queue_size: 131072,
+                max_capture_pps: 1048576,
+            },
+            preprocess: PreProcess {
+                tunnel_decap_protocols: [
+                    1,
+                    2,
+                ],
+                tunnel_trim_protocols: [],
+                packet_segmentation_reassembly: [],
+            },
+            physical_mirror: PhysicalMirror {
+                default_capture_network_type: 3,
+                packet_dedup_disabled: false,
+                private_cloud_gateway_traffic: false,
+            },
+        },
+        ebpf: Ebpf {
+            disabled: false,
+            socket: EbpfSocket {
+                uprobe: EbpfSocketUprobe {
+                    golang: EbpfSocketUprobeGolang {
+                        enabled: false,
+                        tracing_timeout: 120s,
+                    },
+                    tls: EbpfSocketUprobeTls {
+                        enabled: false,
+                    },
+                    dpdk: EbpfSocketUprobeDpdk {
+                        command: "",
+                        rx_hooks: [],
+                        tx_hooks: [],
+                    },
+                },
+                kprobe: EbpfSocketKprobe {
+                    disabled: false,
+                    enable_unix_socket: false,
+                    blacklist: EbpfSocketKprobePorts {
+                        ports: "",
+                    },
+                    whitelist: EbpfSocketKprobePorts {
+                        ports: "",
+                    },
+                },
+                sock_ops: EbpfSocketSockOps {
+                    tcp_option_trace: EbpfTcpOptionTrace {
+                        enabled: false,
+                        sampling_window_bytes: 16384,
+                    },
+                },
+                tunning: EbpfSocketTunning {
+                    max_capture_rate: 0,
+                    syscall_trace_id_disabled: false,
+                    map_prealloc_disabled: false,
+                    fentry_enabled: false,
+                },
+                preprocess: EbpfSocketPreprocess {
+                    out_of_order_reassembly_cache_size: 16,
+                    out_of_order_reassembly_protocols: [],
+                    out_of_order_reassembly_timeout: 100ms,
+                    segmentation_reassembly_protocols: [],
+                },
+            },
+            file: EbpfFile {
+                io_event: EbpfFileIoEvent {
+                    collect_mode: 1,
+                    minimal_duration: 1ms,
+                    enable_virtual_file_collect: false,
+                },
+            },
+            profile: EbpfProfile {
+                on_cpu: EbpfProfileOnCpu {
+                    disabled: false,
+                    sampling_frequency: 99,
+                    aggregate_by_cpu: false,
+                },
+                off_cpu: EbpfProfileOffCpu {
+                    disabled: true,
+                    min_blocking_time: 50µs,
+                    aggregate_by_cpu: false,
+                },
+                memory: EbpfProfileMemory {
+                    disabled: true,
+                    report_interval: 10s,
+                    allocated_addresses_lru_len: 131072,
+                    sort_length: 16384,
+                    sort_interval: 1.5s,
+                    queue_size: 32768,
+                },
+                unwinding: Unwinding {
+                    dwarf_disabled: true,
+                    dwarf_regex: "",
+                    dwarf_process_map_size: 1024,
+                    dwarf_shard_map_size: 128,
+                },
+                preprocess: EbpfProfilePreprocess {
+                    stack_compression: true,
+                },
+                languages: EbpfProfileLanguages {
+                    python_disabled: false,
+                    php_disabled: false,
+                    nodejs_disabled: false,
+                },
+            },
+            tunning: EbpfTunning {
+                collector_queue_size: 65535,
+                userspace_worker_threads: 1,
+                perf_pages_count: 128,
+                kernel_ring_size: 65536,
+                max_socket_entries: 131072,
+                socket_map_reclaim_threshold: 120000,
+                max_trace_entries: 131072,
+            },
+            java_symbol_file_refresh_defer_interval: 60,
+        },
+        resources: Resources {
+            push_interval: 10s,
+            private_cloud: PrivateCloud {
+                hypervisor_resource_enabled: false,
+                vm_mac_source: IfMac,
+                vm_xml_directory: "/etc/libvirt/qemu/",
+                vm_mac_mapping_script: "",
+            },
+            kubernetes: Kubernetes {
+                kubernetes_namespace: "",
+                api_resources: [
+                    ApiResources {
+                        name: "namespaces",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "nodes",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "pods",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "replicationcontrollers",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "services",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "daemonsets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "deployments",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "replicasets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "statefulsets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "ingresses",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "configmaps",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                ],
+                api_list_page_size: 1000,
+                api_list_max_interval: 600s,
+                ingress_flavour: "kubernetes",
+                pod_mac_collection_method: Adaptive,
+            },
+        },
+        integration: Integration {
+            enabled: true,
+            listen_port: 38086,
+            compression: Compression {
+                trace: true,
+                profile: true,
+            },
+            prometheus_extra_labels: PrometheusExtraLabels {
+                enabled: false,
+                extra_labels: [],
+                label_length: 1024,
+                value_length: 4096,
+            },
+            feature_control: FeatureControl {
+                profile_integration_disabled: false,
+                trace_integration_disabled: false,
+                metric_integration_disabled: false,
+                log_integration_disabled: false,
+            },
+        },
+        vector: Vector {
+            enabled: false,
+            config: Null,
+        },
+    },
+    outputs: Outputs {
+        socket: Socket {
+            data_socket_type: File,
+            npb_socket_type: RawUdp,
+            raw_udp_qos_bypass: false,
+            multiple_sockets_to_ingester: false,
+        },
+        flow_log: OutputsFlowLog {
+            filters: FlowLogFilters {
+                l4_capture_network_types: [
+                    3,
+                ],
+                l7_capture_network_types: [
+                    3,
+                ],
+                l4_ignored_observation_points: [],
+                l7_ignored_observation_points: [],
+            },
+            aggregators: FlowLogAggregators {
+                aggregate_health_check_l4_flow_log: true,
+            },
+            throttles: Throttles {
+                l4_throttle: 10000,
+                l7_throttle: 10000,
+            },
+            tunning: OutputsFlowLogTunning {
+                collector_queue_size: 65536,
+            },
+        },
+        flow_metrics: FlowMetrics {
+            enabled: true,
+            filters: FlowMetricsFilters {
+                inactive_server_port_aggregation: false,
+                inactive_ip_aggregation: false,
+                npm_metrics: true,
+                npm_metrics_concurrent: true,
+                apm_metrics: true,
+                second_metrics: true,
+            },
+            tunning: FlowMetricsTunning {
+                sender_queue_size: 65536,
+            },
+        },
+        npb: Npb {
+            max_mtu: 1500,
+            raw_udp_vlan_tag: 0,
+            extra_vlan_header: None,
+            traffic_global_dedup: true,
+            target_port: 4789,
+            custom_vxlan_flags: 255,
+            overlay_vlan_header_trimming: false,
+            max_tx_throughput: 1048576000,
+        },
+        compression: OutputCompression {
+            application_log: true,
+            pcap: true,
+            l7_flow_log: true,
+            l4_flow_log: false,
+        },
+    },
+    processors: Processors {
+        packet: Packet {
+            policy: Policy {
+                fast_path_map_size: 0,
+                fast_path_disabled: false,
+                forward_table_capacity: 16384,
+                max_first_path_level: 8,
+            },
+            tcp_header: TcpHeader {
+                block_size: 256,
+                sender_queue_size: 65536,
+                header_fields_flag: 0,
+            },
+            pcap_stream: PcapStream {
+                receiver_queue_size: 65536,
+                sender_queue_size: 8192,
+                buffer_size_per_flow: 65536,
+                total_buffer_size: 88304,
+                flush_interval: 60s,
+            },
+            toa: Toa {
+                sender_queue_size: 65536,
+                cache_size: 65536,
+            },
+        },
+        request_log: RequestLog {
+            application_protocol_inference: ApplicationProtocolInference {
+                inference_max_retries: 128,
+                inference_result_ttl: 60s,
+                inference_whitelist: [
+                    InferenceWhitelist {
+                        process_name: "envoy",
+                        port_list: [
+                            15001,
+                            15006,
+                        ],
+                    },
+                ],
+                enabled_protocols: [
+                    "HTTP",
+                    "HTTP2",
+                    "MySQL",
+                    "Redis",
+                    "Kafka",
+                    "DNS",
+                    "TLS",
+                ],
+                protocol_special_config: ProtocolSpecialConfig {
+                    oracle: OracleConfig {
+                        is_be: true,
+                        int_compressed: true,
+                        resp_0x04_extra_byte: false,
+                    },
+                    iso8583: Iso8583Config {
+                        extract_fields: "2,7,11,32,33",
+                        translation_enabled: true,
+                        pan_obfuscate: true,
+                    },
+                    web_sphere_mq: WebSphereMqConfig {
+                        parse_xml_enabled: true,
+                    },
+                    mysql: MysqlConfig {
+                        decompress_payload: true,
+                    },
+                    grpc: GrpcConfig {
+                        streaming_data_enabled: false,
+                    },
+                },
+            },
+            filters: Filters {
+                port_number_prefilters: {
+                    "MQTT": "1-65535",
+                    "AMQP": "1-65535",
+                    "RocketMQ": "1-65535",
+                    "MongoDB": "1-65535",
+                    "Kafka": "1-65535",
+                    "Pulsar": "1-65535",
+                    "Tars": "1-65535",
+                    "SomeIP": "1-65535",
+                    "ISO8583": "1-65535",
+                    "FastCGI": "1-65535",
+                    "ZMTP": "1-65535",
+                    "TLS": "443,6443",
+                    "NATS": "1-65535",
+                    "Custom": "1-65535",
+                    "WebSphereMQ": "1-65535",
+                    "OpenWire": "1-65535",
+                    "PostgreSQL": "1-65535",
+                    "SofaRPC": "1-65535",
+                    "bRPC": "1-65535",
+                    "HTTP": "1-65535",
+                    "DNS": "53,5353",
+                    "PING": "1-65535",
+                    "Memcached": "11211",
+                    "Dubbo": "1-65535",
+                    "MySQL": "1-65535",
+                    "Oracle": "1521",
+                    "HTTP2": "1-65535",
+                    "Triple": "1-65535",
+                    "Redis": "1-65535",
+                },
+                tag_filters: {
+                    "OpenWire": [],
+                    "WebSphereMQ": [],
+                    "Oracle": [],
+                    "Tars": [],
+                    "PostgreSQL": [],
+                    "Pulsar": [],
+                    "FastCGI": [],
+                    "TLS": [],
+                    "RocketMQ": [],
+                    "AMQP": [],
+                    "MySQL": [],
+                    "DNS": [],
+                    "Dubbo": [],
+                    "Kafka": [],
+                    "Memcached": [],
+                    "Triple": [],
+                    "ISO8583": [],
+                    "SomeIP": [],
+                    "NATS": [],
+                    "Redis": [],
+                    "HTTP": [],
+                    "MQTT": [],
+                    "ZMTP": [],
+                    "SOFARPC": [],
+                    "bRPC": [],
+                    "Custom": [],
+                    "HTTP2": [],
+                    "gRPC": [],
+                    "MongoDB": [],
+                    "PING": [],
+                },
+                unconcerned_dns_nxdomain_response_suffixes: [],
+                cbpf_disabled: false,
+            },
+            timeouts: Timeouts {
+                tcp_request_timeout: 300s,
+                udp_request_timeout: 150s,
+                session_aggregate: [],
+            },
+            tag_extraction: RequestLogTagExtraction {
+                tracing_tag: TracingTag {
+                    http_real_client: [
+                        "X_Forwarded_For",
+                    ],
+                    x_request_id: [
+                        "X_Request_ID",
+                    ],
+                    multiple_trace_id_collection: true,
+                    copy_apm_trace_id: false,
+                    apm_trace_id: [
+                        "traceparent",
+                        "sw8",
+                    ],
+                    apm_span_id: [
+                        "traceparent",
+                        "sw8",
+                    ],
+                },
+                http_endpoint: HttpEndpoint {
+                    extraction_disabled: false,
+                    match_rules: [
+                        HttpEndpointMatchRule {
+                            url_prefix: "",
+                            keep_segments: 2,
+                        },
+                    ],
+                },
+                obfuscate_protocols: [
+                    "Redis",
+                ],
+                custom_fields: {
+                    "HTTP": [],
+                    "HTTP2": [],
+                },
+                raw: RequestLogTagExtractionRaw {
+                    error_request_header: 0,
+                    error_response_header: 0,
+                    error_request_payload: 0,
+                    error_response_payload: 256,
+                },
+            },
+            tunning: RequestLogTunning {
+                payload_truncation: 1024,
+                session_aggregate_max_entries: 65536,
+                consistent_timestamp_in_l7_metrics: false,
+            },
+        },
+        flow_log: ProcessorsFlowLog {
+            time_window: TimeWindow {
+                max_tolerable_packet_delay: 1s,
+                extra_tolerable_flow_delay: 0ns,
+            },
+            conntrack: Conntrack {
+                flow_flush_interval: 1s,
+                flow_generation: FlowGeneration {
+                    server_ports: [],
+                    cloud_traffic_ignore_mac: false,
+                    ignore_l2_end: false,
+                    idc_traffic_ignore_vlan: false,
+                },
+                timeouts: ConntrackTimeouts {
+                    established: 300s,
+                    closing_rst: 35s,
+                    opening_rst: 1s,
+                    others: 5s,
+                },
+            },
+            tunning: ProcessorsFlowLogTunning {
+                flow_map_hash_slots: 131072,
+                rrt_cache_capacity: 16000,
+                concurrent_flow_limit: 65535,
+                memory_pool_size: 65536,
+                max_batched_buffer_size: 131072,
+                flow_aggregator_queue_size: 65535,
+                flow_generator_queue_size: 65536,
+                quadruple_generator_queue_size: 262144,
+            },
+        },
+    },
+    plugins: Plugins {
+        update_time: 0ns,
+        wasm_plugins: [],
+        so_plugins: [],
+    },
+    dev: Dev {
+        feature_flags: [],
+    },
+}
+[2026-03-05 10:41:11.187938 +00:00] INFO [src/config/handler.rs:3128] dispatcher will reload config
+[2026-03-05 10:41:11.188093 +00:00] INFO [src/config/handler.rs:4302] Update global.common.vpc_id from 0 to 3302.
+[2026-03-05 10:41:11.188143 +00:00] INFO [src/config/handler.rs:4312] Update global.common.agent_id from 0 to 3302.
+[2026-03-05 10:41:11.188195 +00:00] INFO [src/config/handler.rs:4339] Update global.common.agent_type from TtUnknown to TtProcess.
+[2026-03-05 10:41:11.188237 +00:00] INFO [src/config/handler.rs:4364] Update global.communication.grpc_buffer_size from 1048576 to 5242880, and it is actually used 5242880.
+[2026-03-05 10:41:11.189721 +00:00] INFO [src/utils/guard.rs:510] guard watchdog started
+[2026-03-05 10:41:11.189869 +00:00] INFO [src/utils/guard.rs:789] guard started
+[2026-03-05 10:41:11.195256 +00:00] INFO [src/trident.rs:274] Agent state changed from Disabled to Running (enabled: true melted_down: false)
+[2026-03-05 10:42:11.214683 +00:00] INFO [src/trident.rs:2267] Start check process...
+[2026-03-05 10:42:11.240417 +00:00] INFO [src/trident.rs:2275] Start check core file...
+[2026-03-05 10:42:11.240545 +00:00] INFO [src/utils/environment/linux.rs:409] Current /proc/sys/kernel/core_pattern content is core
+
+[2026-03-05 10:42:11.240610 +00:00] INFO [src/utils/environment/linux.rs:306] Check core-files in dir: /
+[2026-03-05 10:42:11.240969 +00:00] INFO [src/trident.rs:2282] Start check controller ip...
+[2026-03-05 10:42:11.241034 +00:00] INFO [src/trident.rs:2286] Start check free space...
+[2026-03-05 10:42:11.263187 +00:00] INFO [src/trident.rs:2437] Agent run with feature-flags: NONE.
+[2026-03-05 10:42:11.294771 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:42:11.294955 +00:00] INFO [src/platform/kubernetes/mod.rs:80] kubernetes poller privileges: set_ns=true read_link_ns=true
+[2026-03-05 10:42:11.295007 +00:00] INFO [src/platform/kubernetes/mod.rs:90] platform monitoring no extra netns
+[2026-03-05 10:42:11.295086 +00:00] INFO [src/platform/synchronizer.rs:137] updating kubernetes poller
+[2026-03-05 10:42:11.295382 +00:00] INFO [src/utils/process/linux.rs:384] Process listener register feature proc.gprocess_info
+[2026-03-05 10:42:11.295599 +00:00] INFO [src/trident.rs:2592] static analyzer ip: '127.0.0.1' actual analyzer ip '127.0.0.1'
+[2026-03-05 10:42:11.296644 +00:00] INFO [src/dispatcher/mod.rs:1390] Afpacket init with Options { frame_size: 65536, block_size: 1048576, num_blocks: 48, add_vlan_header: false, block_timeout: 64000000, poll_timeout: 100000000, version: TpacketVersionHighestavailablet, socket_type: SocketTypeRaw, iface: "", packet_fanout_mode: None }
+[2026-03-05 10:42:11.331450 +00:00] INFO [src/dispatcher/recv_engine/af_packet/tpacket.rs:231] Packet fanout disabled.
+[2026-03-05 10:42:11.360655 +00:00] INFO [src/dispatcher/base_dispatcher.rs:781] Decap tunnel type change to VXLAN IPIP
+[2026-03-05 10:42:11.361091 +00:00] INFO [src/dispatcher/base_dispatcher.rs:850] Npb dedup change to true
+[2026-03-05 10:42:11.361661 +00:00] INFO [src/dispatcher/base_dispatcher.rs:942] Dispatcher(0) Adding VMs: [00:00:00:00:00:00, 00:18:77:53:94:b3, 00:18:77:53:94:b4, 00:18:77:53:94:b5, 00:18:77:53:94:b6, 00:e2:ba:84:88:6c, 00:e2:ba:84:88:6d, 00:e2:ba:0b:96:18, 00:e2:ba:0b:96:19, 00:59:9f:18:e4:14, 00:e0:ed:22:9a:ce, 00:e0:ed:22:9a:cf, 00:f3:58:0a:4c:f9, 00:86:e2:8f:c8:42, 00:ab:9c:94:8a:4a, 00:7c:8a:fe:e6:e9, 00:66:b3:4f:fb:e2, 00:02:38:5a:0a:12, 00:3f:9b:70:e6:bc, 00:c2:d5:6b:8b:f9, 00:f4:ff:b8:2c:f7, 00:38:37:aa:c3:fd, 00:f9:62:43:4e:61, 00:b2:11:04:5d:ff, 00:09:fe:ce:ac:4f, 00:70:2a:e1:43:ea, 00:e7:17:c7:5b:70, 00:4b:e6:ab:37:1e, 00:e5:94:88:b5:f4, 00:c3:b9:61:94:18, 00:89:0b:1c:6b:f8, 00:da:86:e4:2b:5f, 00:14:57:c3:9c:da, 00:80:91:42:c4:af, 00:48:59:90:fe:56, 00:ff:37:bb:05:d7, 00:a7:27:7c:13:c9, 00:55:0e:73:e3:fc, 00:1e:ea:14:ad:38, 00:8d:21:de:0f:f0, 00:8d:aa:d1:d5:79, 00:d9:49:b7:8c:a6, 00:64:91:22:d9:c4] changing pipelines to 
+if_index: 1 mac: 00:00:00:00:00:00
+if_index: 2 mac: 00:18:77:53:94:b3
+if_index: 3 mac: 00:18:77:53:94:b4
+if_index: 4 mac: 00:18:77:53:94:b5
+if_index: 5 mac: 00:18:77:53:94:b6
+if_index: 6 mac: 00:e2:ba:84:88:6c
+if_index: 7 mac: 00:e2:ba:84:88:6d
+if_index: 8 mac: 00:e2:ba:0b:96:18
+if_index: 9 mac: 00:e2:ba:0b:96:19
+if_index: 10 mac: 00:59:9f:18:e4:14
+if_index: 11 mac: 00:e0:ed:22:9a:ce
+if_index: 12 mac: 00:e0:ed:22:9a:cf
+if_index: 23 mac: 00:f3:58:0a:4c:f9
+if_index: 199 mac: 00:86:e2:8f:c8:42
+if_index: 201 mac: 00:ab:9c:94:8a:4a
+if_index: 203 mac: 00:7c:8a:fe:e6:e9
+if_index: 426 mac: 00:66:b3:4f:fb:e2
+if_index: 427 mac: 00:02:38:5a:0a:12
+if_index: 428 mac: 00:3f:9b:70:e6:bc
+if_index: 429 mac: 00:c2:d5:6b:8b:f9
+if_index: 430 mac: 00:f4:ff:b8:2c:f7
+if_index: 431 mac: 00:38:37:aa:c3:fd
+if_index: 432 mac: 00:f9:62:43:4e:61
+if_index: 433 mac: 00:b2:11:04:5d:ff
+if_index: 434 mac: 00:09:fe:ce:ac:4f
+if_index: 435 mac: 00:70:2a:e1:43:ea
+if_index: 436 mac: 00:e7:17:c7:5b:70
+if_index: 437 mac: 00:4b:e6:ab:37:1e
+if_index: 438 mac: 00:e5:94:88:b5:f4
+if_index: 439 mac: 00:c3:b9:61:94:18
+if_index: 440 mac: 00:89:0b:1c:6b:f8
+if_index: 441 mac: 00:da:86:e4:2b:5f
+if_index: 442 mac: 00:14:57:c3:9c:da
+if_index: 443 mac: 00:80:91:42:c4:af
+if_index: 444 mac: 00:48:59:90:fe:56
+if_index: 445 mac: 00:ff:37:bb:05:d7
+if_index: 446 mac: 00:a7:27:7c:13:c9
+if_index: 447 mac: 00:55:0e:73:e3:fc
+if_index: 448 mac: 00:1e:ea:14:ad:38
+if_index: 449 mac: 00:8d:21:de:0f:f0
+if_index: 450 mac: 00:8d:aa:d1:d5:79
+if_index: 451 mac: 00:d9:49:b7:8c:a6
+if_index: 452 mac: 00:64:91:22:d9:c4
+[2026-03-05 10:42:11.361987 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:42:11.363028 +00:00] INFO [src/ebpf_dispatcher.rs:1374] ebpf collector init... uprobe_meltdown: false
+[2026-03-05 10:42:11.363204 +00:00] INFO [src/ebpf_dispatcher.rs:825] ebpf golang uprobe proc regexp is empty, skip set
+[2026-03-05 10:42:11.363281 +00:00] INFO [src/ebpf_dispatcher.rs:858] ebpf openssl uprobe proc regexp is empty, skip set
+[2026-03-05 10:42:11.363335 +00:00] INFO [src/ebpf_dispatcher.rs:888] ebpf golang symbol proc regexp is empty, skip set
+[2026-03-05 10:42:11.363436 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Http1 parse enabled
+[2026-03-05 10:42:11.363501 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Http2 parse enabled
+[2026-03-05 10:42:11.363556 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol DNS parse enabled
+[2026-03-05 10:42:11.363612 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol MySQL parse enabled
+[2026-03-05 10:42:11.363660 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Kafka parse enabled
+[2026-03-05 10:42:11.363724 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Redis parse enabled
+[2026-03-05 10:42:11.363816 +00:00] INFO [src/ebpf_dispatcher.rs:920] ebpf kprobe enabled
+[2026-03-05 10:42:11.363898 +00:00] INFO [src/ebpf/user/socket.c:4016] Kprobe feature has been enabled.
+[2026-03-05 10:42:11.363951 +00:00] INFO [src/ebpf_dispatcher.rs:928] ebpf unix socket tracing disabled
+[2026-03-05 10:42:11.363999 +00:00] INFO [src/ebpf/user/socket.c:4022] unix socket feature has been disabled.
+[2026-03-05 10:42:11.364089 +00:00] INFO [src/ebpf/user/tracer.c:2308] Currently "/proc/sys/net/core/bpf_jit_enable" value is 1, not need set.
+[2026-03-05 10:42:11.364193 +00:00] INFO [src/ebpf/user/mem.c:298] log2_default_hugepage_sz 21
+[2026-03-05 10:42:11.364323 +00:00] INFO [src/ebpf/user/tracer.c:2320] linux version : 6.8.0-90-generic (version code : 395276)
+[2026-03-05 10:42:11.364403 +00:00] INFO [src/ebpf/user/utils.c:377] RLIMIT_NOFILE cur:1048576, rlim_max:1048576
+[2026-03-05 10:42:11.366683 +00:00] INFO [src/ebpf/user/tracer.c:2269] /usr/bin/zerotrace-ebpfctl installed successfully.
+[2026-03-05 10:42:11.366783 +00:00] INFO [src/ebpf/user/tracer.c:2338] sys_boot_time_ns : 1769097332111161265
+[2026-03-05 10:42:11.367926 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 404 - 404 set: 400 - 403
+[2026-03-05 10:42:11.368013 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 0 - 0 set: 800 - 800
+[2026-03-05 10:42:11.368181 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'trigger_kern_adapt' succeed.
+[2026-03-05 10:42:11.368265 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'boot time update' succeed.
+[2026-03-05 10:42:11.368788 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MQTT] success, ports 1-65535
+[2026-03-05 10:42:11.368931 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398330 successfully bound to CPU 3.
+[2026-03-05 10:42:11.369002 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398329 successfully bound to CPU 2.
+[2026-03-05 10:42:11.369189 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[AMQP] success, ports 1-65535
+[2026-03-05 10:42:11.369195 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398333 successfully bound to CPU 6.
+[2026-03-05 10:42:11.369248 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398334 successfully bound to CPU 7.
+[2026-03-05 10:42:11.369480 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[RocketMQ] success, ports 1-65535
+[2026-03-05 10:42:11.369478 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398337 successfully bound to CPU 10.
+[2026-03-05 10:42:11.369537 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398338 successfully bound to CPU 11.
+[2026-03-05 10:42:11.369758 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MongoDB] success, ports 1-65535
+[2026-03-05 10:42:11.370037 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Kafka] success, ports 1-65535
+[2026-03-05 10:42:11.370338 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Pulsar] success, ports 1-65535
+[2026-03-05 10:42:11.370288 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398331 successfully bound to CPU 4.
+[2026-03-05 10:42:11.370640 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Tars] success, ports 1-65535
+[2026-03-05 10:42:11.370909 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Some/IP] success, ports 1-65535
+[2026-03-05 10:42:11.371190 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[ISO-8583] success, ports 1-65535
+[2026-03-05 10:42:11.371483 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[FastCGI] success, ports 1-65535
+[2026-03-05 10:42:11.371758 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[ZMTP] success, ports 1-65535
+[2026-03-05 10:42:11.371903 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[TLS] success, ports 443,6443
+[2026-03-05 10:42:11.372020 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398332 successfully bound to CPU 5.
+[2026-03-05 10:42:11.372040 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398327 successfully bound to CPU 0.
+[2026-03-05 10:42:11.372062 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398336 successfully bound to CPU 9.
+[2026-03-05 10:42:11.372065 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398335 successfully bound to CPU 8.
+[2026-03-05 10:42:11.372087 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398328 successfully bound to CPU 1.
+[2026-03-05 10:42:11.372206 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[NATS] success, ports 1-65535
+[2026-03-05 10:42:11.372226 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398343 successfully bound to CPU 12.
+[2026-03-05 10:42:11.372401 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Custom] success, ports 1-65535
+[2026-03-05 10:42:11.372397 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398344 successfully bound to CPU 13.
+[2026-03-05 10:42:11.372395 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398345 successfully bound to CPU 14.
+[2026-03-05 10:42:11.372444 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398346 successfully bound to CPU 15.
+[2026-03-05 10:42:11.372599 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[WebSphereMQ] success, ports 1-65535
+[2026-03-05 10:42:11.372532 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398347 successfully bound to CPU 16.
+[2026-03-05 10:42:11.372621 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398349 successfully bound to CPU 18.
+[2026-03-05 10:42:11.372693 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398350 successfully bound to CPU 19.
+[2026-03-05 10:42:11.372798 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[OpenWire] success, ports 1-65535
+[2026-03-05 10:42:11.372860 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398352 successfully bound to CPU 21.
+[2026-03-05 10:42:11.372903 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398351 successfully bound to CPU 20.
+[2026-03-05 10:42:11.372983 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[PgSQL] success, ports 1-65535
+[2026-03-05 10:42:11.373020 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398354 successfully bound to CPU 23.
+[2026-03-05 10:42:11.373159 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[SofaRPC] success, ports 1-65535
+[2026-03-05 10:42:11.373364 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[bRPC] success, ports 1-65535
+[2026-03-05 10:42:11.373590 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[HTTP1] success, ports 1-65535
+[2026-03-05 10:42:11.373703 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[DNS] success, ports 53,5353
+[2026-03-05 10:42:11.373882 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Unknown] success, ports 1-65535
+[2026-03-05 10:42:11.373992 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Memcached] success, ports 11211
+[2026-03-05 10:42:11.374200 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Dubbo] success, ports 1-65535
+[2026-03-05 10:42:11.374540 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MySQL] success, ports 1-65535
+[2026-03-05 10:42:11.374692 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Oracle] success, ports 1521
+[2026-03-05 10:42:11.374879 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[HTTP2] success, ports 1-65535
+[2026-03-05 10:42:11.375056 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Unknown] success, ports 1-65535
+[2026-03-05 10:42:11.375249 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Redis] success, ports 1-65535
+[2026-03-05 10:42:11.375306 +00:00] INFO [src/ebpf/user/socket.c:4045] Disabled the fentry/fexit feature
+[2026-03-05 10:42:11.375237 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398353 successfully bound to CPU 22.
+[2026-03-05 10:42:11.375379 +00:00] INFO [src/ebpf/user/tracer.c:171] check_kernel_version Linux 6.8.12-0
+[2026-03-05 10:42:11.375443 +00:00] INFO [src/ebpf/user/socket.c:2907] Datadump directory (/var/log) created or already exists.
+[2026-03-05 10:42:11.376212 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2398348 successfully bound to CPU 17.
+[2026-03-05 10:42:11.380073 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1 mntns_id 4026531841 entry_count 93 proc_count 1 refcount 0 bytes_count 10985 bytes
+[2026-03-05 10:42:11.386963 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 161 mntns_id 4026531862 entry_count 1 proc_count 1 refcount 0 bytes_count 117 bytes
+[2026-03-05 10:42:11.395261 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1390 mntns_id 4026534551 entry_count 111 proc_count 1 refcount 0 bytes_count 13123 bytes
+[2026-03-05 10:42:11.396536 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57038 mntns_id 4026534713 entry_count 62 proc_count 1 refcount 0 bytes_count 9324 bytes
+[2026-03-05 10:42:11.397653 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57408 mntns_id 4026534644 entry_count 58 proc_count 1 refcount 0 bytes_count 8982 bytes
+[2026-03-05 10:42:11.398809 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57776 mntns_id 4026534784 entry_count 52 proc_count 1 refcount 0 bytes_count 7679 bytes
+[2026-03-05 10:42:11.399763 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58329 mntns_id 4026534854 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.400054 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58337 mntns_id 4026534857 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.400324 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58346 mntns_id 4026534860 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.400608 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58355 mntns_id 4026534863 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.401282 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58447 mntns_id 4026534866 entry_count 58 proc_count 1 refcount 0 bytes_count 6841 bytes
+[2026-03-05 10:42:11.401919 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58451 mntns_id 4026534869 entry_count 60 proc_count 1 refcount 0 bytes_count 7162 bytes
+[2026-03-05 10:42:11.402494 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58467 mntns_id 4026534872 entry_count 55 proc_count 1 refcount 0 bytes_count 6601 bytes
+[2026-03-05 10:42:11.403048 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58476 mntns_id 4026534875 entry_count 54 proc_count 1 refcount 0 bytes_count 6415 bytes
+[2026-03-05 10:42:11.403529 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58927 mntns_id 4026534947 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.403826 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58939 mntns_id 4026534950 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.404151 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58967 mntns_id 4026534953 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:42:11.404615 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59144 mntns_id 4026534955 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.404889 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59181 mntns_id 4026535084 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.405176 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59193 mntns_id 4026535089 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.405702 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59460 mntns_id 4026535159 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.406052 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59463 mntns_id 4026535163 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:42:11.406340 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59475 mntns_id 4026535165 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.406627 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59480 mntns_id 4026535168 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.407006 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59489 mntns_id 4026535172 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:42:11.407801 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59498 mntns_id 4026535174 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.408531 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59626 mntns_id 4026535178 entry_count 55 proc_count 1 refcount 0 bytes_count 6702 bytes
+[2026-03-05 10:42:11.409312 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59662 mntns_id 4026535181 entry_count 55 proc_count 1 refcount 0 bytes_count 6702 bytes
+[2026-03-05 10:42:11.409972 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59796 mntns_id 4026535187 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:42:11.410499 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59975 mntns_id 4026535190 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:42:11.411023 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 60102 mntns_id 4026535193 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:42:11.411592 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 61140 mntns_id 4026535184 entry_count 55 proc_count 1 refcount 0 bytes_count 6718 bytes
+[2026-03-05 10:42:11.411993 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240422 mntns_id 4026535398 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.412293 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240431 mntns_id 4026535402 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.413194 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240806 mntns_id 4026535406 entry_count 99 proc_count 1 refcount 0 bytes_count 18065 bytes
+[2026-03-05 10:42:11.414036 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240879 mntns_id 4026535409 entry_count 95 proc_count 1 refcount 0 bytes_count 16810 bytes
+[2026-03-05 10:42:11.414933 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240997 mntns_id 4026535415 entry_count 99 proc_count 1 refcount 0 bytes_count 18067 bytes
+[2026-03-05 10:42:11.415782 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 241049 mntns_id 4026535418 entry_count 95 proc_count 1 refcount 0 bytes_count 16810 bytes
+[2026-03-05 10:42:11.416226 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1028236 mntns_id 4026537518 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.416776 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1028278 mntns_id 4026537522 entry_count 54 proc_count 1 refcount 0 bytes_count 6411 bytes
+[2026-03-05 10:42:11.417119 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051711 mntns_id 4026534943 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.417522 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051856 mntns_id 4026537583 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.417824 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051858 mntns_id 4026537587 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.418350 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051875 mntns_id 4026537591 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:42:11.419709 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051980 mntns_id 4026537594 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:42:11.420854 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051987 mntns_id 4026537597 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:42:11.438224 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 2432913 mntns_id 4026534549 entry_count 96 proc_count 1 refcount 0 bytes_count 11466 bytes
+[2026-03-05 10:42:11.441467 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229804 mntns_id 4026534552 entry_count 113 proc_count 1 refcount 0 bytes_count 13105 bytes
+[2026-03-05 10:42:11.443260 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229851 mntns_id 4026532742 entry_count 96 proc_count 1 refcount 0 bytes_count 11335 bytes
+[2026-03-05 10:42:11.445236 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229902 mntns_id 4026534570 entry_count 100 proc_count 1 refcount 0 bytes_count 11818 bytes
+[2026-03-05 10:42:11.446894 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3652065 mntns_id 4026532753 entry_count 100 proc_count 1 refcount 0 bytes_count 11975 bytes
+[2026-03-05 10:42:11.448107 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3837290 mntns_id 4026532741 entry_count 119 proc_count 1 refcount 0 bytes_count 13526 bytes
+[2026-03-05 10:42:11.449258 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3837304 mntns_id 4026534569 entry_count 99 proc_count 1 refcount 0 bytes_count 11791 bytes
+[2026-03-05 10:42:11.449592 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4004349 mntns_id 4026535487 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:42:11.450130 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4004383 mntns_id 4026535491 entry_count 64 proc_count 1 refcount 0 bytes_count 9640 bytes
+[2026-03-05 10:42:11.451382 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058697 mntns_id 4026535495 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:42:11.451783 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058722 mntns_id 4026535563 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:42:11.452208 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058723 mntns_id 4026535630 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:42:11.452630 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058735 mntns_id 4026535699 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:42:11.453061 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058742 mntns_id 4026535767 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.453461 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058747 mntns_id 4026535834 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.453883 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058756 mntns_id 4026535903 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:42:11.454307 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058763 mntns_id 4026535971 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.454721 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058771 mntns_id 4026536039 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.455134 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058774 mntns_id 4026536106 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.455615 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058783 mntns_id 4026536175 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:42:11.456028 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058791 mntns_id 4026536244 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:42:11.456470 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058796 mntns_id 4026536311 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.456887 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058805 mntns_id 4026536380 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:42:11.457909 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059538 mntns_id 4026536472 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.458337 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059545 mntns_id 4026536538 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.458784 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059552 mntns_id 4026536603 entry_count 55 proc_count 1 refcount 0 bytes_count 6366 bytes
+[2026-03-05 10:42:11.459236 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059606 mntns_id 4026536673 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.459650 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059608 mntns_id 4026536743 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.460045 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059616 mntns_id 4026536876 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.460468 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059627 mntns_id 4026536811 entry_count 51 proc_count 1 refcount 0 bytes_count 5553 bytes
+[2026-03-05 10:42:11.460870 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059635 mntns_id 4026537086 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.461276 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059638 mntns_id 4026536941 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.461688 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059651 mntns_id 4026537006 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.462253 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059906 mntns_id 4026537163 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.462660 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059970 mntns_id 4026537235 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.463051 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059987 mntns_id 4026537303 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:42:11.471505 +00:00] INFO [src/ebpf/user/load.c:499] license: GPL
+[2026-03-05 10:42:11.473824 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__socket_info_map"), set max_entries 131072
+[2026-03-05 10:42:11.473883 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__trace_map"), set max_entries 131072
+[2026-03-05 10:42:11.514064 +00:00] INFO [src/ebpf/user/btf_core.c:324] BTF vmlinux file: /sys/kernel/btf/vmlinux
+[2026-03-05 10:42:11.514464 +00:00] INFO [src/ebpf/user/load.c:310] Kernel support interfaces `bpf_probe_read{kernel,user}[_str]`
+[2026-03-05 10:42:21.962851 +00:00] INFO [src/ebpf/user/tracer.c:666] bpf load "socket-trace-bpf-linux-5.2_plus" succeed.
+[2026-03-05 10:42:21.963035 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 128, system page size: 4096 bytes, required system pages: 128
+[[38;5;208m2026-03-05 10:42:21.967129 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/btf_core.c:391] [38;5;208mBTF member __sk_flags_offset of struct sock can not be found[0m
+[2026-03-05 10:42:21.968300 +00:00] INFO [src/ebpf/user/socket.c:1945] Offsets from BTF vmlinux:
+[2026-03-05 10:42:21.968362 +00:00] INFO [src/ebpf/user/socket.c:1946]     copied_seq_offs: 0x5b0
+[2026-03-05 10:42:21.968408 +00:00] INFO [src/ebpf/user/socket.c:1947]     write_seq_offs: 0x624
+[2026-03-05 10:42:21.968452 +00:00] INFO [src/ebpf/user/socket.c:1948]     files_offs: 0xc20
+[2026-03-05 10:42:21.968493 +00:00] INFO [src/ebpf/user/socket.c:1949]     sk_flags_offs: 0x200
+[2026-03-05 10:42:21.968553 +00:00] INFO [src/ebpf/user/socket.c:1951]     struct_files_struct_fdt_offset: 0x20
+[2026-03-05 10:42:21.968593 +00:00] INFO [src/ebpf/user/socket.c:1953]     struct_file_private_data_offset: 0xc8
+[2026-03-05 10:42:21.968633 +00:00] INFO [src/ebpf/user/socket.c:1955]     struct_file_f_op_offset: 0xb0
+[2026-03-05 10:42:21.968673 +00:00] INFO [src/ebpf/user/socket.c:1957]     struct_file_operations_read_iter_offset: 0x20
+[2026-03-05 10:42:21.968716 +00:00] INFO [src/ebpf/user/socket.c:1959]     struct_file_f_inode_offset: 0xa8
+[2026-03-05 10:42:21.968755 +00:00] INFO [src/ebpf/user/socket.c:1961]     struct_file_f_pos_offset: 0x40
+[2026-03-05 10:42:21.968793 +00:00] INFO [src/ebpf/user/socket.c:1963]     struct_inode_i_mode_offset: 0x0
+[2026-03-05 10:42:21.968832 +00:00] INFO [src/ebpf/user/socket.c:1965]     struct_file_dentry_offset: 0xa0
+[2026-03-05 10:42:21.968873 +00:00] INFO [src/ebpf/user/socket.c:1967]     struct_inode_i_sb_offset: 0x38
+[2026-03-05 10:42:21.968912 +00:00] INFO [src/ebpf/user/socket.c:1969]     struct_super_block_s_dev_offset: 0x10
+[2026-03-05 10:42:21.968951 +00:00] INFO [src/ebpf/user/socket.c:1971]     struct_dentry_name_offset: 0x28
+[2026-03-05 10:42:21.968990 +00:00] INFO [src/ebpf/user/socket.c:1973]     struct_dentry_d_parent_offset: 0x18
+[2026-03-05 10:42:21.969029 +00:00] INFO [src/ebpf/user/socket.c:1975]     struct_sock_family_offset: 0x10
+[2026-03-05 10:42:21.969068 +00:00] INFO [src/ebpf/user/socket.c:1977]     struct_sock_saddr_offset: 0x4
+[2026-03-05 10:42:21.969107 +00:00] INFO [src/ebpf/user/socket.c:1979]     struct_sock_daddr_offset: 0x0
+[2026-03-05 10:42:21.969145 +00:00] INFO [src/ebpf/user/socket.c:1981]     struct_sock_ip6saddr_offset: 0x48
+[2026-03-05 10:42:21.969206 +00:00] INFO [src/ebpf/user/socket.c:1983]     struct_sock_ip6daddr_offset: 0x38
+[2026-03-05 10:42:21.969252 +00:00] INFO [src/ebpf/user/socket.c:1985]     struct_sock_dport_offset: 0xc
+[2026-03-05 10:42:21.969328 +00:00] INFO [src/ebpf/user/socket.c:1987]     struct_sock_sport_offset: 0xe
+[2026-03-05 10:42:21.969373 +00:00] INFO [src/ebpf/user/socket.c:1989]     struct_sock_skc_state_offset: 0x12
+[2026-03-05 10:42:21.969413 +00:00] INFO [src/ebpf/user/socket.c:1991]     struct_sock_common_ipv6only_offset: 0x13
+[2026-03-05 10:42:21.969462 +00:00] INFO [src/ebpf/user/socket.c:1993]     struct_file_f_path_offset: 0x98
+[2026-03-05 10:42:21.969505 +00:00] INFO [src/ebpf/user/socket.c:1995]     struct_path_mnt_offset: 0x0
+[2026-03-05 10:42:21.969541 +00:00] INFO [src/ebpf/user/socket.c:1997]     struct_mount_mnt_offset: 0x20
+[2026-03-05 10:42:21.969578 +00:00] INFO [src/ebpf/user/socket.c:1999]     struct_mount_mnt_ns_offset: 0xf0
+[2026-03-05 10:42:21.969618 +00:00] INFO [src/ebpf/user/socket.c:2001]     struct_mnt_namespace_ns_offset: 0x0
+[2026-03-05 10:42:21.969655 +00:00] INFO [src/ebpf/user/socket.c:2003]     struct_ns_common_inum_offset: 0x10
+[2026-03-05 10:42:21.969691 +00:00] INFO [src/ebpf/user/socket.c:2005]     struct_mount_mnt_id_offset: 0x12c
+[2026-03-05 10:42:21.969778 +00:00] INFO [src/ebpf/user/socket.c:3023] [eBPF Kernel Adapt] Set offsets map from btf_vmlinux, success.
+[2026-03-05 10:42:21.969826 +00:00] INFO [src/ebpf/user/socket.c:3026] == Unix domain socket ==
+[2026-03-05 10:42:21.969865 +00:00] INFO [src/ebpf/user/socket.c:2293] Received limit_size (0), the final value is set to '4096'
+[2026-03-05 10:42:21.969953 +00:00] INFO [src/ebpf/user/socket.c:3058] Config socket_data_limit_max: 4096
+[2026-03-05 10:42:21.969999 +00:00] INFO [src/ebpf/user/socket.c:3059] Config io_event_collect_mode: 1
+[2026-03-05 10:42:21.970037 +00:00] INFO [src/ebpf/user/socket.c:3060] Config io_event_minimal_duration: 1000000 ns
+[2026-03-05 10:42:21.970078 +00:00] INFO [src/ebpf/user/socket.c:3061] Config virtual_file_collect_enable: 0
+[2026-03-05 10:42:21.970115 +00:00] INFO [src/ebpf/user/socket.c:3062] Config g_disable_syscall_tracing: 0
+[2026-03-05 10:42:21.970156 +00:00] INFO [src/ebpf/user/socket.c:3063] Config go_tracing_timeout: 120
+[2026-03-05 10:42:21.970215 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 0, program name df_TP_proto_infer_2
+[2026-03-05 10:42:21.970271 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 1, program name df_TP_proto_infer_3
+[2026-03-05 10:42:21.970375 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 2, program name df_TP_data_submit
+[2026-03-05 10:42:21.970423 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 3, program name df_TP_output_data
+[2026-03-05 10:42:21.970466 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 4, program name df_TP_io_event
+[2026-03-05 10:42:21.970509 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 0, program name df_KP_proto_infer_2
+[2026-03-05 10:42:21.970551 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 1, program name df_KP_proto_infer_3
+[2026-03-05 10:42:21.970637 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 2, program name df_KP_data_submit
+[2026-03-05 10:42:21.970740 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 3, program name df_KP_output_data
+[2026-03-05 10:42:21.971602 +00:00] INFO [src/ebpf/user/socket.c:2233] Whitelist is empty
+[2026-03-05 10:42:21.971859 +00:00] INFO [src/ebpf/user/socket.c:2233] Blacklist is empty
+[2026-03-05 10:42:21.971917 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[HTTP1] success.
+[2026-03-05 10:42:21.971972 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[HTTP2] success.
+[2026-03-05 10:42:21.972024 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Dubbo] success.
+[2026-03-05 10:42:21.972076 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[SofaRPC] success.
+[2026-03-05 10:42:21.972127 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[FastCGI] success.
+[2026-03-05 10:42:21.972193 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[bRPC] success.
+[2026-03-05 10:42:21.972260 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Tars] success.
+[2026-03-05 10:42:21.972330 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Some/IP] success.
+[2026-03-05 10:42:21.972383 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[ISO-8583] success.
+[2026-03-05 10:42:21.972431 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Unknown] success.
+[2026-03-05 10:42:21.972481 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MySQL] success.
+[2026-03-05 10:42:21.972530 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[PgSQL] success.
+[2026-03-05 10:42:21.972602 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Oracle] success.
+[2026-03-05 10:42:21.972651 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Redis] success.
+[2026-03-05 10:42:21.972703 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MongoDB] success.
+[2026-03-05 10:42:21.972754 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Memcached] success.
+[2026-03-05 10:42:21.972802 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Kafka] success.
+[2026-03-05 10:42:21.972852 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MQTT] success.
+[2026-03-05 10:42:21.972902 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[AMQP] success.
+[2026-03-05 10:42:21.972963 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[OpenWire] success.
+[2026-03-05 10:42:21.973013 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[NATS] success.
+[2026-03-05 10:42:21.973063 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Pulsar] success.
+[2026-03-05 10:42:21.973111 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[ZMTP] success.
+[2026-03-05 10:42:21.973173 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[RocketMQ] success.
+[2026-03-05 10:42:21.973240 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[WebSphereMQ] success.
+[2026-03-05 10:42:21.973290 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[DNS] success.
+[2026-03-05 10:42:21.973337 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[TLS] success.
+[2026-03-05 10:42:21.973386 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Unknown] success.
+[2026-03-05 10:42:21.973434 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Custom] success.
+[2026-03-05 10:42:21.973479 +00:00] INFO [src/ebpf/user/tracer.c:1369] tracer(socket-trace) attach ...
+[2026-03-05 10:42:21.978403 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_sendmsg', success!
+[2026-03-05 10:42:21.983265 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_sendmmsg', success!
+[2026-03-05 10:42:21.988466 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_recvmsg', success!
+[2026-03-05 10:42:21.993509 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/do_writev', success!
+[2026-03-05 10:42:21.998381 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/do_readv', success!
+[2026-03-05 10:42:21.999035 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_fork', succeed!
+[2026-03-05 10:42:21.999159 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_clone', succeed!
+[2026-03-05 10:42:21.999342 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/sched/sched_process_exec', succeed!
+[2026-03-05 10:42:21.999525 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/sched/sched_process_exit', succeed!
+[2026-03-05 10:42:21.999690 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_write', succeed!
+[2026-03-05 10:42:21.999797 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_read', succeed!
+[2026-03-05 10:42:21.999893 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_sendto', succeed!
+[2026-03-05 10:42:21.999986 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_recvfrom', succeed!
+[2026-03-05 10:42:22.000081 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_connect', succeed!
+[2026-03-05 10:42:22.000186 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_recvmmsg', succeed!
+[2026-03-05 10:42:22.000294 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_socket', succeed!
+[2026-03-05 10:42:22.000399 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_read', succeed!
+[2026-03-05 10:42:22.000505 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_write', succeed!
+[2026-03-05 10:42:22.000607 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendto', succeed!
+[2026-03-05 10:42:22.000706 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvfrom', succeed!
+[2026-03-05 10:42:22.000832 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendmsg', succeed!
+[2026-03-05 10:42:22.000934 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendmmsg', succeed!
+[2026-03-05 10:42:22.001036 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvmsg', succeed!
+[2026-03-05 10:42:22.001138 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvmmsg', succeed!
+[2026-03-05 10:42:22.001304 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_writev', succeed!
+[2026-03-05 10:42:22.001425 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_readv', succeed!
+[2026-03-05 10:42:22.001528 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_accept', succeed!
+[2026-03-05 10:42:22.001630 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_accept4', succeed!
+[2026-03-05 10:42:22.001744 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_close', succeed!
+[2026-03-05 10:42:22.001862 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_getppid', succeed!
+[2026-03-05 10:42:22.001978 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pread64', succeed!
+[2026-03-05 10:42:22.002099 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_preadv', succeed!
+[2026-03-05 10:42:22.002244 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwrite64', succeed!
+[2026-03-05 10:42:22.002381 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwritev', succeed!
+[2026-03-05 10:42:22.002500 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pread64', succeed!
+[2026-03-05 10:42:22.002653 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_preadv', succeed!
+[2026-03-05 10:42:22.002790 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwrite64', succeed!
+[2026-03-05 10:42:22.002909 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwritev', succeed!
+[2026-03-05 10:42:22.003028 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_preadv2', succeed!
+[2026-03-05 10:42:22.003147 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_preadv2', succeed!
+[2026-03-05 10:42:22.003290 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwritev2', succeed!
+[2026-03-05 10:42:22.003410 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwritev2', succeed!
+[2026-03-05 10:42:22.003466 +00:00] INFO [src/ebpf/user/tracer.c:1377] Successfully completed attach.
+[2026-03-05 10:42:22.003809 +00:00] INFO [src/ebpf/user/tracer.c:323] thread sk-reader-0, detached successful.
+[2026-03-05 10:42:22.003910 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'offset-infer-server' succeed.
+[2026-03-05 10:42:22.003963 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'offset-infer-client' succeed.
+[2026-03-05 10:42:22.004007 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'mount-offset-infer' succeed.
+[2026-03-05 10:42:22.004050 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'check-map-exceeded' succeed.
+[2026-03-05 10:42:22.004092 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'check-kern-adapt' succeed.
+[2026-03-05 10:42:22.004150 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 504 - 504 set: 500 - 503
+[2026-03-05 10:42:22.004239 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 603 - 603 set: 600 - 602
+[2026-03-05 10:42:22.004343 +00:00] INFO [src/ebpf/user/socket.c:2293] Received limit_size (1024), the final value is set to '1024'
+[2026-03-05 10:42:22.004461 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:1019] [CP] Set oncpu profiler enable.
+[2026-03-05 10:42:22.018504 +00:00] INFO [src/ebpf/user/tracer.c:171] check_kernel_version Linux 6.8.12-0
+[2026-03-05 10:42:22.018614 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000000000 A fixed_percpu_data
+ [address:0000000000000000]
+[2026-03-05 10:42:22.018671 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000000000 A __per_cpu_start
+ [address:0000000000000000]
+[2026-03-05 10:42:22.018718 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000001000 A cpu_debug_store
+ [address:0000000000001000]
+[2026-03-05 10:42:22.018824 +00:00] INFO [src/ebpf/user/profile/profile_common.c:221] Check kallsyms: count 100 check_num 100 zero_count 2
+[2026-03-05 10:42:22.018911 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:782] set java_syms_update_delay : 60
+[2026-03-05 10:42:22.387546 +00:00] INFO [src/ebpf/user/proc.c:1005] address 0xffffffff96ee26a0 find symbol '__sys_sendmsg', ksyms-cache, created successfully.
+[2026-03-05 10:42:22.387702 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:970] [CP] Set 'cpu_aggregation_flag' successful, value 0
+[2026-03-05 10:42:22.388957 +00:00] INFO [src/ebpf/user/load.c:499] license: GPL
+[2026-03-05 10:42:22.389303 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__stack_map_a"), set max_entries 8192
+[2026-03-05 10:42:22.389367 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__stack_map_b"), set max_entries 8192
+[2026-03-05 10:42:22.414222 +00:00] INFO [src/ebpf/user/btf_core.c:324] BTF vmlinux file: /sys/kernel/btf/vmlinux
+[2026-03-05 10:42:22.546465 +00:00] INFO [src/ebpf/user/tracer.c:666] bpf load "continuous-profiler-5.15_plus" succeed.
+[2026-03-05 10:42:22.623028 +00:00] INFO [src/ebpf/user/utils.c:1669] thread java_update, detached successful.
+[2026-03-05 10:42:22.623198 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:373] [CP] === oncpu profiler enabled ===
+[2026-03-05 10:42:22.623267 +00:00] INFO [src/ebpf/user/profile/profile_common.c:161] [CP] set_bpf_run_enabled() success, enable_flag:0
+[2026-03-05 10:42:22.623317 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 16, system page size: 4096 bytes, required system pages: 16
+[2026-03-05 10:42:22.624370 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 16, system page size: 4096 bytes, required system pages: 16
+[2026-03-05 10:42:22.625430 +00:00] INFO [src/ebpf/user/tracer.c:323] thread oncpu_reader-0, detached successful.
+[2026-03-05 10:42:22.625504 +00:00] INFO [src/ebpf/user/tracer.c:1369] tracer(continuous_profiler) attach ...
+[2026-03-05 10:42:22.625875 +00:00] INFO [src/ebpf/user/tracer.c:1254] tracer "continuous_profiler" attach perf event prog successful.
+[2026-03-05 10:42:22.625931 +00:00] INFO [src/ebpf/user/tracer.c:1377] Successfully completed attach.
+[2026-03-05 10:42:23.651982 +00:00] INFO [src/ebpf/user/unwind_tracer.c:207] unwind tracer init: tpbase_offset=9320
+[2026-03-05 10:42:23.652378 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__cp_progs_jmp_pe_map'), key 0, program name df_PE_dwarf_unwind
+[2026-03-05 10:42:23.652502 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__cp_progs_jmp_pe_map'), key 7, program name df_PE_oncpu_output
+[2026-03-05 10:42:23.652559 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 703 - 703 set: 700 - 702
+[2026-03-05 10:42:23.652764 +00:00] INFO [src/utils/process/linux.rs:384] Process listener register feature ebpf.profile.on_cpu
+[2026-03-05 10:42:23.652939 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:970] [CP] Set 'cpu_aggregation_flag' successful, value 0
+[2026-03-05 10:42:23.652999 +00:00] INFO [src/ebpf/user/tracer.c:2432] All tracers finish!!!
+[2026-03-05 10:42:23.653071 +00:00] INFO [src/ebpf_dispatcher.rs:1419] ebpf collector initialized.
+[2026-03-05 10:42:23.653161 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:42:23.653801 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:42:23.654439 +00:00] INFO [src/trident.rs:3432] Starting agent components.
+[2026-03-05 10:42:23.654657 +00:00] INFO [src/debug/debugger.rs:440] debugger started
+[2026-03-05 10:42:23.654851 +00:00] INFO [src/sender/uniform_sender.rs:333] 3-doc-to-collector-sender uniform sender id: 2 started
+[2026-03-05 10:42:23.655040 +00:00] INFO [src/sender/uniform_sender.rs:333] 2-protolog-to-collector-sender uniform sender id: 3 started
+[2026-03-05 10:42:23.654946 +00:00] INFO [src/debug/debugger.rs:128] debugger listening on: [::]:20346
+[2026-03-05 10:42:23.655215 +00:00] INFO [src/sender/uniform_sender.rs:333] 3-flowlog-to-collector-sender uniform sender id: 1 started
+[2026-03-05 10:42:23.655403 +00:00] INFO [src/sender/uniform_sender.rs:333] 2-packet-sequence-block-to-sender uniform sender id: 5 started
+[2026-03-05 10:42:23.655599 +00:00] INFO [src/flow_generator/protocol_logs/parser.rs:719] app protocol logs parser (id=0) started
+[2026-03-05 10:42:23.655671 +00:00] INFO [src/collector/quadruple_generator.rs:775] new quadruple_generator id: 0, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:42:23.655751 +00:00] INFO [src/dispatcher/local_mode_dispatcher.rs:201] Start dispatcher (0)
+[2026-03-05 10:42:23.657404 +00:00] INFO [src/collector/quadruple_generator.rs:699] quadruple generator id: 0 started
+[2026-03-05 10:42:23.657551 +00:00] INFO [src/collector/flow_aggr.rs:133] l4 flow aggr id: 0 started
+[2026-03-05 10:42:23.657686 +00:00] INFO [src/collector/collector.rs:1292] second_collector id=(0) started
+[2026-03-05 10:42:23.657832 +00:00] INFO [src/collector/collector.rs:1292] minute_collector id=(0) started
+[2026-03-05 10:42:23.657900 +00:00] INFO [src/collector/l7_quadruple_generator.rs:531] new l7 quadruple_generator id: 0, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:42:23.658448 +00:00] INFO [src/collector/l7_quadruple_generator.rs:473] l7 quadruple generator id: 0 started
+[2026-03-05 10:42:23.658594 +00:00] INFO [src/collector/collector.rs:1424] second_collector id=(0) started
+[2026-03-05 10:42:23.658748 +00:00] INFO [src/collector/collector.rs:1424] minute_collector id=(0) started
+[2026-03-05 10:42:23.658870 +00:00] INFO [src/flow_generator/packet_sequence/parser.rs:88] packet sequence parser (id=0) started
+[2026-03-05 10:42:23.658933 +00:00] INFO [src/handler/npb.rs:338] Start npb packet sender 0.
+[2026-03-05 10:42:23.659076 +00:00] INFO [src/flow_generator/protocol_logs/parser.rs:719] app protocol logs parser (id=1) started
+[2026-03-05 10:42:23.659142 +00:00] INFO [src/collector/l7_quadruple_generator.rs:531] new l7 quadruple_generator id: 1, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:42:23.671348 +00:00] INFO [src/collector/l7_quadruple_generator.rs:473] l7 quadruple generator id: 1 started
+[2026-03-05 10:42:23.671496 +00:00] INFO [src/collector/collector.rs:1424] second_collector id=(1) started
+[2026-03-05 10:42:23.671612 +00:00] INFO [src/collector/collector.rs:1424] minute_collector id=(1) started
+[[38;5;208m2026-03-05 10:42:23.671756 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/socket.c:3185] [38;5;208m[eBPF Kernel Adapt] Adapting the linux kernel(6.8.0-90-generic) is in progress, please try the start operation again later.[0m
+[2026-03-05 10:42:23.676686 +00:00] INFO [src/ebpf/user/tracer.c:1524] ctrl_main begin !!!
+[2026-03-05 10:42:23.689246 +00:00] INFO [src/flow_generator/flow_map.rs:472] loaded 0 wasm and 0 so plugins
+[2026-03-05 10:42:24.680677 +00:00] INFO [src/monitor.rs:754] update free disk monitor from [] to ["/"]
+[2026-03-05 10:42:24.680999 +00:00] INFO [src/ebpf/user/tracer.c:1789] trigger_kern_adapt begin !!!
+[2026-03-05 10:42:24.772489 +00:00] INFO [src/ebpf/user/mount.c:849] Insert adapt kern data id (2397226,2398326) mntID 26 nsID 4026531841
+[2026-03-05 10:42:24.772717 +00:00] INFO [src/ebpf/user/mount.c:864] mount_offset_infer: The pread64() system call wastriggered, reading 512 bytes.
+[2026-03-05 10:42:24.783251 +00:00] INFO [src/ebpf/user/socket.c:532] [eBPF Kernel Adapt] kernel_offset_infer_server close.client_count:24
+[2026-03-05 10:42:25.060109 +00:00] INFO [src/collector/flow_aggr.rs:316] now slot start time is 1772707275s have flushed minute slot count is 1772707274
+[[38;5;208m2026-03-05 10:42:25.671929 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/socket.c:3185] [38;5;208m[eBPF Kernel Adapt] Adapting the linux kernel(6.8.0-90-generic) is in progress, please try the start operation again later.[0m
+[2026-03-05 10:42:25.707602 +00:00] INFO [src/ebpf/user/socket.c:1565] [eBPF Kernel Adapt] Linux 6.8.0-90-generic adapt success. Set the status to TRACER_RUNNING
+[2026-03-05 10:42:25.707782 +00:00] INFO [src/ebpf/user/tracer.c:1599] set_period_event_invalid 'check-kern-adapt' set invalid succeed.
+[2026-03-05 10:42:25.707871 +00:00] INFO [src/ebpf/user/tracer.c:1599] set_period_event_invalid 'trigger_kern_adapt' set invalid succeed.
+[2026-03-05 10:42:25.708011 +00:00] INFO [src/ebpf/user/socket.c:2068] member_fields_offset:
+[2026-03-05 10:42:25.708113 +00:00] INFO [src/ebpf/user/socket.c:2070] 	ready: 0x1
+[2026-03-05 10:42:25.708215 +00:00] INFO [src/ebpf/user/socket.c:2071] 	kprobe_invalid: 0x0
+[2026-03-05 10:42:25.708301 +00:00] INFO [src/ebpf/user/socket.c:2072] 	enable_unix_socket: 0x0
+[2026-03-05 10:42:25.708379 +00:00] INFO [src/ebpf/user/socket.c:2073] 	files_infer_done: 0x1
+[2026-03-05 10:42:25.708457 +00:00] INFO [src/ebpf/user/socket.c:2074] 	reserved: 0x0
+[2026-03-05 10:42:25.708534 +00:00] INFO [src/ebpf/user/socket.c:2077] 	struct_dentry_d_parent_offset: 0x18
+[2026-03-05 10:42:25.708612 +00:00] INFO [src/ebpf/user/socket.c:2078] 	task__files_offset: 0xc20
+[2026-03-05 10:42:25.708689 +00:00] INFO [src/ebpf/user/socket.c:2079] 	sock__flags_offset: 0x200
+[2026-03-05 10:42:25.708786 +00:00] INFO [src/ebpf/user/socket.c:2081] 	tcp_sock__copied_seq_offset: 0x5b0
+[2026-03-05 10:42:25.708876 +00:00] INFO [src/ebpf/user/socket.c:2083] 	tcp_sock__write_seq_offset: 0x624
+[2026-03-05 10:42:25.708953 +00:00] INFO [src/ebpf/user/socket.c:2086] 	struct_files_struct_fdt_offset: 0x20
+[2026-03-05 10:42:25.709030 +00:00] INFO [src/ebpf/user/socket.c:2088] 	struct_file_f_pos_offset: 0x40
+[2026-03-05 10:42:25.709107 +00:00] INFO [src/ebpf/user/socket.c:2090] 	struct_file_private_data_offset: 0xc8
+[2026-03-05 10:42:25.709201 +00:00] INFO [src/ebpf/user/socket.c:2092] 	struct_file_f_op_offset: 0xb0
+[2026-03-05 10:42:25.709287 +00:00] INFO [src/ebpf/user/socket.c:2094] 	struct_file_operations_read_iter_offset: 0x20
+[2026-03-05 10:42:25.709365 +00:00] INFO [src/ebpf/user/socket.c:2096] 	struct_file_f_inode_offset: 0xa8
+[2026-03-05 10:42:25.709442 +00:00] INFO [src/ebpf/user/socket.c:2098] 	struct_inode_i_mode_offset: 0x0
+[2026-03-05 10:42:25.709517 +00:00] INFO [src/ebpf/user/socket.c:2100] 	struct_inode_i_sb_offset: 0x38
+[2026-03-05 10:42:25.709594 +00:00] INFO [src/ebpf/user/socket.c:2102] 	struct_super_block_s_dev_offset: 0x10
+[2026-03-05 10:42:25.709671 +00:00] INFO [src/ebpf/user/socket.c:2104] 	struct_file_dentry_offset: 0xa0
+[2026-03-05 10:42:25.709748 +00:00] INFO [src/ebpf/user/socket.c:2106] 	struct_dentry_name_offset: 0x28
+[2026-03-05 10:42:25.709824 +00:00] INFO [src/ebpf/user/socket.c:2108] 	struct_sock_family_offset: 0x10
+[2026-03-05 10:42:25.709900 +00:00] INFO [src/ebpf/user/socket.c:2110] 	struct_sock_saddr_offset: 0x4
+[2026-03-05 10:42:25.709977 +00:00] INFO [src/ebpf/user/socket.c:2112] 	struct_sock_daddr_offset: 0x0
+[2026-03-05 10:42:25.710053 +00:00] INFO [src/ebpf/user/socket.c:2114] 	struct_sock_ip6saddr_offset: 0x48
+[2026-03-05 10:42:25.710148 +00:00] INFO [src/ebpf/user/socket.c:2116] 	struct_sock_ip6daddr_offset: 0x38
+[2026-03-05 10:42:25.710252 +00:00] INFO [src/ebpf/user/socket.c:2118] 	struct_sock_dport_offset: 0xc
+[2026-03-05 10:42:25.710330 +00:00] INFO [src/ebpf/user/socket.c:2120] 	struct_sock_sport_offset: 0xe
+[2026-03-05 10:42:25.710407 +00:00] INFO [src/ebpf/user/socket.c:2122] 	struct_sock_skc_state_offset: 0x12
+[2026-03-05 10:42:25.710484 +00:00] INFO [src/ebpf/user/socket.c:2124] 	struct_sock_common_ipv6only_offset: 0x13
+[2026-03-05 10:42:25.710560 +00:00] INFO [src/ebpf/user/socket.c:2127] 	struct_file_f_path_offset: 0x98
+[2026-03-05 10:42:25.710637 +00:00] INFO [src/ebpf/user/socket.c:2129] 	struct_path_mnt_offset: 0x0
+[2026-03-05 10:42:25.710717 +00:00] INFO [src/ebpf/user/socket.c:2131] 	struct_mount_mnt_offset: 0x20
+[2026-03-05 10:42:25.710793 +00:00] INFO [src/ebpf/user/socket.c:2133] 	struct_mount_mnt_ns_offset: 0xf0
+[2026-03-05 10:42:25.710869 +00:00] INFO [src/ebpf/user/socket.c:2135] 	struct_mnt_namespace_ns_offset: 0x0
+[2026-03-05 10:42:25.710945 +00:00] INFO [src/ebpf/user/socket.c:2137] 	struct_ns_common_inum_offset: 0x10
+[2026-03-05 10:42:25.711020 +00:00] INFO [src/ebpf/user/socket.c:2139] 	struct_mount_mnt_id_offset: 0x12c
+[2026-03-05 10:42:26.626390 +00:00] INFO [src/ebpf/user/profile/profile_common.c:161] [CP] set_bpf_run_enabled() success, enable_flag:1
+[2026-03-05 10:42:27.672290 +00:00] INFO [src/ebpf/user/socket.c:3195] Call socket_tracer_start()
+[2026-03-05 10:42:27.672544 +00:00] INFO [src/ebpf_dispatcher.rs:1573] ebpf collector started
+[2026-03-05 10:42:27.672651 +00:00] INFO [src/utils/process/linux.rs:523] Startting process listener ...
+[2026-03-05 10:42:27.672882 +00:00] INFO [src/trident.rs:3509] Started agent components.
+[2026-03-05 10:42:38.397034 +00:00] INFO [src/ebpf/user/tracer.c:2226] thread 131427827906240 index 5
+[2026-03-05 10:42:38.507402 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2397226 NAME zerotrace-agent
+[2026-03-05 10:43:08.335642 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2377637 NAME node
+[2026-03-05 10:43:08.625315 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2324407 NAME node
+[2026-03-05 10:43:11.500674 +00:00] INFO [src/flow_generator/flow_map.rs:472] loaded 0 wasm and 0 so plugins
+[2026-03-05 10:43:13.530474 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2091353 NAME node
+[2026-03-05 10:45:49.064227 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2097770 NAME node
+[[38;5;196m2026-03-05 10:46:57.673575 +00:00[0m] [38;5;196mERROR[0m [src/main.rs:128] [38;5;196mpanicked at src/policy/labeler.rs:73:27:
+attempt to shift left with overflow[0m
+[[38;5;196m2026-03-05 10:46:57.674060 +00:00[0m] [38;5;196mERROR[0m [src/main.rs:130] [38;5;196m   0: zerotrace_agent::main::{{closure}}
+             at /zerotrace/agent/src/main.rs:130:22
+[0m
+[2026-03-05 10:48:47.913666 +00:00] INFO [/zerotrace/agent/src/trident.rs:665] static_config Config {
+    controller_ips: [
+        "127.0.0.1",
+    ],
+    controller_port: 30035,
+    controller_tls_port: 30135,
+    controller_cert_file_prefix: "",
+    log_file: "/var/log/zerotrace-agent/zerotrace-agent.log",
+    kubernetes_cluster_id: "",
+    kubernetes_cluster_name: None,
+    vtap_group_id_request: "",
+    controller_domain_name: [],
+    agent_mode: Standalone,
+    override_os_hostname: None,
+    async_worker_thread_number: 16,
+    agent_unique_identifier: IpMac,
+    pid_file: "",
+    team_id: "",
+    cgroups_disabled: false,
+}
+[2026-03-05 10:48:47.915071 +00:00] INFO [src/trident.rs:742] ==================== Launching ZeroTrace-Agent ====================
+[2026-03-05 10:48:47.915340 +00:00] INFO [src/trident.rs:743] Brief tag: CE|main|354351dfda50cbb7eae840f511da87df7f76b3a3
+[2026-03-05 10:48:47.915486 +00:00] INFO [src/trident.rs:744] Environment variables: "K8S_NODE_IP_FOR_DEEPFLOW= CTRL_NETWORK_INTERFACE= K8S_POD_IP_FOR_DEEPFLOW= IN_CONTAINER= K8S_WATCH_POLICY= K8S_NAMESPACE_FOR_DEEPFLOW="
+[2026-03-05 10:48:47.951568 +00:00] INFO [src/trident.rs:787] agent 127.0.0.1/00:00:00:00:00:00 running in Standalone mode, ctrl_ip 127.0.0.1 ctrl_mac 00:00:00:00:00:00
+[2026-03-05 10:48:47.970627 +00:00] INFO [src/utils/cgroups/linux.rs:174] cgroups controller started
+[2026-03-05 10:48:47.974451 +00:00] INFO [src/monitor.rs:761] monitor started
+[2026-03-05 10:48:47.974604 +00:00] INFO [src/platform/libvirt_xml_extractor.rs:104] libvirt_xml_extractor started
+[2026-03-05 10:49:48.002562 +00:00] INFO [src/config/handler.rs:3117] UserConfig {
+    global: Global {
+        limits: Limits {
+            max_millicpus: 1000,
+            max_memory: 805306368,
+            max_log_backhaul_rate: 36000,
+            max_local_log_file_size: 1048576000,
+            local_log_retention: 25920000s,
+            max_sockets: 1024,
+            max_sockets_tolerate_interval: 60s,
+        },
+        alerts: Alerts {
+            thread_threshold: 500,
+            process_threshold: 10,
+            check_core_file_disabled: false,
+        },
+        circuit_breakers: CircuitBreakers {
+            sys_memory_percentage: SysMemoryPercentage {
+                trigger_threshold: 0,
+                metric: Free,
+            },
+            relative_sys_load: RelativeSysLoad {
+                trigger_threshold: 1.0,
+                recovery_threshold: 0.9,
+                metric: Load15,
+            },
+            tx_throughput: TxThroughput {
+                trigger_threshold: 0,
+                throughput_monitoring_interval: 10s,
+            },
+            free_disk: FreeDisk {
+                percentage_trigger_threshold: 15,
+                absolute_trigger_threshold: 10737418240,
+                directories: [
+                    "/",
+                ],
+            },
+        },
+        tunning: Tunning {
+            cpu_affinity: [],
+            process_scheduling_priority: 0,
+            idle_memory_trimming: true,
+            swap_disabled: false,
+            page_cache_reclaim_percentage: 100,
+            resource_monitoring_interval: 10s,
+        },
+        ntp: Ntp {
+            enabled: false,
+            max_drift: 300s,
+            min_drift: 10s,
+        },
+        communication: Communication {
+            proactive_request_interval: 60s,
+            max_escape_duration: 3600s,
+            ingester_ip: "127.0.0.1",
+            ingester_port: 30033,
+            grpc_buffer_size: 5242880,
+            max_throughput_to_ingester: 100,
+            ingester_traffic_overflow_action: Waiting,
+            request_via_nat_ip: false,
+            proxy_controller_ip: "127.0.0.1",
+            proxy_controller_port: 30035,
+        },
+        self_monitoring: SelfMonitoring {
+            log: Log {
+                log_level: "INFO",
+                log_file: "/var/log/zerotrace-agent/zerotrace-agent.log",
+                log_backhaul_enabled: true,
+            },
+            profile: Profile {
+                enabled: false,
+            },
+            debug: Debug {
+                enabled: true,
+                local_udp_port: 0,
+            },
+            hostname: "",
+            interval: 10s,
+        },
+        standalone_mode: StandaloneMode {
+            max_data_file_size: 209715200,
+            data_file_dir: "/var/log/zerotrace-agent/",
+        },
+        common: GlobalCommon {
+            kubernetes_api_enabled: false,
+            enabled: true,
+            region_id: 0,
+            pod_cluster_id: 0,
+            vpc_id: 3302,
+            agent_id: 3302,
+            team_id: 0,
+            organize_id: 0,
+            agent_type: TtProcess,
+            secret_key: "",
+        },
+    },
+    inputs: Inputs {
+        proc: Proc {
+            enabled: true,
+            proc_dir_path: "/proc",
+            socket_info_sync_interval: 0ns,
+            min_lifetime: 3s,
+            tag_extraction: TagExtraction {
+                script_command: [],
+                exec_username: "zerotrace",
+            },
+            process_blacklist: [
+                "awk",
+                "bash",
+                "curl",
+                "grep",
+                "pause",
+                "runc",
+                "sed",
+                "sh",
+                "sleep",
+            ],
+            process_matcher: [
+                ProcessMatcher {
+                    match_regex: \bjava( +\S+)* +-jar +(\S*/)*([^ /]+\.jar),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$3",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \bpython(\S)*( +-\S+)* +(\S*/)*([^ /]+),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$4",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \bphp(\d+)?(-fpm|-cli|-cgi)?( +-\S+)* +(\S*/)*([^ /]+\.php),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$5",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: \b(node|nodejs)( +--\S+)* +(\S*/)*([^ /]+\.js),
+                    match_type: CmdWithArgs,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "$4",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: ^zerotrace-,
+                    match_type: ProcessName,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: false,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "",
+                    enabled_features: [
+                        "ebpf.profile.on_cpu",
+                        "proc.gprocess_info",
+                    ],
+                },
+                ProcessMatcher {
+                    match_regex: .*,
+                    match_type: ProcessName,
+                    match_languages: [],
+                    match_usernames: [],
+                    only_in_container: true,
+                    only_with_tag: false,
+                    ignore: false,
+                    rewrite_name: "",
+                    enabled_features: [
+                        "proc.gprocess_info",
+                    ],
+                },
+            ],
+            symbol_table: SymbolTable {
+                golang_specific: GolangSpecific {
+                    enabled: false,
+                },
+                java: Java {
+                    refresh_defer_duration: 60s,
+                },
+            },
+        },
+        cbpf: Cbpf {
+            common: Common {
+                capture_mode: Local,
+            },
+            af_packet: AfPacket {
+                interface_regex: "^(tap.*|cali.*|veth.*|eth.*|en[osipx].*|lxc.*|lo|[0-9a-f]+_h)$",
+                inner_interface_capture_enabled: false,
+                inner_interface_regex: "^eth\\d+$",
+                bond_interfaces: [],
+                extra_netns_regex: "",
+                extra_bpf_filter: "",
+                src_interfaces: [],
+                vlan_pcp_in_physical_mirror_traffic: 0,
+                bpf_filter_disabled: false,
+                skip_npb_bpf: false,
+                tunning: AfPacketTunning {
+                    socket_version: Auto,
+                    ring_blocks_enabled: false,
+                    ring_blocks: 128,
+                    packet_fanout_count: 1,
+                    packet_fanout_mode: 0,
+                    promisc: false,
+                },
+            },
+            special_network: SpecialNetwork {
+                dpdk: Dpdk {
+                    source: None,
+                    reorder_cache_window_size: 60ms,
+                },
+                libpcap: Libpcap {
+                    enabled: false,
+                },
+                vhost_user: VhostUser {
+                    vhost_socket_path: "",
+                },
+                physical_switch: PhysicalSwitch {
+                    sflow_ports: [],
+                    netflow_ports: [],
+                },
+            },
+            tunning: CbpfTunning {
+                dispatcher_queue_enabled: false,
+                max_capture_packet_size: 65535,
+                raw_packet_buffer_block_size: 65536,
+                raw_packet_queue_size: 131072,
+                max_capture_pps: 1048576,
+            },
+            preprocess: PreProcess {
+                tunnel_decap_protocols: [
+                    1,
+                    2,
+                ],
+                tunnel_trim_protocols: [],
+                packet_segmentation_reassembly: [],
+            },
+            physical_mirror: PhysicalMirror {
+                default_capture_network_type: 3,
+                packet_dedup_disabled: false,
+                private_cloud_gateway_traffic: false,
+            },
+        },
+        ebpf: Ebpf {
+            disabled: false,
+            socket: EbpfSocket {
+                uprobe: EbpfSocketUprobe {
+                    golang: EbpfSocketUprobeGolang {
+                        enabled: false,
+                        tracing_timeout: 120s,
+                    },
+                    tls: EbpfSocketUprobeTls {
+                        enabled: false,
+                    },
+                    dpdk: EbpfSocketUprobeDpdk {
+                        command: "",
+                        rx_hooks: [],
+                        tx_hooks: [],
+                    },
+                },
+                kprobe: EbpfSocketKprobe {
+                    disabled: false,
+                    enable_unix_socket: false,
+                    blacklist: EbpfSocketKprobePorts {
+                        ports: "",
+                    },
+                    whitelist: EbpfSocketKprobePorts {
+                        ports: "",
+                    },
+                },
+                sock_ops: EbpfSocketSockOps {
+                    tcp_option_trace: EbpfTcpOptionTrace {
+                        enabled: false,
+                        sampling_window_bytes: 16384,
+                    },
+                },
+                tunning: EbpfSocketTunning {
+                    max_capture_rate: 0,
+                    syscall_trace_id_disabled: false,
+                    map_prealloc_disabled: false,
+                    fentry_enabled: false,
+                },
+                preprocess: EbpfSocketPreprocess {
+                    out_of_order_reassembly_cache_size: 16,
+                    out_of_order_reassembly_protocols: [],
+                    out_of_order_reassembly_timeout: 100ms,
+                    segmentation_reassembly_protocols: [],
+                },
+            },
+            file: EbpfFile {
+                io_event: EbpfFileIoEvent {
+                    collect_mode: 1,
+                    minimal_duration: 1ms,
+                    enable_virtual_file_collect: false,
+                },
+            },
+            profile: EbpfProfile {
+                on_cpu: EbpfProfileOnCpu {
+                    disabled: false,
+                    sampling_frequency: 99,
+                    aggregate_by_cpu: false,
+                },
+                off_cpu: EbpfProfileOffCpu {
+                    disabled: true,
+                    min_blocking_time: 50µs,
+                    aggregate_by_cpu: false,
+                },
+                memory: EbpfProfileMemory {
+                    disabled: true,
+                    report_interval: 10s,
+                    allocated_addresses_lru_len: 131072,
+                    sort_length: 16384,
+                    sort_interval: 1.5s,
+                    queue_size: 32768,
+                },
+                unwinding: Unwinding {
+                    dwarf_disabled: true,
+                    dwarf_regex: "",
+                    dwarf_process_map_size: 1024,
+                    dwarf_shard_map_size: 128,
+                },
+                preprocess: EbpfProfilePreprocess {
+                    stack_compression: true,
+                },
+                languages: EbpfProfileLanguages {
+                    python_disabled: false,
+                    php_disabled: false,
+                    nodejs_disabled: false,
+                },
+            },
+            tunning: EbpfTunning {
+                collector_queue_size: 65535,
+                userspace_worker_threads: 1,
+                perf_pages_count: 128,
+                kernel_ring_size: 65536,
+                max_socket_entries: 131072,
+                socket_map_reclaim_threshold: 120000,
+                max_trace_entries: 131072,
+            },
+            java_symbol_file_refresh_defer_interval: 60,
+        },
+        resources: Resources {
+            push_interval: 10s,
+            private_cloud: PrivateCloud {
+                hypervisor_resource_enabled: false,
+                vm_mac_source: IfMac,
+                vm_xml_directory: "/etc/libvirt/qemu/",
+                vm_mac_mapping_script: "",
+            },
+            kubernetes: Kubernetes {
+                kubernetes_namespace: "",
+                api_resources: [
+                    ApiResources {
+                        name: "namespaces",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "nodes",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "pods",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "replicationcontrollers",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "services",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "daemonsets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "deployments",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "replicasets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "statefulsets",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "ingresses",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                    ApiResources {
+                        name: "configmaps",
+                        disabled: false,
+                        group: "",
+                        version: "",
+                        field_selector: "",
+                    },
+                ],
+                api_list_page_size: 1000,
+                api_list_max_interval: 600s,
+                ingress_flavour: "kubernetes",
+                pod_mac_collection_method: Adaptive,
+            },
+        },
+        integration: Integration {
+            enabled: true,
+            listen_port: 38086,
+            compression: Compression {
+                trace: true,
+                profile: true,
+            },
+            prometheus_extra_labels: PrometheusExtraLabels {
+                enabled: false,
+                extra_labels: [],
+                label_length: 1024,
+                value_length: 4096,
+            },
+            feature_control: FeatureControl {
+                profile_integration_disabled: false,
+                trace_integration_disabled: false,
+                metric_integration_disabled: false,
+                log_integration_disabled: false,
+            },
+        },
+        vector: Vector {
+            enabled: false,
+            config: Null,
+        },
+    },
+    outputs: Outputs {
+        socket: Socket {
+            data_socket_type: File,
+            npb_socket_type: RawUdp,
+            raw_udp_qos_bypass: false,
+            multiple_sockets_to_ingester: false,
+        },
+        flow_log: OutputsFlowLog {
+            filters: FlowLogFilters {
+                l4_capture_network_types: [
+                    3,
+                ],
+                l7_capture_network_types: [
+                    3,
+                ],
+                l4_ignored_observation_points: [],
+                l7_ignored_observation_points: [],
+            },
+            aggregators: FlowLogAggregators {
+                aggregate_health_check_l4_flow_log: true,
+            },
+            throttles: Throttles {
+                l4_throttle: 10000,
+                l7_throttle: 10000,
+            },
+            tunning: OutputsFlowLogTunning {
+                collector_queue_size: 65536,
+            },
+        },
+        flow_metrics: FlowMetrics {
+            enabled: true,
+            filters: FlowMetricsFilters {
+                inactive_server_port_aggregation: false,
+                inactive_ip_aggregation: false,
+                npm_metrics: true,
+                npm_metrics_concurrent: true,
+                apm_metrics: true,
+                second_metrics: true,
+            },
+            tunning: FlowMetricsTunning {
+                sender_queue_size: 65536,
+            },
+        },
+        npb: Npb {
+            max_mtu: 1500,
+            raw_udp_vlan_tag: 0,
+            extra_vlan_header: None,
+            traffic_global_dedup: true,
+            target_port: 4789,
+            custom_vxlan_flags: 255,
+            overlay_vlan_header_trimming: false,
+            max_tx_throughput: 1048576000,
+        },
+        compression: OutputCompression {
+            application_log: true,
+            pcap: true,
+            l7_flow_log: true,
+            l4_flow_log: false,
+        },
+    },
+    processors: Processors {
+        packet: Packet {
+            policy: Policy {
+                fast_path_map_size: 0,
+                fast_path_disabled: false,
+                forward_table_capacity: 16384,
+                max_first_path_level: 8,
+            },
+            tcp_header: TcpHeader {
+                block_size: 256,
+                sender_queue_size: 65536,
+                header_fields_flag: 0,
+            },
+            pcap_stream: PcapStream {
+                receiver_queue_size: 65536,
+                sender_queue_size: 8192,
+                buffer_size_per_flow: 65536,
+                total_buffer_size: 88304,
+                flush_interval: 60s,
+            },
+            toa: Toa {
+                sender_queue_size: 65536,
+                cache_size: 65536,
+            },
+        },
+        request_log: RequestLog {
+            application_protocol_inference: ApplicationProtocolInference {
+                inference_max_retries: 128,
+                inference_result_ttl: 60s,
+                inference_whitelist: [
+                    InferenceWhitelist {
+                        process_name: "envoy",
+                        port_list: [
+                            15001,
+                            15006,
+                        ],
+                    },
+                ],
+                enabled_protocols: [
+                    "HTTP",
+                    "HTTP2",
+                    "MySQL",
+                    "Redis",
+                    "Kafka",
+                    "DNS",
+                    "TLS",
+                ],
+                protocol_special_config: ProtocolSpecialConfig {
+                    oracle: OracleConfig {
+                        is_be: true,
+                        int_compressed: true,
+                        resp_0x04_extra_byte: false,
+                    },
+                    iso8583: Iso8583Config {
+                        extract_fields: "2,7,11,32,33",
+                        translation_enabled: true,
+                        pan_obfuscate: true,
+                    },
+                    web_sphere_mq: WebSphereMqConfig {
+                        parse_xml_enabled: true,
+                    },
+                    mysql: MysqlConfig {
+                        decompress_payload: true,
+                    },
+                    grpc: GrpcConfig {
+                        streaming_data_enabled: false,
+                    },
+                },
+            },
+            filters: Filters {
+                port_number_prefilters: {
+                    "PING": "1-65535",
+                    "Tars": "1-65535",
+                    "Triple": "1-65535",
+                    "RocketMQ": "1-65535",
+                    "HTTP": "1-65535",
+                    "SofaRPC": "1-65535",
+                    "FastCGI": "1-65535",
+                    "Oracle": "1521",
+                    "PostgreSQL": "1-65535",
+                    "ISO8583": "1-65535",
+                    "WebSphereMQ": "1-65535",
+                    "Dubbo": "1-65535",
+                    "MQTT": "1-65535",
+                    "bRPC": "1-65535",
+                    "Pulsar": "1-65535",
+                    "MongoDB": "1-65535",
+                    "ZMTP": "1-65535",
+                    "MySQL": "1-65535",
+                    "TLS": "443,6443",
+                    "DNS": "53,5353",
+                    "HTTP2": "1-65535",
+                    "Redis": "1-65535",
+                    "Custom": "1-65535",
+                    "NATS": "1-65535",
+                    "AMQP": "1-65535",
+                    "SomeIP": "1-65535",
+                    "Memcached": "11211",
+                    "Kafka": "1-65535",
+                    "OpenWire": "1-65535",
+                },
+                tag_filters: {
+                    "bRPC": [],
+                    "Redis": [],
+                    "FastCGI": [],
+                    "PostgreSQL": [],
+                    "RocketMQ": [],
+                    "OpenWire": [],
+                    "ZMTP": [],
+                    "Pulsar": [],
+                    "Memcached": [],
+                    "PING": [],
+                    "MySQL": [],
+                    "HTTP": [],
+                    "gRPC": [],
+                    "SOFARPC": [],
+                    "Tars": [],
+                    "Custom": [],
+                    "ISO8583": [],
+                    "HTTP2": [],
+                    "Oracle": [],
+                    "DNS": [],
+                    "MongoDB": [],
+                    "SomeIP": [],
+                    "AMQP": [],
+                    "WebSphereMQ": [],
+                    "Dubbo": [],
+                    "NATS": [],
+                    "TLS": [],
+                    "Kafka": [],
+                    "MQTT": [],
+                    "Triple": [],
+                },
+                unconcerned_dns_nxdomain_response_suffixes: [],
+                cbpf_disabled: false,
+            },
+            timeouts: Timeouts {
+                tcp_request_timeout: 300s,
+                udp_request_timeout: 150s,
+                session_aggregate: [],
+            },
+            tag_extraction: RequestLogTagExtraction {
+                tracing_tag: TracingTag {
+                    http_real_client: [
+                        "X_Forwarded_For",
+                    ],
+                    x_request_id: [
+                        "X_Request_ID",
+                    ],
+                    multiple_trace_id_collection: true,
+                    copy_apm_trace_id: false,
+                    apm_trace_id: [
+                        "traceparent",
+                        "sw8",
+                    ],
+                    apm_span_id: [
+                        "traceparent",
+                        "sw8",
+                    ],
+                },
+                http_endpoint: HttpEndpoint {
+                    extraction_disabled: false,
+                    match_rules: [
+                        HttpEndpointMatchRule {
+                            url_prefix: "",
+                            keep_segments: 2,
+                        },
+                    ],
+                },
+                obfuscate_protocols: [
+                    "Redis",
+                ],
+                custom_fields: {
+                    "HTTP2": [],
+                    "HTTP": [],
+                },
+                raw: RequestLogTagExtractionRaw {
+                    error_request_header: 0,
+                    error_response_header: 0,
+                    error_request_payload: 0,
+                    error_response_payload: 256,
+                },
+            },
+            tunning: RequestLogTunning {
+                payload_truncation: 1024,
+                session_aggregate_max_entries: 65536,
+                consistent_timestamp_in_l7_metrics: false,
+            },
+        },
+        flow_log: ProcessorsFlowLog {
+            time_window: TimeWindow {
+                max_tolerable_packet_delay: 1s,
+                extra_tolerable_flow_delay: 0ns,
+            },
+            conntrack: Conntrack {
+                flow_flush_interval: 1s,
+                flow_generation: FlowGeneration {
+                    server_ports: [],
+                    cloud_traffic_ignore_mac: false,
+                    ignore_l2_end: false,
+                    idc_traffic_ignore_vlan: false,
+                },
+                timeouts: ConntrackTimeouts {
+                    established: 300s,
+                    closing_rst: 35s,
+                    opening_rst: 1s,
+                    others: 5s,
+                },
+            },
+            tunning: ProcessorsFlowLogTunning {
+                flow_map_hash_slots: 131072,
+                rrt_cache_capacity: 16000,
+                concurrent_flow_limit: 65535,
+                memory_pool_size: 65536,
+                max_batched_buffer_size: 131072,
+                flow_aggregator_queue_size: 65535,
+                flow_generator_queue_size: 65536,
+                quadruple_generator_queue_size: 262144,
+            },
+        },
+    },
+    plugins: Plugins {
+        update_time: 0ns,
+        wasm_plugins: [],
+        so_plugins: [],
+    },
+    dev: Dev {
+        feature_flags: [],
+    },
+}
+[2026-03-05 10:49:48.003738 +00:00] INFO [src/config/handler.rs:3128] dispatcher will reload config
+[2026-03-05 10:49:48.003867 +00:00] INFO [src/config/handler.rs:4302] Update global.common.vpc_id from 0 to 3302.
+[2026-03-05 10:49:48.003912 +00:00] INFO [src/config/handler.rs:4312] Update global.common.agent_id from 0 to 3302.
+[2026-03-05 10:49:48.003943 +00:00] INFO [src/config/handler.rs:4339] Update global.common.agent_type from TtUnknown to TtProcess.
+[2026-03-05 10:49:48.003976 +00:00] INFO [src/config/handler.rs:4364] Update global.communication.grpc_buffer_size from 1048576 to 5242880, and it is actually used 5242880.
+[2026-03-05 10:49:48.005257 +00:00] INFO [src/utils/guard.rs:510] guard watchdog started
+[2026-03-05 10:49:48.005393 +00:00] INFO [src/utils/guard.rs:789] guard started
+[2026-03-05 10:49:48.010513 +00:00] INFO [src/trident.rs:274] Agent state changed from Disabled to Running (enabled: true melted_down: false)
+[2026-03-05 10:50:48.026792 +00:00] INFO [src/trident.rs:2267] Start check process...
+[2026-03-05 10:50:48.049509 +00:00] INFO [src/trident.rs:2275] Start check core file...
+[2026-03-05 10:50:48.049646 +00:00] INFO [src/utils/environment/linux.rs:409] Current /proc/sys/kernel/core_pattern content is core
+
+[2026-03-05 10:50:48.049727 +00:00] INFO [src/utils/environment/linux.rs:306] Check core-files in dir: /
+[2026-03-05 10:50:48.050135 +00:00] INFO [src/trident.rs:2282] Start check controller ip...
+[2026-03-05 10:50:48.050250 +00:00] INFO [src/trident.rs:2286] Start check free space...
+[2026-03-05 10:50:48.071658 +00:00] INFO [src/trident.rs:2437] Agent run with feature-flags: NONE.
+[2026-03-05 10:50:48.101157 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:50:48.101291 +00:00] INFO [src/platform/kubernetes/mod.rs:80] kubernetes poller privileges: set_ns=true read_link_ns=true
+[2026-03-05 10:50:48.101345 +00:00] INFO [src/platform/kubernetes/mod.rs:90] platform monitoring no extra netns
+[2026-03-05 10:50:48.101413 +00:00] INFO [src/platform/synchronizer.rs:137] updating kubernetes poller
+[2026-03-05 10:50:48.101661 +00:00] INFO [src/utils/process/linux.rs:384] Process listener register feature proc.gprocess_info
+[2026-03-05 10:50:48.101874 +00:00] INFO [src/trident.rs:2592] static analyzer ip: '127.0.0.1' actual analyzer ip '127.0.0.1'
+[2026-03-05 10:50:48.102763 +00:00] INFO [src/dispatcher/mod.rs:1390] Afpacket init with Options { frame_size: 65536, block_size: 1048576, num_blocks: 48, add_vlan_header: false, block_timeout: 64000000, poll_timeout: 100000000, version: TpacketVersionHighestavailablet, socket_type: SocketTypeRaw, iface: "", packet_fanout_mode: None }
+[2026-03-05 10:50:48.126987 +00:00] INFO [src/dispatcher/recv_engine/af_packet/tpacket.rs:231] Packet fanout disabled.
+[2026-03-05 10:50:48.145762 +00:00] INFO [src/dispatcher/base_dispatcher.rs:781] Decap tunnel type change to VXLAN IPIP
+[2026-03-05 10:50:48.146016 +00:00] INFO [src/dispatcher/base_dispatcher.rs:850] Npb dedup change to true
+[2026-03-05 10:50:48.146372 +00:00] INFO [src/dispatcher/base_dispatcher.rs:942] Dispatcher(0) Adding VMs: [00:00:00:00:00:00, 00:18:77:53:94:b3, 00:18:77:53:94:b4, 00:18:77:53:94:b5, 00:18:77:53:94:b6, 00:e2:ba:84:88:6c, 00:e2:ba:84:88:6d, 00:e2:ba:0b:96:18, 00:e2:ba:0b:96:19, 00:59:9f:18:e4:14, 00:e0:ed:22:9a:ce, 00:e0:ed:22:9a:cf, 00:f3:58:0a:4c:f9, 00:86:e2:8f:c8:42, 00:ab:9c:94:8a:4a, 00:7c:8a:fe:e6:e9, 00:66:b3:4f:fb:e2, 00:02:38:5a:0a:12, 00:3f:9b:70:e6:bc, 00:c2:d5:6b:8b:f9, 00:f4:ff:b8:2c:f7, 00:38:37:aa:c3:fd, 00:f9:62:43:4e:61, 00:b2:11:04:5d:ff, 00:09:fe:ce:ac:4f, 00:70:2a:e1:43:ea, 00:e7:17:c7:5b:70, 00:4b:e6:ab:37:1e, 00:e5:94:88:b5:f4, 00:c3:b9:61:94:18, 00:89:0b:1c:6b:f8, 00:da:86:e4:2b:5f, 00:14:57:c3:9c:da, 00:80:91:42:c4:af, 00:48:59:90:fe:56, 00:ff:37:bb:05:d7, 00:a7:27:7c:13:c9, 00:55:0e:73:e3:fc, 00:1e:ea:14:ad:38, 00:8d:21:de:0f:f0, 00:8d:aa:d1:d5:79, 00:d9:49:b7:8c:a6, 00:64:91:22:d9:c4] changing pipelines to 
+if_index: 1 mac: 00:00:00:00:00:00
+if_index: 2 mac: 00:18:77:53:94:b3
+if_index: 3 mac: 00:18:77:53:94:b4
+if_index: 4 mac: 00:18:77:53:94:b5
+if_index: 5 mac: 00:18:77:53:94:b6
+if_index: 6 mac: 00:e2:ba:84:88:6c
+if_index: 7 mac: 00:e2:ba:84:88:6d
+if_index: 8 mac: 00:e2:ba:0b:96:18
+if_index: 9 mac: 00:e2:ba:0b:96:19
+if_index: 10 mac: 00:59:9f:18:e4:14
+if_index: 11 mac: 00:e0:ed:22:9a:ce
+if_index: 12 mac: 00:e0:ed:22:9a:cf
+if_index: 23 mac: 00:f3:58:0a:4c:f9
+if_index: 199 mac: 00:86:e2:8f:c8:42
+if_index: 201 mac: 00:ab:9c:94:8a:4a
+if_index: 203 mac: 00:7c:8a:fe:e6:e9
+if_index: 426 mac: 00:66:b3:4f:fb:e2
+if_index: 427 mac: 00:02:38:5a:0a:12
+if_index: 428 mac: 00:3f:9b:70:e6:bc
+if_index: 429 mac: 00:c2:d5:6b:8b:f9
+if_index: 430 mac: 00:f4:ff:b8:2c:f7
+if_index: 431 mac: 00:38:37:aa:c3:fd
+if_index: 432 mac: 00:f9:62:43:4e:61
+if_index: 433 mac: 00:b2:11:04:5d:ff
+if_index: 434 mac: 00:09:fe:ce:ac:4f
+if_index: 435 mac: 00:70:2a:e1:43:ea
+if_index: 436 mac: 00:e7:17:c7:5b:70
+if_index: 437 mac: 00:4b:e6:ab:37:1e
+if_index: 438 mac: 00:e5:94:88:b5:f4
+if_index: 439 mac: 00:c3:b9:61:94:18
+if_index: 440 mac: 00:89:0b:1c:6b:f8
+if_index: 441 mac: 00:da:86:e4:2b:5f
+if_index: 442 mac: 00:14:57:c3:9c:da
+if_index: 443 mac: 00:80:91:42:c4:af
+if_index: 444 mac: 00:48:59:90:fe:56
+if_index: 445 mac: 00:ff:37:bb:05:d7
+if_index: 446 mac: 00:a7:27:7c:13:c9
+if_index: 447 mac: 00:55:0e:73:e3:fc
+if_index: 448 mac: 00:1e:ea:14:ad:38
+if_index: 449 mac: 00:8d:21:de:0f:f0
+if_index: 450 mac: 00:8d:aa:d1:d5:79
+if_index: 451 mac: 00:d9:49:b7:8c:a6
+if_index: 452 mac: 00:64:91:22:d9:c4
+[2026-03-05 10:50:48.146601 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:50:48.147267 +00:00] INFO [src/ebpf_dispatcher.rs:1374] ebpf collector init... uprobe_meltdown: false
+[2026-03-05 10:50:48.147386 +00:00] INFO [src/ebpf_dispatcher.rs:825] ebpf golang uprobe proc regexp is empty, skip set
+[2026-03-05 10:50:48.147434 +00:00] INFO [src/ebpf_dispatcher.rs:858] ebpf openssl uprobe proc regexp is empty, skip set
+[2026-03-05 10:50:48.147473 +00:00] INFO [src/ebpf_dispatcher.rs:888] ebpf golang symbol proc regexp is empty, skip set
+[2026-03-05 10:50:48.147542 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Http1 parse enabled
+[2026-03-05 10:50:48.147588 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Http2 parse enabled
+[2026-03-05 10:50:48.147623 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol DNS parse enabled
+[2026-03-05 10:50:48.147656 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol MySQL parse enabled
+[2026-03-05 10:50:48.147689 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Kafka parse enabled
+[2026-03-05 10:50:48.147730 +00:00] INFO [src/ebpf_dispatcher.rs:893] l7 protocol Redis parse enabled
+[2026-03-05 10:50:48.147811 +00:00] INFO [src/ebpf_dispatcher.rs:920] ebpf kprobe enabled
+[2026-03-05 10:50:48.147875 +00:00] INFO [src/ebpf/user/socket.c:4016] Kprobe feature has been enabled.
+[2026-03-05 10:50:48.147909 +00:00] INFO [src/ebpf_dispatcher.rs:928] ebpf unix socket tracing disabled
+[2026-03-05 10:50:48.147941 +00:00] INFO [src/ebpf/user/socket.c:4022] unix socket feature has been disabled.
+[2026-03-05 10:50:48.148001 +00:00] INFO [src/ebpf/user/tracer.c:2308] Currently "/proc/sys/net/core/bpf_jit_enable" value is 1, not need set.
+[2026-03-05 10:50:48.148062 +00:00] INFO [src/ebpf/user/mem.c:298] log2_default_hugepage_sz 21
+[2026-03-05 10:50:48.148142 +00:00] INFO [src/ebpf/user/tracer.c:2320] linux version : 6.8.0-90-generic (version code : 395276)
+[2026-03-05 10:50:48.148214 +00:00] INFO [src/ebpf/user/utils.c:377] RLIMIT_NOFILE cur:1048576, rlim_max:1048576
+[2026-03-05 10:50:48.149696 +00:00] INFO [src/ebpf/user/tracer.c:2269] /usr/bin/zerotrace-ebpfctl installed successfully.
+[2026-03-05 10:50:48.149753 +00:00] INFO [src/ebpf/user/tracer.c:2338] sys_boot_time_ns : 1769097332111161275
+[2026-03-05 10:50:48.150669 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 404 - 404 set: 400 - 403
+[2026-03-05 10:50:48.150744 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 0 - 0 set: 800 - 800
+[2026-03-05 10:50:48.150874 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'trigger_kern_adapt' succeed.
+[2026-03-05 10:50:48.150926 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'boot time update' succeed.
+[2026-03-05 10:50:48.151293 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Unknown] success, ports 1-65535
+[2026-03-05 10:50:48.151499 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Tars] success, ports 1-65535
+[2026-03-05 10:50:48.151508 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403238 successfully bound to CPU 1.
+[2026-03-05 10:50:48.151581 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403237 successfully bound to CPU 0.
+[2026-03-05 10:50:48.151674 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403239 successfully bound to CPU 2.
+[2026-03-05 10:50:48.151813 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Unknown] success, ports 1-65535
+[2026-03-05 10:50:48.152087 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[RocketMQ] success, ports 1-65535
+[2026-03-05 10:50:48.152014 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403241 successfully bound to CPU 4.
+[2026-03-05 10:50:48.152323 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403245 successfully bound to CPU 8.
+[2026-03-05 10:50:48.171390 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403242 successfully bound to CPU 5.
+[2026-03-05 10:50:48.171437 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403244 successfully bound to CPU 7.
+[2026-03-05 10:50:48.171540 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[HTTP1] success, ports 1-65535
+[2026-03-05 10:50:48.171582 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403243 successfully bound to CPU 6.
+[2026-03-05 10:50:48.171672 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403240 successfully bound to CPU 3.
+[2026-03-05 10:50:48.171868 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[SofaRPC] success, ports 1-65535
+[2026-03-05 10:50:48.171836 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403246 successfully bound to CPU 9.
+[2026-03-05 10:50:48.171912 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403248 successfully bound to CPU 11.
+[2026-03-05 10:50:48.171944 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403247 successfully bound to CPU 10.
+[2026-03-05 10:50:48.172197 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[FastCGI] success, ports 1-65535
+[2026-03-05 10:50:48.172119 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403249 successfully bound to CPU 12.
+[2026-03-05 10:50:48.172176 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403250 successfully bound to CPU 13.
+[2026-03-05 10:50:48.172258 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403252 successfully bound to CPU 15.
+[2026-03-05 10:50:48.172334 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403253 successfully bound to CPU 16.
+[2026-03-05 10:50:48.172395 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Oracle] success, ports 1521
+[2026-03-05 10:50:48.172506 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403254 successfully bound to CPU 17.
+[2026-03-05 10:50:48.172554 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403256 successfully bound to CPU 19.
+[2026-03-05 10:50:48.172572 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403251 successfully bound to CPU 14.
+[2026-03-05 10:50:48.172616 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403255 successfully bound to CPU 18.
+[2026-03-05 10:50:48.172735 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403257 successfully bound to CPU 20.
+[2026-03-05 10:50:48.172841 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403258 successfully bound to CPU 21.
+[2026-03-05 10:50:48.172946 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[PgSQL] success, ports 1-65535
+[2026-03-05 10:50:48.172942 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403259 successfully bound to CPU 22.
+[2026-03-05 10:50:48.173060 +00:00] INFO [src/ebpf/user/tracer.c:1675] Kick thread 2403260 successfully bound to CPU 23.
+[2026-03-05 10:50:48.173317 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[ISO-8583] success, ports 1-65535
+[2026-03-05 10:50:48.173652 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[WebSphereMQ] success, ports 1-65535
+[2026-03-05 10:50:48.173975 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Dubbo] success, ports 1-65535
+[2026-03-05 10:50:48.174340 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MQTT] success, ports 1-65535
+[2026-03-05 10:50:48.174529 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[bRPC] success, ports 1-65535
+[2026-03-05 10:50:48.174706 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Pulsar] success, ports 1-65535
+[2026-03-05 10:50:48.174882 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MongoDB] success, ports 1-65535
+[2026-03-05 10:50:48.175057 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[ZMTP] success, ports 1-65535
+[2026-03-05 10:50:48.175243 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[MySQL] success, ports 1-65535
+[2026-03-05 10:50:48.175366 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[TLS] success, ports 443,6443
+[2026-03-05 10:50:48.175479 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[DNS] success, ports 53,5353
+[2026-03-05 10:50:48.175655 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[HTTP2] success, ports 1-65535
+[2026-03-05 10:50:48.175830 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Redis] success, ports 1-65535
+[2026-03-05 10:50:48.176005 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Custom] success, ports 1-65535
+[2026-03-05 10:50:48.176195 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[NATS] success, ports 1-65535
+[2026-03-05 10:50:48.176385 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[AMQP] success, ports 1-65535
+[2026-03-05 10:50:48.176564 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Some/IP] success, ports 1-65535
+[2026-03-05 10:50:48.176675 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Memcached] success, ports 11211
+[2026-03-05 10:50:48.176850 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[Kafka] success, ports 1-65535
+[2026-03-05 10:50:48.177026 +00:00] INFO [src/ebpf/user/socket.c:3959] Set ports_bitmap[OpenWire] success, ports 1-65535
+[2026-03-05 10:50:48.177070 +00:00] INFO [src/ebpf/user/socket.c:4045] Disabled the fentry/fexit feature
+[2026-03-05 10:50:48.177134 +00:00] INFO [src/ebpf/user/tracer.c:171] check_kernel_version Linux 6.8.12-0
+[2026-03-05 10:50:48.177215 +00:00] INFO [src/ebpf/user/socket.c:2907] Datadump directory (/var/log) created or already exists.
+[2026-03-05 10:50:48.181479 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1 mntns_id 4026531841 entry_count 93 proc_count 1 refcount 0 bytes_count 10985 bytes
+[2026-03-05 10:50:48.187770 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 161 mntns_id 4026531862 entry_count 1 proc_count 1 refcount 0 bytes_count 117 bytes
+[2026-03-05 10:50:48.195437 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1390 mntns_id 4026534551 entry_count 111 proc_count 1 refcount 0 bytes_count 13123 bytes
+[2026-03-05 10:50:48.196691 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57038 mntns_id 4026534713 entry_count 62 proc_count 1 refcount 0 bytes_count 9324 bytes
+[2026-03-05 10:50:48.197590 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57408 mntns_id 4026534644 entry_count 58 proc_count 1 refcount 0 bytes_count 8982 bytes
+[2026-03-05 10:50:48.198483 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 57776 mntns_id 4026534784 entry_count 52 proc_count 1 refcount 0 bytes_count 7679 bytes
+[2026-03-05 10:50:48.199269 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58329 mntns_id 4026534854 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.199530 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58337 mntns_id 4026534857 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.199779 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58346 mntns_id 4026534860 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.200017 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58355 mntns_id 4026534863 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.200677 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58447 mntns_id 4026534866 entry_count 58 proc_count 1 refcount 0 bytes_count 6841 bytes
+[2026-03-05 10:50:48.201291 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58451 mntns_id 4026534869 entry_count 60 proc_count 1 refcount 0 bytes_count 7162 bytes
+[2026-03-05 10:50:48.201836 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58467 mntns_id 4026534872 entry_count 55 proc_count 1 refcount 0 bytes_count 6601 bytes
+[2026-03-05 10:50:48.202403 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58476 mntns_id 4026534875 entry_count 54 proc_count 1 refcount 0 bytes_count 6415 bytes
+[2026-03-05 10:50:48.202837 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58927 mntns_id 4026534947 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.203093 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58939 mntns_id 4026534950 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.203439 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 58967 mntns_id 4026534953 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:50:48.203865 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59144 mntns_id 4026534955 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.204113 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59181 mntns_id 4026535084 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.204388 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59193 mntns_id 4026535089 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.204857 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59460 mntns_id 4026535159 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.205144 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59463 mntns_id 4026535163 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:50:48.205440 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59475 mntns_id 4026535165 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.205683 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59480 mntns_id 4026535168 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.205973 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59489 mntns_id 4026535172 entry_count 19 proc_count 1 refcount 0 bytes_count 2903 bytes
+[2026-03-05 10:50:48.206279 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59498 mntns_id 4026535174 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.206837 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59626 mntns_id 4026535178 entry_count 55 proc_count 1 refcount 0 bytes_count 6702 bytes
+[2026-03-05 10:50:48.207401 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59662 mntns_id 4026535181 entry_count 55 proc_count 1 refcount 0 bytes_count 6702 bytes
+[2026-03-05 10:50:48.207904 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59796 mntns_id 4026535187 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:50:48.208421 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 59975 mntns_id 4026535190 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:50:48.208908 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 60102 mntns_id 4026535193 entry_count 58 proc_count 1 refcount 0 bytes_count 6753 bytes
+[2026-03-05 10:50:48.209600 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 61140 mntns_id 4026535184 entry_count 55 proc_count 1 refcount 0 bytes_count 6718 bytes
+[2026-03-05 10:50:48.210021 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240422 mntns_id 4026535398 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.210318 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240431 mntns_id 4026535402 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.211244 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240806 mntns_id 4026535406 entry_count 99 proc_count 1 refcount 0 bytes_count 18065 bytes
+[2026-03-05 10:50:48.212051 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240879 mntns_id 4026535409 entry_count 95 proc_count 1 refcount 0 bytes_count 16810 bytes
+[2026-03-05 10:50:48.212944 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 240997 mntns_id 4026535415 entry_count 99 proc_count 1 refcount 0 bytes_count 18067 bytes
+[2026-03-05 10:50:48.213796 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 241049 mntns_id 4026535418 entry_count 95 proc_count 1 refcount 0 bytes_count 16810 bytes
+[2026-03-05 10:50:48.214188 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1028236 mntns_id 4026537518 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.214692 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1028278 mntns_id 4026537522 entry_count 54 proc_count 1 refcount 0 bytes_count 6411 bytes
+[2026-03-05 10:50:48.214998 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051711 mntns_id 4026534943 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.215371 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051856 mntns_id 4026537583 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.215619 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051858 mntns_id 4026537587 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.216122 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051875 mntns_id 4026537591 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:50:48.217516 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051980 mntns_id 4026537594 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:50:48.218305 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 1051987 mntns_id 4026537597 entry_count 54 proc_count 1 refcount 0 bytes_count 6400 bytes
+[2026-03-05 10:50:48.229429 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 2432913 mntns_id 4026534549 entry_count 96 proc_count 1 refcount 0 bytes_count 11466 bytes
+[2026-03-05 10:50:48.231245 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229804 mntns_id 4026534552 entry_count 113 proc_count 1 refcount 0 bytes_count 13105 bytes
+[2026-03-05 10:50:48.232288 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229851 mntns_id 4026532742 entry_count 96 proc_count 1 refcount 0 bytes_count 11335 bytes
+[2026-03-05 10:50:48.233519 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3229902 mntns_id 4026534570 entry_count 100 proc_count 1 refcount 0 bytes_count 11818 bytes
+[2026-03-05 10:50:48.234742 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3652065 mntns_id 4026532753 entry_count 100 proc_count 1 refcount 0 bytes_count 11975 bytes
+[2026-03-05 10:50:48.235872 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3837290 mntns_id 4026532741 entry_count 119 proc_count 1 refcount 0 bytes_count 13526 bytes
+[2026-03-05 10:50:48.236909 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 3837304 mntns_id 4026534569 entry_count 99 proc_count 1 refcount 0 bytes_count 11791 bytes
+[2026-03-05 10:50:48.237261 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4004349 mntns_id 4026535487 entry_count 21 proc_count 1 refcount 0 bytes_count 1927 bytes
+[2026-03-05 10:50:48.237807 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4004383 mntns_id 4026535491 entry_count 64 proc_count 1 refcount 0 bytes_count 9640 bytes
+[2026-03-05 10:50:48.239053 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058697 mntns_id 4026535495 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:50:48.239474 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058722 mntns_id 4026535563 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:50:48.239867 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058723 mntns_id 4026535630 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:50:48.240284 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058735 mntns_id 4026535699 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:50:48.240708 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058742 mntns_id 4026535767 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.241111 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058747 mntns_id 4026535834 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.241534 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058756 mntns_id 4026535903 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:50:48.241962 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058763 mntns_id 4026535971 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.242429 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058771 mntns_id 4026536039 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.242855 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058774 mntns_id 4026536106 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.243267 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058783 mntns_id 4026536175 entry_count 49 proc_count 1 refcount 0 bytes_count 5121 bytes
+[2026-03-05 10:50:48.243666 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058791 mntns_id 4026536244 entry_count 50 proc_count 1 refcount 0 bytes_count 5312 bytes
+[2026-03-05 10:50:48.244075 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058796 mntns_id 4026536311 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.244490 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4058805 mntns_id 4026536380 entry_count 51 proc_count 1 refcount 0 bytes_count 5515 bytes
+[2026-03-05 10:50:48.245501 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059538 mntns_id 4026536472 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.245903 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059545 mntns_id 4026536538 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.246409 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059552 mntns_id 4026536603 entry_count 55 proc_count 1 refcount 0 bytes_count 6366 bytes
+[2026-03-05 10:50:48.246817 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059606 mntns_id 4026536673 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.247229 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059608 mntns_id 4026536743 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.247627 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059616 mntns_id 4026536876 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.248052 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059627 mntns_id 4026536811 entry_count 51 proc_count 1 refcount 0 bytes_count 5553 bytes
+[2026-03-05 10:50:48.248455 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059635 mntns_id 4026537086 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.248867 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059638 mntns_id 4026536941 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.249277 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059651 mntns_id 4026537006 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.249841 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059906 mntns_id 4026537163 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.250244 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059970 mntns_id 4026537235 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.250667 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 4059987 mntns_id 4026537303 entry_count 50 proc_count 1 refcount 0 bytes_count 5311 bytes
+[2026-03-05 10:50:48.253612 +00:00] INFO [src/ebpf/user/load.c:499] license: GPL
+[2026-03-05 10:50:48.256007 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__socket_info_map"), set max_entries 131072
+[2026-03-05 10:50:48.256067 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__trace_map"), set max_entries 131072
+[2026-03-05 10:50:48.304058 +00:00] INFO [src/ebpf/user/btf_core.c:324] BTF vmlinux file: /sys/kernel/btf/vmlinux
+[2026-03-05 10:50:48.304488 +00:00] INFO [src/ebpf/user/load.c:310] Kernel support interfaces `bpf_probe_read{kernel,user}[_str]`
+[2026-03-05 10:50:58.794794 +00:00] INFO [src/ebpf/user/tracer.c:666] bpf load "socket-trace-bpf-linux-5.2_plus" succeed.
+[2026-03-05 10:50:58.794957 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 128, system page size: 4096 bytes, required system pages: 128
+[[38;5;208m2026-03-05 10:50:58.799222 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/btf_core.c:391] [38;5;208mBTF member __sk_flags_offset of struct sock can not be found[0m
+[2026-03-05 10:50:58.800357 +00:00] INFO [src/ebpf/user/socket.c:1945] Offsets from BTF vmlinux:
+[2026-03-05 10:50:58.800406 +00:00] INFO [src/ebpf/user/socket.c:1946]     copied_seq_offs: 0x5b0
+[2026-03-05 10:50:58.800441 +00:00] INFO [src/ebpf/user/socket.c:1947]     write_seq_offs: 0x624
+[2026-03-05 10:50:58.800477 +00:00] INFO [src/ebpf/user/socket.c:1948]     files_offs: 0xc20
+[2026-03-05 10:50:58.800510 +00:00] INFO [src/ebpf/user/socket.c:1949]     sk_flags_offs: 0x200
+[2026-03-05 10:50:58.800547 +00:00] INFO [src/ebpf/user/socket.c:1951]     struct_files_struct_fdt_offset: 0x20
+[2026-03-05 10:50:58.800581 +00:00] INFO [src/ebpf/user/socket.c:1953]     struct_file_private_data_offset: 0xc8
+[2026-03-05 10:50:58.800616 +00:00] INFO [src/ebpf/user/socket.c:1955]     struct_file_f_op_offset: 0xb0
+[2026-03-05 10:50:58.800650 +00:00] INFO [src/ebpf/user/socket.c:1957]     struct_file_operations_read_iter_offset: 0x20
+[2026-03-05 10:50:58.800691 +00:00] INFO [src/ebpf/user/socket.c:1959]     struct_file_f_inode_offset: 0xa8
+[2026-03-05 10:50:58.800724 +00:00] INFO [src/ebpf/user/socket.c:1961]     struct_file_f_pos_offset: 0x40
+[2026-03-05 10:50:58.800760 +00:00] INFO [src/ebpf/user/socket.c:1963]     struct_inode_i_mode_offset: 0x0
+[2026-03-05 10:50:58.800793 +00:00] INFO [src/ebpf/user/socket.c:1965]     struct_file_dentry_offset: 0xa0
+[2026-03-05 10:50:58.800829 +00:00] INFO [src/ebpf/user/socket.c:1967]     struct_inode_i_sb_offset: 0x38
+[2026-03-05 10:50:58.800861 +00:00] INFO [src/ebpf/user/socket.c:1969]     struct_super_block_s_dev_offset: 0x10
+[2026-03-05 10:50:58.800896 +00:00] INFO [src/ebpf/user/socket.c:1971]     struct_dentry_name_offset: 0x28
+[2026-03-05 10:50:58.800949 +00:00] INFO [src/ebpf/user/socket.c:1973]     struct_dentry_d_parent_offset: 0x18
+[2026-03-05 10:50:58.800981 +00:00] INFO [src/ebpf/user/socket.c:1975]     struct_sock_family_offset: 0x10
+[2026-03-05 10:50:58.801012 +00:00] INFO [src/ebpf/user/socket.c:1977]     struct_sock_saddr_offset: 0x4
+[2026-03-05 10:50:58.801044 +00:00] INFO [src/ebpf/user/socket.c:1979]     struct_sock_daddr_offset: 0x0
+[2026-03-05 10:50:58.801075 +00:00] INFO [src/ebpf/user/socket.c:1981]     struct_sock_ip6saddr_offset: 0x48
+[2026-03-05 10:50:58.801107 +00:00] INFO [src/ebpf/user/socket.c:1983]     struct_sock_ip6daddr_offset: 0x38
+[2026-03-05 10:50:58.801137 +00:00] INFO [src/ebpf/user/socket.c:1985]     struct_sock_dport_offset: 0xc
+[2026-03-05 10:50:58.801185 +00:00] INFO [src/ebpf/user/socket.c:1987]     struct_sock_sport_offset: 0xe
+[2026-03-05 10:50:58.801255 +00:00] INFO [src/ebpf/user/socket.c:1989]     struct_sock_skc_state_offset: 0x12
+[2026-03-05 10:50:58.801308 +00:00] INFO [src/ebpf/user/socket.c:1991]     struct_sock_common_ipv6only_offset: 0x13
+[2026-03-05 10:50:58.801343 +00:00] INFO [src/ebpf/user/socket.c:1993]     struct_file_f_path_offset: 0x98
+[2026-03-05 10:50:58.801373 +00:00] INFO [src/ebpf/user/socket.c:1995]     struct_path_mnt_offset: 0x0
+[2026-03-05 10:50:58.801405 +00:00] INFO [src/ebpf/user/socket.c:1997]     struct_mount_mnt_offset: 0x20
+[2026-03-05 10:50:58.801436 +00:00] INFO [src/ebpf/user/socket.c:1999]     struct_mount_mnt_ns_offset: 0xf0
+[2026-03-05 10:50:58.801468 +00:00] INFO [src/ebpf/user/socket.c:2001]     struct_mnt_namespace_ns_offset: 0x0
+[2026-03-05 10:50:58.801499 +00:00] INFO [src/ebpf/user/socket.c:2003]     struct_ns_common_inum_offset: 0x10
+[2026-03-05 10:50:58.801542 +00:00] INFO [src/ebpf/user/socket.c:2005]     struct_mount_mnt_id_offset: 0x12c
+[2026-03-05 10:50:58.801622 +00:00] INFO [src/ebpf/user/socket.c:3023] [eBPF Kernel Adapt] Set offsets map from btf_vmlinux, success.
+[2026-03-05 10:50:58.801666 +00:00] INFO [src/ebpf/user/socket.c:3026] == Unix domain socket ==
+[2026-03-05 10:50:58.801703 +00:00] INFO [src/ebpf/user/socket.c:2293] Received limit_size (0), the final value is set to '4096'
+[2026-03-05 10:50:58.801781 +00:00] INFO [src/ebpf/user/socket.c:3058] Config socket_data_limit_max: 4096
+[2026-03-05 10:50:58.801822 +00:00] INFO [src/ebpf/user/socket.c:3059] Config io_event_collect_mode: 1
+[2026-03-05 10:50:58.801854 +00:00] INFO [src/ebpf/user/socket.c:3060] Config io_event_minimal_duration: 1000000 ns
+[2026-03-05 10:50:58.801885 +00:00] INFO [src/ebpf/user/socket.c:3061] Config virtual_file_collect_enable: 0
+[2026-03-05 10:50:58.801917 +00:00] INFO [src/ebpf/user/socket.c:3062] Config g_disable_syscall_tracing: 0
+[2026-03-05 10:50:58.801947 +00:00] INFO [src/ebpf/user/socket.c:3063] Config go_tracing_timeout: 120
+[2026-03-05 10:50:58.801985 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 0, program name df_TP_proto_infer_2
+[2026-03-05 10:50:58.802022 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 1, program name df_TP_proto_infer_3
+[2026-03-05 10:50:58.802113 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 2, program name df_TP_data_submit
+[2026-03-05 10:50:58.802156 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 3, program name df_TP_output_data
+[2026-03-05 10:50:58.802234 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_tp_map'), key 4, program name df_TP_io_event
+[2026-03-05 10:50:58.802293 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 0, program name df_KP_proto_infer_2
+[2026-03-05 10:50:58.802330 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 1, program name df_KP_proto_infer_3
+[2026-03-05 10:50:58.802415 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 2, program name df_KP_data_submit
+[2026-03-05 10:50:58.802499 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__progs_jmp_kp_map'), key 3, program name df_KP_output_data
+[2026-03-05 10:50:58.803180 +00:00] INFO [src/ebpf/user/socket.c:2233] Whitelist is empty
+[2026-03-05 10:50:58.803427 +00:00] INFO [src/ebpf/user/socket.c:2233] Blacklist is empty
+[2026-03-05 10:50:58.803478 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[HTTP1] success.
+[2026-03-05 10:50:58.803527 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[HTTP2] success.
+[2026-03-05 10:50:58.803575 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Dubbo] success.
+[2026-03-05 10:50:58.803621 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[SofaRPC] success.
+[2026-03-05 10:50:58.803666 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[FastCGI] success.
+[2026-03-05 10:50:58.803712 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[bRPC] success.
+[2026-03-05 10:50:58.803759 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Tars] success.
+[2026-03-05 10:50:58.803806 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Some/IP] success.
+[2026-03-05 10:50:58.803853 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[ISO-8583] success.
+[2026-03-05 10:50:58.803896 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Unknown] success.
+[2026-03-05 10:50:58.803941 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MySQL] success.
+[2026-03-05 10:50:58.803985 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[PgSQL] success.
+[2026-03-05 10:50:58.804027 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Oracle] success.
+[2026-03-05 10:50:58.804071 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Redis] success.
+[2026-03-05 10:50:58.804121 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MongoDB] success.
+[2026-03-05 10:50:58.804212 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Memcached] success.
+[2026-03-05 10:50:58.804294 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Kafka] success.
+[2026-03-05 10:50:58.804342 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[MQTT] success.
+[2026-03-05 10:50:58.804386 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[AMQP] success.
+[2026-03-05 10:50:58.804429 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[OpenWire] success.
+[2026-03-05 10:50:58.804473 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[NATS] success.
+[2026-03-05 10:50:58.804516 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Pulsar] success.
+[2026-03-05 10:50:58.804558 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[ZMTP] success.
+[2026-03-05 10:50:58.804601 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[RocketMQ] success.
+[2026-03-05 10:50:58.804645 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[WebSphereMQ] success.
+[2026-03-05 10:50:58.804690 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[DNS] success.
+[2026-03-05 10:50:58.804732 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[TLS] success.
+[2026-03-05 10:50:58.804776 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Unknown] success.
+[2026-03-05 10:50:58.804831 +00:00] INFO [src/ebpf/user/socket.c:2257] config_proto_ports_bitmap, update eBPF ports_bitmap[Custom] success.
+[2026-03-05 10:50:58.804871 +00:00] INFO [src/ebpf/user/tracer.c:1369] tracer(socket-trace) attach ...
+[2026-03-05 10:50:58.810148 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_sendmsg', success!
+[2026-03-05 10:50:58.815084 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_sendmmsg', success!
+[2026-03-05 10:50:58.820339 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/__sys_recvmsg', success!
+[2026-03-05 10:50:58.825379 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/do_writev', success!
+[2026-03-05 10:50:58.830408 +00:00] INFO [src/ebpf/user/tracer.c:1150] attach enter kprobe: 'kprobe/do_readv', success!
+[2026-03-05 10:50:58.831077 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_fork', succeed!
+[2026-03-05 10:50:58.831201 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_clone', succeed!
+[2026-03-05 10:50:58.831370 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/sched/sched_process_exec', succeed!
+[2026-03-05 10:50:58.831532 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/sched/sched_process_exit', succeed!
+[2026-03-05 10:50:58.831689 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_write', succeed!
+[2026-03-05 10:50:58.831791 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_read', succeed!
+[2026-03-05 10:50:58.831896 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_sendto', succeed!
+[2026-03-05 10:50:58.831990 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_recvfrom', succeed!
+[2026-03-05 10:50:58.832082 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_connect', succeed!
+[2026-03-05 10:50:58.832179 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_recvmmsg', succeed!
+[2026-03-05 10:50:58.832288 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_socket', succeed!
+[2026-03-05 10:50:58.832390 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_read', succeed!
+[2026-03-05 10:50:58.832493 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_write', succeed!
+[2026-03-05 10:50:58.832590 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendto', succeed!
+[2026-03-05 10:50:58.832687 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvfrom', succeed!
+[2026-03-05 10:50:58.832783 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendmsg', succeed!
+[2026-03-05 10:50:58.832880 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_sendmmsg', succeed!
+[2026-03-05 10:50:58.832979 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvmsg', succeed!
+[2026-03-05 10:50:58.833076 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_recvmmsg', succeed!
+[2026-03-05 10:50:58.833182 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_writev', succeed!
+[2026-03-05 10:50:58.833299 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_readv', succeed!
+[2026-03-05 10:50:58.833399 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_accept', succeed!
+[2026-03-05 10:50:58.833497 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_accept4', succeed!
+[2026-03-05 10:50:58.833616 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_close', succeed!
+[2026-03-05 10:50:58.833730 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_getppid', succeed!
+[2026-03-05 10:50:58.833839 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pread64', succeed!
+[2026-03-05 10:50:58.833948 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_preadv', succeed!
+[2026-03-05 10:50:58.834057 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwrite64', succeed!
+[2026-03-05 10:50:58.834177 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwritev', succeed!
+[2026-03-05 10:50:58.834296 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pread64', succeed!
+[2026-03-05 10:50:58.834406 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_preadv', succeed!
+[2026-03-05 10:50:58.834516 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwrite64', succeed!
+[2026-03-05 10:50:58.834627 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwritev', succeed!
+[2026-03-05 10:50:58.834738 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_preadv2', succeed!
+[2026-03-05 10:50:58.834849 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_preadv2', succeed!
+[2026-03-05 10:50:58.834960 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_enter_pwritev2', succeed!
+[2026-03-05 10:50:58.835071 +00:00] INFO [src/ebpf/user/tracer.c:1190] attach tracepoint: 'tracepoint/syscalls/sys_exit_pwritev2', succeed!
+[2026-03-05 10:50:58.835124 +00:00] INFO [src/ebpf/user/tracer.c:1377] Successfully completed attach.
+[2026-03-05 10:50:58.835468 +00:00] INFO [src/ebpf/user/tracer.c:323] thread sk-reader-0, detached successful.
+[2026-03-05 10:50:58.835580 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'offset-infer-server' succeed.
+[2026-03-05 10:50:58.835639 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'offset-infer-client' succeed.
+[2026-03-05 10:50:58.835682 +00:00] INFO [src/ebpf/user/tracer.c:1512] register_extra_waiting_op 'mount-offset-infer' succeed.
+[2026-03-05 10:50:58.835722 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'check-map-exceeded' succeed.
+[2026-03-05 10:50:58.835762 +00:00] INFO [src/ebpf/user/tracer.c:1586] register_period_event_op 'check-kern-adapt' succeed.
+[2026-03-05 10:50:58.835802 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 504 - 504 set: 500 - 503
+[2026-03-05 10:50:58.835840 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 603 - 603 set: 600 - 602
+[2026-03-05 10:50:58.835940 +00:00] INFO [src/ebpf/user/socket.c:2293] Received limit_size (1024), the final value is set to '1024'
+[2026-03-05 10:50:58.836041 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:1019] [CP] Set oncpu profiler enable.
+[2026-03-05 10:50:58.848459 +00:00] INFO [src/ebpf/user/tracer.c:171] check_kernel_version Linux 6.8.12-0
+[2026-03-05 10:50:58.848562 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000000000 A fixed_percpu_data
+ [address:0000000000000000]
+[2026-03-05 10:50:58.848613 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000000000 A __per_cpu_start
+ [address:0000000000000000]
+[2026-03-05 10:50:58.848650 +00:00] INFO [src/ebpf/user/profile/profile_common.c:209] 0000000000001000 A cpu_debug_store
+ [address:0000000000001000]
+[2026-03-05 10:50:58.848750 +00:00] INFO [src/ebpf/user/profile/profile_common.c:221] Check kallsyms: count 100 check_num 100 zero_count 2
+[2026-03-05 10:50:58.848831 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:782] set java_syms_update_delay : 60
+[2026-03-05 10:50:59.221459 +00:00] INFO [src/ebpf/user/proc.c:1005] address 0xffffffff96ee26a0 find symbol '__sys_sendmsg', ksyms-cache, created successfully.
+[2026-03-05 10:50:59.221590 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:970] [CP] Set 'cpu_aggregation_flag' successful, value 0
+[2026-03-05 10:50:59.222817 +00:00] INFO [src/ebpf/user/load.c:499] license: GPL
+[2026-03-05 10:50:59.223114 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__stack_map_a"), set max_entries 8192
+[2026-03-05 10:50:59.223187 +00:00] INFO [src/ebpf/user/tracer.c:583] Update map ("__stack_map_b"), set max_entries 8192
+[2026-03-05 10:50:59.248710 +00:00] INFO [src/ebpf/user/btf_core.c:324] BTF vmlinux file: /sys/kernel/btf/vmlinux
+[2026-03-05 10:50:59.379042 +00:00] INFO [src/ebpf/user/tracer.c:666] bpf load "continuous-profiler-5.15_plus" succeed.
+[2026-03-05 10:50:59.452102 +00:00] INFO [src/ebpf/user/utils.c:1669] thread java_update, detached successful.
+[2026-03-05 10:50:59.452221 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:373] [CP] === oncpu profiler enabled ===
+[2026-03-05 10:50:59.452272 +00:00] INFO [src/ebpf/user/profile/profile_common.c:161] [CP] set_bpf_run_enabled() success, enable_flag:0
+[2026-03-05 10:50:59.452311 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 16, system page size: 4096 bytes, required system pages: 16
+[2026-03-05 10:50:59.453326 +00:00] INFO [src/ebpf/user/tracer.c:508] Input pages: 16, system page size: 4096 bytes, required system pages: 16
+[2026-03-05 10:50:59.454363 +00:00] INFO [src/ebpf/user/tracer.c:323] thread oncpu_reader-0, detached successful.
+[2026-03-05 10:50:59.454431 +00:00] INFO [src/ebpf/user/tracer.c:1369] tracer(continuous_profiler) attach ...
+[2026-03-05 10:50:59.454780 +00:00] INFO [src/ebpf/user/tracer.c:1254] tracer "continuous_profiler" attach perf event prog successful.
+[2026-03-05 10:50:59.454835 +00:00] INFO [src/ebpf/user/tracer.c:1377] Successfully completed attach.
+[2026-03-05 10:51:00.450727 +00:00] INFO [src/ebpf/user/unwind_tracer.c:207] unwind tracer init: tpbase_offset=9320
+[2026-03-05 10:51:00.450977 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__cp_progs_jmp_pe_map'), key 0, program name df_PE_dwarf_unwind
+[2026-03-05 10:51:00.451098 +00:00] INFO [src/ebpf/user/table.c:143] Insert into map('__cp_progs_jmp_pe_map'), key 7, program name df_PE_oncpu_output
+[2026-03-05 10:51:00.451150 +00:00] INFO [src/ebpf/user/ctrl.c:74] [zerotrace-ebpfctl] sockopt register succeed, type get: 703 - 703 set: 700 - 702
+[2026-03-05 10:51:00.451400 +00:00] INFO [src/utils/process/linux.rs:384] Process listener register feature ebpf.profile.on_cpu
+[2026-03-05 10:51:00.451585 +00:00] INFO [src/ebpf/user/profile/perf_profiler.c:970] [CP] Set 'cpu_aggregation_flag' successful, value 0
+[2026-03-05 10:51:00.451639 +00:00] INFO [src/ebpf/user/tracer.c:2432] All tracers finish!!!
+[2026-03-05 10:51:00.451690 +00:00] INFO [src/ebpf_dispatcher.rs:1419] ebpf collector initialized.
+[2026-03-05 10:51:00.451765 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:51:00.452256 +00:00] INFO [src/rpc/synchronizer.rs:681] Reset version of acls, groups, platform_data and custom_app_config.
+[2026-03-05 10:51:00.452872 +00:00] INFO [src/trident.rs:3432] Starting agent components.
+[2026-03-05 10:51:00.453085 +00:00] INFO [src/debug/debugger.rs:440] debugger started
+[2026-03-05 10:51:00.453235 +00:00] INFO [src/sender/uniform_sender.rs:333] 3-doc-to-collector-sender uniform sender id: 2 started
+[2026-03-05 10:51:00.453441 +00:00] INFO [src/sender/uniform_sender.rs:333] 2-protolog-to-collector-sender uniform sender id: 3 started
+[2026-03-05 10:51:00.453311 +00:00] INFO [src/debug/debugger.rs:128] debugger listening on: [::]:11267
+[2026-03-05 10:51:00.453571 +00:00] INFO [src/sender/uniform_sender.rs:333] 3-flowlog-to-collector-sender uniform sender id: 1 started
+[2026-03-05 10:51:00.453732 +00:00] INFO [src/sender/uniform_sender.rs:333] 2-packet-sequence-block-to-sender uniform sender id: 5 started
+[2026-03-05 10:51:00.453935 +00:00] INFO [src/flow_generator/protocol_logs/parser.rs:719] app protocol logs parser (id=0) started
+[2026-03-05 10:51:00.454007 +00:00] INFO [src/collector/quadruple_generator.rs:775] new quadruple_generator id: 0, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:51:00.454021 +00:00] INFO [src/dispatcher/local_mode_dispatcher.rs:201] Start dispatcher (0)
+[2026-03-05 10:51:00.455643 +00:00] INFO [src/collector/quadruple_generator.rs:699] quadruple generator id: 0 started
+[2026-03-05 10:51:00.455781 +00:00] INFO [src/collector/flow_aggr.rs:133] l4 flow aggr id: 0 started
+[2026-03-05 10:51:00.455904 +00:00] INFO [src/collector/collector.rs:1292] second_collector id=(0) started
+[2026-03-05 10:51:00.456058 +00:00] INFO [src/collector/collector.rs:1292] minute_collector id=(0) started
+[2026-03-05 10:51:00.456119 +00:00] INFO [src/collector/l7_quadruple_generator.rs:531] new l7 quadruple_generator id: 0, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:51:00.456652 +00:00] INFO [src/collector/l7_quadruple_generator.rs:473] l7 quadruple generator id: 0 started
+[2026-03-05 10:51:00.456784 +00:00] INFO [src/collector/collector.rs:1424] second_collector id=(0) started
+[2026-03-05 10:51:00.456895 +00:00] INFO [src/collector/collector.rs:1424] minute_collector id=(0) started
+[2026-03-05 10:51:00.457025 +00:00] INFO [src/flow_generator/packet_sequence/parser.rs:88] packet sequence parser (id=0) started
+[2026-03-05 10:51:00.457084 +00:00] INFO [src/handler/npb.rs:338] Start npb packet sender 0.
+[2026-03-05 10:51:00.457236 +00:00] INFO [src/flow_generator/protocol_logs/parser.rs:719] app protocol logs parser (id=1) started
+[2026-03-05 10:51:00.457308 +00:00] INFO [src/collector/l7_quadruple_generator.rs:531] new l7 quadruple_generator id: 1, second_delay: 9, minute_delay: 69, l7_metrics_enabled: true, vtap_flow_1s_enabled: true collector_enabled: true
+[2026-03-05 10:51:00.457824 +00:00] INFO [src/collector/l7_quadruple_generator.rs:473] l7 quadruple generator id: 1 started
+[2026-03-05 10:51:00.457943 +00:00] INFO [src/collector/collector.rs:1424] second_collector id=(1) started
+[2026-03-05 10:51:00.459226 +00:00] INFO [src/ebpf/user/tracer.c:1524] ctrl_main begin !!!
+[2026-03-05 10:51:00.471348 +00:00] INFO [src/collector/collector.rs:1424] minute_collector id=(1) started
+[[38;5;208m2026-03-05 10:51:00.471485 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/socket.c:3185] [38;5;208m[eBPF Kernel Adapt] Adapting the linux kernel(6.8.0-90-generic) is in progress, please try the start operation again later.[0m
+[2026-03-05 10:51:00.489279 +00:00] INFO [src/flow_generator/flow_map.rs:472] loaded 0 wasm and 0 so plugins
+[2026-03-05 10:51:01.477851 +00:00] INFO [src/monitor.rs:754] update free disk monitor from [] to ["/"]
+[2026-03-05 10:51:01.481139 +00:00] INFO [src/ebpf/user/tracer.c:1789] trigger_kern_adapt begin !!!
+[2026-03-05 10:51:01.572412 +00:00] INFO [src/ebpf/user/mount.c:849] Insert adapt kern data id (2402186,2403236) mntID 26 nsID 4026531841
+[2026-03-05 10:51:01.572679 +00:00] INFO [src/ebpf/user/mount.c:864] mount_offset_infer: The pread64() system call wastriggered, reading 512 bytes.
+[2026-03-05 10:51:01.583147 +00:00] INFO [src/ebpf/user/socket.c:532] [eBPF Kernel Adapt] kernel_offset_infer_server close.client_count:24
+[2026-03-05 10:51:02.074616 +00:00] INFO [src/collector/flow_aggr.rs:316] now slot start time is 1772707792s have flushed minute slot count is 1772707791
+[[38;5;208m2026-03-05 10:51:02.471644 +00:00[0m] [38;5;208mWARN[0m [src/ebpf/user/socket.c:3185] [38;5;208m[eBPF Kernel Adapt] Adapting the linux kernel(6.8.0-90-generic) is in progress, please try the start operation again later.[0m
+[2026-03-05 10:51:02.499992 +00:00] INFO [src/ebpf/user/socket.c:1565] [eBPF Kernel Adapt] Linux 6.8.0-90-generic adapt success. Set the status to TRACER_RUNNING
+[2026-03-05 10:51:02.500314 +00:00] INFO [src/ebpf/user/tracer.c:1599] set_period_event_invalid 'check-kern-adapt' set invalid succeed.
+[2026-03-05 10:51:02.500470 +00:00] INFO [src/ebpf/user/tracer.c:1599] set_period_event_invalid 'trigger_kern_adapt' set invalid succeed.
+[2026-03-05 10:51:02.500690 +00:00] INFO [src/ebpf/user/socket.c:2068] member_fields_offset:
+[2026-03-05 10:51:02.500843 +00:00] INFO [src/ebpf/user/socket.c:2070] 	ready: 0x1
+[2026-03-05 10:51:02.500992 +00:00] INFO [src/ebpf/user/socket.c:2071] 	kprobe_invalid: 0x0
+[2026-03-05 10:51:02.501135 +00:00] INFO [src/ebpf/user/socket.c:2072] 	enable_unix_socket: 0x0
+[2026-03-05 10:51:02.501313 +00:00] INFO [src/ebpf/user/socket.c:2073] 	files_infer_done: 0x1
+[2026-03-05 10:51:02.501452 +00:00] INFO [src/ebpf/user/socket.c:2074] 	reserved: 0x0
+[2026-03-05 10:51:02.501592 +00:00] INFO [src/ebpf/user/socket.c:2077] 	struct_dentry_d_parent_offset: 0x18
+[2026-03-05 10:51:02.501731 +00:00] INFO [src/ebpf/user/socket.c:2078] 	task__files_offset: 0xc20
+[2026-03-05 10:51:02.501870 +00:00] INFO [src/ebpf/user/socket.c:2079] 	sock__flags_offset: 0x200
+[2026-03-05 10:51:02.502008 +00:00] INFO [src/ebpf/user/socket.c:2081] 	tcp_sock__copied_seq_offset: 0x5b0
+[2026-03-05 10:51:02.502146 +00:00] INFO [src/ebpf/user/socket.c:2083] 	tcp_sock__write_seq_offset: 0x624
+[2026-03-05 10:51:02.502316 +00:00] INFO [src/ebpf/user/socket.c:2086] 	struct_files_struct_fdt_offset: 0x20
+[2026-03-05 10:51:02.502453 +00:00] INFO [src/ebpf/user/socket.c:2088] 	struct_file_f_pos_offset: 0x40
+[2026-03-05 10:51:02.502593 +00:00] INFO [src/ebpf/user/socket.c:2090] 	struct_file_private_data_offset: 0xc8
+[2026-03-05 10:51:02.502732 +00:00] INFO [src/ebpf/user/socket.c:2092] 	struct_file_f_op_offset: 0xb0
+[2026-03-05 10:51:02.502872 +00:00] INFO [src/ebpf/user/socket.c:2094] 	struct_file_operations_read_iter_offset: 0x20
+[2026-03-05 10:51:02.503010 +00:00] INFO [src/ebpf/user/socket.c:2096] 	struct_file_f_inode_offset: 0xa8
+[2026-03-05 10:51:02.503149 +00:00] INFO [src/ebpf/user/socket.c:2098] 	struct_inode_i_mode_offset: 0x0
+[2026-03-05 10:51:02.503330 +00:00] INFO [src/ebpf/user/socket.c:2100] 	struct_inode_i_sb_offset: 0x38
+[2026-03-05 10:51:02.503468 +00:00] INFO [src/ebpf/user/socket.c:2102] 	struct_super_block_s_dev_offset: 0x10
+[2026-03-05 10:51:02.503629 +00:00] INFO [src/ebpf/user/socket.c:2104] 	struct_file_dentry_offset: 0xa0
+[2026-03-05 10:51:02.503769 +00:00] INFO [src/ebpf/user/socket.c:2106] 	struct_dentry_name_offset: 0x28
+[2026-03-05 10:51:02.503911 +00:00] INFO [src/ebpf/user/socket.c:2108] 	struct_sock_family_offset: 0x10
+[2026-03-05 10:51:02.504048 +00:00] INFO [src/ebpf/user/socket.c:2110] 	struct_sock_saddr_offset: 0x4
+[2026-03-05 10:51:02.504198 +00:00] INFO [src/ebpf/user/socket.c:2112] 	struct_sock_daddr_offset: 0x0
+[2026-03-05 10:51:02.504353 +00:00] INFO [src/ebpf/user/socket.c:2114] 	struct_sock_ip6saddr_offset: 0x48
+[2026-03-05 10:51:02.504492 +00:00] INFO [src/ebpf/user/socket.c:2116] 	struct_sock_ip6daddr_offset: 0x38
+[2026-03-05 10:51:02.504629 +00:00] INFO [src/ebpf/user/socket.c:2118] 	struct_sock_dport_offset: 0xc
+[2026-03-05 10:51:02.504769 +00:00] INFO [src/ebpf/user/socket.c:2120] 	struct_sock_sport_offset: 0xe
+[2026-03-05 10:51:02.504908 +00:00] INFO [src/ebpf/user/socket.c:2122] 	struct_sock_skc_state_offset: 0x12
+[2026-03-05 10:51:02.505047 +00:00] INFO [src/ebpf/user/socket.c:2124] 	struct_sock_common_ipv6only_offset: 0x13
+[2026-03-05 10:51:02.505197 +00:00] INFO [src/ebpf/user/socket.c:2127] 	struct_file_f_path_offset: 0x98
+[2026-03-05 10:51:02.505365 +00:00] INFO [src/ebpf/user/socket.c:2129] 	struct_path_mnt_offset: 0x0
+[2026-03-05 10:51:02.505500 +00:00] INFO [src/ebpf/user/socket.c:2131] 	struct_mount_mnt_offset: 0x20
+[2026-03-05 10:51:02.505633 +00:00] INFO [src/ebpf/user/socket.c:2133] 	struct_mount_mnt_ns_offset: 0xf0
+[2026-03-05 10:51:02.505783 +00:00] INFO [src/ebpf/user/socket.c:2135] 	struct_mnt_namespace_ns_offset: 0x0
+[2026-03-05 10:51:02.505911 +00:00] INFO [src/ebpf/user/socket.c:2137] 	struct_ns_common_inum_offset: 0x10
+[2026-03-05 10:51:02.506027 +00:00] INFO [src/ebpf/user/socket.c:2139] 	struct_mount_mnt_id_offset: 0x12c
+[2026-03-05 10:51:03.455300 +00:00] INFO [src/ebpf/user/profile/profile_common.c:161] [CP] set_bpf_run_enabled() success, enable_flag:1
+[2026-03-05 10:51:04.471962 +00:00] INFO [src/ebpf/user/socket.c:3195] Call socket_tracer_start()
+[2026-03-05 10:51:04.472204 +00:00] INFO [src/ebpf_dispatcher.rs:1573] ebpf collector started
+[2026-03-05 10:51:04.472319 +00:00] INFO [src/utils/process/linux.rs:523] Startting process listener ...
+[2026-03-05 10:51:04.472520 +00:00] INFO [src/trident.rs:3509] Started agent components.
+[2026-03-05 10:51:15.136862 +00:00] INFO [src/ebpf/user/tracer.c:2226] thread 124003423352512 index 5
+[2026-03-05 10:51:15.144065 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2402186 NAME zerotrace-agent
+[2026-03-05 10:51:43.021950 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2324407 NAME node
+[2026-03-05 10:51:48.591806 +00:00] INFO [src/flow_generator/flow_map.rs:472] loaded 0 wasm and 0 so plugins
+[2026-03-05 10:52:14.556717 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2091353 NAME node
+[2026-03-05 10:52:14.911560 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2364743 NAME node
+[2026-03-05 10:53:56.769563 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 2377637 NAME node
+[2026-03-05 10:55:58.952816 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 667 entries in the process cache and cleaned up 4 invalid process records.
+[[38;5;196m2026-03-05 11:00:04.123264 +00:00[0m] [38;5;196mERROR[0m [src/main.rs:128] [38;5;196mpanicked at src/policy/labeler.rs:73:27:
+attempt to shift left with overflow[0m
+[[38;5;196m2026-03-05 11:00:04.123861 +00:00[0m] [38;5;196mERROR[0m [src/main.rs:130] [38;5;196m   0: zerotrace_agent::main::{{closure}}
+             at /zerotrace/agent/src/main.rs:130:22
+[0m

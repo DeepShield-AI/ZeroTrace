@@ -26,15 +26,15 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	controller_common "github.com/deepflowio/deepflow/server/controller/common"
-	ingester_common "github.com/deepflowio/deepflow/server/ingester/profile/common"
-	"github.com/deepflowio/deepflow/server/libs/utils"
-	querier_common "github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	"github.com/deepflowio/deepflow/server/querier/profile/common"
-	"github.com/deepflowio/deepflow/server/querier/profile/model"
+	controller_common "github.com/zerotraceio/zerotrace/server/controller/common"
+	ingester_common "github.com/zerotraceio/zerotrace/server/ingester/profile/common"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
+	querier_common "github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/common"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/model"
 )
 
 var log = logging.MustGetLogger("profile")

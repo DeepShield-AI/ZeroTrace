@@ -18,7 +18,7 @@ use std::time::Instant;
 
 use criterion::*;
 
-use deepflow_agent::common::CaptureNetworkTyper;
+use zerotrace_agent::common::CaptureNetworkTyper;
 
 fn bench_tap_typer(c: &mut Criterion) {
     c.bench_function("get_tap_type_by_vlan", |b| {

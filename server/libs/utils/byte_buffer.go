@@ -17,7 +17,7 @@
 package utils
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 type ByteBuffer struct {

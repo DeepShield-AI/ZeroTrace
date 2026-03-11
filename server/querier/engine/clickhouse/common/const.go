@@ -20,9 +20,9 @@ const PERMISSION_TYPE_NUM = 3
 const DB_NAME_FLOW_LOG = "flow_log"
 const DB_NAME_FLOW_METRICS = "flow_metrics"
 const DB_NAME_EXT_METRICS = "ext_metrics"
-const DB_NAME_DEEPFLOW_SYSTEM = "deepflow_system" // Abandoned
-const DB_NAME_DEEPFLOW_ADMIN = "deepflow_admin"
-const DB_NAME_DEEPFLOW_TENANT = "deepflow_tenant"
+const DB_NAME_ZEROTRACE_SYSTEM = "zerotrace_system" // Abandoned
+const DB_NAME_ZEROTRACE_ADMIN = "zerotrace_admin"
+const DB_NAME_ZEROTRACE_TENANT = "zerotrace_tenant"
 const DB_NAME_EVENT = "event"
 const DB_NAME_PROFILE = "profile"
 const DB_NAME_PROMETHEUS = "prometheus"
@@ -61,8 +61,8 @@ var DB_TABLE_MAP = map[string][]string{
 	DB_NAME_FLOW_LOG:        []string{"l4_flow_log", "l7_flow_log", "l4_packet", "l7_packet"},
 	DB_NAME_FLOW_METRICS:    []string{"network", "network_map", "application", "application_map", "traffic_policy"},
 	DB_NAME_EXT_METRICS:     []string{"ext_common"},
-	DB_NAME_DEEPFLOW_ADMIN:  []string{"deepflow_server"},
-	DB_NAME_DEEPFLOW_TENANT: []string{"deepflow_collector"},
+	DB_NAME_ZEROTRACE_ADMIN:  []string{"zerotrace_server"},
+	DB_NAME_ZEROTRACE_TENANT: []string{"zerotrace_collector"},
 	DB_NAME_EVENT:           []string{"event", "file_event", "alert_event", TABLE_NAME_FILE_EVENT_METRICS},
 	DB_NAME_PROFILE:         []string{"in_process", TABLE_NAME_IN_PROCESS_METRICS},
 	DB_NAME_PROMETHEUS:      []string{"samples"},

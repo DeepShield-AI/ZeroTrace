@@ -22,10 +22,10 @@ import (
 	"slices"
 	"time"
 
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/libs/eventapi"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/libs/eventapi"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type ManagerComponent struct {

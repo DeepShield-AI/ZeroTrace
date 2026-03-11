@@ -24,20 +24,20 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	shared_common "github.com/deepflowio/deepflow/server/common"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	configs "github.com/deepflowio/deepflow/server/controller/config/common"
-	"github.com/deepflowio/deepflow/server/controller/db/clickhouse"
-	metadb "github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/redis"
-	genesis "github.com/deepflowio/deepflow/server/controller/genesis/config"
-	http "github.com/deepflowio/deepflow/server/controller/http/config"
-	manager "github.com/deepflowio/deepflow/server/controller/manager/config"
-	monitor "github.com/deepflowio/deepflow/server/controller/monitor/config"
-	prometheus "github.com/deepflowio/deepflow/server/controller/prometheus/config"
-	statsd "github.com/deepflowio/deepflow/server/controller/statsd/config"
-	tagrecorder "github.com/deepflowio/deepflow/server/controller/tagrecorder/config"
-	trisolaris "github.com/deepflowio/deepflow/server/controller/trisolaris/config"
+	shared_common "github.com/zerotraceio/zerotrace/server/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	configs "github.com/zerotraceio/zerotrace/server/controller/config/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/clickhouse"
+	metadb "github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/redis"
+	genesis "github.com/zerotraceio/zerotrace/server/controller/genesis/config"
+	http "github.com/zerotraceio/zerotrace/server/controller/http/config"
+	manager "github.com/zerotraceio/zerotrace/server/controller/manager/config"
+	monitor "github.com/zerotraceio/zerotrace/server/controller/monitor/config"
+	prometheus "github.com/zerotraceio/zerotrace/server/controller/prometheus/config"
+	statsd "github.com/zerotraceio/zerotrace/server/controller/statsd/config"
+	tagrecorder "github.com/zerotraceio/zerotrace/server/controller/tagrecorder/config"
+	trisolaris "github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
 )
 
 var log = logging.MustGetLogger("config")
@@ -105,7 +105,7 @@ type ControllerConfig struct {
 	IngesterPort                   string `default:"20033" yaml:"ingester-port"`
 	GrpcNodePort                   string `default:"30035" yaml:"grpc-node-port"`
 	Kubeconfig                     string `yaml:"kubeconfig"`
-	ElectionName                   string `default:"deepflow-server" yaml:"election-name"`
+	ElectionName                   string `default:"zerotrace-server" yaml:"election-name"`
 	ReportingDisabled              bool   `default:"false" yaml:"reporting-disabled"`
 	BillingMethod                  string `default:"license" yaml:"billing-method"`
 	PodClusterInternalIPToIngester int    `default:"0" yaml:"pod-cluster-internal-ip-to-ingester"`

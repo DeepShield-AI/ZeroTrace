@@ -19,8 +19,8 @@ package common
 import (
 	"time"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 type GenesisSync interface {

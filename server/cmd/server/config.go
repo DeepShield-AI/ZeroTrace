@@ -25,12 +25,12 @@ import (
 	pyroscope "github.com/grafana/pyroscope-go"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
 )
 
 type Config struct {
-	LogFile             string              `default:"/var/log/deepflow/server.log" yaml:"log-file"`
+	LogFile             string              `default:"/var/log/zerotrace/server.log" yaml:"log-file"`
 	LogLevel            string              `default:"info" yaml:"log-level"`
 	ContinuousProfile   ContinuousProfile   `yaml:"continuous-profile"`
 	Profiler            bool                `yaml:"profiler"`
@@ -55,11 +55,11 @@ type ContinuousProfile struct {
 
 func loadConfig(path string) *Config {
 	config := &Config{
-		LogFile:  "/var/log/deepflow/server.log",
+		LogFile:  "/var/log/zerotrace/server.log",
 		LogLevel: "info",
 		ContinuousProfile: ContinuousProfile{
 			Enabled:       false,
-			ServerAddress: "http://deepflow-agent/api/v1/profile",
+			ServerAddress: "http://zerotrace-agent/api/v1/profile",
 			ProfileTypes:  []string{"cpu", "inuse_objects", "alloc_objects", "inuse_space", "alloc_space"},
 			MutexRate:     5,
 			BlockRate:     5,
@@ -205,13 +205,13 @@ func (p *ContinuousProfiler) Start(forced bool) error {
 	}
 	var err error
 	p.profiler, err = pyroscope.Start(pyroscope.Config{
-		ApplicationName: "deepflow-server",
+		ApplicationName: "zerotrace-server",
 		// replace this with the address of pyroscope server
 		ServerAddress: p.serverAddress,
 		// you can disable logging by setting this to nil
 		Logger: logger,
 		// you can provide static tags via a map:
-		Tags:         map[string]string{"hostname": os.Getenv("K8S_NODE_NAME_FOR_DEEPFLOW")},
+		Tags:         map[string]string{"hostname": os.Getenv("K8S_NODE_NAME_FOR_ZEROTRACE")},
 		ProfileTypes: profileTypes,
 	})
 	if err != nil {

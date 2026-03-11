@@ -28,8 +28,8 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 )
 
 var log = logging.MustGetLogger("config")
@@ -40,16 +40,16 @@ const (
 	DefaultCheckInterval            = 180 // clickhouse是异步删除
 	DefaultDiskUsedPercent          = 80
 	DefaultDiskFreeSpace            = 300
-	DefaultDFDiskPrefix             = "path_"           // In the config.xml of ClickHouse, the disk name of the storage policy 'df_storage' written by deepflow-server starts with 'path_'
+	DefaultDFDiskPrefix             = "path_"           // In the config.xml of ClickHouse, the disk name of the storage policy 'df_storage' written by zerotrace-server starts with 'path_'
 	DefaultSystemDiskPrefix         = "default"         // In the config.xml of ClickHouse, the disk name of default storage policy 'default'
 	DefaultByconityLocalDiskPrefix  = "server_local_"   // In the config.xml of ByConity, the disk name of the storage policy 'default'
 	DefaultBycontiyS3DiskPrefix     = "server_s3_disk_" // In the config.xml of ByConity, the disk name of the storage policy 'cnch_default_s3'
-	EnvK8sNodeIP                    = "K8S_NODE_IP_FOR_DEEPFLOW"
-	EnvK8sPodName                   = "K8S_POD_NAME_FOR_DEEPFLOW"
-	EnvK8sNodeName                  = "K8S_NODE_NAME_FOR_DEEPFLOW"
-	EnvK8sNamespace                 = "K8S_NAMESPACE_FOR_DEEPFLOW"
-	DefaultCKDBService              = "deepflow-clickhouse"
-	DefaultByconityService          = "deepflow-byconity-server"
+	EnvK8sNodeIP                    = "K8S_NODE_IP_FOR_ZEROTRACE"
+	EnvK8sPodName                   = "K8S_POD_NAME_FOR_ZEROTRACE"
+	EnvK8sNodeName                  = "K8S_NODE_NAME_FOR_ZEROTRACE"
+	EnvK8sNamespace                 = "K8S_NAMESPACE_FOR_ZEROTRACE"
+	DefaultCKDBService              = "zerotrace-clickhouse"
+	DefaultByconityService          = "zerotrace-byconity-server"
 	DefaultCKDBServicePort          = 9000
 	DefaultListenPort               = 20033
 	DefaultGrpcBufferSize           = 104857600
@@ -62,7 +62,7 @@ const (
 	IndexTypeIncremetalIdLocation   = "incremental-id"
 	FormatHex                       = "hex"
 	FormatDecimal                   = "decimal"
-	EnvRunningMode                  = "DEEPFLOW_SERVER_RUNNING_MODE"
+	EnvRunningMode                  = "ZEROTRACE_SERVER_RUNNING_MODE"
 	RunningModeStandalone           = "STANDALONE"
 	DefaultByconityStoragePolicy    = "cnch_default_s3"
 	// the maximum number of endpoints for a server corresponding to ClickHouse;
@@ -488,7 +488,7 @@ func (c *Config) GetCKDBColdStorages() map[string]*ckdb.ColdStorage {
 func Load(path string) *Config {
 	configBytes, err := os.ReadFile(path)
 	config := BaseConfig{
-		LogFile:  "/var/log/deepflow/server.log",
+		LogFile:  "/var/log/zerotrace/server.log",
 		LogLevel: "info",
 		Base: Config{
 			ControllerIPs:   []string{DefaultLocalIP},

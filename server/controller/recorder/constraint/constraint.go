@@ -18,9 +18,9 @@
 package constraint
 
 import (
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/diffbase"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/diffbase"
 )
 
 // 资源的原始数据结构

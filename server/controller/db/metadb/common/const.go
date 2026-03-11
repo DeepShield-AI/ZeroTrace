@@ -17,7 +17,7 @@
 package common
 
 const (
-	NON_DEFAULT_ORG_DATABASE_SUFFIX = "_deepflow"
+	NON_DEFAULT_ORG_DATABASE_SUFFIX = "_zerotrace"
 	DATABASE_PREFIX_ALIGNMENT       = "%04d"
 )
 

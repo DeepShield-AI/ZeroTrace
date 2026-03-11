@@ -161,7 +161,7 @@ fn get_counter(counter_type: u32) -> u32 {
 }
 
 fn print_help(program_name: &str) {
-    println!("DeepFlow eBPF Profiler - Continuous CPU Profiling Tool");
+    println!("ZeroTrace eBPF Profiler - Continuous CPU Profiling Tool");
     println!();
     println!("USAGE:");
     println!("    {} <pid1> [pid2] [pid3] ...", program_name);
@@ -266,7 +266,7 @@ fn main() {
     println!("Profiling PIDs: {:?}", pids);
 
     // cat ./.profiler.folded |./flamegraph.pl --color=io --countname=ms > profiler-test.svg
-    let log_file = CString::new("/var/log/deepflow-ebpf.log".as_bytes()).unwrap();
+    let log_file = CString::new("/var/log/zerotrace-ebpf.log".as_bytes()).unwrap();
     let log_file_c = log_file.as_c_str();
     unsafe {
         // The first parameter passed by a null pointer can be
@@ -296,8 +296,8 @@ fn main() {
 
         let mut contexts = [ptr::null_mut(), ptr::null_mut(), ptr::null_mut()];
 
-        // Used to test our DeepFlow products, written as 97 frequency, so that
-        // it will not affect the sampling test of deepflow agent (using 99Hz).
+        // Used to test our ZeroTrace products, written as 97 frequency, so that
+        // it will not affect the sampling test of zerotrace agent (using 99Hz).
         if start_continuous_profiler(
             97,
             60,

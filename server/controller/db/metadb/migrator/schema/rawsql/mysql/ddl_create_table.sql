@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS vtap_repo (
     k8s_image           VARCHAR(512) DEFAULT '',
     created_at          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='store deepflow-agent for easy upgrade';
+)ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='store zerotrace-agent for easy upgrade';
 TRUNCATE TABLE vtap_repo;
 
 CREATE TABLE IF NOT EXISTS az_controller_connection (
@@ -1357,7 +1357,7 @@ CREATE TABLE IF NOT EXISTS third_party_device (
     lcuuid              CHAR(64),
     order_id            INTEGER,
     product_specification_lcuuid CHAR(64),
-    role                INTEGER DEFAULT 1 COMMENT '1. General Purpose, 2. Load Balancer, 3. Database, 4. Web Server, 5. APP Server, 6. Firewall, 7. Gateway, 8. VPN, 9. Storage, 10. WAF 13.DEEPFLOW_TOOL',
+    role                INTEGER DEFAULT 1 COMMENT '1. General Purpose, 2. Load Balancer, 3. Database, 4. Web Server, 5. APP Server, 6. Firewall, 7. Gateway, 8. VPN, 9. Storage, 10. WAF 13.ZEROTRACE_TOOL',
     create_time         DATETIME,
     gateway             CHAR(64) DEFAULT '' COMMENT 'gateway of the default route',
     raid_support        CHAR(64) DEFAULT '' COMMENT 'must be a subset of RAID 0, 1, 5, 6, 10, 50, 60',

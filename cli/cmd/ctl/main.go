@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/cli/ctl"
+	"github.com/zerotraceio/zerotrace/cli/ctl"
 )
 
 var RevCount, Revision, CommitDate, goVersion, Branch, CompileTime string
@@ -27,7 +27,7 @@ var RevCount, Revision, CommitDate, goVersion, Branch, CompileTime string
 func main() {
 	version := fmt.Sprintf(
 		"%s\n%s\n%s\n%s\n%s\n%s\n",
-		"Name: deepflow-ctl community edition",
+		"Name: zerotrace-ctl community edition",
 		"Branch: "+Branch,
 		"CommitID: "+Revision,
 		"RevCount: "+RevCount,

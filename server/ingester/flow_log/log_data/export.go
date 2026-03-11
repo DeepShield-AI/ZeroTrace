@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"unsafe"
 
-	"github.com/deepflowio/deepflow/server/ingester/exporters/common"
-	config "github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	utag "github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/common"
+	config "github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	utag "github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func (l4 *L4FlowLog) QueryUniversalTags(utags *utag.UniversalTagsManager) (*utag.UniversalTags, *utag.UniversalTags) {

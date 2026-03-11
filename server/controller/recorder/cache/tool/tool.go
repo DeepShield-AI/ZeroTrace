@@ -17,8 +17,8 @@
 package tool
 
 import (
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
 )
 
 // Tool consolidates resource data using unified info structs

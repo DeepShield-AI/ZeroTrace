@@ -28,8 +28,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/jsonparser"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/jsonparser"
 )
 
 func RegisterPluginCommand() *cobra.Command {
@@ -45,9 +45,9 @@ func RegisterPluginCommand() *cobra.Command {
 	create := &cobra.Command{
 		Use:   "create",
 		Short: "create plugin",
-		Example: "deepflow-ctl plugin create --type wasm --image /home/tom/hello.wasm --name hello\n" +
-			"deepflow-ctl plugin create --type so --image /home/tom/hello.so --name hello\n" +
-			"deepflow-ctl plugin create --type lua --image /home/tom/hello.lua --name hello --user server",
+		Example: "zerotrace-ctl plugin create --type wasm --image /home/tom/hello.wasm --name hello\n" +
+			"zerotrace-ctl plugin create --type so --image /home/tom/hello.so --name hello\n" +
+			"zerotrace-ctl plugin create --type lua --image /home/tom/hello.lua --name hello --user server",
 		Run: func(cmd *cobra.Command, args []string) {
 			if _, err := os.Stat(image); errors.Is(err, os.ErrNotExist) {
 				fmt.Printf("file(%s) not found\n", image)
@@ -67,7 +67,7 @@ func RegisterPluginCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list plugin",
-		Example: "deepflow-ctl plugin list",
+		Example: "zerotrace-ctl plugin list",
 		Run: func(cmd *cobra.Command, args []string) {
 			listPlugin(cmd)
 		},
@@ -76,7 +76,7 @@ func RegisterPluginCommand() *cobra.Command {
 	delete := &cobra.Command{
 		Use:     "delete",
 		Short:   "delete plugin",
-		Example: "deepflow-ctl plugin delete <name>\n(get name from command `deepflow-ctl plugin list`)",
+		Example: "zerotrace-ctl plugin delete <name>\n(get name from command `zerotrace-ctl plugin list`)",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := deletePlugin(cmd, args); err != nil {
 				fmt.Println(err)

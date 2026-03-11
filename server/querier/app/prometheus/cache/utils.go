@@ -19,8 +19,8 @@ package cache
 import (
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 	"github.com/op/go-logging"
 	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/prompb"

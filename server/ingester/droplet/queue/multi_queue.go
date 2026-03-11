@@ -19,8 +19,8 @@ package queue
 import (
 	"errors"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type MultiQueue struct {

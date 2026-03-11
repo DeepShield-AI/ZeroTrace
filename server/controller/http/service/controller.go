@@ -22,14 +22,14 @@ import (
 	mapset "github.com/deckarep/golang-set"
 	"github.com/google/uuid"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/controller/monitor"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor"
 )
 
 func GetControllers(orgID int, filter map[string]string) (resp []model.Controller, err error) {

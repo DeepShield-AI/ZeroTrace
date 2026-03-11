@@ -1,8 +1,8 @@
-Package: deepflow-agent
+Package: zerotrace-agent
 Version: 1.0-XXXX
 Section: net
 Priority: optional
-Maintainer: deepflow@yunshan.net
+Maintainer: zerotrace@yunshan.net
 Provides: Yunshan
 Architecture: amd64
-Description: Deepflow agent
+Description: Zerotrace agent

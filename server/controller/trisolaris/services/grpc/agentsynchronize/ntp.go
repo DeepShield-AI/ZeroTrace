@@ -21,10 +21,10 @@ import (
 	"strconv"
 	"time"
 
-	api "github.com/deepflowio/deepflow/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
 	context "golang.org/x/net/context"
 
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
 )
 
 type NTPEvent struct{}

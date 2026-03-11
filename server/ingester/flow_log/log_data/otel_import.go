@@ -23,12 +23,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	flowlogCfg "github.com/deepflowio/deepflow/server/ingester/flow_log/config"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	flowlogCfg "github.com/zerotraceio/zerotrace/server/ingester/flow_log/config"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 
 	json "github.com/goccy/go-json"
 	"github.com/google/gopacket/layers"

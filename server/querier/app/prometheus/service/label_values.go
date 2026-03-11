@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
 )
 
 const (
@@ -80,9 +80,9 @@ func getMetrics(ctx context.Context, args *model.PromMetaParams) (resp []string)
 				metricsName := fmt.Sprintf("%s__%s__%s", db, TABLE_NAME_SAMPLES, tableName)
 				resp = append(resp, metricsName)
 			}
-		} else if db == chCommon.DB_NAME_DEEPFLOW_ADMIN || db == chCommon.DB_NAME_DEEPFLOW_TENANT {
-			deepflowSystem, _ := metrics.GetExtMetrics(db, "", where, "", args.OrgID, false, args.Context)
-			for _, v := range deepflowSystem {
+		} else if db == chCommon.DB_NAME_ZEROTRACE_ADMIN || db == chCommon.DB_NAME_ZEROTRACE_TENANT {
+			zerotraceSystem, _ := metrics.GetExtMetrics(db, "", where, "", args.OrgID, false, args.Context)
+			for _, v := range zerotraceSystem {
 				metricName := fmt.Sprintf("%s__%s__%s", db, strings.ReplaceAll(v.Table, ".", "_"), strings.TrimPrefix(v.DisplayName, "metrics."))
 				resp = append(resp, metricName)
 			}
@@ -93,7 +93,7 @@ func getMetrics(ctx context.Context, args *model.PromMetaParams) (resp []string)
 					if v.Category == METRICS_CATEGORY_TAG {
 						continue
 					}
-					if (db == chCommon.DB_NAME_DEEPFLOW_ADMIN || db == chCommon.DB_NAME_DEEPFLOW_TENANT) || (table == TABLE_NAME_L7_FLOW_LOG && strings.Contains(field, "metrics.")) {
+					if (db == chCommon.DB_NAME_ZEROTRACE_ADMIN || db == chCommon.DB_NAME_ZEROTRACE_TENANT) || (table == TABLE_NAME_L7_FLOW_LOG && strings.Contains(field, "metrics.")) {
 						field = v.DisplayName
 					}
 					metricsName := ""

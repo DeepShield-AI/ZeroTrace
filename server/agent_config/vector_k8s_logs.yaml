@@ -1,7 +1,7 @@
 data_dir: /vector-log-checkpoint
 sources:
   kubernetes_logs:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -10,9 +10,9 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component!=front-end"
+    extra_label_selector: "app=zerotrace,component!=front-end"
   kubernetes_logs_frontend:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -21,7 +21,7 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component=front-end"
+    extra_label_selector: "app=zerotrace,component=front-end"
 transforms:
   multiline_kubernetes_logs:
     type: reduce

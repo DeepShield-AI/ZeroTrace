@@ -9,7 +9,7 @@ BEGIN
 
     UPDATE alarm_policy SET monitoring_interval="5m"  WHERE name="采集器 CPU 超限";
     UPDATE alarm_policy SET monitoring_interval="5m" WHERE name="采集器内存超限";
-    UPDATE alarm_policy SET monitoring_interval="5m", query_params="{\"DATABASE\":\"deepflow_tenant\",\"TABLE\":\"deepflow_agent_monitor\",\"interval\":60,\"fill\": \"none\",\"window_size\":5,\"QUERIES\":[{\"QUERY_ID\":\"R1\",\"SELECT\":\"Min(`metrics.sys_free_memory_limit_ratio`)*100 AS `used_bytes`\",\"WHERE\":\"`metrics.sys_free_memory_limit_ratio`!=0\",\"GROUP_BY\":\"`tag.host`\",\"METRICS\":[\"Min(`metrics.sys_free_memory_limit_ratio`)*100 AS `used_bytes`\"]}]}" WHERE name="采集器所在系统空闲内存低";
+    UPDATE alarm_policy SET monitoring_interval="5m", query_params="{\"DATABASE\":\"zerotrace_tenant\",\"TABLE\":\"zerotrace_agent_monitor\",\"interval\":60,\"fill\": \"none\",\"window_size\":5,\"QUERIES\":[{\"QUERY_ID\":\"R1\",\"SELECT\":\"Min(`metrics.sys_free_memory_limit_ratio`)*100 AS `used_bytes`\",\"WHERE\":\"`metrics.sys_free_memory_limit_ratio`!=0\",\"GROUP_BY\":\"`tag.host`\",\"METRICS\":[\"Min(`metrics.sys_free_memory_limit_ratio`)*100 AS `used_bytes`\"]}]}" WHERE name="采集器所在系统空闲内存低";
 
     -- do migration in default db
     

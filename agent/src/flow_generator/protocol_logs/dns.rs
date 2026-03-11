@@ -830,7 +830,7 @@ mod tests {
                     BlacklistTrie::new(vec![TagFilterOperator {
                         field_name: "request_resource".to_string(),
                         operator: "equal".to_string(),
-                        value: "nacos.deepflow-otel-spring-demo.svc.cluster.local".to_string(),
+                        value: "nacos.zerotrace-otel-spring-demo.svc.cluster.local".to_string(),
                     }])
                     .unwrap(),
                 )]),

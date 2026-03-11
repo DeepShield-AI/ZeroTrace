@@ -19,8 +19,8 @@ package metrics
 import (
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 )
 
 func TestCheckDBField(t *testing.T) {

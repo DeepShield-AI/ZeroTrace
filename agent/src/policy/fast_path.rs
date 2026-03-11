@@ -71,7 +71,7 @@ fn generate_mask_ip(netmask_table: &Vec<u32>, ip_src: IpAddr, ip_dst: IpAddr) ->
         }
         _ => {
             warn!(
-                    "IpAddr({:?} and {:?}) is invalid: ip address version is inconsistent, deepflow-agent restart...\n",
+                    "IpAddr({:?} and {:?}) is invalid: ip address version is inconsistent, zerotrace-agent restart...\n",
                     ip_src, ip_dst,
                 );
             crate::utils::clean_and_exit(1);

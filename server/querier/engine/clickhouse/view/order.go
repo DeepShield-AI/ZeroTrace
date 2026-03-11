@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 )
 
 type Orders struct {

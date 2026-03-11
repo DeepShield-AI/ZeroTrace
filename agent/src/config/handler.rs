@@ -2517,7 +2517,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                             warn!(
                                 "agent must have CAP_SYS_ADMIN to run without 'hostNetwork: true'."
                             );
-                            warn!("setns error: {}, deepflow-agent restart...", e);
+                            warn!("setns error: {}, zerotrace-agent restart...", e);
                             crate::utils::clean_and_exit(-1);
                             return MacAddr::ZERO;
                         }
@@ -2525,7 +2525,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                             Ok((_, mac)) => mac,
                             Err(e) => {
                                 warn!(
-                                    "get_ctrl_ip_and_mac error: {}, deepflow-agent restart...",
+                                    "get_ctrl_ip_and_mac error: {}, zerotrace-agent restart...",
                                     e
                                 );
                                 crate::utils::clean_and_exit(-1);
@@ -2534,7 +2534,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                         };
                         #[cfg(target_os = "linux")]
                         if let Err(e) = public::netns::reset_netns() {
-                            warn!("reset setns error: {}, deepflow-agent restart...", e);
+                            warn!("reset setns error: {}, zerotrace-agent restart...", e);
                             crate::utils::clean_and_exit(-1);
                             return MacAddr::ZERO;
                         };
@@ -2837,7 +2837,7 @@ impl ConfigHandler {
             .map(|re| public::netns::find_ns_files_by_regex(&re));
         if old_netns != new_netns {
             info!(
-                "query net namespaces changed from {:?} to {:?}, restart agent to create dispatcher for extra namespaces, deepflow-agent restart...",
+                "query net namespaces changed from {:?} to {:?}, restart agent to create dispatcher for extra namespaces, zerotrace-agent restart...",
                 old_netns, new_netns
             );
             crate::utils::clean_and_exit(public::consts::NORMAL_EXIT_WITH_RESTART);
@@ -2854,7 +2854,7 @@ impl ConfigHandler {
                 .dispatcher
                 .switch_recv_engine(&handler.candidate_config.dispatcher)
             {
-                log::error!("switch RecvEngine error: {}, deepflow-agent restart...", e);
+                log::error!("switch RecvEngine error: {}, zerotrace-agent restart...", e);
                 crate::utils::clean_and_exit(-1);
                 return;
             }
@@ -3300,7 +3300,7 @@ impl ConfigHandler {
             candidate_config.capture_mode = new_common.capture_mode;
             if let Some(c) = components.as_mut() {
                 if packet_fanout_count > 1 {
-                    info!("capture_mode changes and fanout is enabled, deepflow-agent restart...");
+                    info!("capture_mode changes and fanout is enabled, zerotrace-agent restart...");
                     crate::utils::clean_and_exit(public::consts::NORMAL_EXIT_WITH_RESTART);
                     return vec![];
                 } else {
@@ -5801,8 +5801,8 @@ impl ConfigHandler {
                 {
                     error!(
                         "Language-specific profiling configuration changed from {:#?} to {:#?}. \
-                        This change requires deepflow-agent restart to take effect (eBPF maps cannot be \
-                        dynamically created/destroyed). deepflow-agent will restart now...",
+                        This change requires zerotrace-agent restart to take effect (eBPF maps cannot be \
+                        dynamically created/destroyed). zerotrace-agent will restart now...",
                         candidate_config.ebpf.ebpf.profile.languages,
                         new_config.ebpf.ebpf.profile.languages
                     );
@@ -5864,7 +5864,7 @@ impl ConfigHandler {
 
         if new_config != *candidate_config {
             error!(
-                "Some configurations have not been, updated deepflow-agent restart... please check the code."
+                "Some configurations have not been, updated zerotrace-agent restart... please check the code."
             );
             error!(
                 "Configurations from {:#?} to {:#?}",

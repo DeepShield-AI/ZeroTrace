@@ -20,8 +20,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/ingester/flow_log/geo"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_log/geo"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 func TestJsonify(t *testing.T) {
@@ -52,9 +52,9 @@ func TestParseUint32EpcID(t *testing.T) {
 	if r := parseUint32EpcID(40000); r != 40000 {
 		t.Errorf("expect 40000, result %v", r)
 	}
-	id := datatype.EPC_FROM_DEEPFLOW
-	if r := parseUint32EpcID(uint32(id)); r != datatype.EPC_FROM_DEEPFLOW {
-		t.Errorf("expect %v, result %v", datatype.EPC_FROM_DEEPFLOW, r)
+	id := datatype.EPC_FROM_ZEROTRACE
+	if r := parseUint32EpcID(uint32(id)); r != datatype.EPC_FROM_ZEROTRACE {
+		t.Errorf("expect %v, result %v", datatype.EPC_FROM_ZEROTRACE, r)
 	}
 	id = datatype.EPC_FROM_INTERNET
 	if r := parseUint32EpcID(uint32(id)); r != datatype.EPC_FROM_INTERNET {

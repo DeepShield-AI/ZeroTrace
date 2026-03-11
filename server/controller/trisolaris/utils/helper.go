@@ -25,9 +25,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 	"github.com/vishvananda/netlink"
 )
 

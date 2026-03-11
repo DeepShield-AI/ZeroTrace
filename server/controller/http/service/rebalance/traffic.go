@@ -31,13 +31,13 @@ import (
 
 	"github.com/bitly/go-simplejson"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/grpc/statsd"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 var log = logger.MustGetLogger("service.rebalance")
@@ -643,12 +643,12 @@ func (q *Query) GetAgentDispatcher(orgDB *metadb.DB, domainPrefix string, dataDu
 	if domainPrefix == "master-" {
 		domainPrefix = ""
 	}
-	queryURL := fmt.Sprintf("http://%sdeepflow-server:%d/v1/query", domainPrefix, config.Cfg.ListenPort)
+	queryURL := fmt.Sprintf("http://%szerotrace-server:%d/v1/query", domainPrefix, config.Cfg.ListenPort)
 	values := url.Values{}
-	db := "deepflow_tenant"
+	db := "zerotrace_tenant"
 	now := time.Now()
 	before := now.UTC().Add(time.Second * -1 * time.Duration(dataDuration))
-	sql := fmt.Sprintf("SELECT `tag.host`, Sum(`metrics.tx-bytes`) AS `tx-bps` FROM deepflow_agent_collect_sender"+
+	sql := fmt.Sprintf("SELECT `tag.host`, Sum(`metrics.tx-bytes`) AS `tx-bps` FROM zerotrace_agent_collect_sender"+
 		" WHERE `time`>%d AND `time`<%d GROUP BY tag.host", before.Unix(), now.Unix())
 	values.Add("db", db)
 	values.Add("sql", sql)

@@ -937,7 +937,7 @@ impl L7ProtocolParserInterface for KafkaLog {
 impl KafkaLog {
     const MAX_SESSION_PER_FLOW: usize = 32;
     const CODE_APIKEY_NOT_SUPPORTED: i32 = -2;
-    const EXCEPTION_APIKEY_NOT_SUPPORTED: &str = "Type not yet inspected by DeepFlow";
+    const EXCEPTION_APIKEY_NOT_SUPPORTED: &str = "Type not yet inspected by ZeroTrace";
 
     // kafka message parsers
     // references:

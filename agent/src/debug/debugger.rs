@@ -39,9 +39,10 @@ use super::ebpf::{EbpfDebugger, EbpfMessage};
 #[cfg(target_os = "linux")]
 use super::platform::{PlatformDebugger, PlatformMessage};
 use super::{
+    cpu::{CpuDebugger, CpuMessage},
     policy::{PolicyDebugger, PolicyMessage},
     rpc::{RpcDebugger, RpcMessage},
-    Beacon, Message, Module, BEACON_INTERVAL, BEACON_INTERVAL_MIN, DEEPFLOW_AGENT_BEACON,
+    Beacon, Message, Module, BEACON_INTERVAL, BEACON_INTERVAL_MIN, ZEROTRACE_AGENT_BEACON,
 };
 #[cfg(target_os = "linux")]
 use crate::platform::{ApiWatcher, GenericPoller};
@@ -57,46 +58,56 @@ use public::{
     debug::{send_to, Error, QueueDebugger, QueueMessage, Result, MAX_BUF_SIZE},
 };
 
+/// 各模块的调试器集合
 struct ModuleDebuggers {
     #[cfg(target_os = "linux")]
-    pub platform: PlatformDebugger,
-    pub rpc: RpcDebugger,
-    pub queue: Arc<QueueDebugger>,
-    pub policy: PolicyDebugger,
+    pub platform: PlatformDebugger, 
+    pub rpc: RpcDebugger,           
+    pub queue: Arc<QueueDebugger>,  
+    pub policy: PolicyDebugger,     
     #[cfg(all(target_os = "linux", feature = "libtrace"))]
     pub ebpf: EbpfDebugger,
+    pub cpu: CpuDebugger,
 }
 
+/// 调试器主结构
 pub struct Debugger {
-    thread: Mutex<Option<JoinHandle<()>>>,
-    running: Arc<AtomicBool>,
-    debuggers: Arc<ModuleDebuggers>,
-    config: DebugAccess,
-    override_os_hostname: Arc<Option<String>>,
+    thread: Mutex<Option<JoinHandle<()>>>, 
+    running: Arc<AtomicBool>,              
+    debuggers: Arc<ModuleDebuggers>,       
+    config: DebugAccess,                   
+    override_os_hostname: Arc<Option<String>>, 
 }
 
+/// 构造调试器的上下文信息
 pub struct ConstructDebugCtx {
-    pub runtime: Arc<Runtime>,
-    pub config: DebugAccess,
+    pub runtime: Arc<Runtime>,             
+    pub config: DebugAccess,               
     #[cfg(target_os = "linux")]
-    pub api_watcher: Arc<ApiWatcher>,
+    pub api_watcher: Arc<ApiWatcher>,      
     #[cfg(target_os = "linux")]
-    pub poller: Arc<GenericPoller>,
-    pub session: Arc<Session>,
-    pub static_config: Arc<StaticConfig>,
-    pub agent_id: Arc<RwLock<AgentId>>,
-    pub status: Arc<RwLock<Status>>,
-    pub policy_setter: PolicySetter,
+    pub poller: Arc<GenericPoller>,        
+    pub session: Arc<Session>,             
+    pub static_config: Arc<StaticConfig>,  
+    pub agent_id: Arc<RwLock<AgentId>>,    
+    pub status: Arc<RwLock<Status>>,       
+    pub policy_setter: PolicySetter,       
 }
 
 impl Debugger {
     const TIMEOUT: Duration = Duration::from_millis(500);
 
+    /// 启动调试器
+    /// 1. 绑定 UDP 套接字以监听调试命令。
+    /// 2. 启动线程处理传入请求。
+    /// 3. 启动 Beacon 线程广播 Agent 存在。
     pub fn start(&self) {
+        // 确保调试器未在运行
         if self.running.swap(true, Ordering::Relaxed) {
             return;
         }
 
+        // 克隆共享资源以供线程使用
         let running = self.running.clone();
         let debuggers = self.debuggers.clone();
         let conf = self.config.clone();
@@ -106,11 +117,15 @@ impl Debugger {
         let thread = thread::Builder::new()
             .name("debugger".to_owned())
             .spawn(move || {
+                // 根据配置确定绑定地址（IPv6 未指定地址）
                 let addr: SocketAddr =
                     (IpAddr::from(Ipv6Addr::UNSPECIFIED), conf.load().listen_port).into();
+                
+                // 尝试绑定 UDP 套接字
                 let sock = match UdpSocket::bind(addr) {
                     Ok(s) => Arc::new(s),
                     Err(_) => {
+                        // 如果 IPv6 失败，回退到 IPv4
                         let ipv4_addr: SocketAddr =
                             (IpAddr::from(Ipv4Addr::UNSPECIFIED), conf.load().listen_port).into();
                         match UdpSocket::bind(ipv4_addr) {
@@ -126,24 +141,31 @@ impl Debugger {
                     }
                 };
                 info!("debugger listening on: {:?}", sock.local_addr().unwrap());
+                
+                // 设置套接字的读写超时
                 if let Err(e) = sock.set_read_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger set read timeout error: {:?}", e);
                 }
                 if let Err(e) = sock.set_write_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger set write timeout error: {:?}", e);
                 }
+
                 let sock_clone = sock.clone();
                 let running_clone = running.clone();
                 let serialize_conf = config::standard();
                 #[cfg(target_os = "linux")]
                 let agent_mode = conf.load().agent_mode;
                 let beacon_port = conf.load().controller_port;
+
+                // 启动 Beacon 线程以广播 Agent 存在
                 let beacon_thread = thread::Builder::new()
                     .name("debugger-beacon".to_owned())
                     .spawn(move || {
+                        // 计算 Beacon 发送间隔
                         let interval_counter_max =
                             BEACON_INTERVAL.as_secs() / BEACON_INTERVAL_MIN.as_secs();
                         let mut interval_counter = 0;
+                        
                         while running_clone.load(Ordering::Relaxed) {
                             thread::sleep(BEACON_INTERVAL_MIN);
                             interval_counter += 1;
@@ -152,6 +174,7 @@ impl Debugger {
                             }
                             interval_counter = 0;
 
+                            // 确定要在 Beacon 中包含的主机名
                             let Some(hostname) = override_os_hostname.as_ref().clone().or_else(
                                 || match get_hostname() {
                                     Ok(hostname) => Some(hostname),
@@ -164,19 +187,23 @@ impl Debugger {
                                 continue;
                             };
 
+                            // 构造 Beacon 消息
                             let beacon = Beacon {
                                 agent_id: conf.load().agent_id,
                                 hostname,
                             };
 
+                            // 序列化 Beacon 消息
                             let serialized_beacon = match encode_to_vec(beacon, serialize_conf) {
                                 Ok(v) => v,
                                 Err(_) => continue,
                             };
+                            
+                            // 向所有配置的控制器发送 Beacon
                             for &ip in conf.load().controller_ips.iter() {
                                 if let Err(e) = sock_clone.send_to(
                                     [
-                                        DEEPFLOW_AGENT_BEACON.as_bytes(),
+                                        ZEROTRACE_AGENT_BEACON.as_bytes(),
                                         serialized_beacon.as_slice(),
                                     ]
                                     .concat()
@@ -190,6 +217,7 @@ impl Debugger {
                     })
                     .unwrap();
 
+                // 接收和处理调试命令的主循环
                 while running.load(Ordering::Relaxed) {
                     let mut buf = [0u8; MAX_BUF_SIZE];
                     let mut addr = None;
@@ -201,6 +229,7 @@ impl Debugger {
                             if addr.is_none() {
                                 addr.replace(a);
                             }
+                            // 分发接收到的包到相应的模块
                             Self::dispatch(
                                 (&sock, addr.unwrap()),
                                 &buf,
@@ -234,6 +263,7 @@ impl Debugger {
         let thread = thread::Builder::new()
             .name("debugger".to_owned())
             .spawn(move || {
+                // 检查控制器 IP 是 IPv4 还是 IPv6
                 let (mut has_ipv4, mut has_ipv6) = (false, false);
                 for &ip in conf.load().controller_ips.iter() {
                     if ip.is_ipv4() {
@@ -243,13 +273,9 @@ impl Debugger {
                     }
                 }
 
-                // [Issue #34202]: https://github.com/rust-lang/rust/issues/34202
-                // This will return an error when the IP version of the local socket does not match that returned from [`ToSocketAddrs`]
-                // So it needs to bind to ipv4 addr's socket and ipv6 addr's socket on Windows
+                // 绑定 IPv4 Socket
                 let addr_v4: SocketAddr =
                     (IpAddr::from(Ipv4Addr::UNSPECIFIED), conf.load().listen_port).into();
-                let addr_v6: SocketAddr =
-                    (IpAddr::from(Ipv6Addr::UNSPECIFIED), conf.load().listen_port).into();
                 let sock_v4 = match UdpSocket::bind(addr_v4) {
                     Ok(s) => Arc::new(s),
                     Err(e) => {
@@ -261,6 +287,9 @@ impl Debugger {
                     }
                 };
 
+                // 绑定 IPv6 Socket
+                let addr_v6: SocketAddr =
+                    (IpAddr::from(Ipv6Addr::UNSPECIFIED), conf.load().listen_port).into();
                 let sock_v6 = match UdpSocket::bind(addr_v6) {
                     Ok(s) => Arc::new(s),
                     Err(e) => {
@@ -276,23 +305,30 @@ impl Debugger {
                     sock_v4.local_addr().unwrap(),
                     sock_v6.local_addr().unwrap()
                 );
+                
+                // 设置 IPv4 Socket 超时
                 if let Err(e) = sock_v4.set_read_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger ipv4 set read timeout error: {:?}", e);
                 }
                 if let Err(e) = sock_v4.set_write_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger ipv4 set write timeout error: {:?}", e);
                 }
+                
+                // 设置 IPv6 Socket 超时
                 if let Err(e) = sock_v6.set_read_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger ipv6 set read timeout error: {:?}", e);
                 }
                 if let Err(e) = sock_v6.set_write_timeout(Some(Self::TIMEOUT)) {
                     warn!("debugger ipv6 set write timeout error: {:?}", e);
                 }
+                
                 let sock_v4_clone = sock_v4.clone();
                 let sock_v6_clone = sock_v6.clone();
                 let running_clone = running.clone();
                 let serialize_conf = config::standard();
                 let beacon_port = conf.load().controller_port;
+                
+                // 启动 Beacon 线程
                 let beacon_thread = thread::Builder::new()
                     .name("debugger-beacon".to_owned())
                     .spawn(move || {
@@ -328,11 +364,13 @@ impl Debugger {
                                 Ok(v) => v,
                                 Err(_) => continue,
                             };
+                            
+                            // 根据控制器 IP 版本使用相应的 Socket 发送 Beacon
                             for &ip in conf.load().controller_ips.iter() {
                                 if has_ipv4 {
                                     if let Err(e) = sock_v4_clone.send_to(
                                         [
-                                            DEEPFLOW_AGENT_BEACON.as_bytes(),
+                                            ZEROTRACE_AGENT_BEACON.as_bytes(),
                                             serialized_beacon.as_slice(),
                                         ]
                                         .concat()
@@ -344,7 +382,7 @@ impl Debugger {
                                 } else if has_ipv6 {
                                     if let Err(e) = sock_v6_clone.send_to(
                                         [
-                                            DEEPFLOW_AGENT_BEACON.as_bytes(),
+                                            ZEROTRACE_AGENT_BEACON.as_bytes(),
                                             serialized_beacon.as_slice(),
                                         ]
                                         .concat()
@@ -359,7 +397,9 @@ impl Debugger {
                     })
                     .unwrap();
 
+                // 主循环：处理 IPv4 和 IPv6 Socket 上的传入请求
                 while running.load(Ordering::Relaxed) {
+                    // 轮询 IPv4 Socket
                     if has_ipv4 {
                         let mut buf_v4 = [0u8; MAX_BUF_SIZE];
                         let mut addr_v4 = None;
@@ -381,7 +421,7 @@ impl Debugger {
                             }
                             Err(e) => {
                                 match e.kind() {
-                                    ErrorKind::ConnectionReset => {} // It's a bug of Windows, https://stackoverflow.com/questions/34242622/windows-udp-sockets-recvfrom-fails-with-error-10054
+                                    ErrorKind::ConnectionReset => {} 
                                     ErrorKind::WouldBlock => {}
                                     ErrorKind::TimedOut => {}
                                     _ => {
@@ -396,6 +436,7 @@ impl Debugger {
                             }
                         }
                     }
+                    // 轮询 IPv6 Socket
                     if has_ipv6 {
                         let mut buf_v6 = [0u8; MAX_BUF_SIZE];
                         let mut addr_v6 = None;
@@ -417,7 +458,7 @@ impl Debugger {
                             }
                             Err(e) => {
                                 match e.kind() {
-                                    ErrorKind::ConnectionReset => {} // It's a bug of Windows, https://stackoverflow.com/questions/34242622/windows-udp-sockets-recvfrom-fails-with-error-10054
+                                    ErrorKind::ConnectionReset => {} 
                                     ErrorKind::WouldBlock => {}
                                     ErrorKind::TimedOut => {}
                                     _ => {
@@ -440,6 +481,7 @@ impl Debugger {
         info!("debugger started");
     }
 
+    /// 分发接收到的消息到对应的模块调试器
     fn dispatch(
         conn: (&Arc<UdpSocket>, SocketAddr),
         mut payload: &[u8],
@@ -447,19 +489,25 @@ impl Debugger {
         serialize_conf: Configuration,
         #[cfg(target_os = "linux")] agent_mode: crate::trident::RunningMode,
     ) -> Result<()> {
+        // 从 payload 的第一个字节读取模块 ID
         let m = *payload.first().unwrap();
+        // 将字节转换为 Module 枚举
         let module = Module::try_from(m).unwrap_or_default();
 
         match module {
             #[cfg(target_os = "linux")]
             Module::Platform => {
+                // 如果处于 Standalone 模式，立即发送 Fin 消息
                 if matches!(agent_mode, crate::trident::RunningMode::Standalone) {
                     let msg = PlatformMessage::Fin;
                     send_to(conn.0, conn.1, msg, serialize_conf)?;
                 }
+                // 从 payload 解码 PlatformMessage
                 let req: Message<PlatformMessage> =
                     decode_from_std_read(&mut payload, serialize_conf)?;
                 let debugger = &debuggers.platform;
+                
+                // 处理不同的 Platform 消息
                 let resp = match req.into_inner() {
                     PlatformMessage::Version(_) => debugger.api_version(),
                     PlatformMessage::Watcher(w) => debugger
@@ -467,11 +515,15 @@ impl Debugger {
                     PlatformMessage::MacMappings(_) => debugger.mac_mapping(),
                     _ => unreachable!(),
                 };
+                // 发送响应
                 iter_send_to(conn.0, conn.1, resp.iter(), serialize_conf)?;
             }
             Module::Rpc => {
+                // 解码 RpcMessage
                 let req: Message<RpcMessage> = decode_from_std_read(&mut payload, serialize_conf)?;
                 let debugger = &debuggers.rpc;
+                
+                // 分发到特定的 RPC 调试函数
                 let resp_result = match req.into_inner() {
                     RpcMessage::Acls(_) => debugger.flow_acls(),
                     RpcMessage::Cidr(_) => debugger.cidrs(),
@@ -484,6 +536,7 @@ impl Debugger {
                     _ => unreachable!(),
                 };
 
+                // 将结果转换为响应消息，处理错误
                 let resp = match resp_result {
                     Ok(m) => m,
                     Err(e) => vec![RpcMessage::Err(e.to_string())],
@@ -491,9 +544,12 @@ impl Debugger {
                 iter_send_to(conn.0, conn.1, resp.iter(), serialize_conf)?;
             }
             Module::Queue => {
+                // 解码 QueueMessage
                 let req: Message<QueueMessage> =
                     decode_from_std_read(&mut payload, serialize_conf)?;
                 let debugger = &debuggers.queue;
+                
+                // 处理 Queue 命令
                 match req.into_inner() {
                     QueueMessage::Clear => {
                         let msg = debugger.turn_off_all_queue();
@@ -516,9 +572,12 @@ impl Debugger {
                 }
             }
             Module::Policy => {
+                // 解码 PolicyMessage
                 let req: Message<PolicyMessage> =
                     decode_from_std_read(&mut payload, serialize_conf)?;
                 let debugger = &debuggers.policy;
+                
+                // 处理 Policy 命令
                 match req.into_inner() {
                     PolicyMessage::On => debugger.send(conn.0, conn.1, serialize_conf),
                     PolicyMessage::Off => {
@@ -536,8 +595,11 @@ impl Debugger {
             #[cfg(all(target_os = "linux", feature = "libtrace"))]
             Module::Ebpf => {
                 let ebpf = &debuggers.ebpf;
+                // 解码 EbpfMessage
                 let req: Message<EbpfMessage> = decode_from_std_read(&mut payload, serialize_conf)?;
                 let req = req.into_inner();
+                
+                // 处理 eBPF 命令
                 match req {
                     EbpfMessage::DataDump(_) => {
                         ebpf.datadump(conn.0, conn.1, serialize_conf, &req);
@@ -548,6 +610,18 @@ impl Debugger {
                     _ => unreachable!(),
                 }
             }
+            Module::Cpu => {
+                // 解码 CpuMessage
+                let req: Message<CpuMessage> =
+                    decode_from_std_read(&mut payload, serialize_conf)?;
+                let debugger = &debuggers.cpu;
+
+                // 处理 Cpu 命令
+                match req.into_inner() {
+                    CpuMessage::Show => debugger.show(conn.0, conn.1, serialize_conf),
+                    _ => return Err(Error::InvalidMessage("Invalid CpuMessage".to_string())),
+                }
+            }
             _ => warn!("invalid module or invalid request, skip it"),
         }
 
@@ -556,7 +630,7 @@ impl Debugger {
 }
 
 impl Debugger {
-    /// 传入构造上下文
+    /// 创建一个新的 Debugger 实例
     pub fn new(context: ConstructDebugCtx) -> Self {
         let override_os_hostname = Arc::new(context.static_config.override_os_hostname.clone());
         let debuggers = ModuleDebuggers {
@@ -573,6 +647,7 @@ impl Debugger {
             policy: PolicyDebugger::new(context.policy_setter),
             #[cfg(all(target_os = "linux", feature = "libtrace"))]
             ebpf: EbpfDebugger::new(),
+            cpu: CpuDebugger::new(),
         };
 
         Self {
@@ -584,10 +659,12 @@ impl Debugger {
         }
     }
 
+    /// 克隆队列调试器实例
     pub fn clone_queue(&self) -> Arc<QueueDebugger> {
         self.debuggers.queue.clone()
     }
 
+    /// 停止调试器并等待线程结束
     pub fn notify_stop(&self) -> Option<JoinHandle<()>> {
         if !self.running.swap(false, Ordering::Relaxed) {
             return None;
@@ -597,6 +674,7 @@ impl Debugger {
         self.thread.lock().unwrap().take()
     }
 
+    /// 停止调试器
     pub fn stop(&self) {
         if !self.running.swap(false, Ordering::Relaxed) {
             return;
@@ -607,6 +685,7 @@ impl Debugger {
     }
 }
 
+/// 用于与 Agent 调试器通信的客户端（供 zerotrace-agent-ctl 使用）
 pub struct Client {
     sock: UdpSocket,
     conf: Configuration,
@@ -614,7 +693,10 @@ pub struct Client {
 }
 
 impl Client {
+    /// Create a new Client
+    /// 创建新的客户端
     pub fn new(addr: SocketAddr) -> Result<Self> {
+        // 在相应的接口（IPv4/IPv6）上绑定随机端口
         let sock = if addr.is_ipv4() {
             UdpSocket::bind((IpAddr::from(Ipv4Addr::UNSPECIFIED), DEFAULT_CONTROLLER_PORT))?
         } else {
@@ -627,9 +709,12 @@ impl Client {
         })
     }
 
-    /// 消息结构，msg_type占1字节，1个字节构成头部，后面存放序列化的消息
-    /// 仅在client -> server发送的消息使用，server->client使用message
-    /// 0          1               N 单位(字节)
+    /// 发送消息给调试器
+    ///
+    /// Message structure: msg_type (1 byte) + serialized message
+    /// 消息结构：msg_type (1 字节) + 序列化消息
+    ///
+    /// 0          1               N (Bytes)
     /// +----------+---------------+
     /// | msg_type |   message     |
     /// +----------+---------------+
@@ -638,6 +723,7 @@ impl Client {
         Ok(())
     }
 
+    /// 从调试器接收响应
     pub fn recv<D: Decode>(&mut self) -> Result<D> {
         let mut buf = [0u8; MAX_BUF_SIZE];
         match self.sock.recv(&mut buf) {
@@ -648,6 +734,8 @@ impl Client {
                         "receive zero byte",
                     )));
                 }
+
+                // 解码响应消息
                 let d = decode_from_std_read(&mut buf.as_slice(), self.conf)?;
                 Ok(d)
             }
@@ -656,6 +744,7 @@ impl Client {
     }
 }
 
+/// 辅助函数：迭代并发送多条消息
 pub(super) fn iter_send_to<I: Iterator>(
     sock: &UdpSocket,
     addr: impl ToSocketAddrs + Clone,

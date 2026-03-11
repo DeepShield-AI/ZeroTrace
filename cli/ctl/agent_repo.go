@@ -30,9 +30,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/jsonparser"
-	"github.com/deepflowio/deepflow/cli/ctl/common/printutil"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/jsonparser"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/printutil"
 )
 
 var (
@@ -54,9 +54,9 @@ func RegisterRepoCommand() *cobra.Command {
 	return repo
 }
 
-var repoAgentCreateExample = `deepflow-ctl repo agent create --arch x86 --image deepflow-agent
-deepflow-ctl repo agent create --arch x86 --version-image /root/deepflow-agent --image deepflow-agent.exe
-deepflow-ctl repo agent create --arch x86 --version-image /root/deepflow-agent --k8s-image registry.cn-beijing.aliyuncs.com/deepflow-ce/deepflowio-agent:latest`
+var repoAgentCreateExample = `zerotrace-ctl repo agent create --arch x86 --image zerotrace-agent
+zerotrace-ctl repo agent create --arch x86 --version-image /root/zerotrace-agent --image zerotrace-agent.exe
+zerotrace-ctl repo agent create --arch x86 --version-image /root/zerotrace-agent --k8s-image registry.cn-beijing.aliyuncs.com/zerotrace-ce/zerotraceio-agent:latest`
 
 func registerAgentCommand() *cobra.Command {
 	agent := &cobra.Command{
@@ -98,16 +98,16 @@ func registerAgentCommand() *cobra.Command {
 			}
 		},
 	}
-	create.Flags().StringVarP(&arch, "arch", "", "", "arch of deepflow-agent")
-	create.Flags().StringVarP(&image, "image", "", "", "deepflow-agent image to upload")
-	create.Flags().StringVarP(&versionImage, "version-image", "", "", "deepflow-agent image to get branch, rev_count and commit_id")
-	create.Flags().StringVarP(&k8sImage, "k8s-image", "", "", "deepflow-agent Kubernetes image: if k8s-image is not empty, the image flag will be ignored.")
+	create.Flags().StringVarP(&arch, "arch", "", "", "arch of zerotrace-agent")
+	create.Flags().StringVarP(&image, "image", "", "", "zerotrace-agent image to upload")
+	create.Flags().StringVarP(&versionImage, "version-image", "", "", "zerotrace-agent image to get branch, rev_count and commit_id")
+	create.Flags().StringVarP(&k8sImage, "k8s-image", "", "", "zerotrace-agent Kubernetes image: if k8s-image is not empty, the image flag will be ignored.")
 	create.Flags().DurationVar(&timeout, "timeout", 0, "timeout duration(default: 30s), e.g., 1s 1m 1h")
 
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list repo agent",
-		Example: "deepflow-ctl repo agent list",
+		Example: "zerotrace-ctl repo agent list",
 		Run: func(cmd *cobra.Command, args []string) {
 			listRepoAgent(cmd)
 		},
@@ -116,7 +116,7 @@ func registerAgentCommand() *cobra.Command {
 	delete := &cobra.Command{
 		Use:     "delete",
 		Short:   "delete repo agent",
-		Example: "deepflow-ctl repo agent delete <name>",
+		Example: "zerotrace-ctl repo agent delete <name>",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := deleteRepoAgent(cmd, args); err != nil {
 				fmt.Println(err)

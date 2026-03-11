@@ -6,7 +6,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO vmac_column
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'vinterface'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'vinterface'
     AND COLUMN_NAME = 'vmac';
 
     IF vmac_column = '' THEN

@@ -23,13 +23,13 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	api "github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	api "github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type UpgradeEvent struct{}

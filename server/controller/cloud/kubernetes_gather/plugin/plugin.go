@@ -25,9 +25,9 @@ import (
 	lua "github.com/yuin/gopher-lua"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("cloud.kubernetes_gather.plugin")

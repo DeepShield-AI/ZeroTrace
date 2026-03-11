@@ -16,7 +16,7 @@
 
 use std::net::{IpAddr, Ipv4Addr};
 
-use super::{endpoint::EPC_DEEPFLOW, error::Error, IPV4_MAX_MASK_LEN, IPV6_MAX_MASK_LEN};
+use super::{endpoint::EPC_ZEROTRACE, error::Error, IPV4_MAX_MASK_LEN, IPV6_MAX_MASK_LEN};
 
 use public::proto::agent;
 
@@ -125,7 +125,7 @@ impl TryFrom<&agent::Interface> for PlatformData {
         let epc_id = if p.epc_id() > 0 {
             (p.epc_id() & 0xffff) as i32
         } else if p.epc_id() == 0 {
-            EPC_DEEPFLOW
+            EPC_ZEROTRACE
         } else {
             p.epc_id() as i32
         };

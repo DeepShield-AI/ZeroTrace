@@ -19,10 +19,10 @@ package agentsynchronize
 import (
 	context "golang.org/x/net/context"
 
-	api "github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/server/controller/grpc/statsd"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	api "github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 	"github.com/gogo/protobuf/proto"
 )
 

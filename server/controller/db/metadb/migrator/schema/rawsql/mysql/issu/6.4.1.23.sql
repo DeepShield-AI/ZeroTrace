@@ -26,7 +26,7 @@ BEGIN
     END IF;
 END;
 
-CALL AddColumnIfNotExists('deepflow', 'domain_additional_resource', 'compressed_content', 'LONGBLOB');
+CALL AddColumnIfNotExists('zerotrace', 'domain_additional_resource', 'compressed_content', 'LONGBLOB');
 
 DROP PROCEDURE AddColumnIfNotExists;
 

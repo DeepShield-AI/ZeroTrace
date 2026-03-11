@@ -22,13 +22,13 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/edition"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/session"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/types"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/edition"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/session"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/types"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("db.metadb")

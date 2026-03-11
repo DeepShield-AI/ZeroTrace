@@ -20,17 +20,17 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/ingester/app_log/config"
-	"github.com/deepflowio/deepflow/server/ingester/app_log/dbwriter"
-	"github.com/deepflowio/deepflow/server/ingester/app_log/decoder"
-	dropletqueue "github.com/deepflowio/deepflow/server/ingester/droplet/queue"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/ingester/pkg/ckwriter"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	libqueue "github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
+	"github.com/zerotraceio/zerotrace/server/ingester/app_log/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/app_log/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/ingester/app_log/decoder"
+	dropletqueue "github.com/zerotraceio/zerotrace/server/ingester/droplet/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/pkg/ckwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	libqueue "github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
 )
 
 type ApplicationLogger struct {

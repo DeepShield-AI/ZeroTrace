@@ -88,7 +88,7 @@ func TestConvDictValueCommentToSection(t *testing.T) {
       # ---
       # match_regex: ""
       process_matcher:
-        - match_regex: deepflow-.*`),
+        - match_regex: zerotrace-.*`),
 				start: 4,
 			},
 			want: []string{
@@ -115,7 +115,7 @@ func TestConvDictValueCommentToSection(t *testing.T) {
       # ---
       # rewrite_name: ""
       process_matcher:
-        - match_regex: deepflow-.*`),
+        - match_regex: zerotrace-.*`),
 				start: 4,
 			},
 			want: []string{
@@ -148,7 +148,7 @@ func TestConvDictValueCommentToSection(t *testing.T) {
       # ---
       # enabled_features: []
       process_matcher:
-        - match_regex: deepflow-.*`),
+        - match_regex: zerotrace-.*`),
 				start: 4,
 			},
 			want: []string{
@@ -295,7 +295,7 @@ global:
       # ---
       # rewrite_name: ""
       process_matcher:
-        - match_regex: deepflow-.*`),
+        - match_regex: zerotrace-.*`),
 				start: 3,
 			},
 			want: []string{
@@ -528,7 +528,7 @@ func TestConvertTemplateYAMLToJSON(t *testing.T) {
     common:
       capture_mode: 0
   ebpf:
-    profile: # deepflow-server for test, don't delete 241108
+    profile: # zerotrace-server for test, don't delete 241108
       unwinding:
         dwarf_regex: ^python[23].*`),
 				dynamicOpts: dynamicOptions,
@@ -634,7 +634,7 @@ inputs:
       # ---
       # rewrite_name: ""
       process_matcher:
-        - match_regex: deepflow-.*`),
+        - match_regex: zerotrace-.*`),
 			},
 			want: map[string]interface{}{
 				"inputs.proc.tag_extraction.process_matcher": map[string]interface{}{
@@ -688,7 +688,7 @@ func TestDictValueToString(t *testing.T) {
 				yamlData: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: (python[23]|deepflow-server).* # deepflow-server for test, don't delete 241108
+      - match_regex: (python[23]|zerotrace-server).* # zerotrace-server for test, don't delete 241108
         match_type: ProcessName
 outputs:
   flow_log:
@@ -699,7 +699,7 @@ outputs:
 			want: map[string]interface{}{
 				"inputs": map[string]interface{}{
 					"proc": map[string]interface{}{
-						"process_matcher": "- match_regex: (python[23]|deepflow-server).*\n  match_type: ProcessName\n",
+						"process_matcher": "- match_regex: (python[23]|zerotrace-server).*\n  match_type: ProcessName\n",
 					},
 				},
 				"outputs": map[string]interface{}{
@@ -805,7 +805,7 @@ func TestStringToDictValue(t *testing.T) {
 			args: args{
 				yamlData: []byte(`inputs:
   proc:
-    process_matcher: "- match_regex: (python[23]|deepflow-server).*\n  match_type: ProcessName\n"
+    process_matcher: "- match_regex: (python[23]|zerotrace-server).*\n  match_type: ProcessName\n"
 outputs:
   flow_log:
     filters:
@@ -817,7 +817,7 @@ outputs:
 					"proc": map[string]interface{}{
 						"process_matcher": []interface{}{
 							map[string]interface{}{
-								"match_regex": "(python[23]|deepflow-server).*",
+								"match_regex": "(python[23]|zerotrace-server).*",
 								"match_type":  "ProcessName",
 							},
 						},
@@ -905,7 +905,7 @@ func TestDataConvertToJSON(t *testing.T) {
 				yamlData: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: (python[23]|deepflow-server).* # deepflow-server for test, don't delete 241108
+      - match_regex: (python[23]|zerotrace-server).* # zerotrace-server for test, don't delete 241108
         match_type: ProcessName
 outputs:
   flow_log:
@@ -916,7 +916,7 @@ outputs:
 			want: []byte(`{
   "inputs": {
     "proc": {
-      "process_matcher": "- match_regex: (python[23]|deepflow-server).*\n  match_type: ProcessName\n"
+      "process_matcher": "- match_regex: (python[23]|zerotrace-server).*\n  match_type: ProcessName\n"
     }
   },
   "outputs": {
@@ -968,7 +968,7 @@ func TestConvertYAMLToJSON(t *testing.T) {
 				yamlData: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: (python[23]|deepflow-server).* # deepflow-server for test, don't delete 241108
+      - match_regex: (python[23]|zerotrace-server).* # zerotrace-server for test, don't delete 241108
         match_type: ProcessName
 outputs:
   flow_log:
@@ -979,7 +979,7 @@ outputs:
 			want: []byte(`{
   "inputs": {
     "proc": {
-      "process_matcher": "- match_regex: (python[23]|deepflow-server).*\n  match_type: ProcessName\n"
+      "process_matcher": "- match_regex: (python[23]|zerotrace-server).*\n  match_type: ProcessName\n"
     }
   },
   "outputs": {
@@ -1036,7 +1036,7 @@ func TestBatchConvertYAMLToJSON(t *testing.T) {
 					[]byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: (python[23]|deepflow-server).*
+      - match_regex: (python[23]|zerotrace-server).*
         match_type: ProcessName`),
 					[]byte(`invalid-yaml:
   - item1
@@ -1239,7 +1239,7 @@ func TestValidateYAML(t *testing.T) {
 				yamlData: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: (python[23]|deepflow-server).* # deepflow-server for test, don't delete 241108
+      - match_regex: (python[23]|zerotrace-server).* # zerotrace-server for test, don't delete 241108
         match_type: ProcessName`),
 			},
 			wantErr: false,

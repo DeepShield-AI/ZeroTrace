@@ -17,10 +17,10 @@
 package diffbase
 
 import (
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/tool"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/tool"
 )
 
 func (b *DataSet) AddDHCPPort(dbItem *metadbmodel.DHCPPort, seq int, toolDataSet *tool.DataSet) {

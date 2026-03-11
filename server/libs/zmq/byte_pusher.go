@@ -20,8 +20,8 @@ import (
 	logging "github.com/op/go-logging"
 	"github.com/pebbe/zmq4"
 
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("sender")

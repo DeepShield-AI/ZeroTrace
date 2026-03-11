@@ -22,8 +22,8 @@ import (
 
 	. "github.com/google/gopacket/layers"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 // 平台信息有关测试
@@ -303,7 +303,7 @@ func TestModifyEpcIdPolicy2(t *testing.T) {
 // l2EpcId0=-1,l3EpcId0=-1,l2Epcid1=-2,l3EpcId1=50的数据正确性
 func TestModifyEpcIdPolicy3(t *testing.T) {
 	policy := NewPolicyTable(1, 2, 1024, false)
-	platformData1 := generatePlatformDataByParam(ip4, mac4, EPC_FROM_DEEPFLOW, 3)
+	platformData1 := generatePlatformDataByParam(ip4, mac4, EPC_FROM_ZEROTRACE, 3)
 	platformData2 := generatePlatformDataByParam(ip5, mac5, groupEpc[5], 3)
 	policy.UpdateInterfaceData([]PlatformData{platformData1, platformData2})
 	generateIpgroupData(policy)
@@ -312,7 +312,7 @@ func TestModifyEpcIdPolicy3(t *testing.T) {
 	key := generateLookupKey(mac2, mac1, ip4, ip5, IPProtocolTCP, 0, 8000)
 	setEthTypeAndOthers(key, EthernetTypeIPv4, ttl, l2EndBool[1], l2EndBool[1])
 
-	basicData := generateEpcInfo(EPC_FROM_DEEPFLOW, EPC_FROM_DEEPFLOW, EPC_FROM_INTERNET, groupEpc[5])
+	basicData := generateEpcInfo(EPC_FROM_ZEROTRACE, EPC_FROM_ZEROTRACE, EPC_FROM_INTERNET, groupEpc[5])
 	data, _ := policy.lookupAllByKey(key)
 	if !CheckEpcTestResult(t, basicData, data) {
 		t.Error("TestModifyEpcIdPolicy3 Check Failed!")
@@ -327,8 +327,8 @@ func TestModifyEpcIdPolicy3(t *testing.T) {
 // l3EpcId0=-2, l3EpcId1=-2的数据正确性
 func TestModifyEpcIdPolicy5(t *testing.T) {
 	policy := NewPolicyTable(1, 2, 1024, false)
-	platformData1 := generatePlatformDataByParam(ip4, mac4, EPC_FROM_DEEPFLOW, 4)
-	platformData2 := generatePlatformDataByParam(ip5, mac5, EPC_FROM_DEEPFLOW, 4)
+	platformData1 := generatePlatformDataByParam(ip4, mac4, EPC_FROM_ZEROTRACE, 4)
+	platformData2 := generatePlatformDataByParam(ip5, mac5, EPC_FROM_ZEROTRACE, 4)
 	policy.UpdateInterfaceData([]PlatformData{platformData1, platformData2})
 	generateIpgroupData(policy)
 	generateAclData(policy)
@@ -338,7 +338,7 @@ func TestModifyEpcIdPolicy5(t *testing.T) {
 	key := generateLookupKey(mac2, mac3, ip4, ip5, IPProtocolTCP, 0, 8000)
 	setEthTypeAndOthers(key, EthernetTypeIPv4, ttl, l2EndBool[0], l2EndBool[1])
 
-	basicData := generateEpcInfo(EPC_FROM_INTERNET, EPC_FROM_DEEPFLOW, EPC_FROM_INTERNET, EPC_FROM_DEEPFLOW)
+	basicData := generateEpcInfo(EPC_FROM_INTERNET, EPC_FROM_ZEROTRACE, EPC_FROM_INTERNET, EPC_FROM_ZEROTRACE)
 	data, _ := policy.lookupAllByKey(key)
 	if !CheckEpcTestResult(t, basicData, data) {
 		t.Error("TestModifyEpcIdPolicy5 Check Failed!")
@@ -355,7 +355,7 @@ func TestModifyEpcIdPolicy5(t *testing.T) {
 	key.L2End0 = true
 	key.L3End1 = true
 
-	basicData = generateEpcInfo(EPC_FROM_DEEPFLOW, EPC_FROM_DEEPFLOW, EPC_FROM_DEEPFLOW, EPC_FROM_DEEPFLOW)
+	basicData = generateEpcInfo(EPC_FROM_ZEROTRACE, EPC_FROM_ZEROTRACE, EPC_FROM_ZEROTRACE, EPC_FROM_ZEROTRACE)
 	data, _ = policy.lookupAllByKey(key)
 	if !CheckEpcTestResult(t, basicData, data) {
 		t.Error("TestModifyEpcIdPolicy5-2 Check Failed!")

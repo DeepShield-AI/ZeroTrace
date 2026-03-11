@@ -17,9 +17,9 @@
 package service
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
 )
 
 func GetAgentByUser(userInfo *httpcommon.UserInfo, fpermitCfg *common.FPermit, vtaps []metadbmodel.VTap) ([]metadbmodel.VTap, error) {

@@ -28,12 +28,12 @@ import (
 
 	"inet.af/netaddr"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	ccommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/genesis/common"
-	"github.com/deepflowio/deepflow/server/controller/genesis/config"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	ccommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis/common"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis/config"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type bridge struct {

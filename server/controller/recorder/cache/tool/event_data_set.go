@@ -16,7 +16,7 @@
 
 package tool
 
-import "github.com/deepflowio/deepflow/server/controller/common"
+import "github.com/zerotraceio/zerotrace/server/controller/common"
 
 type EventDataSet struct {
 	hostIPToID   map[string]int

@@ -19,7 +19,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/deepflowio/deepflow/server/libs/datastructure"
+	"github.com/zerotraceio/zerotrace/server/libs/datastructure"
 	"github.com/gin-gonic/gin"
 )
 

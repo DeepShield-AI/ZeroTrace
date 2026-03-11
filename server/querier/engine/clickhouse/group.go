@@ -21,11 +21,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 func GetMultiGroup(stmts []Statement, name string, asTagMap map[string]string) []Statement {

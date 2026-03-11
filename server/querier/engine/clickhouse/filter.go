@@ -27,14 +27,14 @@ import (
 	"time"
 
 	"github.com/Knetic/govaluate"
-	"github.com/deepflowio/deepflow/server/libs/utils"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 	"github.com/xwb1989/sqlparser"
 	"inet.af/netaddr"
 )
@@ -1500,7 +1500,7 @@ func (f *WhereFunction) Trans(expr sqlparser.Expr, w *Where, e *CHEngine) (view.
 		}
 		var isIntEnum = true
 		enumTable := table
-		if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, db) {
+		if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, db) {
 			enumTable = chCommon.DB_TABLE_MAP[db][0]
 		}
 		tagDescription, ok := tag.TAG_DESCRIPTIONS[tag.TagDescriptionKey{

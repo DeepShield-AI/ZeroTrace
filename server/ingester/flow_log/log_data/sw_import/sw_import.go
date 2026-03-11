@@ -17,9 +17,9 @@
 package sw_import
 
 import (
-	flowlogCfg "github.com/deepflowio/deepflow/server/ingester/flow_log/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_log/log_data"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
+	flowlogCfg "github.com/zerotraceio/zerotrace/server/ingester/flow_log/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_log/log_data"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
 )
 
 func SkyWalkingDataToL7FlowLogs(vtapID, orgId, teamId uint16, segmentData, peerIP []byte, uri string, platformData *grpc.PlatformInfoTable, cfg *flowlogCfg.Config) []*log_data.L7FlowLog {

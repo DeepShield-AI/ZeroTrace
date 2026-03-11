@@ -17,8 +17,8 @@
 package resource
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 func GetVPCs(orgID int, filter map[string]interface{}) ([]*metadbmodel.VPC, error) {

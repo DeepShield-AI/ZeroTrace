@@ -27,7 +27,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/config"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/config"
 	"github.com/goccy/go-json"
 	"github.com/op/go-logging"
 )

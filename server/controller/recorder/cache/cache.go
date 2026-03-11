@@ -24,14 +24,14 @@ import (
 
 	"github.com/op/go-logging"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/diffbase"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/tool"
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	tagrecorderHealer "github.com/deepflowio/deepflow/server/controller/tagrecorder/healer"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/diffbase"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/tool"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	tagrecorderHealer "github.com/zerotraceio/zerotrace/server/controller/tagrecorder/healer"
 )
 
 // 为支持domain及其sub_domain的独立刷新，将缓存拆分成对应的独立Cache

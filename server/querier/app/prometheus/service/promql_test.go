@@ -89,7 +89,7 @@ func TestParsePromQL(t *testing.T) {
 		So(res.Data[0]["aggFunc"], ShouldEqual, "sum")
 	})
 
-	Convey("TestCase_ParsePromQL_Success_4_DeepFlow_Metrics", t, func() {
+	Convey("TestCase_ParsePromQL_Success_4_ZeroTrace_Metrics", t, func() {
 		res, err := executor.parsePromQL("sum(flow_log__l7_flow_log__request)by(auto_instance_0)")
 		So(err, ShouldBeNil)
 		So(len(res.Data), ShouldBeGreaterThan, 0)

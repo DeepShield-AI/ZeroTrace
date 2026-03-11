@@ -21,10 +21,10 @@ import (
 	"math"
 	"strconv"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/hmap/lru"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap/lru"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (

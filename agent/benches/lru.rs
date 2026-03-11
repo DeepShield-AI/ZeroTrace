@@ -20,7 +20,7 @@ use std::time::Duration;
 use std::{net::Ipv4Addr, time::Instant};
 
 use criterion::*;
-use deepflow_agent::{
+use zerotrace_agent::{
     _L7PerfCache as L7PerfCache, _LogCache as LogCache, _LogCacheKey as LogCacheKey,
 };
 use lru::LruCache;

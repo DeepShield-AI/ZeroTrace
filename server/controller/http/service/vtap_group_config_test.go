@@ -19,7 +19,7 @@ package service
 import (
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/agent_config"
 )
 
 func Test_copyStruct(t *testing.T) {

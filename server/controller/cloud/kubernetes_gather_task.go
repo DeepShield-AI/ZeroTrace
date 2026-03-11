@@ -21,14 +21,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/config"
-	"github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather"
-	kmodel "github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather"
+	kmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type KubernetesGatherTask struct {

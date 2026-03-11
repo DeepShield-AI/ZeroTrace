@@ -28,7 +28,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
 )
 
 func RegisterGenesisCommand() *cobra.Command {
@@ -44,7 +44,7 @@ func RegisterGenesisCommand() *cobra.Command {
 	syncInfo := &cobra.Command{
 		Use:     "sync",
 		Short:   "genesis sync info",
-		Example: "deepflow-ctl genesis sync",
+		Example: "zerotrace-ctl genesis sync",
 		Run: func(cmd *cobra.Command, args []string) {
 			syncInfo(cmd, syncType)
 		},
@@ -55,7 +55,7 @@ func RegisterGenesisCommand() *cobra.Command {
 	k8sInfo := &cobra.Command{
 		Use:     "k8s",
 		Short:   "genesis k8s info",
-		Example: "deepflow-ctl genesis k8s cluster_id",
+		Example: "zerotrace-ctl genesis k8s cluster_id",
 		Run: func(cmd *cobra.Command, args []string) {
 			k8sInfo(cmd, args, k8sType)
 		},
@@ -65,7 +65,7 @@ func RegisterGenesisCommand() *cobra.Command {
 	agentInfo := &cobra.Command{
 		Use:     "agent",
 		Short:   "genesis agent info",
-		Example: "deepflow-ctl genesis agent -i node_ip [agent_id]",
+		Example: "zerotrace-ctl genesis agent -i node_ip [agent_id]",
 		Run: func(cmd *cobra.Command, args []string) {
 			agentInfo(cmd, args)
 		},
@@ -74,7 +74,7 @@ func RegisterGenesisCommand() *cobra.Command {
 	storageInfo := &cobra.Command{
 		Use:     "storage",
 		Short:   "genesis storage info",
-		Example: "deepflow-ctl genesis storage agent_id",
+		Example: "zerotrace-ctl genesis storage agent_id",
 		Run: func(cmd *cobra.Command, args []string) {
 			storageInfo(cmd, args)
 		},

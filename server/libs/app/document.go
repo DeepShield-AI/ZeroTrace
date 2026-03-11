@@ -22,10 +22,10 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (

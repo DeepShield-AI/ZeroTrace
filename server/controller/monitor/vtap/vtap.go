@@ -22,14 +22,14 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/monitor/config"
-	"github.com/deepflowio/deepflow/server/controller/monitor/vtap/version"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/config"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/vtap/version"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("monitor/vtap")

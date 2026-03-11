@@ -17,10 +17,10 @@
 package controller
 
 import (
-	api "github.com/deepflowio/deepflow/message/controller"
+	api "github.com/zerotraceio/zerotrace/message/controller"
 	context "golang.org/x/net/context"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 type EncryptKeyEvent struct{}

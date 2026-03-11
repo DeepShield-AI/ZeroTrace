@@ -19,7 +19,7 @@ package agentlicense
 import (
 	"gorm.io/gorm"
 
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 func UpdateAgentLicenseFunction(tx *gorm.DB, userID int, newAgentGroup *metadbmodel.VTapGroup, agents []metadbmodel.VTap) error {

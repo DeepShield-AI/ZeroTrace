@@ -27,17 +27,17 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/deepflowio/deepflow/server/common"
-	"github.com/deepflowio/deepflow/server/controller/controller"
-	"github.com/deepflowio/deepflow/server/controller/report"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/ingester/droplet/profiler"
-	"github.com/deepflowio/deepflow/server/ingester/ingester"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/mcp"
-	"github.com/deepflowio/deepflow/server/querier/querier"
+	"github.com/zerotraceio/zerotrace/server/common"
+	"github.com/zerotraceio/zerotrace/server/controller/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/report"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/droplet/profiler"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingester"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/mcp"
+	"github.com/zerotraceio/zerotrace/server/querier/querier"
 
 	logging "github.com/op/go-logging"
 )
@@ -64,7 +64,7 @@ func main() {
 	if *version {
 		fmt.Printf(
 			"%s\n%s\n%s\n%s\n%s\n%s\n",
-			"Name: deepflow-server community edition",
+			"Name: zerotrace-server community edition",
 			"Branch: "+Branch,
 			"CommitID: "+Revision,
 			"RevCount: "+RevCount,
@@ -79,7 +79,7 @@ func main() {
 	logLevel, _ := logging.LogLevel(cfg.LogLevel)
 	logging.SetLevel(logLevel, "")
 
-	log.Infof("deepflow-server config: %+v", *cfg)
+	log.Infof("zerotrace-server config: %+v", *cfg)
 
 	debug.SetIpAndPort(ingesterctl.DEBUG_LISTEN_IP, ingesterctl.DEBUG_LISTEN_PORT)
 	debug.NewLogLevelControl()

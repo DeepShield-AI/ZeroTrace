@@ -20,9 +20,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/controller/recorder/cleaner"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/db/idmng"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cleaner"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/db/idmng"
 )
 
 var (

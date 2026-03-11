@@ -23,17 +23,17 @@ import (
 
 	"github.com/bitly/go-simplejson"
 
-	. "github.com/deepflowio/deepflow/server/controller/cloud/config"
+	. "github.com/zerotraceio/zerotrace/server/controller/cloud/config"
 )
 
 type Debugger struct {
-	logDir       string // /var/log/deepflow/cloud/<domain name>
-	tmpLogDir    string // /var/log/deepflow/cloud/<domain name>/tmp
-	latestLogDir string // /var/log/deepflow/cloud/<domain name>/latest
+	logDir       string // /var/log/zerotrace/cloud/<domain name>
+	tmpLogDir    string // /var/log/zerotrace/cloud/<domain name>/tmp
+	latestLogDir string // /var/log/zerotrace/cloud/<domain name>/latest
 }
 
 func NewDebugger(domainName string) *Debugger {
-	logDir := fmt.Sprintf("/var/log/deepflow/cloud/%s/", domainName)
+	logDir := fmt.Sprintf("/var/log/zerotrace/cloud/%s/", domainName)
 	return &Debugger{
 		logDir:       logDir,
 		tmpLogDir:    logDir + "tmp/",

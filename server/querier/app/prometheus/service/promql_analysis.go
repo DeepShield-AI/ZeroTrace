@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 )
 
 func (e *prometheusExecutor) promQLAnalysis(ctx context.Context, metric string, targetLabels []string, appLabels []string, startTime string, endTime string, orgID string) (*common.Result, error) {

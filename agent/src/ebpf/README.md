@@ -6,11 +6,11 @@ Provides the Rust language interface.
 
 Currently support `x86_64` and `arm64` architectures.
 
-[Kernel version and feature support](https://github.com/deepflowio/docs/blob/main/docs/zh/02-ce-install/01-overview.md#%E8%BF%90%E8%A1%8C%E6%9D%83%E9%99%90%E5%8F%8A%E5%86%85%E6%A0%B8%E8%A6%81%E6%B1%82)
+[Kernel version and feature support](https://github.com/zerotraceio/docs/blob/main/docs/zh/02-ce-install/01-overview.md#%E8%BF%90%E8%A1%8C%E6%9D%83%E9%99%90%E5%8F%8A%E5%86%85%E6%A0%B8%E8%A6%81%E6%B1%82)
 
 # Protocol Tracing
 
-Deepflow-agent deploys eBPF probes (kprobe/traceponit) on Linux syscalls. When application makes network-related syscalls, deepflow-agent's eBPF probes snoop the data.
+Zerotrace-agent deploys eBPF probes (kprobe/traceponit) on Linux syscalls. When application makes network-related syscalls, zerotrace-agent's eBPF probes snoop the data.
 
 The following protocols are currently probed:
 
@@ -44,7 +44,7 @@ Trace to the Golang program is implemented by the following method:
 - Create probes and attach based on the parsed datas.
 - Capture process execute/exit events by tracking two tracepoints(`tracepoint/sched/sched_process_fork` and `tracepoint/sched/sched_process_exit`). Update probes based on captured events.
 
-Note: In order to avoid attaching/detaching the golang program repeatedly, it is necessary to confirm that the golang application has been running stably before DeepFlow-agent starts the attach operation. After DeepFlow-agent detects that the golang application is loaded, it delays the attach operation for 60 seconds. Openssl only supports kernel 4.17 and above.
+Note: In order to avoid attaching/detaching the golang program repeatedly, it is necessary to confirm that the golang application has been running stably before ZeroTrace-agent starts the attach operation. After ZeroTrace-agent detects that the golang application is loaded, it delays the attach operation for 60 seconds. Openssl only supports kernel 4.17 and above.
 
 # Implement logic
 
@@ -457,7 +457,7 @@ graph LR
 - 8 rust extra events callback
   - We provide a function that the user can register a callback interface for a specific event. e.g. Use rust function process these events.
 - 9.1 add_event_to_proc_header
-  - Add `struct process_event` to list-head(proc_events_head), need to set a expire time in `struct process_event`, see the description of [TLS/SSL Tracing](https://github.com/deepflowio/deepflow/tree/main/agent/src/ebpf#tlsssl-tracing) for the reason.
+  - Add `struct process_event` to list-head(proc_events_head), need to set a expire time in `struct process_event`, see the description of [TLS/SSL Tracing](https://github.com/zerotraceio/zerotrace/tree/main/agent/src/ebpf#tlsssl-tracing) for the reason.
 - 14.2.1 clear_probes_by_pid
   - Clear all probe, when process id == pid (event fetched).
 - 14.2.2 proc_parse_and_register

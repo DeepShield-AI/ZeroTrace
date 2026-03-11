@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
 )
 
 const (
@@ -35,7 +35,7 @@ type offloadEnabledFunc func(string, []string, bool) bool
 // validate `func` & `by`, return if the <XSelector> can be offloaded
 func offloadEnabled(metric string, funcs []string, by bool) bool {
 	// if func() without (tags), can not be offloaded
-	// not offloaded DeepFlow Native Metric, because it's already offloaded
+	// not offloaded ZeroTrace Native Metric, because it's already offloaded
 	if strings.Contains(metric, "__") || !by || len(funcs) == 0 {
 		return false
 	}

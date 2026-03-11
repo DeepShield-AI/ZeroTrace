@@ -25,15 +25,15 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type DataSource struct {
@@ -90,8 +90,8 @@ var DEFAULT_DATA_SOURCE_DISPLAY_NAMES = []string{
 	"应用-调用日志",       // flow_log.l7_flow_log
 	"网络-TCP 时序数据",   // flow_log.l4_packet
 	"网络-PCAP 数据",    // flow_log.l7_packet
-	"租户侧监控数据",       //  deepflow_tenant.*
-	"管理侧监控数据",       // deepflow_admin.*
+	"租户侧监控数据",       //  zerotrace_tenant.*
+	"管理侧监控数据",       // zerotrace_admin.*
 	"外部指标数据",        // ext_metrics.*
 	"Prometheus 数据", // prometheus.*
 	"事件-资源变更事件",     // event.event
@@ -134,10 +134,10 @@ func (d *DataSource) GetDataSources(orgID int, filter map[string]interface{}, sp
 				collection = "flow_metrics.application*"
 			case "network":
 				collection = "flow_metrics.network*"
-			case "deepflow_tenant":
-				collection = "deepflow_tenant.*"
-			case "deepflow_admin":
-				collection = "deepflow_admin.*"
+			case "zerotrace_tenant":
+				collection = "zerotrace_tenant.*"
+			case "zerotrace_admin":
+				collection = "zerotrace_admin.*"
 			case "ext_metrics":
 				collection = "ext_metrics.*"
 			case "prometheus":
@@ -194,9 +194,9 @@ func (d *DataSource) GetDataSources(orgID int, filter map[string]interface{}, sp
 			dataSourceResp.IsDefault = false
 		}
 		if specCfg != nil {
-			if dataSource.DataTableCollection == "deepflow_tenant.*" ||
-				dataSource.DataTableCollection == "deepflow_admin.*" {
-				dataSourceResp.IntervalTime = common.DATA_SOURCE_DEEPFLOW_SYSTEM_INTERVAL
+			if dataSource.DataTableCollection == "zerotrace_tenant.*" ||
+				dataSource.DataTableCollection == "zerotrace_admin.*" {
+				dataSourceResp.IntervalTime = common.DATA_SOURCE_ZEROTRACE_SYSTEM_INTERVAL
 			}
 			if dataSource.DataTableCollection == "ext_metrics.*" {
 				dataSourceResp.IntervalTime = specCfg.DataSourceExtMetricsInterval
@@ -654,7 +654,7 @@ func getName(interval_time int, collection string) (string, error) {
 	case 0:
 		// return value: flow_log.l4_flow_log, flow_log.l7_flow_log,
 		// flow_log.l4_packet, flow_log.l7_packet,
-		// deepflow_tenant, deepflow_admin, ext_metrics, prometheus,
+		// zerotrace_tenant, zerotrace_admin, ext_metrics, prometheus,
 		// event.event, event.perf_event, event.alert_event
 		return strings.TrimSuffix(collection, ".*"), nil
 	case 1: // one second

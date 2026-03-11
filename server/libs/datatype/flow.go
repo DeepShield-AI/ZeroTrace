@@ -25,9 +25,9 @@ import (
 
 	"github.com/google/gopacket/layers"
 
-	"github.com/deepflowio/deepflow/server/libs/datatype/pb"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type CloseType uint8

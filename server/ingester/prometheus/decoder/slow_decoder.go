@@ -24,16 +24,16 @@ import (
 	logging "github.com/op/go-logging"
 	"github.com/prometheus/common/model"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/config"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/dbwriter"
-	"github.com/deepflowio/deepflow/server/libs/datatype/prompb"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype/prompb"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type SlowCounter struct {

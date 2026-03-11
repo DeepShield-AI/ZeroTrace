@@ -23,15 +23,15 @@ import (
 	"github.com/gogo/protobuf/proto"
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	ingestercommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/pcap/config"
-	"github.com/deepflowio/deepflow/server/ingester/pcap/dbwriter"
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	ingestercommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/pcap/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/pcap/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("pcap.decoder")

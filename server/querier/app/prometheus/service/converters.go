@@ -34,12 +34,12 @@ import (
 	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/xwb1989/sqlparser"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	tagdescription "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	tagdescription "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 const (
@@ -131,7 +131,7 @@ type prefix int
 
 const (
 	prefixNone     prefix = iota
-	prefixDeepFlow        // support "df_" prefix for DeepFlow universal tag, e.g.: df_auto_instance
+	prefixZeroTrace        // support "df_" prefix for ZeroTrace universal tag, e.g.: df_auto_instance
 	prefixTag             // support "tag_" prefix for Prometheus native lable, e.g.: tag_instance
 )
 
@@ -155,7 +155,7 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 	var groupBy []string
 	var metricWithAggFunc string
 	// use map for duplicate tags removal
-	var expectedDeepFlowNativeTags map[string]string
+	var expectedZeroTraceNativeTags map[string]string
 
 	// append query field: 1. show tags OR aggregation tags
 	isShowTagStatement := false
@@ -169,10 +169,10 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 		}
 		// append all `SHOW tags`
 		metricsArray = append(metricsArray, tagsArray...)
-		expectedDeepFlowNativeTags = make(map[string]string, len(q.Matchers)-1)
+		expectedZeroTraceNativeTags = make(map[string]string, len(q.Matchers)-1)
 	} else {
-		if db != chCommon.DB_NAME_EXT_METRICS && (db != chCommon.DB_NAME_DEEPFLOW_ADMIN && db != chCommon.DB_NAME_DEEPFLOW_TENANT) && db != chCommon.DB_NAME_PROMETHEUS && db != "" {
-			// DeepFlow native metrics needs aggregation for query
+		if db != chCommon.DB_NAME_EXT_METRICS && (db != chCommon.DB_NAME_ZEROTRACE_ADMIN && db != chCommon.DB_NAME_ZEROTRACE_TENANT) && db != chCommon.DB_NAME_PROMETHEUS && db != "" {
+			// ZeroTrace native metrics needs aggregation for query
 			if len(q.Hints.Grouping) == 0 {
 				// not specific cardinality
 				return ctx, "", "", "", "", fmt.Errorf("unknown series")
@@ -232,7 +232,7 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 					// for [Count], not calculate second times, just return Count(row) value
 					if p.interceptPrometheusExpr != nil {
 						_ = p.interceptPrometheusExpr(func(e *parser.AggregateExpr) error {
-							// Count(row) in deepflow already complete in clickhouse query
+							// Count(row) in zerotrace already complete in clickhouse query
 							// so we don't need `Count` again, instead, `Sum` all `Count` result would be our expectation
 							// so, modify expr.Operation here to make prometheus engine do `Sum` for `values`
 							e.Op = parser.SUM
@@ -250,15 +250,15 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 			}
 		} else {
 			if len(q.Hints.Grouping) > 0 {
-				expectedDeepFlowNativeTags = make(map[string]string, len(q.Hints.Grouping)+len(q.Matchers)-1)
+				expectedZeroTraceNativeTags = make(map[string]string, len(q.Hints.Grouping)+len(q.Matchers)-1)
 				for _, q := range q.Hints.Grouping {
-					tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixType, db, q)
-					if isDeepFlowTag {
-						expectedDeepFlowNativeTags[tagName] = tagAlias
+					tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixType, db, q)
+					if isZeroTraceTag {
+						expectedZeroTraceNativeTags[tagName] = tagAlias
 					}
 				}
 			} else {
-				expectedDeepFlowNativeTags = make(map[string]string, len(q.Matchers)-1)
+				expectedZeroTraceNativeTags = make(map[string]string, len(q.Matchers)-1)
 			}
 		}
 	}
@@ -271,7 +271,7 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 	if db == "" || db == chCommon.DB_NAME_PROMETHEUS {
 		// append metricName `value`
 		metricsArray = append(metricsArray, metricAlias)
-		// append `tag` only for prometheus & ext_metrics & deepflow_admin / deepflow_tenant
+		// append `tag` only for prometheus & ext_metrics & zerotrace_admin / zerotrace_tenant
 		if !common.IsValueInSliceString(q.Hints.Func, model.RelabelFunctions) {
 			// `tag` should be append into `Select` with:
 			// 1. not any aggregations, try get all `tag`
@@ -290,11 +290,11 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 				}
 			}
 		}
-	} else if db == chCommon.DB_NAME_EXT_METRICS || db == chCommon.DB_NAME_DEEPFLOW_ADMIN || db == chCommon.DB_NAME_DEEPFLOW_TENANT {
+	} else if db == chCommon.DB_NAME_EXT_METRICS || db == chCommon.DB_NAME_ZEROTRACE_ADMIN || db == chCommon.DB_NAME_ZEROTRACE_TENANT {
 		metricsArray = append(metricsArray, fmt.Sprintf(metricAlias, metricName))
 		metricsArray = append(metricsArray, fmt.Sprintf("`%s`", PROMETHEUS_NATIVE_TAG_NAME))
 	} else {
-		// for flow_metrics/flow_log/deepflow_admin/deepflow_tenant/ext_metrics
+		// for flow_metrics/flow_log/zerotrace_admin/zerotrace_tenant/ext_metrics
 		// append metricName as "%s as value"
 		if metricWithAggFunc != "" {
 			// only when query metric samples
@@ -309,15 +309,15 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 	filters := make([]string, 0, len(q.Matchers)+1)
 	filters = append(filters, fmt.Sprintf("(time >= %d AND time <= %d)", startTime, endTime))
 	for _, matcher := range q.Matchers {
-		tagName, tagAlias, isDeepFlowTag, newFilter := p.parseMatchers(matcher, prefixType, db)
+		tagName, tagAlias, isZeroTraceTag, newFilter := p.parseMatchers(matcher, prefixType, db)
 		if newFilter == "" {
 			continue
 		}
 		filters = append(filters, newFilter)
 
 		if db == "" || db == chCommon.DB_NAME_PROMETHEUS || db == chCommon.DB_NAME_EXT_METRICS {
-			if isDeepFlowTag && len(q.Hints.Grouping) == 0 {
-				expectedDeepFlowNativeTags[tagName] = tagAlias
+			if isZeroTraceTag && len(q.Hints.Grouping) == 0 {
+				expectedZeroTraceNativeTags[tagName] = tagAlias
 				// append all priority higher tags
 				if greaterTags, hasIDSuffix := getTagsGreaterThan(tagName); greaterTags != nil {
 					for i := range greaterTags {
@@ -325,18 +325,18 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 						if hasIDSuffix {
 							appendTag = fmt.Sprintf("`%s_id`", greaterTags[i])
 						}
-						expectedDeepFlowNativeTags[appendTag] = ""
+						expectedZeroTraceNativeTags[appendTag] = ""
 					}
 				}
 			}
 
-			if isDeepFlowTag && tagAlias != "" {
-				expectedDeepFlowNativeTags[tagName] = tagAlias
+			if isZeroTraceTag && tagAlias != "" {
+				expectedZeroTraceNativeTags[tagName] = tagAlias
 			}
 
-			if !isDeepFlowTag && debug {
+			if !isZeroTraceTag && debug {
 				// append in query for analysis (findout if tag is target_label)
-				expectedDeepFlowNativeTags[tagName] = tagAlias
+				expectedZeroTraceNativeTags[tagName] = tagAlias
 			}
 		}
 	}
@@ -344,29 +344,29 @@ func (p *prometheusReader) promReaderTransToSQL(ctx context.Context, req *prompb
 	if len(p.extraFilters) > 0 {
 		// to support same filters like promql filters, here we need to parse and extract `where` clause
 		// it can't be use in querier where directly
-		// for this scenarios, all tag would be use as deepflow-tag, do not support prometheus tag here
-		// notice: here, when call parseExtraFiltersToWhereClause, use prefixType=prefixNone means always query DeepFlow tag
+		// for this scenarios, all tag would be use as zerotrace-tag, do not support prometheus tag here
+		// notice: here, when call parseExtraFiltersToWhereClause, use prefixType=prefixNone means always query ZeroTrace tag
 		extraLabelMatchers, err := parseExtraFiltersToMatchers(p.extraFilters)
 		if err == nil {
 			filters = append(filters, p.parseExtraFiltersToWhereClause(extraLabelMatchers, prefixNone, db,
 				func(tagName string, isTag bool) {
 					if db == "" || db == chCommon.DB_NAME_PROMETHEUS || db == chCommon.DB_NAME_EXT_METRICS {
 						if len(q.Hints.Grouping) == 0 && isTag {
-							expectedDeepFlowNativeTags[tagName] = tagName
+							expectedZeroTraceNativeTags[tagName] = tagName
 						}
 					}
 				}))
 		}
 	}
 
-	// append query field: 4. append DeepFlow native tags for Prometheus metrics
-	for tagName, tagAlias := range expectedDeepFlowNativeTags {
-		// reduce Prometheus query DeepFlow tags
+	// append query field: 4. append ZeroTrace native tags for Prometheus metrics
+	for tagName, tagAlias := range expectedZeroTraceNativeTags {
+		// reduce Prometheus query ZeroTrace tags
 		// append tags into `select` clause only when:
-		// 1. grouping DeepFlow tags or filter DeepFlow tags
+		// 1. grouping ZeroTrace tags or filter ZeroTrace tags
 		// 2. filer enum tags when grouping
 		// will not append tags:
-		// 1. neither grouping nor filter any DeepFlow tags
+		// 1. neither grouping nor filter any ZeroTrace tags
 		// 2. filter normal tags when grouping
 		if tagAlias == "" {
 			metricsArray = append(metricsArray, tagName)
@@ -393,16 +393,16 @@ func (p *prometheusReader) parseMatchers(matcher *prompb.LabelMatcher, prefixTyp
 	if matcher.Name == labels.MetricName {
 		return "", "", false, ""
 	}
-	tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixType, db, matcher.Name)
-	operation, value := getLabelMatcher(matcher.Type, matcher.Value, isDeepFlowTag)
+	tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixType, db, matcher.Name)
+	operation, value := getLabelMatcher(matcher.Type, matcher.Value, isZeroTraceTag)
 	if operation == "" {
 		return "", "", false, ""
 	}
 
-	// for normal query & DeepFlow metrics, query enum tag can only use tag name(Enum(x)) in filter clause
+	// for normal query & ZeroTrace metrics, query enum tag can only use tag name(Enum(x)) in filter clause
 	tagMatcher := tagName
-	if prefixType != prefixNone && isDeepFlowTag && tagAlias != "" {
-		// for Prometheus metrics, query DeepFlow enum tag can only use tag alias(x_enum) in filter clause
+	if prefixType != prefixNone && isZeroTraceTag && tagAlias != "" {
+		// for Prometheus metrics, query ZeroTrace enum tag can only use tag alias(x_enum) in filter clause
 		tagMatcher = tagAlias
 	}
 
@@ -411,14 +411,14 @@ func (p *prometheusReader) parseMatchers(matcher *prompb.LabelMatcher, prefixTyp
 		for _, v := range value {
 			tmpFilters = append(tmpFilters, fmt.Sprintf("%s %s '%s'", tagMatcher, operation, escapeSingleQuote(v)))
 		}
-		return tagName, tagAlias, isDeepFlowTag, fmt.Sprintf("(%s)", strings.Join(tmpFilters, " OR "))
+		return tagName, tagAlias, isZeroTraceTag, fmt.Sprintf("(%s)", strings.Join(tmpFilters, " OR "))
 	} else {
 		// () with only ONE condition in it will cause error
-		if value[0] == "" && isDeepFlowTag {
-			// only for DeepFlow Tag, when value is empty, use [not] exist(`tag`) for query
-			return tagName, tagAlias, isDeepFlowTag, fmt.Sprintf("%s(%s)", operation, tagMatcher)
+		if value[0] == "" && isZeroTraceTag {
+			// only for ZeroTrace Tag, when value is empty, use [not] exist(`tag`) for query
+			return tagName, tagAlias, isZeroTraceTag, fmt.Sprintf("%s(%s)", operation, tagMatcher)
 		} else {
-			return tagName, tagAlias, isDeepFlowTag, fmt.Sprintf("%s %s '%s'", tagMatcher, operation, escapeSingleQuote(value[0]))
+			return tagName, tagAlias, isZeroTraceTag, fmt.Sprintf("%s %s '%s'", tagMatcher, operation, escapeSingleQuote(value[0]))
 		}
 	}
 }
@@ -462,9 +462,9 @@ func parseMetric(matchers []*prompb.LabelMatcher) (prefixType prefix, metricName
 		queryMetric = matcher.Value
 
 		if strings.Contains(metricName, "__") {
-			// DeepFlow native metrics: ${db}__${table}__${metricsName}
+			// ZeroTrace native metrics: ${db}__${table}__${metricsName}
 			// i.e.: flow_log__l4_flow_log__byte_rx
-			// DeepFlow native metrics(flow_metrics): ${db}__${table}__${metricsName}__${datasource}
+			// ZeroTrace native metrics(flow_metrics): ${db}__${table}__${metricsName}__${datasource}
 			// i.e.: flow_metrics__network__byte_rx__1m
 			// Telegraf integrated metrics: ext_metrics__metrics__${integratedSource}_${inputTarget}__${metricsName}
 			// i.e.: ext_metrics__metrics__influxdb_cpu__usage_user
@@ -473,10 +473,10 @@ func parseMetric(matchers []*prompb.LabelMatcher) (prefixType prefix, metricName
 			metricsSplit := strings.Split(metricName, "__")
 			if _, ok := chCommon.DB_TABLE_MAP[metricsSplit[0]]; ok {
 				db = metricsSplit[0]
-				table = metricsSplit[1] // FIXME: should fix deepflow_admin/deepflow_tenant table name like 'deepflow_server.xxx'
+				table = metricsSplit[1] // FIXME: should fix zerotrace_admin/zerotrace_tenant table name like 'zerotrace_server.xxx'
 				metricName = metricsSplit[2]
 
-				if db == chCommon.DB_NAME_DEEPFLOW_ADMIN || db == chCommon.DB_NAME_DEEPFLOW_TENANT {
+				if db == chCommon.DB_NAME_ZEROTRACE_ADMIN || db == chCommon.DB_NAME_ZEROTRACE_TENANT {
 					metricAlias = "`metrics.%s` as value"
 				} else if db == chCommon.DB_NAME_EXT_METRICS {
 					// identify tag prefix as "tag_"
@@ -512,7 +512,7 @@ func parseMetric(matchers []*prompb.LabelMatcher) (prefixType prefix, metricName
 		} else {
 			// Prometheus native metrics: ${metricsName}
 			// identify prefix for tag names with "df_"
-			prefixType = prefixDeepFlow
+			prefixType = prefixZeroTrace
 
 			// Prometheus native metrics only query `value` as metrics sample
 			metricAlias = "value"
@@ -590,7 +590,7 @@ func showTags(ctx context.Context, db string, table string, startTime int64, end
 	return tagsArray, nil
 }
 
-func parseDeepFlowTag(tag string) (tagName string, tagAlias string) {
+func parseZeroTraceTag(tag string) (tagName string, tagAlias string) {
 	if enumAlias, ok := formatEnumTag(tag); ok {
 		return enumAlias, fmt.Sprintf("`%s%s`", tag, ENUM_TAG_SUFFIX)
 	} else {
@@ -608,35 +608,35 @@ func removePrometheusTagPrefix(tag string) string {
 }
 
 // prefix type means "real prefix type" for metric
-// when query prometheus metrics, prefix type is DeepFlow Tag, means we should query DeepFlow tag with 'df_x'
-// when query DeepFlow metrics, prefix type is Prometheus Tag, means we should query Prometheus tag with 'tag_x'
-func (p *prometheusReader) parsePromQLTag(prefixType prefix, db, tag string) (tagName string, tagAlias string, isDeepFlowTag bool) {
+// when query prometheus metrics, prefix type is ZeroTrace Tag, means we should query ZeroTrace tag with 'df_x'
+// when query ZeroTrace metrics, prefix type is Prometheus Tag, means we should query Prometheus tag with 'tag_x'
+func (p *prometheusReader) parsePromQLTag(prefixType prefix, db, tag string) (tagName string, tagAlias string, isZeroTraceTag bool) {
 	// set flag
 	if prefixType == prefixNone {
-		isDeepFlowTag = true
+		isZeroTraceTag = true
 	}
 	if prefixType == prefixTag && !strings.HasPrefix(tag, "tag_") {
-		isDeepFlowTag = true
+		isZeroTraceTag = true
 	}
-	if prefixType == prefixDeepFlow && strings.HasPrefix(tag, config.Cfg.Prometheus.AutoTaggingPrefix) {
-		isDeepFlowTag = true
+	if prefixType == prefixZeroTrace && strings.HasPrefix(tag, config.Cfg.Prometheus.AutoTaggingPrefix) {
+		isZeroTraceTag = true
 	}
 
 	// `tagAlias` return only when tag is `enum tag` (returns `Enum(tag)` as `_tag_enum`)
-	if isDeepFlowTag {
+	if isZeroTraceTag {
 		if strings.HasPrefix(tag, config.Cfg.Prometheus.AutoTaggingPrefix) {
-			tagName, tagAlias = parseDeepFlowTag(p.convertToQuerierAllowedTagName(removeDeepFlowPrefix(tag)))
+			tagName, tagAlias = parseZeroTraceTag(p.convertToQuerierAllowedTagName(removeZeroTracePrefix(tag)))
 		} else {
-			tagName, tagAlias = parseDeepFlowTag(p.convertToQuerierAllowedTagName(tag))
+			tagName, tagAlias = parseZeroTraceTag(p.convertToQuerierAllowedTagName(tag))
 		}
 	} else {
 		// query ext_metrics/prometheus
-		// query deepflow native metrics (deepflow_admin/deepflow_tenant/flow_metrics/flow_log)
+		// query zerotrace native metrics (zerotrace_admin/zerotrace_tenant/flow_metrics/flow_log)
 		tagName = parsePrometheusTag(removeTagPrefix(tag))
 	}
 
-	// deepflow_admin/deepflow_tanant don't have any DeepFlow universal tag, overwrite the tagName
-	if db == chCommon.DB_NAME_DEEPFLOW_ADMIN || db == chCommon.DB_NAME_DEEPFLOW_TENANT {
+	// zerotrace_admin/zerotrace_tanant don't have any ZeroTrace universal tag, overwrite the tagName
+	if db == chCommon.DB_NAME_ZEROTRACE_ADMIN || db == chCommon.DB_NAME_ZEROTRACE_TENANT {
 		tagName = parsePrometheusTag(tag)
 		tagAlias = ""
 	}
@@ -705,13 +705,13 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 	metricsType := result.Schemas[columnIndexes[METRICS_INDEX]].ValueType
 	allowParseType := []string{"Int", "Float64", "UInt64"}
 
-	// append other deepflow native tag into results
-	allDeepFlowNativeTags := make([]int, 0, otherTagCount)
+	// append other zerotrace native tag into results
+	allZeroTraceNativeTags := make([]int, 0, otherTagCount)
 	for i := range result.Columns {
 		if tagsFieldIndex[i] || isValueInArray(i, columnIndexes) {
 			continue
 		}
-		allDeepFlowNativeTags = append(allDeepFlowNativeTags, i)
+		allZeroTraceNativeTags = append(allZeroTraceNativeTags, i)
 	}
 
 	// Scan all the results, determine the seriesID of each sample and the number of samples in each series,
@@ -727,7 +727,7 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 	seriesSampleCount := make([]int32, maxPossibleSeries)           // number of samples of each series
 	initialSeriesIndex := int32(0)
 	promJsonMap := make(map[string]map[string]string)
-	tagsStrList := make([]string, 0, len(allDeepFlowNativeTags))
+	tagsStrList := make([]string, 0, len(allZeroTraceNativeTags))
 	promTagStrList := make([]string, 0)
 	promTagWriter := strings.Builder{}
 
@@ -740,7 +740,7 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 		}
 
 		// merge and serialize all tags as map key
-		var deepflowNativeTagString, promTagJson string
+		var zerotraceNativeTagString, promTagJson string
 		var filterTagMap map[string]string
 		// merge prometheus tags
 		if columnIndexes[TAG_INDEX] > -1 {
@@ -773,7 +773,7 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 				promTagWriter.WriteByte(':')
 				promTagWriter.WriteString(filterTagMap[promTagStrList[i]])
 			}
-			deepflowNativeTagString = promTagWriter.String()
+			zerotraceNativeTagString = promTagWriter.String()
 			promTagWriter.Reset()
 			promTagStrList = promTagStrList[:0]
 		} else if columnIndexes[LABELS_INDEX] > -1 {
@@ -787,9 +787,9 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 				labelString.WriteString(strconv.Itoa(j))
 				labelString.WriteString(strconv.Itoa(int(labelsArray[j])))
 			}
-			deepflowNativeTagString = labelString.String()
+			zerotraceNativeTagString = labelString.String()
 			filterTagMap = make(map[string]string, len(tagsFieldIndex)+1)
-			filterTagMap[model.PROMETHEUS_LABELS_INDEX] = deepflowNativeTagString
+			filterTagMap[model.PROMETHEUS_LABELS_INDEX] = zerotraceNativeTagString
 			// agg prometheus query, directly get tag.x
 			for idx := range tagsFieldIndex {
 				name := removePrometheusTagPrefix(result.Columns[idx].(string))
@@ -806,10 +806,10 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 			}
 		}
 
-		if deepflowNativeTagString == "" {
+		if zerotraceNativeTagString == "" {
 			// if tagIndex = -1 and len(tagsFieldIndex) = 0, append metric name
 			// if all tags were filterd by `replica label`, append metric name
-			deepflowNativeTagString = fmt.Sprintf("%s:%s", PROMETHEUS_METRICS_NAME, metricsName)
+			zerotraceNativeTagString = fmt.Sprintf("%s:%s", PROMETHEUS_METRICS_NAME, metricsName)
 			if filterTagMap == nil {
 				filterTagMap = map[string]string{PROMETHEUS_METRICS_NAME: metricsName}
 			} else {
@@ -817,19 +817,19 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 			}
 		}
 
-		// merge deepflow autotagging tags
-		if len(allDeepFlowNativeTags) > 0 {
-			for i := 0; i < len(allDeepFlowNativeTags); i++ {
-				tagsStrList = append(tagsStrList, strconv.Itoa(allDeepFlowNativeTags[i]))
-				tagsStrList = append(tagsStrList, getValue(values[allDeepFlowNativeTags[i]]))
+		// merge zerotrace autotagging tags
+		if len(allZeroTraceNativeTags) > 0 {
+			for i := 0; i < len(allZeroTraceNativeTags); i++ {
+				tagsStrList = append(tagsStrList, strconv.Itoa(allZeroTraceNativeTags[i]))
+				tagsStrList = append(tagsStrList, getValue(values[allZeroTraceNativeTags[i]]))
 			}
-			deepflowNativeTagString += strings.Join(tagsStrList, "-")
+			zerotraceNativeTagString += strings.Join(tagsStrList, "-")
 			tagsStrList = tagsStrList[:0]
 		}
 
 		// check and assign seriesIndex
 		var series *prompb.TimeSeries
-		index, exist := seriesIndexMap[deepflowNativeTagString]
+		index, exist := seriesIndexMap[zerotraceNativeTagString]
 		if exist {
 			sampleSeriesIndex[i] = index
 			seriesSampleCount[index]++
@@ -842,13 +842,13 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 			// tag label pair
 			var pairs []prompb.Label
 			if len(filterTagMap) > 0 { // has any prometheus tag
-				pairs = make([]prompb.Label, 0, 1+len(filterTagMap)+len(allDeepFlowNativeTags))
+				pairs = make([]prompb.Label, 0, 1+len(filterTagMap)+len(allZeroTraceNativeTags))
 				for k, v := range filterTagMap {
 					if v == "" {
 						continue
 					}
 					if prefix == prefixTag {
-						// prometheus tag for deepflow metrics
+						// prometheus tag for zerotrace metrics
 						pairs = append(pairs, prompb.Label{Name: appendPrometheusPrefix(k), Value: v})
 					} else {
 						// no prefix, use prometheus native tag
@@ -859,19 +859,19 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 			}
 
 			if cap(pairs) == 0 {
-				pairs = make([]prompb.Label, 0, 1+len(allDeepFlowNativeTags))
+				pairs = make([]prompb.Label, 0, 1+len(allZeroTraceNativeTags))
 			}
 
-			for _, idx := range allDeepFlowNativeTags {
+			for _, idx := range allZeroTraceNativeTags {
 				// remove zero value tag (0/""/{})
 				if isZero(values[idx]) {
 					continue
 				}
 				formatTag := formatTagName(result.Columns[idx].(string))
 				p.addExternalTagCache(formatTag, result.Columns[idx].(string))
-				if (len(filterTagMap) > 0) && prefix == prefixDeepFlow {
-					// deepflow tag for prometheus metrics
-					pairs = append(pairs, prompb.Label{Name: appendDeepFlowPrefix(extractEnumTag(formatTag)), Value: getValue(values[idx])})
+				if (len(filterTagMap) > 0) && prefix == prefixZeroTrace {
+					// zerotrace tag for prometheus metrics
+					pairs = append(pairs, prompb.Label{Name: appendZeroTracePrefix(extractEnumTag(formatTag)), Value: getValue(values[idx])})
 				} else {
 					pairs = append(pairs, prompb.Label{Name: extractEnumTag(formatTag), Value: getValue(values[idx])})
 				}
@@ -890,13 +890,13 @@ func (p *prometheusReader) respTransToProm(ctx context.Context, metricsName stri
 				// pre-sorted labels string
 				// if cache enabled, it will append in cache and remove it in return
 				// only when remote read, because only `remote read cache` need use label string to compare
-				pairs = append(pairs, prompb.Label{Name: model.CACHE_LABEL_STRING_TAG, Value: deepflowNativeTagString})
+				pairs = append(pairs, prompb.Label{Name: model.CACHE_LABEL_STRING_TAG, Value: zerotraceNativeTagString})
 			}
 
 			series = &prompb.TimeSeries{Labels: pairs}
 			seriesArray = append(seriesArray, series)
 
-			seriesIndexMap[deepflowNativeTagString] = initialSeriesIndex
+			seriesIndexMap[zerotraceNativeTagString] = initialSeriesIndex
 			sampleSeriesIndex[i] = initialSeriesIndex
 			seriesSampleCount[initialSeriesIndex] = 1
 			initialSeriesIndex++
@@ -1073,7 +1073,7 @@ func (p *prometheusReader) parseQueryRequestToSQL(ctx context.Context, queryReq 
 	expectedQueryTags := make(map[string]string, cap(groupBy)+len(queryReq.GetLabels())-1)
 
 	handleTagFunc := func(tag string) string {
-		tagName, tagAlias, _ := p.parsePromQLTag(prefixDeepFlow, chCommon.DB_NAME_PROMETHEUS, tag)
+		tagName, tagAlias, _ := p.parsePromQLTag(prefixZeroTrace, chCommon.DB_NAME_PROMETHEUS, tag)
 		expectedQueryTags[tagName] = tagAlias
 		return tagName
 	}
@@ -1092,14 +1092,14 @@ func (p *prometheusReader) parseQueryRequestToSQL(ctx context.Context, queryReq 
 		if matcher.Name == labels.MetricName {
 			continue
 		}
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, chCommon.DB_NAME_PROMETHEUS, matcher.Name)
-		operation, value := getLabelMatcher(parseMatcherType(matcher.Type), matcher.Value, isDeepFlowTag)
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, chCommon.DB_NAME_PROMETHEUS, matcher.Name)
+		operation, value := getLabelMatcher(parseMatcherType(matcher.Type), matcher.Value, isZeroTraceTag)
 		if operation == "" {
 			continue
 		}
 
 		tagMatcher := tagName
-		if isDeepFlowTag && tagAlias != "" {
+		if isZeroTraceTag && tagAlias != "" {
 			tagMatcher = tagAlias
 		}
 		if len(value) > 1 {
@@ -1109,16 +1109,16 @@ func (p *prometheusReader) parseQueryRequestToSQL(ctx context.Context, queryReq 
 			}
 			filters = append(filters, fmt.Sprintf("(%s)", strings.Join(tmpFilters, " OR ")))
 		} else {
-			if value[0] == "" && isDeepFlowTag {
-				// only for DeepFlow Tag, when value is empty, use [not] exist(`tag`) for query
+			if value[0] == "" && isZeroTraceTag {
+				// only for ZeroTrace Tag, when value is empty, use [not] exist(`tag`) for query
 				filters = append(filters, fmt.Sprintf("%s(%s)", operation, tagMatcher))
 			} else {
 				filters = append(filters, fmt.Sprintf("%s %s '%s'", tagMatcher, operation, escapeSingleQuote(value[0])))
 			}
 		}
 
-		if isDeepFlowTag && cap(groupBy) == 0 {
-			// if not grouping tag, but use filter or has alias for enum tag, append into `expectedDeepFlowNativeTags` for `select df_tag`
+		if isZeroTraceTag && cap(groupBy) == 0 {
+			// if not grouping tag, but use filter or has alias for enum tag, append into `expectedZeroTraceNativeTags` for `select df_tag`
 			// why cap(groupBy) == 0: select would influence group result, so when cap(groupBy)>0, we don't append select
 			expectedQueryTags[tagName] = tagAlias
 			if greaterTags, hasIDSuffix := getTagsGreaterThan(tagName); greaterTags != nil {
@@ -1247,16 +1247,16 @@ func parseMatcherType(t labels.MatchType) prompb.LabelMatcher_Type {
 }
 
 // match prometheus lable matcher type
-func getLabelMatcher(t prompb.LabelMatcher_Type, v string, isDeepFlowTag bool) (string, []string) {
+func getLabelMatcher(t prompb.LabelMatcher_Type, v string, isZeroTraceTag bool) (string, []string) {
 	switch t {
 	case prompb.LabelMatcher_EQ:
-		if v == "" && isDeepFlowTag {
+		if v == "" && isZeroTraceTag {
 			return "not exist", []string{v}
 		} else {
 			return "=", []string{v}
 		}
 	case prompb.LabelMatcher_NEQ:
-		if v == "" && isDeepFlowTag {
+		if v == "" && isZeroTraceTag {
 			return "exist", []string{v}
 		} else {
 			return "!=", []string{v}
@@ -1265,7 +1265,7 @@ func getLabelMatcher(t prompb.LabelMatcher_Type, v string, isDeepFlowTag bool) (
 		// for regex like 'a|b', convert to 'tag=a OR tag=b'
 		if _match_fullmatch_reg.MatchString(v) {
 			return "=", strings.Split(v, "|")
-		} else if v == "" && isDeepFlowTag {
+		} else if v == "" && isZeroTraceTag {
 			return "not exist", []string{v}
 		} else {
 			return "REGEXP", []string{appendRegexRules(v)}
@@ -1274,7 +1274,7 @@ func getLabelMatcher(t prompb.LabelMatcher_Type, v string, isDeepFlowTag bool) (
 		// for regex like 'a|b', convert to 'tag!=a OR tag!=b'
 		if _match_fullmatch_reg.MatchString(v) {
 			return "!=", strings.Split(v, "|")
-		} else if v == "" && isDeepFlowTag {
+		} else if v == "" && isZeroTraceTag {
 			return "exist", []string{v}
 		} else {
 			return "NOT REGEXP", []string{appendRegexRules(v)}
@@ -1488,7 +1488,7 @@ func (p *prometheusReader) addExternalTagCache(tag string, originTag string) {
 	}
 }
 
-func appendDeepFlowPrefix(tag string) string {
+func appendZeroTracePrefix(tag string) string {
 	return fmt.Sprintf("%s%s", config.Cfg.Prometheus.AutoTaggingPrefix, tag)
 }
 
@@ -1504,7 +1504,7 @@ func (p *prometheusReader) convertToQuerierAllowedTagName(matcherName string) (t
 	}
 }
 
-func removeDeepFlowPrefix(tag string) string {
+func removeZeroTracePrefix(tag string) string {
 	return strings.TrimPrefix(tag, config.Cfg.Prometheus.AutoTaggingPrefix)
 }
 
@@ -1520,7 +1520,7 @@ func removeEscapeQuote(v string, r string) string {
 	return strings.TrimPrefix(strings.TrimSuffix(v, r), r)
 }
 
-// use priority for deepflow querier, when try to query "x", all universal tags which greaterthan "x" would append to querier
+// use priority for zerotrace querier, when try to query "x", all universal tags which greaterthan "x" would append to querier
 func getTagsGreaterThan(tag string) ([]string, bool) {
 	queryTag := removeEscapeQuote(tag, "`")
 	hasIDSuffix := false
@@ -1561,7 +1561,7 @@ func findNestedType(dbType string) string {
 }
 
 // 专门给 extraFilters 做一个结构体，以解析实际的 tag + value
-// 注意：仅能用于 DeepFlow tag 查询
+// 注意：仅能用于 ZeroTrace tag 查询
 type extraFilters struct {
 	label    string
 	value    string

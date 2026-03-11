@@ -22,7 +22,7 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/libs/logger/blocker"
+	"github.com/zerotraceio/zerotrace/server/libs/logger/blocker"
 )
 
 // Prefix is an interface that can be implemented by types that want to provide a prefix to a log message.

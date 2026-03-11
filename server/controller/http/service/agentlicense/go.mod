@@ -1,3 +1,3 @@
-module github.com/deepflowio/deepflow/server/controller/http/service/agentlicense
+module github.com/zerotraceio/zerotrace/server/controller/http/service/agentlicense
 
 go 1.18

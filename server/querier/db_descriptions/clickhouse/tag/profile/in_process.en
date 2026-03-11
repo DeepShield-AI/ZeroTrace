@@ -51,8 +51,8 @@ process_id                 , Process ID                    ,
 trace_id                   , TraceID                       ,
 span_name                  , Span Name                     ,
 
-vtap                       , DeepFlow Agent                , Deprecated，please use agent.
-agent                      , DeepFlow Agent                ,
+vtap                       , ZeroTrace Agent                , Deprecated，please use agent.
+agent                      , ZeroTrace Agent                ,
 
 profile_value_unit         , Metric Unit                   ,
 profile_event_type         , Profile Type                  ,

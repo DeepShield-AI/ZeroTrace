@@ -25,11 +25,11 @@ import (
 	"inet.af/netaddr"
 
 	mapset "github.com/deckarep/golang-set"
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 	"github.com/mikioh/ipaddr"
 )
 

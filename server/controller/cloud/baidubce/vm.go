@@ -23,9 +23,9 @@ import (
 	bcc_api "github.com/baidubce/bce-sdk-go/services/bcc/api"
 	"github.com/baidubce/bce-sdk-go/services/eni"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (b *BaiduBce) getVMs(zoneNameToAZLcuuid map[string]string, vpcIdToLcuuid map[string]string, networkIdToLcuuid map[string]string) ([]model.VM, []model.VInterface, []model.IP, error) {

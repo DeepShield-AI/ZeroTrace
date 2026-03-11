@@ -19,11 +19,11 @@ package recorder
 import (
 	"context"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder")

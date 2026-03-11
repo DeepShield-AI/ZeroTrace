@@ -25,18 +25,18 @@ import (
 
 	"github.com/op/go-logging"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache"
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/listener"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/controller/recorder/statsd"
-	"github.com/deepflowio/deepflow/server/controller/recorder/updater"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/listener"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/updater"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
 )
 
 const (

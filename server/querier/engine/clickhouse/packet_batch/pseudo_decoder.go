@@ -17,7 +17,7 @@
 package packet_batch
 
 import (
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 )
 
 func PacketBatchFormat(args []interface{}) func(*common.Result) error {

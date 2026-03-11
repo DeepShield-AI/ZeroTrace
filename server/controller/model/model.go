@@ -19,7 +19,7 @@ package model
 import (
 	"time"
 
-	"github.com/deepflowio/deepflow/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/agent_config"
 )
 
 type ControllerUpdate struct {

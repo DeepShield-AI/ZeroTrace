@@ -28,15 +28,15 @@ import (
 
 	"github.com/bitly/go-simplejson"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/cache"
-	prometheuscommon "github.com/deepflowio/deepflow/server/controller/prometheus/common"
-	prometheuscfg "github.com/deepflowio/deepflow/server/controller/prometheus/config"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/encoder"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	queriercfg "github.com/deepflowio/deepflow/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/cache"
+	prometheuscommon "github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
+	prometheuscfg "github.com/zerotraceio/zerotrace/server/controller/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/encoder"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	queriercfg "github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 var (
@@ -425,7 +425,7 @@ func (q *querier) getLabelAndFillActiveData(domainNamePrefix string) error {
 }
 
 func (q *querier) getByRegion(domainNamePrefix string, resourceType string) (*simplejson.Json, error) {
-	url := fmt.Sprintf("http://%sdeepflow-server:%d/v1/query", domainNamePrefix, queriercfg.Cfg.ListenPort)
+	url := fmt.Sprintf("http://%szerotrace-server:%d/v1/query", domainNamePrefix, queriercfg.Cfg.ListenPort)
 	log.Infof("get active data: %s, body: %v", url, q.reqBody[resourceType], q.org.LogPrefix)
 	resp, err := common.CURLForm(
 		http.MethodPost,

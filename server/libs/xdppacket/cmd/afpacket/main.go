@@ -34,8 +34,8 @@ import (
 	"github.com/google/gopacket/afpacket"
 	logging "github.com/op/go-logging"
 
-	. "github.com/deepflowio/deepflow/server/libs/logger"
-	. "github.com/deepflowio/deepflow/server/libs/xdppacket/cmd/common"
+	. "github.com/zerotraceio/zerotrace/server/libs/logger"
+	. "github.com/zerotraceio/zerotrace/server/libs/xdppacket/cmd/common"
 )
 
 const (

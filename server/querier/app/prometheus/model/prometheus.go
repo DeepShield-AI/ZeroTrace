@@ -81,7 +81,7 @@ type WrapHistorySeries struct {
 	Value float64 `json:"value"`
 }
 
-type DeepFlowPromRequest struct {
+type ZeroTracePromRequest struct {
 	Slimit       int
 	Start        int64
 	End          int64

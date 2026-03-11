@@ -21,7 +21,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("common")

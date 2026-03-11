@@ -1,0 +1,148 @@
+version: '3.2'
+services:
+  mysql:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/mysql:8.0.31
+    container_name: zerotrace-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: zerotrace
+      MYSQL_DATABASE: grafana
+      TZ: Asia/Shanghai
+    volumes:
+      - type: bind
+        source: ./common/config/mysql/my.cnf
+        target: /etc/my.cnf
+      - type: bind
+        source: ./common/config/mysql/init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
+      - /opt/zerotrace/mysql:/var/lib/mysql:z
+    networks:
+      - zerotrace
+  clickhouse:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/clickhouse-server:23.8.7.24
+    container_name: zerotrace-clickhouse
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - type: bind
+        source: ./common/config/clickhouse/config.xml
+        target: /etc/clickhouse-server/config.xml
+      - type: bind
+        source: ./common/config/clickhouse/users.xml
+        target: /etc/clickhouse-server/users.xml
+      - /opt/zerotrace/clickhouse:/var/lib/clickhouse:z
+      - /opt/zerotrace/clickhouse_storage:/var/lib/clickhouse_storage:z
+    links:
+    - mysql
+    networks:
+      - zerotrace
+  zerotrace-server:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotrace-server:${ZEROTRACE_VERSION}
+    container_name: zerotrace-server
+    restart: always
+    environment:
+      ZEROTRACE_SERVER_RUNNING_MODE: STANDALONE
+      K8S_POD_IP_FOR_ZEROTRACE: 127.0.0.1
+      K8S_NODE_IP_FOR_ZEROTRACE: ${NODE_IP_FOR_ZEROTRACE}
+      K8S_NAMESPACE_FOR_ZEROTRACE: zerotrace
+      K8S_NODE_NAME_FOR_ZEROTRACE: zerotrace-host
+      K8S_POD_NAME_FOR_ZEROTRACE: zerotrace-container
+      TZ: Asia/Shanghai
+    volumes:
+      - type: bind
+        source: ./common/config/zerotrace-server/server.yaml
+        target: /etc/server.yaml
+    networks:
+      - zerotrace
+    links:
+    - mysql
+    - clickhouse
+    - zerotrace-app
+    ports:
+      - 20416:20416  # querier module, querying data usage, http port
+      - 20419:20419  # profile module
+      - 30417:20417  # controller module, zerotrace-ctl is used interactively
+      - 30035:20035  # controller module, control plane, grpc port
+      - 30033:20033  # ingester module, data plane, port
+  zerotrace-app:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotrace-app:${ZEROTRACE_VERSION}
+    container_name: zerotrace-app
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - type: bind
+        source: ./common/config/zerotrace-app/app.yaml
+        target: /etc/zerotrace/app.yaml
+    networks:
+      - zerotrace
+    ports:
+      - 20418:20418
+  zerotrace-grafana-init-worksdir:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotraceio-init-grafana-ds-dh:latest
+    container_name: zerotrace-grafana-init-worksdir
+    command: /bin/sh -c "rm -rf /tmp/dashboards/*; rm -rf /var/lib/grafana/plugins/*"
+    volumes:
+      - /opt/zerotrace/grafana/dashboards:/tmp/dashboards:z
+      - /opt/zerotrace/grafana/plugins:/var/lib/grafana/plugins:z
+      - /opt/zerotrace/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:z
+    networks:
+      - zerotrace
+  zerotrace-grafana-init-grafana-ds-dh:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotraceio-init-grafana-ds-dh:latest
+    container_name: zerotrace-grafana-init-grafana-ds-dh
+    volumes:
+      - /opt/zerotrace/grafana/dashboards:/tmp/dashboards:z
+      - /opt/zerotrace/grafana/plugins:/var/lib/grafana/plugins:z
+      - /opt/zerotrace/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:z
+      - /opt/zerotrace/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:z
+    networks:
+      - zerotrace
+    depends_on:
+      - zerotrace-grafana-init-worksdir
+  zerotrace-grafana-init-custom-plugins:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotraceio-init-grafana:latest
+    container_name: zerotrace-grafana-init-custom-plugins
+    volumes:
+      - /opt/zerotrace/grafana/dashboards:/tmp/dashboards:z
+      - /opt/zerotrace/grafana/plugins:/var/lib/grafana/plugins:z
+    networks:
+      - zerotrace
+    depends_on:
+      - zerotrace-grafana-init-worksdir
+  zerotrace-grafana:
+    image: registry.cn-hongkong.aliyuncs.com/zerotrace-ce/grafana:10.1.5
+    container_name: zerotrace-grafana
+    environment:
+      TZ: "Asia/Shanghai"
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "zerotrace"
+      ZEROTRACE_REQUEST_URL: 'http://zerotrace-server:20416'
+      ZEROTRACE_TRACEURL: 'http://zerotrace-app:20418'
+      MYSQL_URL: "zerotrace-mysql:30130"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD:  "zerotrace"
+      CLICKHOUSE_SERVER: "zerotrace-clickhouse"
+      CLICKHOUSE_USER: "default"
+      CLICKHOUSE_PASSWORD: ""
+    restart: always
+    volumes:
+      - type: bind
+        source: ./common/config/grafana/grafana.ini
+        target: /etc/grafana/grafana.ini
+      - /opt/zerotrace/grafana/dashboards:/tmp/dashboards:z
+      - /opt/zerotrace/grafana/plugins:/var/lib/grafana/plugins:z
+      - /opt/zerotrace/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:z
+      - /opt/zerotrace/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:z
+    networks:
+      - zerotrace
+    ports:
+      - 3000:3000
+    depends_on:
+      - zerotrace-grafana-init-grafana-ds-dh
+      - zerotrace-grafana-init-custom-plugins
+
+networks:
+  zerotrace:
+    external: false

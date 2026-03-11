@@ -20,10 +20,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/query"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/query"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type UpdaterManager struct {

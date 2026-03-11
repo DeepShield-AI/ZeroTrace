@@ -42,5 +42,5 @@ biz_service.group          , Biz Service Group             ,
 ip                         , IP Address                    ,
 is_ipv4                    , IPv4 Flag                     ,
 
-vtap                       , DeepFlow Agent                , Deprecated，please use agent.
-agent                      , DeepFlow Agent                ,
+vtap                       , ZeroTrace Agent                , Deprecated，please use agent.
+agent                      , ZeroTrace Agent                ,

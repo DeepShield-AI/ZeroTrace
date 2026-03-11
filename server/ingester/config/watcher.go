@@ -28,7 +28,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	libs "github.com/deepflowio/deepflow/server/libs/kubernetes"
+	libs "github.com/zerotraceio/zerotrace/server/libs/kubernetes"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -193,7 +193,7 @@ func (w *Watcher) getMyClickhouseEndpointsExternal() ([]Endpoint, error) {
 }
 
 // How to get my external clickhouse endpoint:
-// 1, Input a list of all 'deepflow-server' pods, and sort by name to find the 'index' of myself pod in it
+// 1, Input a list of all 'zerotrace-server' pods, and sort by name to find the 'index' of myself pod in it
 // 2. Input the list of all clickhouse endpoints, and sort by IP
 // 3, my corresponding 'clickhouse endpoint' is on position 'index%len'  in the 'clickhouse endpoints list'
 func getMyClickhouseEndpoints(podNames []string, myName string, endpoints []Endpoint) ([]Endpoint, error) {

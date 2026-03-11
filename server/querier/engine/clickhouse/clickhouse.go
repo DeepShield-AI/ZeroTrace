@@ -31,16 +31,16 @@ import (
 	logging "github.com/op/go-logging"
 	"github.com/xwb1989/sqlparser"
 
-	ctlcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	tagdescription "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
-	"github.com/deepflowio/deepflow/server/querier/parse"
+	ctlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	tagdescription "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/parse"
 )
 
 var log = logging.MustGetLogger("clickhouse")
@@ -543,7 +543,7 @@ func (e *CHEngine) ParseShowSql(sql string, args *common.QuerierParams, DebugInf
 		funcs, err := metrics.GetFunctionDescriptions()
 		return funcs, []string{}, true, err
 	case 3: // show metrics ...
-		if e.DB == chCommon.DB_NAME_DEEPFLOW_TENANT && len(visibilityFilter) > 0 {
+		if e.DB == chCommon.DB_NAME_ZEROTRACE_TENANT && len(visibilityFilter) > 0 {
 			where = visibilityWhere
 			sql = visibilitySql
 		}
@@ -560,7 +560,7 @@ func (e *CHEngine) ParseShowSql(sql string, args *common.QuerierParams, DebugInf
 		}
 		ShowTagTypeMetrics(tagDescriptions, result, e.DB, table)
 
-		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_DEEPFLOW_TENANT {
+		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_ZEROTRACE_TENANT {
 			result.Values = dataVisibilityfiltering(visibilityFilterRegexp, result.Values)
 		}
 		if args.Language != "" {
@@ -572,11 +572,11 @@ func (e *CHEngine) ParseShowSql(sql string, args *common.QuerierParams, DebugInf
 		e.DB = "flow_tag"
 		return result, sqlList, true, err
 	case 5: // show tags ...
-		if e.DB == chCommon.DB_NAME_DEEPFLOW_TENANT && len(visibilityFilter) > 0 {
+		if e.DB == chCommon.DB_NAME_ZEROTRACE_TENANT && len(visibilityFilter) > 0 {
 			sql = visibilitySql
 		}
 		data, err := tagdescription.GetTagDescriptions(e.DB, table, sql, args.QueryCacheTTL, args.ORGID, args.UseQueryCache, e.Context, DebugInfo)
-		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_DEEPFLOW_TENANT {
+		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_ZEROTRACE_TENANT {
 			data.Values = dataVisibilityfiltering(visibilityFilterRegexp, data.Values)
 		}
 		if args.Language != "" {
@@ -584,11 +584,11 @@ func (e *CHEngine) ParseShowSql(sql string, args *common.QuerierParams, DebugInf
 		}
 		return data, []string{}, true, err
 	case 6: // show tables...
-		if e.DB == chCommon.DB_NAME_DEEPFLOW_TENANT && len(visibilityFilter) > 0 {
+		if e.DB == chCommon.DB_NAME_ZEROTRACE_TENANT && len(visibilityFilter) > 0 {
 			where = visibilityWhere
 		}
 		result := GetTables(e.DB, where, args.QueryCacheTTL, args.ORGID, args.UseQueryCache, e.Context, DebugInfo)
-		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_DEEPFLOW_TENANT {
+		if len(visibilityFilter) > 0 && e.DB != chCommon.DB_NAME_ZEROTRACE_TENANT {
 			result.Values = dataVisibilityfiltering(visibilityFilterRegexp, result.Values)
 		}
 		return result, []string{}, true, nil
@@ -1328,7 +1328,7 @@ func (e *CHEngine) TransFrom(froms sqlparser.TableExprs) error {
 			}
 			e.Table = table
 			// native field
-			if config.ControllerCfg.DFWebService.Enabled && (slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_APPLICATION_LOG, chCommon.DB_NAME_EXT_METRICS}, e.DB) || slices.Contains([]string{chCommon.TABLE_NAME_L7_FLOW_LOG, chCommon.TABLE_NAME_EVENT, chCommon.TABLE_NAME_FILE_EVENT}, e.Table)) {
+			if config.ControllerCfg.DFWebService.Enabled && (slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_APPLICATION_LOG, chCommon.DB_NAME_EXT_METRICS}, e.DB) || slices.Contains([]string{chCommon.TABLE_NAME_L7_FLOW_LOG, chCommon.TABLE_NAME_EVENT, chCommon.TABLE_NAME_FILE_EVENT}, e.Table)) {
 				e.NativeField = map[string]*metrics.Metrics{}
 				getNativeUrl := fmt.Sprintf("http://localhost:%d/v1/native-fields/?db=%s&table_name=%s", config.ControllerCfg.ListenPort, e.DB, e.Table)
 				resp, err := ctlcommon.CURLPerform("GET", getNativeUrl, nil, ctlcommon.WithHeader(ctlcommon.HEADER_KEY_X_ORG_ID, e.ORGID))
@@ -1366,7 +1366,7 @@ func (e *CHEngine) TransFrom(froms sqlparser.TableExprs) error {
 			// ext_metrics只有metrics表，使用virtual_table_name做过滤区分
 			if e.DB == "ext_metrics" {
 				table = "metrics"
-			} else if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_PROMETHEUS}, e.DB) {
+			} else if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_PROMETHEUS}, e.DB) {
 				table = chCommon.DB_TABLE_MAP[e.DB][0]
 			}
 			if e.DB == chCommon.DB_NAME_PROMETHEUS {
@@ -2090,7 +2090,7 @@ func LoadDbDescriptions(dbDescriptions map[string]interface{}) error {
 	// 加载metric定义
 	if metricData, ok := dbDataMap["metrics"]; ok {
 		for db, tables := range chCommon.DB_TABLE_MAP {
-			if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_DEEPFLOW_TENANT}, db) {
+			if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_ZEROTRACE_TENANT}, db) {
 				continue
 			}
 			for _, table := range tables {

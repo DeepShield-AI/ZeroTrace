@@ -22,8 +22,8 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type SortedAcls []*Acl
@@ -274,7 +274,7 @@ func (t *PolicyTable) UpdateMemoryLimit(limit uint64) {
 // 该函数仅用于测试或命令行使用
 func (t *PolicyTable) GetEndpointInfo(mac uint64, ip net.IP, inPort uint32) *EndpointInfo {
 	var endpointInfo *EndpointInfo
-	if PortInDeepflowExporter(inPort) {
+	if PortInZerotraceExporter(inPort) {
 		endpointInfo, _ = t.cloudPlatformLabeler.GetEndpointInfo(mac, ip, TAP_CLOUD, false, 0)
 	} else {
 		endpointInfo, _ = t.cloudPlatformLabeler.GetEndpointInfo(mac, ip, TAP_IDC_MIN, false, 0)

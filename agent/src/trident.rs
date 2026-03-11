@@ -324,9 +324,9 @@ impl VersionInfo {
 		format!(
 			"{}|{}|{}",
 			match self.name {
-				"deepflow-agent-ce" => "CE",
-				"deepflow-agent-ee" => "EE",
-				_ => panic!("{:?} unknown deepflow-agent edition", &self.name),
+				"zerotrace-agent-ce" => "CE",
+				"zerotrace-agent-ee" => "EE",
+				_ => panic!("{:?} unknown zerotrace-agent edition", &self.name),
 			},
 			self.branch,
 			self.commit_id
@@ -348,9 +348,9 @@ CompileTime: {}",
 			self.rev_count,
 			self.commit_id,
 			match self.name {
-				"deepflow-agent-ce" => "deepflow-agent community edition",
-				"deepflow-agent-ee" => "deepflow-agent enterprise edition",
-				_ => panic!("{:?} unknown deepflow-agent edition", &self.name),
+				"zerotrace-agent-ce" => "zerotrace-agent community edition",
+				"zerotrace-agent-ee" => "zerotrace-agent enterprise edition",
+				_ => panic!("{:?} unknown zerotrace-agent edition", &self.name),
 			},
 			self.branch,
 			self.commit_id,
@@ -434,7 +434,7 @@ pub struct Trident {
 }
 
 impl Trident {
-	// 启动 DeepFlow Agent
+	// 启动 ZeroTrace Agent
 	//
 	// 该方法负责 Agent 的初始化工作，包括：
 	// 1. 保护 CPU 亲和性，防止 numad 干扰
@@ -452,10 +452,10 @@ impl Trident {
 	) -> Result<Trident> {
 		// 1. 保护 CPU 亲和性，防止 numad 干扰
 		// To prevent 'numad' from interfering with the CPU
-		// affinity settings of deepflow-agent
+		// affinity settings of zerotrace-agent
 		#[cfg(any(target_os = "linux", target_os = "android"))]
 		// 只针对linux和android系统，windows系统中不存在numad
-		// CPU 亲和性: DeepFlow Agent通常会将关键线程绑定到特定的 CPU 核上，以减少上下文切换和缓存失效，从而提升抓包和处理性能。
+		// CPU 亲和性: ZeroTrace Agent通常会将关键线程绑定到特定的 CPU 核上，以减少上下文切换和缓存失效，从而提升抓包和处理性能。
 		// numad 是 Linux 下的一个用户态守护进程，用于自动调整进程的 NUMA（非统一内存访问）策略。它会监控系统资源并尝试动态迁移进程到它认为更合适的 CPU/内存节点上。
 		// 如果 numad 介入并强行移动 Agent 的线程，会破坏 Agent 精心配置的 CPU 绑定，导致严重的性能抖动或下降。
 		match trace_utils::protect_cpu_affinity() {
@@ -686,7 +686,7 @@ impl Trident {
 				ntp_diff,
 				sender_leaky_bucket,
 			) {
-				error!("Launching deepflow-agent failed: {}, deepflow-agent restart...", e);
+				error!("Launching zerotrace-agent failed: {}, zerotrace-agent restart...", e);
 				crate::utils::clean_and_exit(1);
 			}
 		});
@@ -739,12 +739,12 @@ impl Trident {
 		ntp_diff: Arc<AtomicI64>,
 		sender_leaky_bucket: Arc<LeakyBucket>,
 	) -> Result<()> {
-		info!("==================== Launching DeepFlow-Agent ====================");
+		info!("==================== Launching ZeroTrace-Agent ====================");
 		info!("Brief tag: {}", version_info.brief_tag());
 		info!("Environment variables: {:?}", get_env());
 		// 通过环境变量检查
 		if running_in_container() {
-			info!("use K8S_NODE_IP_FOR_DEEPFLOW env ip as destination_ip({})", ctrl_ip);
+			info!("use K8S_NODE_IP_FOR_ZEROTRACE env ip as destination_ip({})", ctrl_ip);
 		}
 
 		#[cfg(target_os = "linux")]
@@ -898,7 +898,7 @@ impl Trident {
 			info!("don't initialize cgroups controller, because kernel version < 3 or agent is in Windows");
 		} else if cgroups_disabled {
 			// 如果配置显式禁用 Cgroups，则退化为定期轮询检查资源使用情况。
-			info!("don't initialize cgroups controller, disable cgroups, deepflow-agent will default to checking the CPU and memory resource usage in a loop every 10 seconds to prevent resource usage from exceeding limits");
+			info!("don't initialize cgroups controller, disable cgroups, zerotrace-agent will default to checking the CPU and memory resource usage in a loop every 10 seconds to prevent resource usage from exceeding limits");
 		} else {
 			// 初始化 Cgroups 控制器，用于资源限制
 			match Cgroups::new(process::id() as u64, config_handler.environment()) {
@@ -1436,7 +1436,7 @@ fn component_on_config_change(
 					},
 					Err(e) => {
 						warn!(
-							"build dispatcher_component failed: {}, deepflow-agent restart...",
+							"build dispatcher_component failed: {}, zerotrace-agent restart...",
 							e
 						);
 						crate::utils::clean_and_exit(1);
@@ -1559,7 +1559,7 @@ fn component_on_config_change(
 					},
 					Err(e) => {
 						warn!(
-							"build dispatcher_component failed: {}, deepflow-agent restart...",
+							"build dispatcher_component failed: {}, zerotrace-agent restart...",
 							e
 						);
 						crate::utils::clean_and_exit(1);
@@ -1697,13 +1697,13 @@ impl DomainNameListener {
 								match get_ctrl_ip_and_mac(&ips[0].parse().unwrap()) {
 									Ok(tuple) => tuple,
 									Err(e) => {
-										warn!("get ctrl ip and mac failed with error: {}, deepflow-agent restart...", e);
+										warn!("get ctrl ip and mac failed with error: {}, zerotrace-agent restart...", e);
 										crate::utils::clean_and_exit(1);
 										continue;
 									},
 								};
 							info!(
-								"use K8S_NODE_IP_FOR_DEEPFLOW env ip as destination_ip({})",
+								"use K8S_NODE_IP_FOR_ZEROTRACE env ip as destination_ip({})",
 								ctrl_ip
 							);
 							#[cfg(target_os = "linux")]
@@ -1713,7 +1713,7 @@ impl DomainNameListener {
 								// use host ip/mac as agent id if not in sidecar mode
 								if let Err(e) = netns::NsFile::Root.open_and_setns() {
 									warn!("agent must have CAP_SYS_ADMIN to run without 'hostNetwork: true'.");
-									warn!("setns error: {}, deepflow-agent restart...", e);
+									warn!("setns error: {}, zerotrace-agent restart...", e);
 									crate::utils::clean_and_exit(1);
 									continue;
 								}
@@ -1721,13 +1721,13 @@ impl DomainNameListener {
 								{
 									Ok(tuple) => tuple,
 									Err(e) => {
-										warn!("get ctrl ip and mac failed with error: {}, deepflow-agent restart...", e);
+										warn!("get ctrl ip and mac failed with error: {}, zerotrace-agent restart...", e);
 										crate::utils::clean_and_exit(1);
 										continue;
 									},
 								};
 								if let Err(e) = netns::reset_netns() {
-									warn!("reset setns error: {}, deepflow-agent restart...", e);
+									warn!("reset setns error: {}, zerotrace-agent restart...", e);
 									crate::utils::clean_and_exit(1);
 									continue;
 								}
@@ -1972,7 +1972,7 @@ impl AgentComponents {
 
 	// 创建新的 Collector 线程，负责 L4 流日志的聚合和指标生成
 	//
-	// Collector 是 DeepFlow Agent 的数据汇聚中心。
+	// Collector 是 ZeroTrace Agent 的数据汇聚中心。
 	// 它接收来自各个 Dispatcher 的原始流 (TaggedFlow)，进行二次聚合、指标计算和格式化，最终生成 Document 发送给 Server。
 	//
 	// 组件流程:
@@ -2498,7 +2498,7 @@ impl AgentComponents {
 			policy_setter, // 允许 Debugger 动态查看或调整策略
 		};
 		// 启动 Debugger 服务 (默认监听 UDP 30033)
-		// 响应 deepflow-ctl 的调试命令
+		// 响应 zerotrace-ctl 的调试命令
 		let debugger = Debugger::new(context);
 
 		// 创建 QueueDebugger
@@ -2511,7 +2511,7 @@ impl AgentComponents {
 		// 网络流量本身只有 IP 和端口信息。运维人员更关心是“哪个进程”或“哪个容器”在通信。
 		// 监听操作系统 (Netlink/Procfs) 的进程启动和退出事件。
 		// 维护 `(IP, Port) <-> PID/ProcessName/ContainerID` 的动态映射表。
-		// 这是 DeepFlow "应用感知" 能力的核心。
+		// 这是 ZeroTrace "应用感知" 能力的核心。
 		let process_listener = Arc::new(ProcessListener::new(
 			// 进程黑名单: 忽略不需要监控的进程 (减少噪音和资源消耗)
 			&candidate_config.user_config.inputs.proc.process_blacklist,
@@ -2697,7 +2697,7 @@ impl AgentComponents {
 		};
 
 		// NPB (Network Packet Broker) 配置
-		// NPB 功能允许 DeepFlow 将采集到的流量分发给第三方安全或分析工具。
+		// NPB 功能允许 ZeroTrace 将采集到的流量分发给第三方安全或分析工具。
 		// 限制分发流量的带宽，防止 Agent 占满网络出口带宽。
 		let npb_bps_limit = Arc::new(LeakyBucket::new(Some(
 			config_handler.candidate_config.sender.npb_bps_threshold,
@@ -2708,7 +2708,7 @@ impl AgentComponents {
 		));
 
 		// (4) PCAP 数据包发送器
-		// **背景**: DeepFlow 支持“按需留存” (On-Demand Capture)。
+		// **背景**: ZeroTrace 支持“按需留存” (On-Demand Capture)。
 		// 当发生特定事件或通过策略配置时，Agent 会将原始数据包 (PCAP) 捕获并上传。
 		let pcap_batch_queue = "2-pcap-batch-to-sender";
 		let (pcap_batch_sender, pcap_batch_receiver, pcap_batch_counter) =
@@ -2718,7 +2718,7 @@ impl AgentComponents {
 				&queue_debugger,
 			);
 		// 注册队列监控指标
-		// 允许通过 DeepFlow 自身的监控面板查看该队列的积压情况和丢包率
+		// 允许通过 ZeroTrace 自身的监控面板查看该队列的积压情况和丢包率
 		stats_collector.register_countable(
 			&QueueStats { module: pcap_batch_queue, ..Default::default() },
 			Countable::Owned(Box::new(pcap_batch_counter)),
@@ -2791,7 +2791,7 @@ impl AgentComponents {
 		let bpf_syntax_str = bpf_builder.build_pcap_syntax_to_str();
 		#[cfg(any(target_os = "linux", target_os = "android"))]
 		// 编译 BPF 指令
-		// 1. 构建: `bpf_builder` 生成一系列 `BpfSyntax` (DeepFlow 定义的 BPF 指令枚举)。
+		// 1. 构建: `bpf_builder` 生成一系列 `BpfSyntax` (ZeroTrace 定义的 BPF 指令枚举)。
 		// 2. 转换: 这些指令随后会被转换成 `RawInstruction` (对应 Linux 内核的 `struct sock_filter`)。
 		//    即: OpCode (操作码), JT (跳真偏移), JF (跳假偏移), K (立即数)。
 		// 3. 应用: 最终在 Dispatcher 线程中，通过 `setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prog)` 系统调用，
@@ -2815,7 +2815,7 @@ impl AgentComponents {
 
 		let mut tap_interfaces = vec![];
 		// 14. 创建 Dispatcher 组件 (核心循环)
-		// DeepFlow 采用 "Per-Queue Dispatcher" 模型。
+		// ZeroTrace 采用 "Per-Queue Dispatcher" 模型。
 		// 每一个 (网口, Namespace, QueueID) 组合对应一个 Dispatcher 实例。
 		// Dispatcher 内部是一个死循环，不断从内核 Recv 包，经过 Pipeline 处理，最后 Send 到上述的队列中
 		// - 无锁设计: 尽量让一个流的处理都在同一个线程内完成，减少锁竞争。
@@ -2894,7 +2894,7 @@ impl AgentComponents {
 		// 初始化进程事件发送队列和线程
 		// 传统的监控往往只关注资源使用率，而忽略了进程的生命周期。
 		// 通过 eBPF 捕获 `execve` 和 `exit` 系统调用，精确记录进程的启动和退出时间、命令行参数、父子关系。
-		// 这使得 DeepFlow 能够构建动态的进程拓扑图，并关联短生命周期进程的性能数据。
+		// 这使得 ZeroTrace 能够构建动态的进程拓扑图，并关联短生命周期进程的性能数据。
 		let (proc_event_sender, proc_event_uniform_sender) = {
 			let proc_event_queue_name = "1-proc-event-to-sender";
 			let (proc_event_sender, proc_event_receiver, counter) = queue::bounded_with_debug(
@@ -2977,7 +2977,7 @@ impl AgentComponents {
 		#[cfg(feature = "enterprise-integration")]
 		// 初始化 SkyWalking 数据集成 (企业版功能)
 		// 许多企业已经部署了 SkyWalking 进行 APM 监控。
-		// 接收 SkyWalking Agent 上报的 Trace 数据，与 DeepFlow 自身的 eBPF/BPF 数据进行融合。
+		// 接收 SkyWalking Agent 上报的 Trace 数据，与 ZeroTrace 自身的 eBPF/BPF 数据进行融合。
 		// 消除数据孤岛，提供统一的观测视角。
 		let (skywalking_sender, skywalking_uniform_sender) = {
 			let skywalking_queue_name = "1-skywalking-to-sender";
@@ -3009,7 +3009,7 @@ impl AgentComponents {
 
 		// 初始化 Datadog 数据集成
 		// 兼容 Datadog 生态。
-		// 允许 DeepFlow Agent 接收 Datadog 格式的 Trace/Metric 数据。
+		// 允许 ZeroTrace Agent 接收 Datadog 格式的 Trace/Metric 数据。
 		let datadog_queue_name = "1-datadog-to-sender";
 		let (datadog_sender, datadog_receiver, counter) = queue::bounded_with_debug(
 			user_config.processors.flow_log.tunning.flow_aggregator_queue_size,
@@ -3147,7 +3147,7 @@ impl AgentComponents {
 		}
 
 		// 初始化 OTel数据发送队列和线程
-		// 兼容 OTel 协议，允许 DeepFlow Agent 接收或转发 OTel Trace/Metrics 数据。
+		// 兼容 OTel 协议，允许 ZeroTrace Agent 接收或转发 OTel Trace/Metrics 数据。
 		let otel_queue_name = "1-otel-to-sender";
 		let (otel_sender, otel_receiver, counter) = queue::bounded_with_debug(
 			user_config.processors.flow_log.tunning.flow_aggregator_queue_size,
@@ -3271,7 +3271,7 @@ impl AgentComponents {
 
 		// 16. 初始化外部指标服务组件 (MetricServer)
 		// 统一采集器，接收来自外部系统的 **Push** 数据。
-		// 支持多种主流的可观测性协议，将它们转换为 DeepFlow 的内部格式并统一上报。
+		// 支持多种主流的可观测性协议，将它们转换为 ZeroTrace 的内部格式并统一上报。
 		let (external_metrics_server, external_metrics_counter) = MetricServer::new(
 			runtime.clone(),
 			otel_sender,            // 处理 OpenTelemetry Trace/Metrics
@@ -3641,7 +3641,7 @@ impl Components {
 	// 创建新的组件实例 (Components Factory)
 	//
 	// 该函数充当工厂方法，根据当前运行环境和配置，实例化具体的工作组件。
-	// DeepFlow Agent 有两种主要的工作模式：
+	// ZeroTrace Agent 有两种主要的工作模式：
 	// 1. Watcher 模式：轻量级模式，仅负责监听 Kubernetes API 资源变化，不进行流量采集。
 	//    通常用于某些特殊的 Sidecar 容器或任务中。
 	// 2. Agent 模式：全功能模式，包含流量采集 (Dispatcher)、统计 (Collector)、
@@ -3773,7 +3773,7 @@ fn build_pcap_assembler(
 
 // 构建分发器组件 (DispatcherComponent)
 //
-// Dispatcher 是 DeepFlow Agent 的数据面 (Data Plane) 引擎。
+// Dispatcher 是 ZeroTrace Agent 的数据面 (Data Plane) 引擎。
 // 每个 Dispatcher 对应一个独立的采集线程 (通常绑定到一个 CPU 核心)，负责处理特定的流量输入源。
 //
 // Pipeline:
@@ -4038,7 +4038,7 @@ fn build_dispatchers(
 	let dispatcher = match dispatcher_builder.build() {
 		Ok(d) => d,
 		Err(e) => {
-			warn!("dispatcher creation failed: {}, deepflow-agent restart...", e);
+			warn!("dispatcher creation failed: {}, zerotrace-agent restart...", e);
 			thread::sleep(Duration::from_secs(1));
 			return Err(e.into());
 		},

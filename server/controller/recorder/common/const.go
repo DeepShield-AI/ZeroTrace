@@ -17,7 +17,7 @@
 package common
 
 import (
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 const (

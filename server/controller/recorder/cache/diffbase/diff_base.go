@@ -17,7 +17,7 @@
 package diffbase
 
 import (
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
 )
 
 // 所有资源的主要信息，用于与cloud数据比较差异，根据差异更新资源

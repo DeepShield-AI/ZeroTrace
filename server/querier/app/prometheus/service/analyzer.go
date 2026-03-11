@@ -20,7 +20,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
 	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/model/timestamp"
 	"github.com/prometheus/prometheus/promql"

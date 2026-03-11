@@ -17,8 +17,8 @@
 package service
 
 import (
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/profile/model"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/model"
 )
 
 func GrafanaProfile(args model.Profile, cfg *config.QuerierConfig, where string) (result *model.GrafanaProfileValue, debug interface{}, err error) {

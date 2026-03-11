@@ -59,8 +59,8 @@ server_port                , Server Port                   ,
 
 tap                        , Traffic Access Point          , Traffic Access Point. Use a fixed value (virtual network) to represent cloud traffic, and other values to represent traditional IDC traffic (support up to 254 custom values to represent the location of traffic mirror).
 capture_network_type       , Capture Network Type          , Traffic Access Point. Use a fixed value (virtual network) to represent cloud traffic, and other values to represent traditional IDC traffic (support up to 254 custom values to represent the location of traffic mirror).
-vtap                       , DeepFlow Agent                ,
-agent                      , DeepFlow Agent                ,
+vtap                       , ZeroTrace Agent                ,
+agent                      , ZeroTrace Agent                ,
 nat_source                 , NAT Source                    ,
 tap_port                   , TAP Port Identifier           , When the value of tap_port_type is 'Local NIC', tap_port indicates the MAC address suffix (the last four bytes) of the tap interface.
 tap_port_name              , TAP Port Name                 , When the value of tap_port_type is 'Local NIC', tap_port_name indicates the name of the tap interface.

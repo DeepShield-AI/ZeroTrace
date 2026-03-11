@@ -25,9 +25,9 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
-	"github.com/deepflowio/deepflow/cli/ctl/example"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/example"
 )
 
 func RegisterDomainCommand() *cobra.Command {
@@ -43,7 +43,7 @@ func RegisterDomainCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list [name]",
 		Short:   "list domain info",
-		Example: "deepflow-ctl domain list deepflow-domain",
+		Example: "zerotrace-ctl domain list zerotrace-domain",
 		Run: func(cmd *cobra.Command, args []string) {
 			listDomain(cmd, args, listOutput)
 		},
@@ -54,7 +54,7 @@ func RegisterDomainCommand() *cobra.Command {
 	create := &cobra.Command{
 		Use:     "create",
 		Short:   "create domain",
-		Example: "deepflow-ctl domain create -f -",
+		Example: "zerotrace-ctl domain create -f -",
 		Run: func(cmd *cobra.Command, args []string) {
 			createDomain(cmd, args, createFilename)
 		},
@@ -66,7 +66,7 @@ func RegisterDomainCommand() *cobra.Command {
 	update := &cobra.Command{
 		Use:     "update",
 		Short:   "update domain",
-		Example: "deepflow-ctl domain update deepflow-domain -f k8s.yaml",
+		Example: "zerotrace-ctl domain update zerotrace-domain -f k8s.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			updateDomain(cmd, args, updateFilename)
 		},
@@ -77,7 +77,7 @@ func RegisterDomainCommand() *cobra.Command {
 	delete := &cobra.Command{
 		Use:     "delete [name]",
 		Short:   "delete domain",
-		Example: "deepflow-ctl domain delete deepflow-domain",
+		Example: "zerotrace-ctl domain delete zerotrace-domain",
 		Run: func(cmd *cobra.Command, args []string) {
 			deleteDomain(cmd, args)
 		},
@@ -87,7 +87,7 @@ func RegisterDomainCommand() *cobra.Command {
 		Use:     "example domain_type",
 		Short:   "example domain create yaml",
 		Long:    "supported types: " + strings.Trim(fmt.Sprint(common.DomainTypes), "[]"),
-		Example: "deepflow-ctl domain example agent_sync \nsupport example type: aliyun | aws | baidu_bce | filereader | agent_sync | \nhuawei | kubernetes | qingcloud | tencent | volcengine",
+		Example: "zerotrace-ctl domain example agent_sync \nsupport example type: aliyun | aws | baidu_bce | filereader | agent_sync | \nhuawei | kubernetes | qingcloud | tencent | volcengine",
 		Run: func(cmd *cobra.Command, args []string) {
 			exampleDomainConfig(cmd, args)
 		},

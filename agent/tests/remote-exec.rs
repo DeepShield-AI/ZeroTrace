@@ -32,7 +32,7 @@ use tokio::{runtime::Runtime, sync::mpsc, task::JoinHandle};
 use tokio_stream::{wrappers::ReceiverStream, Stream, StreamExt};
 use tonic::{transport::Server as TonicServer, Request, Response, Status, Streaming};
 
-use deepflow_agent::{
+use zerotrace_agent::{
     config::{config::Config, handler::ConfigHandler},
     exception::ExceptionHandler,
     rpc::{Executor, Session, DEFAULT_TIMEOUT},

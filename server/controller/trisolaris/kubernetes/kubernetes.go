@@ -26,19 +26,19 @@ import (
 
 	"context"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	cconfig "github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	resourceservice "github.com/deepflowio/deepflow/server/controller/http/service/resource"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	cconfig "github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	resourceservice "github.com/zerotraceio/zerotrace/server/controller/http/service/resource"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.kubernetes")

@@ -25,7 +25,7 @@ import (
 	"github.com/mikioh/ipaddr"
 	"inet.af/netaddr"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 func GenerateIPMask(ip string) int {

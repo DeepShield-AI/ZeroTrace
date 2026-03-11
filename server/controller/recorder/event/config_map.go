@@ -17,13 +17,13 @@
 package event
 
 import (
-	ctrlCommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbModel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/event/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/libs/eventapi"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	ctrlCommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbModel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/event/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/libs/eventapi"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type ConfigMap struct {

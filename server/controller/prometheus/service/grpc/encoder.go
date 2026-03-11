@@ -19,8 +19,8 @@ package grpc
 import (
 	"golang.org/x/net/context"
 
-	"github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/encoder"
+	"github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/encoder"
 )
 
 type EncoderEvent struct{}

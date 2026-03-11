@@ -22,17 +22,17 @@ import (
 	"slices"
 	"strings"
 
-	ctlcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	ctlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 )
 
 var EXT_METRICS = map[string]*Metrics{}
 
 func GetExtMetrics(db, table, where, queryCacheTTL, orgID string, useQueryCache bool, ctx context.Context) (map[string]*Metrics, error) {
 	loadMetrics := make(map[string]*Metrics)
-	if slices.Contains([]string{common.DB_NAME_DEEPFLOW_ADMIN, common.DB_NAME_DEEPFLOW_TENANT, common.DB_NAME_APPLICATION_LOG, common.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{common.TABLE_NAME_L7_FLOW_LOG, common.TABLE_NAME_EVENT, common.TABLE_NAME_FILE_EVENT}, table) {
+	if slices.Contains([]string{common.DB_NAME_ZEROTRACE_ADMIN, common.DB_NAME_ZEROTRACE_TENANT, common.DB_NAME_APPLICATION_LOG, common.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{common.TABLE_NAME_L7_FLOW_LOG, common.TABLE_NAME_EVENT, common.TABLE_NAME_FILE_EVENT}, table) {
 		externalChClient := client.Client{
 			Host:     config.Cfg.Clickhouse.Host,
 			Port:     config.Cfg.Clickhouse.Port,

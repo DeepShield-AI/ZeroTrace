@@ -306,7 +306,7 @@ _Pragma("GCC error \"PT_GO_REGS_PARM\"");
 #define MAP_MAX_ENTRIES_DEF 40960
 
 /*
- * DeepFlow eBPF program naming convention:
+ * ZeroTrace eBPF program naming convention:
  *
  *   'df_<type_identifier>_<probe_name>'
  *

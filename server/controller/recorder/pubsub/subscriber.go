@@ -16,7 +16,7 @@
 
 package pubsub
 
-import "github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
+import "github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
 
 // newSubscriberInfo creates a new subscriber info
 func newSubscriberInfo(subscriber interface{}, spec *SubscriptionSpec) *SubscriberInfo {

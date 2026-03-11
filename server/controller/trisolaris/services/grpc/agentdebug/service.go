@@ -19,13 +19,13 @@ package synchronize
 import (
 	"fmt"
 
-	api "github.com/deepflowio/deepflow/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	grpcserver "github.com/deepflowio/deepflow/server/controller/grpc"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	grpcserver "github.com/zerotraceio/zerotrace/server/controller/grpc"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.agentdebug")

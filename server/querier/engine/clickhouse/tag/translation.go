@@ -22,8 +22,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 )
 
 var TagResoureMap = GenerateTagResoureMap()

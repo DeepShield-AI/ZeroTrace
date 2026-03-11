@@ -6,13 +6,13 @@
 
 最简单的方法是使用我们构建好的编译环境：
 ```bash
-git clone --recursive https://github.com/deepflowio/deepflow.git 
-cd deepflow 
+git clone --recursive https://github.com/zerotraceio/zerotrace.git 
+cd zerotrace 
 docker run --privileged --rm -it -v \
-    $(pwd):/deepflow -v ~/.cargo:/usr/local/cargo hub.deepflow.yunshan.net/public/rust-build bash -c \
-    "cd /deepflow/agent && cargo build"
+    $(pwd):/zerotrace -v ~/.cargo:/usr/local/cargo hub.zerotrace.yunshan.net/public/rust-build bash -c \
+    "cd /zerotrace/agent && cargo build"
 
-# binary file directory: ./agent/target/debug/deepflow-agent
+# binary file directory: ./agent/target/debug/zerotrace-agent
 ```
 
 ## 手动编译
@@ -81,7 +81,7 @@ ln -s /usr/local/lib/libelf.a /usr/lib/libelf.a
 
 # libGoReSym
 # 安装/升级golang版本到go1.18
-wget https://github.com/deepflowio/libGoReSym/archive/refs/tags/v0.0.1-2.tar.gz
+wget https://github.com/zerotraceio/libGoReSym/archive/refs/tags/v0.0.1-2.tar.gz
 tar -xzf v0.0.1-2.tar.gz
 cd libGoReSym-0.0.1-2
 make && make install && make clean
@@ -89,7 +89,7 @@ make && make install && make clean
 
 编译 agent：
 ```bash
-git clone --recursive https://github.com/deepflowio/deepflow.git
-cd deepflow/agent
+git clone --recursive https://github.com/zerotraceio/zerotrace.git
+cd zerotrace/agent
 cargo build
 ```

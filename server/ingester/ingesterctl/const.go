@@ -16,7 +16,7 @@
 
 package ingesterctl
 
-import "github.com/deepflowio/deepflow/server/libs/debug"
+import "github.com/zerotraceio/zerotrace/server/libs/debug"
 
 const (
 	DEBUG_LISTEN_IP   = "::"

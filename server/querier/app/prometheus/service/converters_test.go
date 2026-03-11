@@ -27,12 +27,12 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/deepflowio/deepflow/server/libs/lru"
-	cfg "github.com/deepflowio/deepflow/server/querier/app/prometheus/config"
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	tagdescription "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/libs/lru"
+	cfg "github.com/zerotraceio/zerotrace/server/querier/app/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	tagdescription "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
 )
 
 type promqlParse struct {
@@ -94,7 +94,7 @@ func TestParseMetric(t *testing.T) {
 			output: "flow_metrics_network_map_rtt_max_1s",
 			table:  "flow_metrics_network_map_rtt_max_1s",
 			alias:  "value",
-			prefix: prefixDeepFlow,
+			prefix: prefixZeroTrace,
 		},
 		{
 			input:  "flow_metrics__network__rtt_max__1m",
@@ -127,7 +127,7 @@ func TestParseMetric(t *testing.T) {
 			output: "container_memory_usage_bytes",
 			table:  "container_memory_usage_bytes",
 			alias:  "value",
-			prefix: prefixDeepFlow,
+			prefix: prefixZeroTrace,
 		},
 		{
 			input:  "ext_metrics__metrics__prometheus_container_memory_usage_bytes",
@@ -438,71 +438,71 @@ func TestParsePromQLTag(t *testing.T) {
 	// Test cases generation
 	// Test cases for prefixType prefixTag
 	t.Run("prefixType prefixTag - tag starts with tag_", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixTag, "prometheus", "tag_example")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixTag, "prometheus", "tag_example")
 		assert.Equal(t, "`tag.example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.False(t, isDeepFlowTag)
+		assert.False(t, isZeroTraceTag)
 	})
 
 	t.Run("prefixType prefixTag - tag does not start with tag_", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixTag, "ext_metrics", "example")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixTag, "ext_metrics", "example")
 		assert.Equal(t, "`example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
-	// Test cases for prefixType prefixDeepFlow
-	t.Run("prefixType prefixDeepFlow - tag starts with AutoTaggingPrefix", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, "", "df_example")
+	// Test cases for prefixType prefixZeroTrace
+	t.Run("prefixType prefixZeroTrace - tag starts with AutoTaggingPrefix", func(t *testing.T) {
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, "", "df_example")
 		assert.Equal(t, "`example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
-	t.Run("prefixType prefixDeepFlow - tag does not start with AutoTaggingPrefix", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, "", "example")
+	t.Run("prefixType prefixZeroTrace - tag does not start with AutoTaggingPrefix", func(t *testing.T) {
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, "", "example")
 		assert.Equal(t, "`tag.example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.False(t, isDeepFlowTag)
+		assert.False(t, isZeroTraceTag)
 	})
 
 	// Test case for default prefixType
 	t.Run("default prefixType", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixNone, chCommon.DB_NAME_DEEPFLOW_ADMIN, "example")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixNone, chCommon.DB_NAME_ZEROTRACE_ADMIN, "example")
 		assert.Equal(t, "`tag.example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
-	t.Run("default prefixType - db is not deepflow system", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixNone, "other_db", "example")
+	t.Run("default prefixType - db is not zerotrace system", func(t *testing.T) {
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixNone, "other_db", "example")
 		assert.Equal(t, "`example`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
 	// Test cases for `app_kubernetes_io_managed_by` tag
 	t.Run("test case for app_kubernetes_io_managed_by tag", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, "prometheus", "df_app_kubernetes_io_managed_by")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, "prometheus", "df_app_kubernetes_io_managed_by")
 		assert.Equal(t, "`app.kubernetes.io/managed-by`", tagName)
 		assert.Equal(t, "", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
 	// Test cases for get tagAlias on Enum Tag
 	t.Run("test case for get tagAlias on enum tag", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, "prometheus", "df_l7_protocol")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, "prometheus", "df_l7_protocol")
 		assert.Equal(t, "Enum(l7_protocol)", tagName)
 		assert.Equal(t, "`l7_protocol_enum`", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 
 	// Test cases for get tagAlias on Enum Tag with languages
 	t.Run("test case for get tagAlias on enum tag", func(t *testing.T) {
-		tagName, tagAlias, isDeepFlowTag := p.parsePromQLTag(prefixDeepFlow, "prometheus", "df_auto_service_type")
+		tagName, tagAlias, isZeroTraceTag := p.parsePromQLTag(prefixZeroTrace, "prometheus", "df_auto_service_type")
 		assert.Equal(t, "Enum(auto_service_type)", tagName)
 		assert.Equal(t, "`auto_service_type_enum`", tagAlias)
-		assert.True(t, isDeepFlowTag)
+		assert.True(t, isZeroTraceTag)
 	})
 }
 

@@ -17,10 +17,10 @@
 package healer
 
 import (
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/common/metadata"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbModel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common/metadata"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbModel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 func NewDefaultDomainHealers(db *metadb.DB) *Healers {

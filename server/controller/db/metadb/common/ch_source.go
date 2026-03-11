@@ -19,7 +19,7 @@ package common
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
 )
 
 type ClickHouseSource struct {

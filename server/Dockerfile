@@ -1,4 +1,4 @@
-FROM alpine:latest as deepflow-server
+FROM alpine:latest as zerotrace-server
 
 MAINTAINER songzhen@yunshan.net
 
@@ -14,6 +14,6 @@ COPY ./controller/cloud/kubernetes_gather/lua /bin/
 ARG TARGETARCH 
 
 RUN --mount=target=/tmp-mount \
-    cp -a /tmp-mount/bin/deepflow-server.${TARGETARCH} /bin/deepflow-server
+    cp -a /tmp-mount/bin/zerotrace-server.${TARGETARCH} /bin/zerotrace-server
 
-CMD /bin/deepflow-server
+CMD /bin/zerotrace-server

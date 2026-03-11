@@ -58,7 +58,7 @@ use enterprise_utils::l7::custom_policy::config::CustomProtocolConfig;
 
 pub const K8S_CA_CRT_PATH: &str = "/run/secrets/kubernetes.io/serviceaccount/ca.crt";
 const MINUTE: Duration = Duration::from_secs(60);
-const DEFAULT_STANDALONE_CONFIG: &str = "/etc/deepflow-agent-standalone.yaml";
+const DEFAULT_STANDALONE_CONFIG: &str = "/etc/zerotrace-agent-standalone.yaml";
 
 #[derive(Debug, Error)]
 pub enum ConfigError {
@@ -306,7 +306,7 @@ impl Default for TagExtraction {
     fn default() -> Self {
         Self {
             script_command: vec![],
-            exec_username: "deepflow".to_string(),
+            exec_username: "zerotrace".to_string(),
         }
     }
 }
@@ -647,7 +647,7 @@ impl Default for Proc {
                     ..Default::default()
                 },
                 ProcessMatcher {
-                    match_regex: Regex::new("^deepflow-").unwrap(),
+                    match_regex: Regex::new("^zerotrace-").unwrap(),
                     only_in_container: false,
                     enabled_features: vec![
                         "ebpf.profile.on_cpu".to_string(),
@@ -2545,7 +2545,7 @@ impl Default for Log {
     fn default() -> Self {
         Self {
             log_level: "INFO".to_string(),
-            log_file: "/var/log/deepflow-agent/deepflow-agent.log".to_string(),
+            log_file: "/var/log/zerotrace-agent/zerotrace-agent.log".to_string(),
             log_backhaul_enabled: true,
         }
     }
@@ -2609,7 +2609,7 @@ impl Default for StandaloneMode {
     fn default() -> Self {
         Self {
             max_data_file_size: 200 << 20,
-            data_file_dir: "/var/log/deepflow-agent/".to_string(),
+            data_file_dir: "/var/log/zerotrace-agent/".to_string(),
         }
     }
 }
@@ -3154,7 +3154,7 @@ impl UserConfig {
         }
 
         // 虽然RFC 791里最低MTU是68，但是此时compressor会崩溃，
-        // 所以MTU最低限定到200以确保deepflow-agent能够成功运行
+        // 所以MTU最低限定到200以确保zerotrace-agent能够成功运行
         if self.outputs.npb.max_mtu < 200 {
             return Err(ConfigError::RuntimeConfigInvalid(format!(
                 "MTU({}) specified smaller than 200",
@@ -3331,7 +3331,7 @@ impl Default for OnCpuProfile {
             disabled: false,
             frequency: 99,
             cpu: 0,
-            regex: "^deepflow-.*".to_string(),
+            regex: "^zerotrace-.*".to_string(),
         }
     }
 }
@@ -3350,7 +3350,7 @@ impl Default for OffCpuProfile {
     fn default() -> Self {
         OffCpuProfile {
             disabled: false,
-            regex: "^deepflow-.*".to_string(),
+            regex: "^zerotrace-.*".to_string(),
             cpu: 0,
             min_block: Duration::from_micros(50),
         }
@@ -3788,7 +3788,7 @@ mod tests {
     #[test]
     fn read_yaml_file() {
         // TODO: improve test cases
-        let c = Config::load_from_file("config/deepflow-agent.yaml")
+        let c = Config::load_from_file("config/zerotrace-agent.yaml")
             .expect("failed loading config file");
         assert_eq!(c.controller_ips.len(), 1);
         assert_eq!(&c.controller_ips[0], "127.0.0.1");

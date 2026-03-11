@@ -21,7 +21,7 @@ import (
 
 	"golang.org/x/exp/slices"
 
-	ctrlcommon "github.com/deepflowio/deepflow/server/controller/common"
+	ctrlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 // UserInfo defines the user information parsed from the request header, used to build redis cache key and build memory cache filter conditions

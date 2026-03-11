@@ -21,8 +21,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/dbcache"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbcache"
 )
 
 type TapType struct {

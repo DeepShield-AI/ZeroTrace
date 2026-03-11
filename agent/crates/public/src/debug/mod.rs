@@ -41,6 +41,8 @@ pub enum Error {
     NotFound(String),
     #[error("{0}")]
     FromUtf8(String),
+    #[error("{0}")]
+    InvalidMessage(String),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

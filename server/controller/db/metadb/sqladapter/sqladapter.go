@@ -19,9 +19,9 @@ package sqladapter
 import (
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/edition"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/types"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/edition"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/types"
 )
 
 var log = logging.MustGetLogger("db.metadb.migrator.schema")

@@ -26,9 +26,9 @@ import (
 
 	"github.com/google/gopacket/layers"
 
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
 )
 
 func TestHasEdgeTagField(t *testing.T) {
@@ -56,7 +56,7 @@ func TestInt16Unmarshal(t *testing.T) {
 }
 
 func TestNegativeID(t *testing.T) {
-	f := Field{L3EpcID: datatype.EPC_FROM_DEEPFLOW}
+	f := Field{L3EpcID: datatype.EPC_FROM_ZEROTRACE}
 	if f.NewTag(L3EpcID).ToKVString() != ",l3_epc_id=-1" {
 		t.Error("int16值处理得不正确")
 	}

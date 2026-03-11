@@ -24,19 +24,19 @@ import (
 	"github.com/influxdata/influxdb/models"
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/config"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/dbwriter"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/stats/pb"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/stats/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("ext_metrics.decoder")
@@ -132,7 +132,7 @@ func (d *Decoder) Run() {
 			if d.msgType == datatype.MESSAGE_TYPE_TELEGRAF {
 				d.handleTelegraf(recvBytes.VtapID, decoder)
 			} else if d.msgType == datatype.MESSAGE_TYPE_DFSTATS || d.msgType == datatype.MESSAGE_TYPE_SERVER_DFSTATS {
-				d.handleDeepflowStats(recvBytes.VtapID, decoder)
+				d.handleZerotraceStats(recvBytes.VtapID, decoder)
 			}
 			receiver.ReleaseRecvBuffer(recvBytes)
 		}
@@ -179,27 +179,27 @@ func (d *Decoder) sendTelegraf(vtapID uint16, point models.Point) {
 	d.counter.OutCount++
 }
 
-func (d *Decoder) handleDeepflowStats(vtapID uint16, decoder *codec.SimpleDecoder) {
+func (d *Decoder) handleZerotraceStats(vtapID uint16, decoder *codec.SimpleDecoder) {
 	for !decoder.IsEnd() {
 		pbStats := &pb.Stats{}
 		bytes := decoder.ReadBytes()
 		if decoder.Failed() {
 			if d.counter.ErrorCount == 0 {
-				log.Errorf("deepflow stats decode failed, offset=%d len=%d", decoder.Offset(), len(decoder.Bytes()))
+				log.Errorf("zerotrace stats decode failed, offset=%d len=%d", decoder.Offset(), len(decoder.Bytes()))
 			}
 			d.counter.ErrorCount++
 			return
 		}
 		if err := pbStats.Unmarshal(bytes); err != nil || pbStats.Name == "" {
 			if d.counter.ErrorCount == 0 {
-				log.Warningf("deepflow stats parse failed, err msg: %s", err)
+				log.Warningf("zerotrace stats parse failed, err msg: %s", err)
 			}
 			d.counter.ErrorCount++
 			continue
 		}
 
 		if d.debugEnabled {
-			log.Debugf("decoder %d vtap %d recv deepflow stats: %v", d.index, vtapID, pbStats)
+			log.Debugf("decoder %d vtap %d recv zerotrace stats: %v", d.index, vtapID, pbStats)
 		}
 		metrics, dbId := d.StatsToExtMetrics(vtapID, pbStats)
 		if !metrics.IsValid() {
@@ -229,15 +229,15 @@ func (d *Decoder) StatsToExtMetrics(vtapID uint16, s *pb.Stats) (*dbwriter.ExtMe
 	// if OrgId is set, the set OrgId will be used first.
 	if s.OrgId != 0 {
 		m.OrgId, m.TeamID = uint16(s.OrgId), uint16(s.TeamId)
-		writerDBID = dbwriter.DEEPFLOW_TENANT_DB_ID
+		writerDBID = dbwriter.ZEROTRACE_TENANT_DB_ID
 	} else { // OrgId not set
-		// from deepflow_server, OrgId set default
+		// from zerotrace_server, OrgId set default
 		if m.MsgType == datatype.MESSAGE_TYPE_SERVER_DFSTATS {
 			m.OrgId, m.TeamID = ckdb.DEFAULT_ORG_ID, ckdb.DEFAULT_TEAM_ID
-			writerDBID = dbwriter.DEEPFLOW_ADMIN_DB_ID
-		} else { // from deepflow_agent, OrgId Get from header first, then from vtapID
+			writerDBID = dbwriter.ZEROTRACE_ADMIN_DB_ID
+		} else { // from zerotrace_agent, OrgId Get from header first, then from vtapID
 			m.OrgId, m.TeamID = d.orgId, d.teamId
-			writerDBID = dbwriter.DEEPFLOW_TENANT_DB_ID
+			writerDBID = dbwriter.ZEROTRACE_TENANT_DB_ID
 		}
 	}
 	return m, writerDBID

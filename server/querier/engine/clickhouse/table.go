@@ -20,9 +20,9 @@ import (
 	"context"
 	"slices"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 )
 
 func GetDatabases() *common.Result {
@@ -42,7 +42,7 @@ func GetTables(db, where, queryCacheTTL, orgID string, useQueryCache bool, ctx c
 	if !ok {
 		return nil
 	}
-	if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_PROMETHEUS}, db) {
+	if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_PROMETHEUS}, db) {
 		values = append(values, chCommon.GetExtTables(db, where, queryCacheTTL, orgID, useQueryCache, ctx, DebugInfo)...)
 	} else {
 		for _, table := range tables {

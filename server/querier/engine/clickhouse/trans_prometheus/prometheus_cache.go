@@ -22,9 +22,9 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
 )
 
 var log = logging.MustGetLogger("clickhouse.trans_prometheus")

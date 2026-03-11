@@ -21,10 +21,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/deepflowio/deepflow/server/libs/hmap"
-	"github.com/deepflowio/deepflow/server/libs/hmap/keyhash"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap/keyhash"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type u128LRUNode struct {

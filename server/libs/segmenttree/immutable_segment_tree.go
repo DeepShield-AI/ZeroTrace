@@ -24,8 +24,8 @@ import (
 
 	"github.com/Workiva/go-datastructures/bitarray"
 
-	. "github.com/deepflowio/deepflow/server/libs/datastructure"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	. "github.com/zerotraceio/zerotrace/server/libs/datastructure"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 type EndpointType = int

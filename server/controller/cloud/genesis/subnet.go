@@ -19,8 +19,8 @@ package genesis
 import (
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (g *Genesis) getSubnets() ([]model.Subnet, error) {

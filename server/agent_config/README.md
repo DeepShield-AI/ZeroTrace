@@ -32,7 +32,7 @@ global:
 
 **Description**:
 
-deepflow-agent uses cgroups to limit CPU usage.
+zerotrace-agent uses cgroups to limit CPU usage.
 1 millicpu = 1 millicore = 0.001 core.
 
 ### Memory Limit {#global.limits.max_memory}
@@ -63,12 +63,12 @@ global:
 
 **Description**:
 
-deepflow-agent uses cgroups to limit memory usage.
+zerotrace-agent uses cgroups to limit memory usage.
 
 Note:
-- Memory of the dedicated deepflow-agent is not limited
-- Memory limits for container deepflow-agent are enforced by container
-- Memory limits for container deepflow-agent in the same cluster need to be consistent
+- Memory of the dedicated zerotrace-agent is not limited
+- Memory limits for container zerotrace-agent are enforced by container
+- Memory limits for container zerotrace-agent in the same cluster need to be consistent
 
 ### Maximum Log Backhaul Rate {#global.limits.max_log_backhaul_rate}
 
@@ -98,7 +98,7 @@ global:
 
 **Description**:
 
-deepflow-agent will send logs to deepflow-server, 0 means no limit.
+zerotrace-agent will send logs to zerotrace-server, 0 means no limit.
 
 ### Maximum Local Log File Size {#global.limits.max_local_log_file_size}
 
@@ -128,7 +128,7 @@ global:
 
 **Description**:
 
-The maximum disk space allowed for deepflow-agent log files.
+The maximum disk space allowed for zerotrace-agent log files.
 
 ### Local Log Retention {#global.limits.local_log_retention}
 
@@ -157,7 +157,7 @@ global:
 
 **Description**:
 
-The retention time for deepflow-agent log files.
+The retention time for zerotrace-agent log files.
 
 ### Maximum Socket Count {#global.limits.max_sockets}
 
@@ -251,9 +251,9 @@ global:
 
 **Description**:
 
-The maximum number of threads deepflow-agent is allowed to create.
+The maximum number of threads zerotrace-agent is allowed to create.
 - When the number of threads exceeds this limit, an exception alert will be triggered.
-- When the number of threads exceeds twice this limit value, a deepflow-agent restart will be triggered.
+- When the number of threads exceeds twice this limit value, a zerotrace-agent restart will be triggered.
 
 ### Process Limit {#global.alerts.process_threshold}
 
@@ -282,9 +282,9 @@ global:
 
 **Description**:
 
-The maximum number of processes named `deepflow-agent` is allowed to launch.
-If the number of processes named `deepflow-agent` in the current system reaches this limit,
-subsequent processes named `deepflow-agent` will fail to start.
+The maximum number of processes named `zerotrace-agent` is allowed to launch.
+If the number of processes named `zerotrace-agent` in the current system reaches this limit,
+subsequent processes named `zerotrace-agent` will fail to start.
 
 ### Core File Checker {#global.alerts.check_core_file_disabled}
 
@@ -321,7 +321,7 @@ check provides a switch to prevent the process hang. Additional links:
 
 ## Circuit Breakers {#global.circuit_breakers}
 
-Control deepflow-agent to stop running or stop some functions under certain environmental conditions.
+Control zerotrace-agent to stop running or stop some functions under certain environmental conditions.
 
 ### System Free Memory Percentage {#global.circuit_breakers.sys_memory_percentage}
 
@@ -398,7 +398,7 @@ global:
 
 **Description**:
 
-deepflow-agent observes the percentage of this memory metric
+zerotrace-agent observes the percentage of this memory metric
 
 ### Relative System Load {#global.circuit_breakers.relative_sys_load}
 
@@ -465,7 +465,7 @@ global:
 
 **Description**:
 
-After deepflow-agent enters disabled state and Linux system load
+After zerotrace-agent enters disabled state and Linux system load
 divided by the number of CPU cores is continuously below this value for 5
 minutes, the agent can recover from the circuit breaker
 disabled state.
@@ -679,7 +679,7 @@ For the `windows` operating system, the default value is `c:\`.
 
 ## Tunning {#global.tunning}
 
-Tune the runtime of deepflow-agent.
+Tune the runtime of zerotrace-agent.
 
 ### CPU Affinity {#global.tunning.cpu_affinity}
 
@@ -745,7 +745,7 @@ global:
 **Description**:
 
 The smaller the value of process scheduling priority, the higher the priority of the
-`deepflow-agent` process, and the larger the value, the lower the priority.
+`zerotrace-agent` process, and the larger the value, the lower the priority.
 
 ### Idle Memory Trimming {#global.tunning.idle_memory_trimming}
 
@@ -880,7 +880,7 @@ The agent will monitor:
 ## NTP Clock Synchronization {#global.ntp}
 
 This synchronization mechanism does not alter the host's clock; it is only used
-internally by the deepflow-agent process.
+internally by the zerotrace-agent process.
 
 ### Enabled {#global.ntp.enabled}
 
@@ -908,8 +908,8 @@ global:
 
 **Description**:
 
-Whether to synchronize the clock to the deepflow-server, this behavior
-will not change the time of the deepflow-agent running environment.
+Whether to synchronize the clock to the zerotrace-server, this behavior
+will not change the time of the zerotrace-agent running environment.
 
 Notice: Before enabling NTP, the controller needs to first start the NTP service. The agent will
 only continue to work after the time synchronization is complete.
@@ -974,7 +974,7 @@ When the clock drift exceeds this value, the timestamp will be corrected.
 
 ## Communication {#global.communication}
 
-Configuration of deepflow-agent communication.
+Configuration of zerotrace-agent communication.
 
 ### Proactive Request Interval {#global.communication.proactive_request_interval}
 
@@ -1003,8 +1003,8 @@ global:
 
 **Description**:
 
-The interval at which deepflow-agent proactively requests configuration and
-tag information from deepflow-server.
+The interval at which zerotrace-agent proactively requests configuration and
+tag information from zerotrace-server.
 
 ### Maximum Escape Duration {#global.communication.max_escape_duration}
 
@@ -1063,8 +1063,8 @@ global:
 
 **Description**:
 
-When this value is set, deepflow-agent will use this IP to access the
-control plane port of deepflow-server, otherwise, the server will use
+When this value is set, zerotrace-agent will use this IP to access the
+control plane port of zerotrace-server, otherwise, the server will use
 its own node IP as the control plane communication IP. This parameter is
 usually used when the server uses a load balancer or a virtual IP to
 provide services externally.
@@ -1096,9 +1096,9 @@ global:
 
 **Description**:
 
-The control plane port used by deepflow-agent to access deepflow-server.
+The control plane port used by zerotrace-agent to access zerotrace-server.
 The default port within the same K8s cluster is 20035, and the default port
-of deepflow-agent outside the cluster is 30035.
+of zerotrace-agent outside the cluster is 30035.
 
 ### Ingester IP Address {#global.communication.ingester_ip}
 
@@ -1126,9 +1126,9 @@ global:
 
 **Description**:
 
-When this value is set, deepflow-agent will use this IP to access the
-data plane port of deepflow-server, which is usually used when
-deepflow-server uses an external load balancer.
+When this value is set, zerotrace-agent will use this IP to access the
+data plane port of zerotrace-server, which is usually used when
+zerotrace-server uses an external load balancer.
 
 ### Ingester Port {#global.communication.ingester_port}
 
@@ -1157,9 +1157,9 @@ global:
 
 **Description**:
 
-The data plane port used by deepflow-agent to access deepflow-server.
+The data plane port used by zerotrace-agent to access zerotrace-server.
 The default port within the same K8s cluster is 20033, and the default port
-of deepflow-agent outside the cluster is 30033.
+of zerotrace-agent outside the cluster is 30033.
 
 ### gRPC Socket Buffer Size {#global.communication.grpc_buffer_size}
 
@@ -1282,20 +1282,20 @@ global:
 
 **Description**:
 
-Used when deepflow-agent uses an external IP address to access
-deepflow-server. For example, when deepflow-server is behind a NAT gateway,
-or the host where deepflow-server is located has multiple node IP addresses
-and different deepflow-agents need to access different node IPs, you can
-set an additional NAT IP for each deepflow-server address, and modify this
+Used when zerotrace-agent uses an external IP address to access
+zerotrace-server. For example, when zerotrace-server is behind a NAT gateway,
+or the host where zerotrace-server is located has multiple node IP addresses
+and different zerotrace-agents need to access different node IPs, you can
+set an additional NAT IP for each zerotrace-server address, and modify this
 value to `true`.
 
 ## Self Monitoring {#global.self_monitoring}
 
-Configuration of deepflow-agent's own diagnosis.
+Configuration of zerotrace-agent's own diagnosis.
 
 ### Log {#global.self_monitoring.log}
 
-Configuration of deepflow-agent's own logs.
+Configuration of zerotrace-agent's own logs.
 
 #### Log Level {#global.self_monitoring.log.log_level}
 
@@ -1332,7 +1332,7 @@ global:
 
 **Description**:
 
-Log level of deepflow-agent.
+Log level of zerotrace-agent.
 
 It is also possible to specify the log level for specific modules with advanced configuation in the following format:
 
@@ -1345,7 +1345,7 @@ It is also possible to specify the log level for specific modules with advanced 
 For example:
 
 ```
-log_level: info,deepflow_agent::rpc::session=debug
+log_level: info,zerotrace_agent::rpc::session=debug
 ```
 
 will set the log level to INFO for all modules and DEBUG for the rpc::session module.
@@ -1367,7 +1367,7 @@ Upgrade from old version: `static_config.log-file`
 global:
   self_monitoring:
     log:
-      log_file: /var/log/deepflow-agent/deepflow-agent.log
+      log_file: /var/log/zerotrace-agent/zerotrace-agent.log
 ```
 
 **Schema**:
@@ -1377,7 +1377,7 @@ global:
 
 **Description**:
 
-The file where deepflow-agent logs are written.
+The file where zerotrace-agent logs are written.
 Note that this configuration is only used in standalone mode.
 
 #### Log Backhaul Enabled {#global.self_monitoring.log.log_backhaul_enabled}
@@ -1407,7 +1407,7 @@ global:
 
 **Description**:
 
-When enabled, deepflow-agent will send its own logs to deepflow-server.
+When enabled, zerotrace-agent will send its own logs to zerotrace-server.
 
 ### Profile {#global.self_monitoring.profile}
 
@@ -1470,7 +1470,7 @@ global:
 
 **Description**:
 
-Disabled / Enabled the debug function of the deepflow-agent.
+Disabled / Enabled the debug function of the zerotrace-agent.
 
 #### Local UDP Port {#global.self_monitoring.debug.local_udp_port}
 
@@ -1564,7 +1564,7 @@ statsd interval.
 
 ## Standalone Mode {#global.standalone_mode}
 
-Configuration of deepflow-agent standalone mode.
+Configuration of zerotrace-agent standalone mode.
 
 ### Maximum Data File Size {#global.standalone_mode.max_data_file_size}
 
@@ -1594,8 +1594,8 @@ global:
 
 **Description**:
 
-When deepflow-agent runs in standalone mode, it will not be controlled by
-deepflow-server, and the collected data will only be written to the local file.
+When zerotrace-agent runs in standalone mode, it will not be controlled by
+zerotrace-server, and the collected data will only be written to the local file.
 Currently supported data types for writing are l4_flow_log and l7_flow_log. Each
 type of data is written to a separate file. This configuration can be used to
 specify the maximum size of the data file, and rotate when it exceeds this size.
@@ -1617,7 +1617,7 @@ Upgrade from old version: `static_config.standalone-data-file-dir`
 ```yaml
 global:
   standalone_mode:
-    data_file_dir: /var/log/deepflow-agent/
+    data_file_dir: /var/log/zerotrace-agent/
 ```
 
 **Schema**:
@@ -1659,15 +1659,15 @@ inputs:
 
 **Description**:
 
-After enabling this configuration, deepflow-agent will periodically report the process information
-specified in `inputs.proc.process_matcher` to deepflow-server. After synchronizing process information,
+After enabling this configuration, zerotrace-agent will periodically report the process information
+specified in `inputs.proc.process_matcher` to zerotrace-server. After synchronizing process information,
 all eBPF observability data will automatically inject the global process ID (gprocess_id) tag.
 
 Note: When enabling this feature, the specific process list must also be specified in `inputs.proc.process_matcher`,
 i.e., `proc.gprocess_info` must be included in `inputs.proc.process_matcher.[*].enabled_features`.
 
 This configuration only applies to agents of `cloud server` types (CHOST_VM, CHOST_BM) and `container`
-types (K8S_VM, K8S_BM). Use the command `deepflow-ctl agent list` to determine the specific agent
+types (K8S_VM, K8S_BM). Use the command `zerotrace-ctl agent list` to determine the specific agent
 type in CLI environments.
 
 ### Directory of /proc {#inputs.proc.proc_dir_path}
@@ -1828,7 +1828,7 @@ Upgrade from old version: `static_config.os-app-tag-exec-user`
 inputs:
   proc:
     tag_extraction:
-      exec_username: deepflow
+      exec_username: zerotrace
 ```
 
 **Schema**:
@@ -1930,7 +1930,7 @@ inputs:
     - enabled_features:
       - ebpf.profile.on_cpu
       - proc.gprocess_info
-      match_regex: ^deepflow-
+      match_regex: ^zerotrace-
       only_in_container: false
     - enabled_features:
       - proc.gprocess_info
@@ -2395,7 +2395,7 @@ inputs:
 
 **Description**:
 
-When the `deepflow-agent` detects unresolved function names in the Java process call stack, it
+When the `zerotrace-agent` detects unresolved function names in the Java process call stack, it
 triggers the generation of the process function symbol table and updates the symbol cache. Currently,
 the Java symbol file is continuously updated, and the `duration` is used to control the delay in
 updating the symbol cache with the new symbol file. This delay is necessary because Java uses a JIT
@@ -2435,7 +2435,7 @@ inputs:
 
 **Description**:
 
-All Java symbol files are stored in the '/tmp' directory mounted by the deepflow-agent.
+All Java symbol files are stored in the '/tmp' directory mounted by the zerotrace-agent.
 To prevent excessive occupation of host node space due to large Java symbol files, a
 maximum size limit is set for each generated Java symbol file.
 
@@ -2477,14 +2477,14 @@ inputs:
 
 **Description**:
 
-`Virtual Mirror` mode is used when deepflow-agent cannot directly capture the traffic from
+`Virtual Mirror` mode is used when zerotrace-agent cannot directly capture the traffic from
 the source. For example:
 - in the K8s macvlan environment, capture the Pod traffic through the Node NIC
 - in the Hyper-V environment, capture the VM traffic through the Hypervisor NIC
 - in the ESXi environment, capture traffic through VDS/VSS local SPAN
 - in the DPDK environment, capture traffic through DPDK ring buffer
 
-Use `Physical Mirror` mode when deepflow-agent captures traffic through physical
+Use `Physical Mirror` mode when zerotrace-agent captures traffic through physical
 switch mirroring.
 
 <mark>`Physical Mirror` is only supported in the Enterprise Edition.</mark>
@@ -2819,10 +2819,10 @@ inputs:
 **Description**:
 
 It is found that there may be bugs in BPF traffic filtering under some
-versions of Linux Kernel. After this configuration is enabled, deepflow-agent
+versions of Linux Kernel. After this configuration is enabled, zerotrace-agent
 will not use the filtering capabilities of BPF, and will filter by itself after
 capturing full traffic. Note that this may significantly increase the resource
-overhead of deepflow-agent.
+overhead of zerotrace-agent.
 
 #### Skip NPB BPF {#inputs.cbpf.af_packet.skip_npb_bpf}
 
@@ -2953,7 +2953,7 @@ inputs:
 
 **Description**:
 
-deepflow-agent will automatically calculate the number of blocks
+zerotrace-agent will automatically calculate the number of blocks
 used by AF_PACKET according to max_memory, which can also be specified
 using this configuration item. The size of each block is fixed at 1MB.
 
@@ -3599,7 +3599,7 @@ inputs:
 
 **Description**:
 
-deepflow-agent will mark the TAP (Traffic Access Point) location
+zerotrace-agent will mark the TAP (Traffic Access Point) location
 according to the outer vlan tag in the mirrored traffic of the physical
 switch. When the vlan tag has no corresponding TAP value, or the vlan
 pcp does not match the `inputs.cbpf.af_packet.vlan_pcp_in_physical_mirror_traffic`, it will assign the TAP value.
@@ -3814,7 +3814,7 @@ One can use the following method to determine whether an application process can
   If the output contains symbols such as `0000000000502ac0 T SSL_write`,
   it means the process is using a statically linked OpenSSL library.
 
-After enabled, deepflow-agent will retrieve process information that
+After enabled, zerotrace-agent will retrieve process information that
 matches the regular expression, hooking the corresponding encryption/decryption
 interfaces of the openssl library. In the logs, you will encounter a message similar
 to the following:
@@ -3914,7 +3914,7 @@ In the example above, "Driver: igb_uio" indicates a DPDK-managed device (other o
 "vfio-pci" and "uio_pci_generic", which are also managed by DPDK). The actual driver is 'i40e'
 (derived from 'Module: i40e').
 
-You can use the sustainable profiling feature provided by DeepFlow to perform function profiling
+You can use the sustainable profiling feature provided by ZeroTrace to perform function profiling
 on the DPDK application and check the specific interface names. Alternatively, you can run the
 `perf` command on the node where the agent is located:
 `perf record -F97 -a -g -p <DPDK application PID> -- sleep 30`
@@ -4158,7 +4158,7 @@ inputs:
 
 **Description**:
 
-Whether to enable the tcp-option tracing SockOps program, which injects DeepFlow metadata
+Whether to enable the tcp-option tracing SockOps program, which injects ZeroTrace metadata
 (for example, process PID) into a custom TCP option for eligible connections.
 Note: This feature requires cgroup v2 (unified hierarchy) and kernel > 5.10. On hosts
 using cgroup v1 the SockOps program will fail to attach and the agent will log a warning.
@@ -4419,7 +4419,7 @@ out-of-order-reassembly processing for it. Note that the agent will consume more
 in this case, so please adjust the syscall-out-of-order-cache-size accordingly and monitor
 the agent's memory usage.
 
-Supported protocols: [https://www.deepflow.io/docs/features/l7-protocols/overview/](https://www.deepflow.io/docs/features/l7-protocols/overview/)
+Supported protocols: [https://www.zerotrace.io/docs/features/l7-protocols/overview/](https://www.zerotrace.io/docs/features/l7-protocols/overview/)
 
 Attention: configuring `HTTP2` or `gRPC` will enable both protocols.
 
@@ -4452,7 +4452,7 @@ inputs:
 **Description**:
 
 When the OOOR cache data times out, it will be output directly. This parameter can be adjusted according to metric
-`deepflow_agent_ebpf_collect.metrics.time_backtrack_max`.
+`zerotrace_agent_ebpf_collect.metrics.time_backtrack_max`.
 
 Note: Increasing this value will consume more memory
 
@@ -4497,7 +4497,7 @@ segmentation-reassembly processing to merge application protocol content spread 
 multiple syscalls before parsing it. This enhances the success rate of application
 protocol parsing. Note that `out_of_order_reassembly_protocols` must also be enabled for
 this feature to be effective.
-Supported protocols: [https://www.deepflow.io/docs/features/l7-protocols/overview/](https://www.deepflow.io/docs/features/l7-protocols/overview/)
+Supported protocols: [https://www.zerotrace.io/docs/features/l7-protocols/overview/](https://www.zerotrace.io/docs/features/l7-protocols/overview/)
 Attention: configuring `HTTP2` or `gRPC` will enable both protocols.
 
 ### File {#inputs.ebpf.file}
@@ -5037,7 +5037,7 @@ inputs:
 
 **Description**:
 
-The interval at which deepflow-agent aggregates and reports memory profile data.
+The interval at which zerotrace-agent aggregates and reports memory profile data.
 
 ##### LRU length for process allocated addresses {#inputs.ebpf.profile.memory.allocated_addresses_lru_len}
 
@@ -5101,7 +5101,7 @@ inputs:
 In order to match mallocs and frees, memory profiler will sort data by timestamp before processing.
 This parameter is the length of the sorted array.
 When configuring this option, first adjust the `sort_interval` parameter according to the instructions,
-and then refer to the agent performance statistics in `deepflow_agent_ebpf_memory_profiler`
+and then refer to the agent performance statistics in `zerotrace_agent_ebpf_memory_profiler`
 `dequeued_by_length` and `dequeued_by_interval` metrics, appropriately reduce this parameter
 while ensuring that the former is several times smaller than the latter.
 
@@ -5135,7 +5135,7 @@ inputs:
 
 In order to match mallocs and frees, memory profiler will sort data by timestamp before processing.
 This parameter controls the max span of interval between the first and last item in the sorted array.
-Refer to agent performance statistics in `deepflow_agent_ebpf_memory_profiler`,
+Refer to agent performance statistics in `zerotrace_agent_ebpf_memory_profiler`,
 making `time_backtracked` to 0. Configurion `sort_length` may also need to be increased.
 
 ##### Queue Size {#inputs.ebpf.profile.memory.queue_size}
@@ -5167,7 +5167,7 @@ inputs:
 **Description**:
 
 Memory profiler inner queue size.
-Refer to agent performance statistics in `deepflow_agent_ebpf_memory_profiler`,
+Refer to agent performance statistics in `zerotrace_agent_ebpf_memory_profiler`,
 making `overwritten` to 0 and `pending` not exceeding this configuration.
 
 #### Preprocess {#inputs.ebpf.profile.preprocess}
@@ -5203,7 +5203,7 @@ inputs:
 Compress the call stack before sending data. Compression can effectively reduce the agent's
 memory usage, data transmission bandwidth consumption, and ingester's CPU overhead. However,
 it also increases the CPU usage of the agent. Tests have shown that compressing the on-cpu
-function call stack of the deepflow-agent can reduce bandwidth consumption by `x` times, but
+function call stack of the zerotrace-agent can reduce bandwidth consumption by `x` times, but
 it will result in an additional `y%` CPU usage for the agent.
 
 #### Language-specific Profiling {#inputs.ebpf.profile.languages}
@@ -5551,8 +5551,8 @@ inputs:
 
 **Description**:
 
-The interval at which deepflow-agent actively reports resource information
-to deepflow-server.
+The interval at which zerotrace-agent actively reports resource information
+to zerotrace-server.
 
 ### Workload Resource Sync Enabled {#inputs.resources.workload_resource_sync_enabled}
 
@@ -5578,8 +5578,8 @@ inputs:
 
 **Description**:
 
-When enabled, deepflow-server will abstract VM based on the runtime
-environment information reported by deepflow-agent.
+When enabled, zerotrace-server will abstract VM based on the runtime
+environment information reported by zerotrace-agent.
 
 ### Collect Private Cloud Resource {#inputs.resources.private_cloud}
 
@@ -5610,8 +5610,8 @@ inputs:
 
 **Description**:
 
-When enabled, deepflow-agent will automatically synchronize virtual
-machine and network information on KVM or Linux Host to deepflow-server.
+When enabled, zerotrace-agent will automatically synchronize virtual
+machine and network information on KVM or Linux Host to zerotrace-server.
 Information collected includes:
 - raw_all_vm_xml
 - raw_vm_states
@@ -6150,16 +6150,16 @@ inputs:
 
 **Description**:
 
-In active mode, deepflow-agent enters the netns of other Pods through
+In active mode, zerotrace-agent enters the netns of other Pods through
 setns syscall to query the MAC and IP addresses. In this mode, the setns
-operation requires the SYS_ADMIN permission. In passive mode deepflow-agent
+operation requires the SYS_ADMIN permission. In passive mode zerotrace-agent
 calculates the MAC and IP addresses used by Pods by capturing ARP/ND traffic.
 When set to adaptive, active mode will be used first.
 
 ### Pull Resource From Controller {#inputs.resources.pull_resource_from_controller}
 
-Configurations for deepflow-server on pulling resources from controller.
-DeepFlow-agent will not read this section.
+Configurations for zerotrace-server on pulling resources from controller.
+ZeroTrace-agent will not read this section.
 
 #### Domain Filter {#inputs.resources.pull_resource_from_controller.domain_filter}
 
@@ -6195,13 +6195,13 @@ inputs:
 **Description**:
 
 Default value `0` means all domains, or can be set to a list of lcuuid of a
-series of domains, you can get lcuuid through 'deepflow-ctl domain list'.
+series of domains, you can get lcuuid through 'zerotrace-ctl domain list'.
 
-Note: The list of MAC and IP addresses is used by deepflow-agent to inject tags
+Note: The list of MAC and IP addresses is used by zerotrace-agent to inject tags
 into data. This configuration can reduce the number and frequency of MAC and
-IP addresses delivered by deepflow-server to deepflow-agent. When there is no
-cross-domain service request, deepflow-server can be configured to only deliver
-the information in the local domain to deepflow-agent.
+IP addresses delivered by zerotrace-server to zerotrace-agent. When there is no
+cross-domain service request, zerotrace-server can be configured to only deliver
+the information in the local domain to zerotrace-agent.
 
 #### Only K8s Pod IP in Local Cluster {#inputs.resources.pull_resource_from_controller.only_kubernetes_pod_ip_in_local_cluster}
 
@@ -6230,12 +6230,12 @@ inputs:
 
 **Description**:
 
-The list of MAC and IP addresses is used by deepflow-agent to inject tags
+The list of MAC and IP addresses is used by zerotrace-agent to inject tags
 into data. This configuration can reduce the number and frequency of MAC and IP
-addresses delivered by deepflow-server to deepflow-agent. When the Pod IP is not
+addresses delivered by zerotrace-server to zerotrace-agent. When the Pod IP is not
 used for direct communication between the K8s cluster and the outside world,
-deepflow-server can be configured to only deliver the information in the local
-K8s cluster to deepflow-agent.
+zerotrace-server can be configured to only deliver the information in the local
+K8s cluster to zerotrace-agent.
 
 ## Integration {#inputs.integration}
 
@@ -6326,9 +6326,9 @@ inputs:
 
 **Description**:
 
-Whether to compress the integrated trace data received by deepflow-agent. The compression
+Whether to compress the integrated trace data received by zerotrace-agent. The compression
 ratio is about 5:1~10:1. Turning on this feature will result in higher CPU consumption
-of deepflow-agent.
+of zerotrace-agent.
 
 #### Profile {#inputs.integration.compression.profile}
 
@@ -6357,9 +6357,9 @@ inputs:
 
 **Description**:
 
-Whether to compress the integrated profile data received by deepflow-agent. The compression
+Whether to compress the integrated profile data received by zerotrace-agent. The compression
 ratio is about 5:1~10:1. Turning on this feature will result in higher CPU consumption
-of deepflow-agent.
+of zerotrace-agent.
 
 ### Prometheus Extra Labels {#inputs.integration.prometheus_extra_labels}
 
@@ -6643,10 +6643,10 @@ inputs:
 **Description**:
 
 The detail config for Vector Component, all availble config keys could be found in [vector.dev](https://vector.dev/docs/reference/configuration)
-Here's an example for how to capture kubernetes logs、host metrics in virtual machine and kubelet metrics in kubernetes. It'll send to DeepFlow-Agent as output.
+Here's an example for how to capture kubernetes logs、host metrics in virtual machine and kubelet metrics in kubernetes. It'll send to ZeroTrace-Agent as output.
 
 scrape host metrics:
-`K8S_NODE_NAME_FOR_DEEPFLOW` only required in k8s container environment
+`K8S_NODE_NAME_FOR_ZEROTRACE` only required in k8s container environment
 ```yaml
 sources:
   host_metrics:
@@ -6659,8 +6659,8 @@ transforms:
     inputs:
     - host_metrics
     source: |
-      .tags.instance = "${K8S_NODE_IP_FOR_DEEPFLOW}"
-      host_name, _ = get_env_var("K8S_NODE_NAME_FOR_DEEPFLOW")
+      .tags.instance = "${K8S_NODE_IP_FOR_ZEROTRACE}"
+      host_name, _ = get_env_var("K8S_NODE_NAME_FOR_ZEROTRACE")
       if !is_empty(host_name) {
         .tags.host = host_name
       }
@@ -6708,7 +6708,7 @@ sources:
   cadvisor_metrics:
     type: prometheus_scrape
     endpoints:
-    - https://${K8S_NODE_IP_FOR_DEEPFLOW}:10250/metrics/cadvisor
+    - https://${K8S_NODE_IP_FOR_ZEROTRACE}:10250/metrics/cadvisor
     auth:
       strategy: bearer
       token: SECRET[kube_token.token]
@@ -6722,7 +6722,7 @@ sources:
   kubelet_metrics:
     type: prometheus_scrape
     endpoints:
-    - https://${K8S_NODE_IP_FOR_DEEPFLOW}:10250/metrics
+    - https://${K8S_NODE_IP_FOR_ZEROTRACE}:10250/metrics
     auth:
       strategy: bearer
       token: SECRET[kube_token.token]
@@ -6779,12 +6779,12 @@ sinks:
 
 ```
 
-scrape kubernentes logs (capture DeepFlow Pod logs as example, if other Pod logs is required, update `extra_label_selector` add custom filters)
+scrape kubernentes logs (capture ZeroTrace Pod logs as example, if other Pod logs is required, update `extra_label_selector` add custom filters)
 ```yaml
 data_dir: /vector-log-checkpoint
 sources:
   kubernetes_logs:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -6793,9 +6793,9 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component!=front-end"
+    extra_label_selector: "app=zerotrace,component!=front-end"
   kubernetes_logs_frontend:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -6804,7 +6804,7 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component=front-end"
+    extra_label_selector: "app=zerotrace,component=front-end"
 transforms:
   multiline_kubernetes_logs:
     type: reduce
@@ -6901,7 +6901,7 @@ sources:
   internal_metrics:
     type: internal_metrics
     scrape_interval_secs: 10
-    namespace: ${K8S_NAMESPACE_FOR_DEEPFLOW}
+    namespace: ${K8S_NAMESPACE_FOR_ZEROTRACE}
   socket_dial_input:
     type: demo_logs
     interval: 10
@@ -6913,7 +6913,7 @@ transforms:
     inputs:
     - internal_metrics
     source: |-
-      .tags.instance = "${K8S_NODE_IP_FOR_DEEPFLOW}"
+      .tags.instance = "${K8S_NODE_IP_FOR_ZEROTRACE}"
   internal_metrics_dispatch:
     type: route
     inputs:
@@ -6985,7 +6985,7 @@ processors:
 
 **Description**:
 
-When set to 0, deepflow-agent will automatically adjust the map size
+When set to 0, zerotrace-agent will automatically adjust the map size
 according to `global.limits.max_memory`.
 Note: In practice, it should not be set to less than 8000.
 
@@ -7016,7 +7016,7 @@ processors:
 
 **Description**:
 
-When set to `true`, deepflow-agent will not use fast path.
+When set to `true`, zerotrace-agent will not use fast path.
 
 #### Forward Table Capacity {#processors.packet.policy.forward_table_capacity}
 
@@ -7490,7 +7490,7 @@ processors:
 
 **Description**:
 
-deepflow-agent will mark the application protocol for each
+zerotrace-agent will mark the application protocol for each
 <vpc, ip, protocol, port> tuple. In order to avoid misidentification caused by IP
 changes, the validity period after successfully identifying the protocol will be
 limited to this value.
@@ -7628,8 +7628,8 @@ processors:
 
 **Description**:
 
-Turning off some protocol identification can reduce deepflow-agent resource consumption.
-Supported protocols: [https://www.deepflow.io/docs/features/l7-protocols/overview/](https://www.deepflow.io/docs/features/l7-protocols/overview/)
+Turning off some protocol identification can reduce zerotrace-agent resource consumption.
+Supported protocols: [https://www.zerotrace.io/docs/features/l7-protocols/overview/](https://www.zerotrace.io/docs/features/l7-protocols/overview/)
 <mark>Oracle and TLS is only supported in the Enterprise Edition.</mark>
 
 #### Protocol Special Config {#processors.request_log.application_protocol_inference.protocol_special_config}
@@ -8088,7 +8088,7 @@ HTTP2: 1-65535
 NOTE:
 1. HTTP2 and TLS are only used for Kprobe, not applicable to Uprobe.
    All data obtained through Uprobe is not subject to port restrictions.
-   - Supported protocols: [https://www.deepflow.io/docs/features/l7-protocols/overview/](https://www.deepflow.io/docs/features/l7-protocols/overview/)
+   - Supported protocols: [https://www.zerotrace.io/docs/features/l7-protocols/overview/](https://www.zerotrace.io/docs/features/l7-protocols/overview/)
    - <mark>Oracle and TLS is only supported in the Enterprise Edition.</mark>
 2. Attention: use `HTTP2` for `gRPC` Protocol.
 
@@ -8171,7 +8171,7 @@ the blacklist from being collected by the agent or included in application perfo
 It's recommended to only place non-business request logs like heartbeats or health checks in this
 blacklist. Including business request logs might lead to breaks in the distributed tracing tree.
 
-Supported protocols: [https://www.deepflow.io/docs/features/l7-protocols/overview/](https://www.deepflow.io/docs/features/l7-protocols/overview/)
+Supported protocols: [https://www.zerotrace.io/docs/features/l7-protocols/overview/](https://www.zerotrace.io/docs/features/l7-protocols/overview/)
 
 <mark>Oracle and TLS is only supported in the Enterprise Edition.</mark>
 
@@ -8219,7 +8219,7 @@ the blacklist from being collected by the agent or included in application perfo
 It's recommended to only place non-business request logs like heartbeats or health checks in this
 blacklist. Including business request logs might lead to breaks in the distributed tracing tree.
 
-Supported protocols: https://www.deepflow.io/docs/features/l7-protocols/overview/
+Supported protocols: https://www.zerotrace.io/docs/features/l7-protocols/overview/
 
 <mark>Oracle and TLS is only supported in the Enterprise Edition.</mark>
 
@@ -8390,7 +8390,7 @@ processors:
 
 **Description**:
 
-When disabled, deepflow-agent will not generate request_log from packet data.
+When disabled, zerotrace-agent will not generate request_log from packet data.
 
 ### Timeouts {#processors.request_log.timeouts}
 
@@ -9346,14 +9346,14 @@ entries that can be cached in each time slot.
 If the number of l7_flow_log entries cached in a time slot exceeds this
 configuration, 10% of the data in that time slot will be evicted based on the
 LRU strategy to reduce memory consumption. Note that the evicted data will not be
-discarded; instead, they will be sent to the deepflow-server as unidirectional
+discarded; instead, they will be sent to the zerotrace-server as unidirectional
 request_log.
 
 The following metrics can be used as reference data for adjusting this configuration:
-- Metric `deepflow_system.deepflow_agent_l7_session_aggr.cached-request-resource`
+- Metric `zerotrace_system.zerotrace_agent_l7_session_aggr.cached-request-resource`
   Used to record the total memory occupied by the request_resource field of the
   unidirectional l7_flow_log cached in all time slots at the current moment, in bytes.
-- Metric `deepflow_system.deepflow_agent_l7_session_aggr.over-limit`
+- Metric `zerotrace_system.zerotrace_agent_l7_session_aggr.over-limit`
   Used to record the number of times eviction is triggered due to reaching the
   LRU capacity limit.
 
@@ -10167,7 +10167,7 @@ outputs:
 
 **Description**:
 
-When set to true, deepflow-agent will send data with multiple sockets to Ingester,
+When set to true, zerotrace-agent will send data with multiple sockets to Ingester,
 which has higher performance, but will bring more impact to the firewall.
 
 ## Flow Log and Request Log {#outputs.flow_log}
@@ -10512,7 +10512,7 @@ outputs:
 
 **Description**:
 
-When disabled, deepflow-agent will not send metrics and logging data
+When disabled, zerotrace-agent will not send metrics and logging data
 collected using eBPF and cBPF.
 
 Attention: set to false will also disable l4_flow_log and l7_flow_log.
@@ -10546,7 +10546,7 @@ outputs:
 
 **Description**:
 
-When enabled, deepflow-agent will not generate detailed metrics for each
+When enabled, zerotrace-agent will not generate detailed metrics for each
 inactive port (ports that only receive data, not send data), and the data of
 all inactive ports will be aggregated into the metrics with a tag
 'server_port = 0'.
@@ -10578,7 +10578,7 @@ outputs:
 
 **Description**:
 
-When enabled, deepflow-agent will not generate detailed metrics for each
+When enabled, zerotrace-agent will not generate detailed metrics for each
 inactive IP address (IP addresses that only receive data, not send data), and
 the data of all inactive IP addresses will be aggregated into the metrics with
 a tag 'ip = 0'.
@@ -10610,7 +10610,7 @@ outputs:
 
 **Description**:
 
-When closed, deepflow-agent only collects some basic throughput metrics.
+When closed, zerotrace-agent only collects some basic throughput metrics.
 
 #### NPM Concurrent Metrics {#outputs.flow_metrics.filters.npm_metrics_concurrent}
 
@@ -10637,7 +10637,7 @@ outputs:
 
 **Description**:
 
-When closed, deepflow-agent does not calculate metrics concurrent.
+When closed, zerotrace-agent does not calculate metrics concurrent.
 
 #### APM Metrics {#outputs.flow_metrics.filters.apm_metrics}
 
@@ -10666,7 +10666,7 @@ outputs:
 
 **Description**:
 
-When closed, deepflow-agent will not collect RED (request/error/delay) metrics.
+When closed, zerotrace-agent will not collect RED (request/error/delay) metrics.
 
 #### Second Metrics {#outputs.flow_metrics.filters.second_metrics}
 
@@ -10833,7 +10833,7 @@ outputs:
 **Description**:
 
 Whether to add an extra 802.1Q header to NPB traffic, when this value is
-set, deepflow-agent will insert a VLAN Tag into the NPB traffic header, and
+set, zerotrace-agent will insert a VLAN Tag into the NPB traffic header, and
 the value is the lower 12 bits of TunnelID in the VXLAN header.
 
 ### Traffic Global Dedup {#outputs.npb.traffic_global_dedup}
@@ -10925,7 +10925,7 @@ outputs:
 **Description**:
 
 NPB uses the first byte of the VXLAN Flag to identify the sending traffic to
-prevent the traffic sent by NPB from being collected by deepflow-agent.
+prevent the traffic sent by NPB from being collected by zerotrace-agent.
 
 Attention: To ensure that the VNI bit is set, the value configured here will
 be used after |= 0b1000_0000. Therefore, this value cannot be directly
@@ -11018,9 +11018,9 @@ outputs:
 
 **Description**:
 
-Whether to compress the integrated application log data received by deepflow-agent. The compression
+Whether to compress the integrated application log data received by zerotrace-agent. The compression
 ratio is about 5:1~20:1. Turning on this feature will result in higher CPU consumption
-of deepflow-agent.
+of zerotrace-agent.
 
 ### Pcap {#outputs.compression.pcap}
 
@@ -11046,9 +11046,9 @@ outputs:
 
 **Description**:
 
-Whether to compress the captured pcap data received by deepflow-agent. The compression
+Whether to compress the captured pcap data received by zerotrace-agent. The compression
 ratio is about 5:1~10:1. Turning on this feature will result in higher CPU consumption
-of deepflow-agent.
+of zerotrace-agent.
 
 ### Request Log {#outputs.compression.l7_flow_log}
 
@@ -11075,7 +11075,7 @@ outputs:
 **Description**:
 
 Whether to compress the l7 flow log. The compression ratio is about 8:1.
-Turning on this feature will result in higher CPU consumption of deepflow-agent.
+Turning on this feature will result in higher CPU consumption of zerotrace-agent.
 
 ### Flow Log {#outputs.compression.l4_flow_log}
 
@@ -11204,5 +11204,5 @@ dev:
 
 **Description**:
 
-Unreleased deepflow-agent features can be turned on by setting this switch.
+Unreleased zerotrace-agent features can be turned on by setting this switch.
 

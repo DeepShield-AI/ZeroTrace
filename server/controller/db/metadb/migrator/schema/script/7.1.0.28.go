@@ -21,7 +21,7 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 func (s scripts) Version7_1_0_28(db *gorm.DB) error {

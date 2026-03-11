@@ -29,10 +29,10 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("exporters_config")
@@ -48,7 +48,7 @@ const (
 	CATEGORY_TAG       = "$tag"
 	CATEGORY_METRICS   = "$metrics"
 
-	TOPIC_PREFIX = "deepflow."
+	TOPIC_PREFIX = "zerotrace."
 )
 
 var DefaultExportCategory = []string{"$service_info", "$tracing_info", "$network_layer", "$flow_info", "$transport_layer", "$application_layer", "$metrics"}

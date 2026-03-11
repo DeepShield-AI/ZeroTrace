@@ -23,8 +23,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
 	"github.com/spf13/cobra"
 )
 

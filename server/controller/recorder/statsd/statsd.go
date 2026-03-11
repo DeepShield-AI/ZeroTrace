@@ -19,9 +19,9 @@ package statsd
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
 )
 
 var log = logger.MustGetLogger("recorder.statsd")

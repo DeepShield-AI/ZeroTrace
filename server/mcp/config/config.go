@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"os"
 
-	cconfig "github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	cconfig "github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 	"gopkg.in/yaml.v2"
 )
 

@@ -23,8 +23,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
 )
 
 // ResponseSetter is a function that sets a response field.

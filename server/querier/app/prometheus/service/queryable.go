@@ -29,7 +29,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/model"
 )
 
 type RemoteReadQuerierable struct {

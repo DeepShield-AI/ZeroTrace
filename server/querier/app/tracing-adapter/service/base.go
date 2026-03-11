@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/model"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/service/packet_service"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/service/packet_service"
 	"github.com/op/go-logging"
 )
 

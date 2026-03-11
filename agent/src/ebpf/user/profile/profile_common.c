@@ -66,7 +66,7 @@
 #include "java_agent_so_gnu.c"
 #include "java_agent_so_musl.c"
 /* use for java symbols generate */
-#include "deepflow_jattach_bin.c"
+#include "zerotrace_jattach_bin.c"
 
 extern struct bpf_tracer *profiler_tracer;
 extern char *flame_graph_start_time;
@@ -295,8 +295,8 @@ int java_libs_and_tools_install(void)
 		}
 	}
 
-	if (gen_file_from_mem((const char *)deepflow_jattach_bin,
-			      sizeof(deepflow_jattach_bin),
+	if (gen_file_from_mem((const char *)zerotrace_jattach_bin,
+			      sizeof(zerotrace_jattach_bin),
 			      (const char *)JAVA_ATTACH_TOOL_PATH)) {
 		ebpf_warning("Java attach tool (%s) generate failed.\n",
 			     JAVA_ATTACH_TOOL_PATH);

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 syntax = "proto3";
-package prometheus_deepflow;
+package prometheus_zerotrace;
 
 option go_package = "prompb";
 

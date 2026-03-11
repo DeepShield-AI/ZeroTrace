@@ -710,7 +710,7 @@ void *get_symbol_cache(pid_t pid, bool new_cache)
 				}
 
 				/*
-				 * When the deepflow-agent is started, to avoid the sudden
+				 * When the zerotrace-agent is started, to avoid the sudden
 				 * generation of Java symbol tables, additional random value
 				 * for each java process's delay.
 				 * The same applies to non-Java processes, which also perform

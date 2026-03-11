@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/common"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/common"
 	. "github.com/smartystreets/goconvey/convey"
 	"skywalking.apache.org/repo/goapi/query"
 )

@@ -19,7 +19,7 @@ package event
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.event")

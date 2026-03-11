@@ -21,10 +21,10 @@ import (
 	"reflect"
 	"strings"
 
-	basecommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	basecommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (
@@ -47,7 +47,7 @@ type DatasourceInfo struct {
 }
 
 const (
-	DEEPFLOW_SYSTEM    DatasourceModifiedOnly = "deepflow_system"
+	ZEROTRACE_SYSTEM    DatasourceModifiedOnly = "zerotrace_system"
 	L4_FLOW_LOG                               = "flow_log.l4_flow_log"
 	L7_FLOW_LOG                               = "flow_log.l7_flow_log"
 	L4_PACKET                                 = "flow_log.l4_packet"
@@ -59,8 +59,8 @@ const (
 	EVENT_ALERT_EVENT                         = "event.alert_event"
 	PROFILE                                   = "profile.in_process"
 	APPLOG                                    = "application_log.log"
-	DEEPFLOW_TENANT                           = "deepflow_tenant"
-	DEEPFLOW_ADMIN                            = "deepflow_admin"
+	ZEROTRACE_TENANT                           = "zerotrace_tenant"
+	ZEROTRACE_ADMIN                            = "zerotrace_admin"
 	PROFILE_METRICS                           = "profile.in_process_metrics"
 	FILE_EVNET_METRICS                        = "event.file_event_metrics"
 )
@@ -68,7 +68,7 @@ const (
 // to modify the datasource TTL, you need to also modify the 'flow_tag' database tables.
 // FIXME: only the 'prometheus' database is supported now, and the remaining databases will be completed in the future.
 var DatasourceModifiedOnlyIDMap = map[DatasourceModifiedOnly]DatasourceInfo{
-	DEEPFLOW_SYSTEM:    {int(flow_metrics.METRICS_TABLE_ID_MAX) + 1, "deepflow_system", []string{"deepflow_system"}, []string{}},
+	ZEROTRACE_SYSTEM:    {int(flow_metrics.METRICS_TABLE_ID_MAX) + 1, "zerotrace_system", []string{"zerotrace_system"}, []string{}},
 	L4_FLOW_LOG:        {int(flow_metrics.METRICS_TABLE_ID_MAX) + 2, "flow_log", []string{"l4_flow_log"}, []string{}},
 	L7_FLOW_LOG:        {int(flow_metrics.METRICS_TABLE_ID_MAX) + 3, "flow_log", []string{"l7_flow_log"}, []string{}},
 	L4_PACKET:          {int(flow_metrics.METRICS_TABLE_ID_MAX) + 4, "flow_log", []string{"l4_packet"}, []string{}},
@@ -80,8 +80,8 @@ var DatasourceModifiedOnlyIDMap = map[DatasourceModifiedOnly]DatasourceInfo{
 	EVENT_ALERT_EVENT:  {int(flow_metrics.METRICS_TABLE_ID_MAX) + 10, "event", []string{"alert_event"}, []string{}},
 	PROFILE:            {int(flow_metrics.METRICS_TABLE_ID_MAX) + 11, "profile", []string{"in_process"}, []string{}},
 	APPLOG:             {int(flow_metrics.METRICS_TABLE_ID_MAX) + 12, "application_log", []string{"log"}, []string{}},
-	DEEPFLOW_TENANT:    {int(flow_metrics.METRICS_TABLE_ID_MAX) + 13, "deepflow_tenant", []string{"deepflow_collector"}, []string{}},
-	DEEPFLOW_ADMIN:     {int(flow_metrics.METRICS_TABLE_ID_MAX) + 14, "deepflow_admin", []string{"deepflow_server"}, []string{}},
+	ZEROTRACE_TENANT:    {int(flow_metrics.METRICS_TABLE_ID_MAX) + 13, "zerotrace_tenant", []string{"zerotrace_collector"}, []string{}},
+	ZEROTRACE_ADMIN:     {int(flow_metrics.METRICS_TABLE_ID_MAX) + 14, "zerotrace_admin", []string{"zerotrace_server"}, []string{}},
 	PROFILE_METRICS:    {int(flow_metrics.METRICS_TABLE_ID_MAX) + 15, "profile", []string{"in_process_metrics.1s_agg"}, []string{}},
 	FILE_EVNET_METRICS: {int(flow_metrics.METRICS_TABLE_ID_MAX) + 16, "event", []string{"file_event_metrics.1s_agg"}, []string{}},
 }

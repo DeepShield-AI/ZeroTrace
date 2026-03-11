@@ -19,9 +19,9 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/router/packet_adapter"
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/service"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/router/packet_adapter"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/service"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 func PrometheusRouter(e *gin.Engine) {

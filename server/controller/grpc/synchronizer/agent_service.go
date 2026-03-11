@@ -20,14 +20,14 @@ import (
 	"strings"
 	"time"
 
-	api "github.com/deepflowio/deepflow/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	grpcserver "github.com/deepflowio/deepflow/server/controller/grpc"
-	"github.com/deepflowio/deepflow/server/controller/grpc/statsd"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/services/grpc/agentsynchronize"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	grpcserver "github.com/zerotraceio/zerotrace/server/controller/grpc"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/grpc/agentsynchronize"
 )
 
 type AgentService struct {
@@ -68,7 +68,7 @@ func (s *AgentService) Sync(ctx context.Context, in *api.SyncRequest) (*api.Sync
 
 func (s *AgentService) Push(r *api.SyncRequest, in api.Synchronizer_PushServer) error {
 	processName := r.GetProcessName()
-	if strings.HasPrefix(processName, "trident") || strings.HasPrefix(processName, "deepflow-agent") {
+	if strings.HasPrefix(processName, "trident") || strings.HasPrefix(processName, "zerotrace-agent") {
 		s.vTapEvent.Push(r, in)
 	}
 	return nil

@@ -20,11 +20,11 @@ import (
 	"net/http"
 	"sync"
 
-	adapter_config "github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/config"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/model"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/service"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	adapter_config "github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/config"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/model"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/service"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 	"github.com/gin-gonic/gin"
 	"github.com/op/go-logging"
 )

@@ -35,7 +35,7 @@ use wasmtime_wasi::snapshots::preview_1::add_wasi_snapshot_preview1_to_linker;
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export wasm_log
     func wasmLog(b *byte, length int, level uint8)
 
@@ -93,7 +93,7 @@ fn check_memory(caller: &mut Caller<'_, StoreDataType>, b: u32, len: u32, func_n
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export vm_read_ctx_base
     func vmReadCtxBase(b *byte, length int) int
 */
@@ -130,7 +130,7 @@ pub(super) fn vm_read_ctx_base(mut caller: Caller<'_, StoreDataType>, b: u32, le
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export vm_read_payload
     func vmReadPayload(b *byte, length int) int
 */
@@ -174,7 +174,7 @@ pub(super) fn vm_read_payload(mut caller: Caller<'_, StoreDataType>, b: u32, len
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export vm_read_http_req_info
     func vmReadHttpReqInfo(b *byte, length int) int
 */
@@ -219,7 +219,7 @@ pub(super) fn vm_read_http_req_info(
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export vm_read_http_resp_info
     func vmReadHttpRespInfo(b *byte, length int) int
 */
@@ -264,7 +264,7 @@ pub(super) fn vm_read_http_resp_info(
 /*
     import function, correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export vm_read_custom_message_info
     func vmReadCustomMessageInfo(b *byte, length int) int
 */
@@ -311,7 +311,7 @@ pub(super) fn vm_read_custom_message_info(
 
     correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export host_read_l7_protocol_info
     func hostReadL7ProtocolInfo(b *byte, length int) bool
 */
@@ -396,7 +396,7 @@ pub(super) fn host_read_l7_protocol_info(
 
     correspond to go func signature:
 
-    //go:wasm-module deepflow
+    //go:wasm-module zerotrace
     //export host_read_str_result
     func hostReadStrResult(b *byte, length int) bool
 */

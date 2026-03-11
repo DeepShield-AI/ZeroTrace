@@ -19,8 +19,8 @@ package edition
 import (
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/types"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/types"
 )
 
 func GetAdapter(cfg config.Config) (types.SQLAdapter, error) {

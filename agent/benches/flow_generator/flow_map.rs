@@ -18,7 +18,7 @@ use std::time::Instant;
 
 use criterion::*;
 
-use deepflow_agent::{
+use zerotrace_agent::{
     _FlowMapConfig as Config, _TcpFlags as TcpFlags, _Timestamp as Timestamp,
     _new_flow_map_and_receiver as new_flow_map_and_receiver, _new_meta_packet as new_meta_packet,
     _reverse_meta_packet as reverse_meta_packet, common::meta_packet::ProtocolData,

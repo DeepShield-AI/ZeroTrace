@@ -17,7 +17,7 @@
 package common
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/session"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/session"
 )
 
 func DropDatabase(dc *DBConfig) error {

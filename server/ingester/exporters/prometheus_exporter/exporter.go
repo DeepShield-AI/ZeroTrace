@@ -30,16 +30,16 @@ import (
 	"github.com/prometheus/prometheus/prompb"
 	"golang.org/x/net/context"
 
-	ingester_common "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/common"
-	exporters_cfg "github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	utag "github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	ingester_common "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/common"
+	exporters_cfg "github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	utag "github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("prometheus_exporter")

@@ -19,9 +19,9 @@ package clickhouse
 import (
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/libs/lru"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/libs/lru"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 var (

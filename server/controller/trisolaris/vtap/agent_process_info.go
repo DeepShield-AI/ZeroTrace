@@ -29,13 +29,13 @@ import (
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	libu "github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	libu "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func convertAgentProto(proto string) agent.ServiceProtocol {

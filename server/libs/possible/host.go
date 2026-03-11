@@ -20,8 +20,8 @@ import (
 	"net"
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/libs/hmap/lru"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap/lru"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type PossibleHost struct {

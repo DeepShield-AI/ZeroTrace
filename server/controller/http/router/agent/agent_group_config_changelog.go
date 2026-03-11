@@ -21,12 +21,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/model"
-	routercommon "github.com/deepflowio/deepflow/server/controller/http/router/common"
-	"github.com/deepflowio/deepflow/server/controller/http/service/agent"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/model"
+	routercommon "github.com/zerotraceio/zerotrace/server/controller/http/router/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/agent"
 )
 
 type AgentGroupConfigChangelog struct {

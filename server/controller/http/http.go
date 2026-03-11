@@ -19,8 +19,8 @@ package http
 import (
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/controller/http/appender"
-	"github.com/deepflowio/deepflow/server/controller/http/common/rsctask"
+	"github.com/zerotraceio/zerotrace/server/controller/http/appender"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/rsctask"
 )
 
 var (

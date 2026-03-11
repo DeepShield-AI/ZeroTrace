@@ -326,7 +326,7 @@ impl PktReceiver {
             .iter()
             .map(|i| i.if_index as i32)
             .collect::<Vec<i32>>();
-        // When the configuration is changed, the deepflow-agent will restart,
+        // When the configuration is changed, the zerotrace-agent will restart,
         // and the NIC configured in promiscuous mode will be retired
         if options.promisc && *promisc_if_indices != if_indices {
             if let Err(e) = engine.set_promisc(promisc_if_indices, false) {

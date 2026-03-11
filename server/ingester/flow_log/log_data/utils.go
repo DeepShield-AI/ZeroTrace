@@ -23,7 +23,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 func IPIntToString(ipInt uint32) string {

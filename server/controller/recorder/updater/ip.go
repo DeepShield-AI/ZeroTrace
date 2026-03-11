@@ -17,11 +17,11 @@
 package updater
 
 import (
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/tool"
-	"github.com/deepflowio/deepflow/server/controller/recorder/statsd"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/tool"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/statsd"
 )
 
 type IP struct {

@@ -20,7 +20,7 @@ import (
 	"encoding/binary"
 	"net"
 
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type ipSegment struct {

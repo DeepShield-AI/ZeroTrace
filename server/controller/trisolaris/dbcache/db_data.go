@@ -19,13 +19,13 @@ package dbcache
 import (
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/agent_config"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model" // FIXME: To avoid ambiguity, name the package either mysql_model or db_model.
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	dbmgr "github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/agent_config"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model" // FIXME: To avoid ambiguity, name the package either mysql_model or db_model.
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	dbmgr "github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.dbcache")

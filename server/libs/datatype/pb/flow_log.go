@@ -17,7 +17,7 @@
 package pb
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 var pbAppProtoLogsDataPool = pool.NewLockFreePool(func() *AppProtoLogsData {

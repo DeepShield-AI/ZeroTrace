@@ -23,16 +23,16 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	basecommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/event/common"
-	exportercommon "github.com/deepflowio/deepflow/server/ingester/exporters/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	utag "github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	basecommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/event/common"
+	exportercommon "github.com/zerotraceio/zerotrace/server/ingester/exporters/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	utag "github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (

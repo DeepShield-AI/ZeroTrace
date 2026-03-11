@@ -21,9 +21,9 @@ import (
 	"strings"
 
 	slb "github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func (a *Aliyun) getLoadBalances(region model.Region, vmLcuuidToVPCLcuuid map[string]string) (

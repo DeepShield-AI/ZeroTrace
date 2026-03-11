@@ -17,7 +17,7 @@
 package pubsub
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 const (

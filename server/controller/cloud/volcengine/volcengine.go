@@ -21,16 +21,16 @@ import (
 	"time"
 
 	"github.com/bitly/go-simplejson"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 	"github.com/volcengine/volcengine-go-sdk/volcengine"
 	"github.com/volcengine/volcengine-go-sdk/volcengine/credentials"
 	"github.com/volcengine/volcengine-go-sdk/volcengine/session"
 
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	cloudconfig "github.com/deepflowio/deepflow/server/controller/cloud/config"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	cloudconfig "github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 var log = logger.MustGetLogger("cloud.volcengine")

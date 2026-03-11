@@ -26,10 +26,10 @@ BEGIN
     END IF;
 END;
 
-CALL AddColumnIfNotExists('deepflow', 'process', 'devicetype', 'INTEGER');
-CALL AddColumnIfNotExists('deepflow', 'process', 'deviceid', 'INTEGER');
-CALL AddColumnIfNotExists('deepflow', 'process', 'pod_node_id', 'INTEGER');
-CALL AddColumnIfNotExists('deepflow', 'process', 'vm_id', 'INTEGER');
+CALL AddColumnIfNotExists('zerotrace', 'process', 'devicetype', 'INTEGER');
+CALL AddColumnIfNotExists('zerotrace', 'process', 'deviceid', 'INTEGER');
+CALL AddColumnIfNotExists('zerotrace', 'process', 'pod_node_id', 'INTEGER');
+CALL AddColumnIfNotExists('zerotrace', 'process', 'vm_id', 'INTEGER');
 
 DROP PROCEDURE AddColumnIfNotExists;
 

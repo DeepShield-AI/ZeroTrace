@@ -17,8 +17,8 @@
 package filereader
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
 )
 
 func (f *FileReader) getRegions(fileInfo *FileInfo) ([]model.Region, error) {

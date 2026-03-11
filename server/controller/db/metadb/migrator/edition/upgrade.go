@@ -17,10 +17,10 @@
 package edition
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/schema"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/session"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/schema"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/session"
 )
 
 func UpgradeDatabase(cfg config.Config) error {

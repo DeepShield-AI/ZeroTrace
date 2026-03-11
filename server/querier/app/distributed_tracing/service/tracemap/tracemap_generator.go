@@ -16,8 +16,8 @@
 package tracemap
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 type TraceMapGenerator struct {

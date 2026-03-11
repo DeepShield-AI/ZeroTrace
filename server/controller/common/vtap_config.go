@@ -17,7 +17,7 @@
 package common
 
 import (
-	"github.com/deepflowio/deepflow/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/agent_config"
 )
 
 var DefaultVTapGroupConfig = &agent_config.AgentGroupConfigModel{

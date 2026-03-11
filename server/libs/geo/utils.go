@@ -17,7 +17,7 @@
 package geo
 
 import (
-	tree "github.com/deepflowio/deepflow/server/libs/segmenttree"
+	tree "github.com/zerotraceio/zerotrace/server/libs/segmenttree"
 )
 
 func DecodeCountry(country uint8) string {

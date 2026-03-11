@@ -282,9 +282,9 @@ static void exec_clear_residual_probes(const char *events_file,
 
 	list_for_each_safe(p, n, &probe_head) {
 		pe = container_of(p, struct probe_elem, list);
-		// Match the [K/U]probe events of "_deepflow_"
-		// 匹配"_deepflow_"的[k/u]probe事件
-		if (strstr(pe->event, "_deepflow_")) {
+		// Match the [K/U]probe events of "_zerotrace_"
+		// 匹配"_zerotrace_"的[k/u]probe事件
+		if (strstr(pe->event, "_zerotrace_")) {
 			if ((ptr = strchr(pe->event, '/'))) {
 				char *s = ++ptr;
 				if ((ptr = strchr(ptr, ' ')))

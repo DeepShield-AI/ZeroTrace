@@ -17,8 +17,8 @@
 package config
 
 import (
-	cloudconfig "github.com/deepflowio/deepflow/server/controller/cloud/config"
-	recorderconfig "github.com/deepflowio/deepflow/server/controller/recorder/config"
+	cloudconfig "github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	recorderconfig "github.com/zerotraceio/zerotrace/server/controller/recorder/config"
 )
 
 type TaskConfig struct {

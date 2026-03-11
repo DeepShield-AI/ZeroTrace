@@ -59,7 +59,7 @@
 #define CP_PERF_PG_NUM 16
 #define ONCPU_PROFILER_NAME "oncpu"
 #define PROFILER_CTX_ONCPU_IDX THREAD_PROFILER_READER_IDX
-#define DEEPFLOW_AGENT_NAME "deepflow-agent"
+#define ZEROTRACE_AGENT_NAME "zerotrace-agent"
 
 extern int sys_cpus_count;
 extern int major, minor;
@@ -623,7 +623,7 @@ int check_profiler_running_pid(int pid)
 {
 	char path[MAX_PATH_LENGTH];
 	snprintf(path, sizeof(path), "/proc/%d/root%s", pid,
-		 DEEPFLOW_RUNNING_PID_PATH);
+		 ZEROTRACE_RUNNING_PID_PATH);
 	FILE *file = fopen(path, "r");
 	if (!file) {
 		if (errno == ENOENT) {
@@ -656,9 +656,9 @@ int check_profiler_running_pid(int pid)
 	}
 	// Compare the recorded and actual start times
 	if (recorded_start_time == actual_start_time) {
-		ebpf_error("The deepflow-agent with process ID %d is already "
+		ebpf_error("The zerotrace-agent with process ID %d is already "
 			   "running. You can disable the continuous profiling "
-			   "feature of the deepflow-agent to skip this check.\n",
+			   "feature of the zerotrace-agent to skip this check.\n",
 			   recorded_pid);
 		return ETR_EXIST;
 	} else {
@@ -673,7 +673,7 @@ int check_profiler_running_pid(int pid)
 
 int check_profiler_is_running(void)
 {
-	int pid = find_pid_by_name(DEEPFLOW_AGENT_NAME, getpid());
+	int pid = find_pid_by_name(ZEROTRACE_AGENT_NAME, getpid());
 	if (pid > 0) {
 		return check_profiler_running_pid(pid);
 	}
@@ -683,7 +683,7 @@ int check_profiler_is_running(void)
 
 int write_profiler_running_pid(void)
 {
-	FILE *file = fopen(DEEPFLOW_RUNNING_PID_PATH, "w");
+	FILE *file = fopen(ZEROTRACE_RUNNING_PID_PATH, "w");
 	if (!file) {
 		ebpf_warning("fopen failed, with %s(%d)", strerror(errno),
 			     errno);

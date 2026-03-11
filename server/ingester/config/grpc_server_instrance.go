@@ -25,8 +25,8 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"golang.org/x/net/context"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
 )
 
 const SYNC_INTERVAL_FAST = 5 * time.Second // When the system first starts, increase the request frequency and obtain Node/Pod information as soon as possible.
@@ -120,7 +120,7 @@ func (p *ServerInstanceInfo) Reload() error {
 		return fmt.Errorf("grpc response failed. responseStatus is %v", status)
 	}
 
-	serverInstanceInfos := response.GetDeepflowServerInstances()
+	serverInstanceInfos := response.GetZerotraceServerInstances()
 	instanceInfos := []InstanceInfo{}
 	for _, v := range serverInstanceInfos {
 		instanceInfos = append(instanceInfos, InstanceInfo{

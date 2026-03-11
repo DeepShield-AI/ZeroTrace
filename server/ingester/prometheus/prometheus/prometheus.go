@@ -23,17 +23,17 @@ import (
 	_ "golang.org/x/net/context"
 	_ "google.golang.org/grpc"
 
-	dropletqueue "github.com/deepflowio/deepflow/server/ingester/droplet/queue"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/config"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/dbwriter"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/decoder"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	libqueue "github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
+	dropletqueue "github.com/zerotraceio/zerotrace/server/ingester/droplet/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/decoder"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	libqueue "github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
 )
 
 type PrometheusHandler struct {

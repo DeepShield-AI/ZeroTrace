@@ -40,27 +40,27 @@ struct symbol_metadata {
 	unsigned short type;
 };
 
-#define TARGET_NS_STORAGE_PATH "/proc/%d/root/deepflow"
+#define TARGET_NS_STORAGE_PATH "/proc/%d/root/zerotrace"
 
 #if !defined(AGENT_LIB_NAME) || !defined(AGENT_MUSL_LIB_NAME)
 #error Makefile should define "AGENT_LIB_NAME" and "AGENT_MUSL_LIB_NAME"
 #endif
 
 #define AGENT_LIB_SRC_PATH "/tmp/" AGENT_LIB_NAME
-#define AGENT_LIB_TARGET_PATH "/deepflow/" AGENT_LIB_NAME
+#define AGENT_LIB_TARGET_PATH "/zerotrace/" AGENT_LIB_NAME
 
 #define AGENT_MUSL_LIB_SRC_PATH "/tmp/" AGENT_MUSL_LIB_NAME
-#define AGENT_MUSL_LIB_TARGET_PATH "/deepflow/" AGENT_MUSL_LIB_NAME
+#define AGENT_MUSL_LIB_TARGET_PATH "/zerotrace/" AGENT_MUSL_LIB_NAME
 
 #define JAVA_LOG_TAG "[JAVA] "
 
 #define PERF_PATH_SZ 256
-#define DF_AGENT_MAP_SOCKET_PATH_FMT "/proc/%d/root/tmp/.deepflow-java-symbols-pid%d.socket"
-#define DF_AGENT_LOG_SOCKET_PATH_FMT "/proc/%d/root/tmp/.deepflow-java-jvmti-logs-pid%d.socket"
+#define DF_AGENT_MAP_SOCKET_PATH_FMT "/proc/%d/root/tmp/.zerotrace-java-symbols-pid%d.socket"
+#define DF_AGENT_LOG_SOCKET_PATH_FMT "/proc/%d/root/tmp/.zerotrace-java-jvmti-logs-pid%d.socket"
 
 #define DF_AGENT_LOCAL_PATH_FMT "/tmp/perf-%d"
 
-#define JVM_AGENT_SYMS_SOCKET_PATH_FMT "/tmp/.deepflow-java-symbols-pid%d.socket"
-#define JVM_AGENT_LOG_SOCKET_PATH_FMT "/tmp/.deepflow-java-jvmti-logs-pid%d.socket"
+#define JVM_AGENT_SYMS_SOCKET_PATH_FMT "/tmp/.zerotrace-java-symbols-pid%d.socket"
+#define JVM_AGENT_LOG_SOCKET_PATH_FMT "/tmp/.zerotrace-java-jvmti-logs-pid%d.socket"
 
 #endif /* DF_JAVA_CONFIG_H */

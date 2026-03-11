@@ -150,7 +150,7 @@ fn test_wasm_http_req() {
     param.parse_config = Some(&config);
 
     let mut http = HttpLog::new_v1();
-    let payload = "POST /test?a=1&b=2&c=test HTTP/1.1\r\nUser-Agent: deepflow\r\nreferer: aaa.com\r\nHost: abc.com\r\nContent-Type: application/json\r\n\r\n";
+    let payload = "POST /test?a=1&b=2&c=test HTTP/1.1\r\nUser-Agent: zerotrace\r\nreferer: aaa.com\r\nHost: abc.com\r\nContent-Type: application/json\r\n\r\n";
     let info = http.parse_payload(payload.as_bytes(), &param).unwrap();
 
     let kv: HashMap<&str, &str> =
@@ -460,8 +460,8 @@ import (
     "bufio"
     "bytes"
     "encoding/base64"
-    "github.com/deepflowio/deepflow-wasm-go-sdk/pb"
-    "github.com/deepflowio/deepflow-wasm-go-sdk/sdk"
+    "github.com/zerotraceio/zerotrace-wasm-go-sdk/pb"
+    "github.com/zerotraceio/zerotrace-wasm-go-sdk/sdk"
     "github.com/valyala/fastjson"
     "io"
     "net/http"
@@ -560,10 +560,10 @@ func (p parser) OnHttpReq(ctx *sdk.HttpReqCtx) sdk.Action {
     checkEq(0, int(baseCtx.L7))
     checkEq("/test?a=1&b=2&c=test", ctx.Path)
     checkEq("abc.com", ctx.Host)
-    checkEq("deepflow", ctx.UserAgent)
+    checkEq("zerotrace", ctx.UserAgent)
     checkEq("aaa.com", ctx.Referer)
     checkEq(
-        "POST /test?a=1&b=2&c=test HTTP/1.1\r\nUser-Agent: deepflow\r\nreferer: aaa.com\r\nHost: abc.com\r\nContent-Type: application/json\r\n\r\n",
+        "POST /test?a=1&b=2&c=test HTTP/1.1\r\nUser-Agent: zerotrace\r\nreferer: aaa.com\r\nHost: abc.com\r\nContent-Type: application/json\r\n\r\n",
         string(payload),
     )
 

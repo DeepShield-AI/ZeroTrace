@@ -30,11 +30,11 @@ import (
 	"github.com/bitly/go-simplejson"
 	"github.com/mark3labs/mcp-go/mcp"
 
-	ccommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/mcp/common"
-	"github.com/deepflowio/deepflow/server/mcp/config"
-	"github.com/deepflowio/deepflow/server/mcp/model"
+	ccommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/mcp/common"
+	"github.com/zerotraceio/zerotrace/server/mcp/config"
+	"github.com/zerotraceio/zerotrace/server/mcp/model"
 )
 
 var log = logger.MustGetLogger("mcp.handle")

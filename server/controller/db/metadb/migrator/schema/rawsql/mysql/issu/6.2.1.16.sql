@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS vtap_repo (
     image               LONGBLOB NOT NULL,
     created_at          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='store deepflow-agent for easy upgrade';
+)ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='store zerotrace-agent for easy upgrade';
 
 UPDATE db_version SET version = '6.2.1.16';

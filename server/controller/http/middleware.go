@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	mcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	mcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
 	"github.com/gin-gonic/gin"
 )
 

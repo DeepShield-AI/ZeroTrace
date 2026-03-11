@@ -23,7 +23,7 @@ use ipnet::{IpNet, Ipv4Net, Ipv6Net};
 use log::warn;
 use num_enum::{IntoPrimitive, TryFromPrimitive};
 
-use super::endpoint::{EPC_ANY, EPC_DEEPFLOW};
+use super::endpoint::{EPC_ANY, EPC_ZEROTRACE};
 use super::enums::{CaptureNetworkType, IpProtocol};
 use super::error::Error;
 use super::matched_field::{MatchedFieldv4, MatchedFieldv6, MatchedFlag};
@@ -834,7 +834,7 @@ impl TryFrom<&agent::Cidr> for Cidr {
         if epc_id > 0 {
             epc_id &= 0xffff;
         } else if epc_id == 0 {
-            epc_id = EPC_DEEPFLOW;
+            epc_id = EPC_ZEROTRACE;
         }
 
         Ok(Cidr {
@@ -996,19 +996,19 @@ impl TryFrom<&agent::GpidSyncEntry> for GpidEntry {
         // if epc_id_0 > 0 {
         //     epc_id_0 &= 0xffff;
         // } else if epc_id_0 == 0 {
-        //     epc_id_0 = EPC_FROM_DEEPFLOW;
+        //     epc_id_0 = EPC_FROM_ZEROTRACE;
         // }
         // let mut epc_id_1 = value.epc_id_1() as i32;
         // if epc_id_1 > 0 {
         //     epc_id_1 &= 0xffff;
         // } else if epc_id_1 == 0 {
-        //     epc_id_1 = EPC_FROM_DEEPFLOW;
+        //     epc_id_1 = EPC_FROM_ZEROTRACE;
         // }
         // let mut epc_id_real = value.epc_id_real() as i32;
         // if epc_id_real > 0 {
         //     epc_id_real &= 0xffff;
         // } else if epc_id_real == 0 {
-        //     epc_id_real = EPC_FROM_DEEPFLOW;
+        //     epc_id_real = EPC_FROM_ZEROTRACE;
         // }
         Ok(GpidEntry {
             epc_id_0: 0,

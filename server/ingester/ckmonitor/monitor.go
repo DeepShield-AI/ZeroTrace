@@ -26,13 +26,13 @@ import (
 
 	"database/sql"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/stats/pb"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/stats/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("monitor")
@@ -104,11 +104,11 @@ func NewCKMonitor(cfg *config.Config) (*Monitor, error) {
 }
 
 func (m *Monitor) sendStatsForceDeleteData(db, table, partition string, bytesOnDisk, rows uint64) {
-	m.sendStats("deepflow_server_ingester_force_delete_clickhouse_data", db, table, partition, bytesOnDisk, rows)
+	m.sendStats("zerotrace_server_ingester_force_delete_clickhouse_data", db, table, partition, bytesOnDisk, rows)
 }
 
 func (m *Monitor) sendStatsTTLExpiredDeleteData(db, table, partition string) {
-	m.sendStats("deepflow_server_ingester_ttl_expired_delete_clickhouse_data", db, table, partition, 0, 0)
+	m.sendStats("zerotrace_server_ingester_ttl_expired_delete_clickhouse_data", db, table, partition, 0, 0)
 }
 
 func (m *Monitor) sendStats(name, db, table, partition string, bytesOnDisk, rows uint64) {
@@ -198,7 +198,7 @@ func (m *Monitor) getDiskInfos(connect *sql.DB) ([]*DiskInfo, error) {
 		for _, cleans := range m.cfg.CKDiskMonitor.DiskCleanups {
 			diskPrefixs += cleans.DiskNamePrefix + ","
 		}
-		return nil, fmt.Errorf("can not find any deepflow data disk like '%s'", diskPrefixs)
+		return nil, fmt.Errorf("can not find any zerotrace data disk like '%s'", diskPrefixs)
 	}
 	return diskInfos, nil
 }

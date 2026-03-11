@@ -17,7 +17,7 @@
 package updater
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message/types"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message/types"
 )
 
 // MessageFactory 为不同资源类型创建对应的消息实例

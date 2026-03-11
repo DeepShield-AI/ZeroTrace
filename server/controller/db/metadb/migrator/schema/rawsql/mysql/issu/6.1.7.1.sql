@@ -1,4 +1,4 @@
-USE deepflow;
+USE zerotrace;
 
 ALTER TABLE vtap_group_configuration DROP COLUMN tap_mode;
 

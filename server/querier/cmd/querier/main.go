@@ -23,9 +23,9 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/querier/querier"
+	"github.com/zerotraceio/zerotrace/server/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/querier/querier"
 )
 
 var configPath = flag.String("f", "/etc/server.yaml", "Specify config file location")

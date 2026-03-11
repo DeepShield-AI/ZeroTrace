@@ -22,12 +22,12 @@ import (
 	"strings"
 	"sync/atomic"
 
-	basecommon "github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	basecommon "github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const (
@@ -36,9 +36,9 @@ const (
 
 const (
 	LOG_TYPE_USER   = "user"   // User process log
-	LOG_TYPE_SYSTEM = "system" // All processes on the server where DeepFlow Server is located
-	LOG_TYPE_AUDIT  = "audit"  // DeepFlow Audit log (operation log)
-	LOG_TYPE_AGENT  = "agent"  // DeepFlow Agent log
+	LOG_TYPE_SYSTEM = "system" // All processes on the server where ZeroTrace Server is located
+	LOG_TYPE_AUDIT  = "audit"  // ZeroTrace Audit log (operation log)
+	LOG_TYPE_AGENT  = "agent"  // ZeroTrace Agent log
 )
 
 func StringToLogType(str string) string {

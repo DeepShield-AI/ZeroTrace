@@ -25,7 +25,7 @@
 #define LOG_CP_TAG	"[CP] "
 
 // For storing information about continuously running profiling processes.
-#define DEEPFLOW_RUNNING_PID_PATH "/tmp/.deepflow-agent-running-pid"
+#define ZEROTRACE_RUNNING_PID_PATH "/tmp/.zerotrace-agent-running-pid"
 
 /*
  * stack_trace_msg_hash, used to store stack trace messages and

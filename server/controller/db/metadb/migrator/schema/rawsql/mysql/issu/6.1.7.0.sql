@@ -1,4 +1,4 @@
-USE deepflow;
+USE zerotrace;
 
 ALTER TABLE vtap_group_configuration ADD COLUMN tap_mode INTEGER DEFAULT 0 COMMENT '0: local 1: mirror 2: physical' AFTER capture_bpf;
 

@@ -28,15 +28,15 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	baseconfig "github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/ingester/pkg/ckwriter"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/config"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype/prompb"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	baseconfig "github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/ingester/pkg/ckwriter"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype/prompb"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("prometheus.dbwriter")

@@ -20,7 +20,7 @@ BEGIN
         SET @lcuuid = (SELECT UUID());
         INSERT INTO data_source (name, tsdb_type, `interval`, retention_time, lcuuid) VALUES ('flow_log.l7_packet', 'flow_log.l7_packet', 0, 3*24, @lcuuid);
         SET @lcuuid = (SELECT UUID());
-        INSERT INTO data_source (name, tsdb_type, `interval`, retention_time, lcuuid) VALUES ('deepflow_system', 'deepflow_system', 0, 3*24, @lcuuid);
+        INSERT INTO data_source (name, tsdb_type, `interval`, retention_time, lcuuid) VALUES ('zerotrace_system', 'zerotrace_system', 0, 3*24, @lcuuid);
 
         COMMIT;
     END IF;

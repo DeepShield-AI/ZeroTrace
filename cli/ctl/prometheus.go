@@ -22,8 +22,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/message/controller"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/message/controller"
 	"github.com/spf13/cobra"
 )
 
@@ -39,8 +39,8 @@ func RegisterPrometheusCommand() *cobra.Command {
 	var t string
 	cacheCmd := &cobra.Command{
 		Use:     "cache",
-		Short:   "pull prometheus cache data from deepflow-server",
-		Example: "deepflow-ctl prometheus cache -t metric-name",
+		Short:   "pull prometheus cache data from zerotrace-server",
+		Example: "zerotrace-ctl prometheus cache -t metric-name",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := prometheusCache(cmd, t); err != nil {
 				fmt.Println(err)
@@ -54,8 +54,8 @@ func RegisterPrometheusCommand() *cobra.Command {
 	var expiredAt string
 	clearCmd := &cobra.Command{
 		Use:     "clear",
-		Short:   "clear prometheus data in MySQL by deepflow-server, use with caution and not frequently!",
-		Example: "deepflow-ctl prometheus clear -e \"2006-01-02 15:04:05\"",
+		Short:   "clear prometheus data in MySQL by zerotrace-server, use with caution and not frequently!",
+		Example: "zerotrace-ctl prometheus clear -e \"2006-01-02 15:04:05\"",
 		Run: func(cmd *cobra.Command, args []string) {
 			prometheusClear(cmd, expiredAt)
 		},

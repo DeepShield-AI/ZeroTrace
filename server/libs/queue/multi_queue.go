@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/deepflowio/deepflow/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
 )
 
 type FixedMultiQueue []*OverwriteQueue

@@ -1,13 +1,13 @@
 # How to profile server
 
-## [go pprof tool](https://pkg.go.dev/net/http/pprof) is used to profile deepflow-server once
+## [go pprof tool](https://pkg.go.dev/net/http/pprof) is used to profile zerotrace-server once
 - Start the pprof service
   - configuration open:
   ```
   profiler: true
   ```
   - if it is not configured, you can also use the command to open
-    -  `deepflow-ctl -i <server pod IP> ingester profiler on`
+    -  `zerotrace-ctl -i <server pod IP> ingester profiler on`
 - Get pprof CPU profile(heap/mutex/block/trace profile is also similar) information and generate graphs for analysis
   - you should install `golang 1.18+` and `graphviz` for analyze
     - for example on CentOS, `yum install golang -y; yum install graphviz -y`
@@ -19,10 +19,10 @@
     - suggest execute `pdf` or `svg` to outputs a graph in PDF/SVG format.
 - You should close pprof service, if it is no longer used
   - if you open with the command, close with the command
-    - `deepflow-ctl -i <server pod IP> ingester profiler off`
+    - `zerotrace-ctl -i <server pod IP> ingester profiler off`
   - if it is configured `profiler: true`, configuration closed, `profiler: false`
 
-## [Continuous Profile with pyroscope](https://github.com/grafana/pyroscope) is used to profile deepflow-server continuous
+## [Continuous Profile with pyroscope](https://github.com/grafana/pyroscope) is used to profile zerotrace-server continuous
 - Install pyroscope in K8S to receive and display continuous profile data
   ```
   helm repo add pyroscope-io https://pyroscope-io.github.io/helm-chart
@@ -32,7 +32,7 @@
   - you should modify the service type of ClusterIP to NodePort for access
     - `kubectl edit svc pyroscope`
       - modify `type: ClusterIP` to `type: NodePort`
-- Start the deepflow-server continuous profiler
+- Start the zerotrace-server continuous profiler
   - configuration open:
   ```
   continuous-profiler:

@@ -1,10 +1,10 @@
-# DeepFlow Helm Charts
+# ZeroTrace Helm Charts
 
-DeepFlow helm chart repo: https://github.com/deepflowio/deepflow-charts
+ZeroTrace helm chart repo: https://github.com/zerotraceio/zerotrace-charts
 
 An automated observability platform for cloud-native developers.
 
-This repository contains [Helm](https://helm.sh/) charts for DeepFlow project.
+This repository contains [Helm](https://helm.sh/) charts for ZeroTrace project.
 
 ## Usage
 
@@ -14,22 +14,22 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add deepflow https://deepflowio.github.io/deepflow
-helm repo update deepflow
+helm repo add zerotrace https://zerotraceio.github.io/zerotrace
+helm repo update zerotrace
 ```
 
 ## Helm Charts
 
-You can then run `helm search repo deepflow` to see the charts.
+You can then run `helm search repo zerotrace` to see the charts.
 
 _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation._
 
 ## Installing the Chart
 
-To install the chart with the release name `deepflow`:
+To install the chart with the release name `zerotrace`:
 
 ```console
-helm install deepflow -n deepflow deepflow/deepflow --create-namespace
+helm install zerotrace -n zerotrace zerotrace/zerotrace --create-namespace
 ```
 
 ## Uninstalling the Chart
@@ -37,7 +37,7 @@ helm install deepflow -n deepflow deepflow/deepflow --create-namespace
 To uninstall/delete the my-release deployment:
 
 ```console
-helm delete deepflow -n deepflow
+helm delete zerotrace -n zerotrace
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

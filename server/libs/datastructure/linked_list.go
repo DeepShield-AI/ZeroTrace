@@ -18,7 +18,7 @@
 package datastructure
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 var elementPool = pool.NewLockFreePool(func() *Element {

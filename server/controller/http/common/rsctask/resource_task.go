@@ -19,8 +19,8 @@ package rsctask
 import (
 	"context"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/redis"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/redis"
 )
 
 type ResourceTaskManager interface {

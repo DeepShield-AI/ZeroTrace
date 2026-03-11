@@ -21,8 +21,8 @@ import (
 	"slices"
 	"time"
 
-	cloudcommon "github.com/deepflowio/deepflow/server/controller/cloud/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcommon "github.com/zerotraceio/zerotrace/server/controller/cloud/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 // This project is not an actual project that is visible to the console, so ignore its exceptions when learning

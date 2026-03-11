@@ -365,8 +365,8 @@ message DynamicConfig {
     optional bool kubernetes_api_enabled = 1;
     optional bool enabled = 2;
 
-    optional uint32 region_id = 10;       // Region ID of the deepflow-agent or Region ID of the data node
-    optional uint32 pod_cluster_id = 11;  // Cluster ID of the container where the deepflow-agent is located
+    optional uint32 region_id = 10;       // Region ID of the zerotrace-agent or Region ID of the data node
+    optional uint32 pod_cluster_id = 11;  // Cluster ID of the container where the zerotrace-agent is located
     optional uint32 vpc_id = 12;
     optional uint32 agent_id = 13;  // range: [0, 64000]
     optional uint32 team_id = 14;
@@ -601,7 +601,7 @@ message KubernetesAPISyncResponse {
 message KubernetesClusterIDRequest {
     optional string ca_md5 = 1;                    // md5 of /run/secrets/[kubernetes.io/serviceaccount/ca.crt
     optional string team_id = 2;                   // agent team identity
-    optional string kubernetes_cluster_name = 46;  // get that from deepflow-agent.yaml
+    optional string kubernetes_cluster_name = 46;  // get that from zerotrace-agent.yaml
 }
 
 message KubernetesClusterIDResponse {

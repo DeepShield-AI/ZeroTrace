@@ -22,7 +22,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

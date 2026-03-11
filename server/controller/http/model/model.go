@@ -17,7 +17,7 @@
 package model
 
 import (
-	agentconf "github.com/deepflowio/deepflow/server/agent_config"
+	agentconf "github.com/zerotraceio/zerotrace/server/agent_config"
 )
 
 type ORGDataCreate struct {

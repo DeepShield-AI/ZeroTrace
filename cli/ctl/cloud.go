@@ -24,7 +24,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
 )
 
 func RegisterCloudCommand() *cobra.Command {
@@ -42,7 +42,7 @@ func RegisterCloudCommand() *cobra.Command {
 	info := &cobra.Command{
 		Use:     "info",
 		Short:   "get cloud info of one domain, must specify one of domain-lcuuid, domain-name",
-		Example: "deepflow-ctl cloud info --domain-lcuuid bcb21453-0833-5d94-b4cf-adb3879400c9 -r VMs,VPCs",
+		Example: "zerotrace-ctl cloud info --domain-lcuuid bcb21453-0833-5d94-b4cf-adb3879400c9 -r VMs,VPCs",
 		Run: func(cmd *cobra.Command, args []string) {
 			getInfo(cmd, domainLcuuid, domainName, infoResource)
 		},
@@ -61,7 +61,7 @@ func RegisterCloudCommand() *cobra.Command {
 	task := &cobra.Command{
 		Use:     "task [domain-lcuuid]",
 		Short:   "get cloud task",
-		Example: "deepflow-ctl cloud task",
+		Example: "zerotrace-ctl cloud task",
 		Run: func(cmd *cobra.Command, args []string) {
 			getTask(cmd, args)
 		},
@@ -71,7 +71,7 @@ func RegisterCloudCommand() *cobra.Command {
 	trigger := &cobra.Command{
 		Use:     "trigger domain-lcuuid",
 		Short:   "trigger domain",
-		Example: "deepflow-ctl cloud trigger domain-lcuuid",
+		Example: "zerotrace-ctl cloud trigger domain-lcuuid",
 		Run: func(cmd *cobra.Command, args []string) {
 			triggerDomain(cmd, args)
 		},

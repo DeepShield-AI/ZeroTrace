@@ -19,9 +19,9 @@ package redis
 import (
 	"context"
 
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/genesis/common"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis/common"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 type GenesisSync struct{}

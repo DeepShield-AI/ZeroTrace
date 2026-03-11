@@ -1,4 +1,4 @@
-MESSAGE = github.com/deepflowio/deepflow/message
+MESSAGE = github.com/zerotraceio/zerotrace/message
 
 vendor:
 	go mod tidy && go mod download && go mod vendor

@@ -7,7 +7,7 @@ BEGIN
 
     SELECT TABLE_NAME INTO table_metric_name_value
     FROM INFORMATION_SCHEMA.TABLES
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_metric_label_name';
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_metric_label_name';
 
     IF table_metric_name_value = '' THEN
         CREATE TABLE IF NOT EXISTS prometheus_metric_label_name (

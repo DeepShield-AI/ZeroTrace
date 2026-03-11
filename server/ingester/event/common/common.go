@@ -17,7 +17,7 @@
 package common
 
 import (
-	exportconfig "github.com/deepflowio/deepflow/server/ingester/exporters/config"
+	exportconfig "github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
 	logging "github.com/op/go-logging"
 )
 

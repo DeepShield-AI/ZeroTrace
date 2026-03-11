@@ -5,7 +5,7 @@
 ```mermaid
 flowchart LR
 
-subgraph deepflow-agent
+subgraph zerotrace-agent
   Dispatcher
   EbpfCollector
   IntegrationCollector
@@ -31,7 +31,7 @@ subgraph deepflow-agent
   UniformSender.9["UniformSender"]
 end
 
-subgraph deepflow-server.ingester
+subgraph zerotrace-server.ingester
   flow_metrics.decoder
   flow_log.decoder.1["flow_log.decoder"]
   flow_log.decoder.2["flow_log.decoder"]
@@ -117,7 +117,7 @@ EbpfCollector -->|MetaPacket| queue.10([queue]) --> EbpfRunner -->|AppProtoLogsD
 EbpfCollector -->|stack_profile_data| ebpf_on_cpu_callback -->|"Profile"| queue.9
 ```
 
-## 1.3. Decoders In deepflow-server.ingester
+## 1.3. Decoders In zerotrace-server.ingester
 
 ```mermaid
 flowchart TD
@@ -148,7 +148,7 @@ subgraph K8s.Node.1
   PodMAC.1[(PodMAC)]
   NodeMAC.1[(NodeMAC)]
 
-  subgraph deepflow-agent.k8s.1
+  subgraph zerotrace-agent.k8s.1
     subgraph PlatformSynchronizer.1[PlatformSynchronizer]
       ActivePoller.1[ActivePoller]
       PassivePoller.1[PassivePoller]
@@ -164,7 +164,7 @@ subgraph K8s.Node.2
   PodMAC.2[(PodMAC)]
   NodeMAC.2[(NodeMAC)]
 
-  subgraph deepflow-agent.k8s.2
+  subgraph zerotrace-agent.k8s.2
     subgraph PlatformSynchronizer.2[PlatformSynchronizer]
       ActivePoller.2[ActivePoller]
       PassivePoller.2[PassivePoller]
@@ -175,7 +175,7 @@ end
 subgraph Host.1
   HostInfo.1[(HostInfo)]
 
-  subgraph deepflow-agent.host.1
+  subgraph zerotrace-agent.host.1
     PlatformSynchronizer.3[PlatformSynchronizer]
   end
 end
@@ -183,12 +183,12 @@ end
 subgraph Host.2
   HostInfo.2[(HostInfo)]
 
-  subgraph deepflow-agent.host.2
+  subgraph zerotrace-agent.host.2
     PlatformSynchronizer.4[PlatformSynchronizer]
   end
 end
 
-subgraph deepflow-server.1
+subgraph zerotrace-server.1
   controller.genesis.1[controller.genesis]
   controller.cloud.1[controller.cloud]
   controller.recorder.1[controller.recorder]
@@ -199,7 +199,7 @@ subgraph deepflow-server.1
   controller.genesis.1 -->|"k8s & host meta"| controller.cloud.1 -->|meta| controller.recorder.1 -->|event| queue.1 --> ingester.event.1
 end
 
-subgraph deepflow-server.2
+subgraph zerotrace-server.2
   controller.genesis.2[controller.genesis]
   controller.cloud.2[controller.cloud]
   controller.recorder.2[controller.recorder]

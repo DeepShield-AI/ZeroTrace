@@ -28,18 +28,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
 
 	/* "github.com/grafana/tempo/pkg/tempopb"
 	v1 "github.com/grafana/tempo/pkg/tempopb/common/v1"
 	resourceProto "github.com/grafana/tempo/pkg/tempopb/resource/v1"
 	traceProto "github.com/grafana/tempo/pkg/tempopb/trace/v1" */
-	"github.com/deepflowio/tempopb"
-	v1 "github.com/deepflowio/tempopb/common/v1"
-	resourceProto "github.com/deepflowio/tempopb/resource/v1"
-	traceProto "github.com/deepflowio/tempopb/trace/v1"
+	"github.com/zerotraceio/tempopb"
+	v1 "github.com/zerotraceio/tempopb/common/v1"
+	resourceProto "github.com/zerotraceio/tempopb/resource/v1"
+	traceProto "github.com/zerotraceio/tempopb/trace/v1"
 	"github.com/google/uuid"
 
 	//"github.com/k0kubun/pp"
@@ -72,12 +72,12 @@ var RESOURCE_KEY_MAP = map[string]string{
 
 var SPAN_KEY_MAP = map[string]string{
 	"tap_side":                "Enum(tap_side)",
-	"deepflow_span_id":        "deepflow_span_id",
-	"deepflow_parent_span_id": "deepflow_parent_span_id",
+	"zerotrace_span_id":        "zerotrace_span_id",
+	"zerotrace_parent_span_id": "zerotrace_parent_span_id",
 }
 
 func L7TracingRequest(args *common.TempoParams) (map[string]interface{}, error) {
-	url := fmt.Sprintf("http://%s:%s/v1/stats/querier/L7FlowTracing", config.Cfg.DeepflowApp.Host, config.Cfg.DeepflowApp.Port)
+	url := fmt.Sprintf("http://%s:%s/v1/stats/querier/L7FlowTracing", config.Cfg.ZerotraceApp.Host, config.Cfg.ZerotraceApp.Port)
 	l7Body := map[string]interface{}{
 		"trace_id":       args.TraceId,
 		"time_start":     args.StartTime,
@@ -100,7 +100,7 @@ func L7TracingRequest(args *common.TempoParams) (map[string]interface{}, error) 
 	}
 	defer response.Body.Close()
 	if response.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("get deepflow-app l7tracing error, url: %s, body: %s, code '%d'", url, l7Body, response.StatusCode))
+		return nil, errors.New(fmt.Sprintf("get zerotrace-app l7tracing error, url: %s, body: %s, code '%d'", url, l7Body, response.StatusCode))
 	}
 
 	body, err := ParseResponse(response)
@@ -154,8 +154,8 @@ func ConvertL7TracingRespToProto(data map[string]interface{}, argTraceId string)
 		serviceUid, ok := trace[L7_TRACING_SERVICE_UID]
 		var rsSpans *traceProto.ResourceSpans
 
-		spanId := trace["deepflow_span_id"].(string)
-		parentSpanId := trace["deepflow_parent_span_id"].(string)
+		spanId := trace["zerotrace_span_id"].(string)
+		parentSpanId := trace["zerotrace_parent_span_id"].(string)
 		if ok && serviceUid != nil {
 			if rsSpans, ok = resourceUidMap[serviceUid.(string)]; !ok {
 				networkParentMap[spanId] = parentSpanId

@@ -19,8 +19,8 @@ package edition
 import (
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/common"
 )
 
 func CheckDBVersion(db *gorm.DB, cfg config.Config) error {

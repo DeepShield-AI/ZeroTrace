@@ -25,8 +25,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/schema"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/schema/script"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/schema"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/schema/script"
 )
 
 func ExecuteCEIssues(dc *DBConfig, curVersion string) error {
@@ -69,7 +69,7 @@ func executeIssue(dc *DBConfig, nextVersion string, rawSqlDir string) error {
 		return nil
 	}
 
-	strSQL := fmt.Sprintf("SET @defaultDatabaseName='%s';\n", "deepflow") + string(byteSQL) // TODO: remove hard code
+	strSQL := fmt.Sprintf("SET @defaultDatabaseName='%s';\n", "zerotrace") + string(byteSQL) // TODO: remove hard code
 	err = dc.DB.Exec(strSQL).Error
 	if err != nil {
 		log.Error(LogDBName(dc.Config.Database, "failed to execute %s issue (version: %s): %s", rawSqlDir, nextVersion, err.Error()))

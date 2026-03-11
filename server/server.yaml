@@ -1,5 +1,5 @@
 # logfile path
-log-file: /var/log/deepflow/server.log
+log-file: /var/log/zerotrace/server.log
 # loglevel: "debug/info/warn/error"
 log-level: info
 
@@ -11,7 +11,7 @@ log-level: info
 
 #continuous-profile:
 #  enabled: false
-#  server-addr: http://deepflow-agent/api/v1/profile
+#  server-addr: http://zerotrace-agent/api/v1/profile
 #  # support profile types: "cpu", "inuse_objects", "alloc_objects", "inuse_space", "alloc_space", "goroutines", "mutex_count", "mutex_duration", "block_count", "block_duration"
 #  profile-types: ["cpu", "inuse_objects", "alloc_objects", "inuse_space", "alloc_space"]
 #  mutex-rate: 5 # valid when ProfileTypes contains 'mutex_count' or 'mutex_duration'
@@ -52,13 +52,13 @@ controller:
   # kubeconfig
   kubeconfig:
   # election
-  election-name: deepflow-server
-  # Once every 24 hours DeepFlow will report usage data to usage.deepflow.yunshan.net
-  # The data includes a random ID, version, number of deepflow server and agent.
+  election-name: zerotrace-server
+  # Once every 24 hours ZeroTrace will report usage data to usage.zerotrace.yunshan.net
+  # The data includes a random ID, version, number of zerotrace server and agent.
   # No data from user databases is ever transmitted.
   # Change this option to true to disable reporting.
   reporting-disabled: false
-  # Deepflow billing mode  license/voucher
+  # Zerotrace billing mode  license/voucher
   billing-method: license
   ## If no-teamid-refused is set to true, agent must report team_id to server
   #no-teamid-refused: false
@@ -86,35 +86,35 @@ controller:
     # additional domains
     additional_domains:
 
-  # deepflow web service config
+  # zerotrace web service config
   df-web-service:
     enabled: false
     host: df-web
     port: 20825
     timeout: 30
 
-  # deepflow querier js config
+  # zerotrace querier js config
   querier-js-service:
     enabled: false
     host: querier-js
     port: 30420
     timeout: 30
 
-  # deepflow fpermit service config
+  # zerotrace fpermit service config
   fpermit:
     enabled: false
     host: fpermit
     port: 20823
     timeout: 30
 
-  # deepflow fuser service config
+  # zerotrace fuser service config
   fuser:
     enabled: false
     host: fuser
     port: 20824
     timeout: 30
 
-  # deepflow acl-controller service config
+  # zerotrace acl-controller service config
   acl-controller:
     enabled: false
     host: acl-controller
@@ -124,9 +124,9 @@ controller:
   # mysql相关配置
   mysql:
     enabled: true
-    database: deepflow
+    database: zerotrace
     user-name: root
-    user-password: deepflow
+    user-password: zerotrace
     host: mysql
     port: 30130
     proxy-host:
@@ -149,10 +149,10 @@ controller:
   # postgresql相关配置
   postgresql:
     enabled: false
-    database: deepflow
+    database: zerotrace
     schema: public
     user-name: postgres
-    user-password: deepflow
+    user-password: zerotrace
     host: postgresql
     port: 5432
     timeout: 30
@@ -162,9 +162,9 @@ controller:
     enabled: false
     dsn: DM8DSN
     # schema should not have the same name as user-name
-    schema: deepflow
+    schema: zerotrace
     user-name: root
-    user-password: deepflow
+    user-password: zerotrace
     host: dm
     port: 5236
     
@@ -186,7 +186,7 @@ controller:
     resource_api_database: 1
     resource_api_expire_interval: 3600
     dimension_resource_database: 2
-    password: deepflow
+    password: zerotrace
     host:
       - redis
     port: 6379
@@ -507,12 +507,12 @@ querier:
 	# 检测请求距离现在的时间，如果小于这个时间不要记录 TraceTree (目前用于 async flow 上报了请求还没响应的场景), unit: s
     trace_tree_cache_delay: 120
 
-  # deepflow-app相关配置
-  deepflow-app:
-    host: deepflow-app
+  # zerotrace-app相关配置
+  zerotrace-app:
+    host: zerotrace-app
     port: 20418
 
-  otel-endpoint: http://deepflow-agent/api/v1/otel/trace
+  otel-endpoint: http://zerotrace-agent/api/v1/otel/trace
   limit: 10000
   time-fill-limit: 20
 
@@ -554,8 +554,8 @@ ingester:
   #  external: false
   #  # database type: suport 'clickhouse', 'byconity', default is 'clickhouse'
   #  type: clickhouse
-  #  # if type is 'byconity', default host is 'deepflow-byconity-server', else 'deepflow-clickhouse'
-  #  host: deepflow-clickhouse
+  #  # if type is 'byconity', default host is 'zerotrace-byconity-server', else 'zerotrace-clickhouse'
+  #  host: zerotrace-clickhouse
   #  port: 9000
   #  # for get clickchouse endpoints tcp port value
   #  endpoint-tcp-port-name: tcp-port
@@ -634,11 +634,11 @@ ingester:
   #  flush-timeout: 10   # 超时写入时间
 
   ## ext_metrics database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #ext-metrics-ttl-hour: 168
 
   ## flow_metrics database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #flow-metrics-ttl-hour:
   #  vtap-flow-1m: 168     # vtap_flow[_edge]_port.1m
   #  vtap-flow-1s: 24     # vtap_flow[_edge]_port.1s
@@ -646,7 +646,7 @@ ingester:
   #  vtap-app-1s: 24      # vtap_app[_edge]_port.1s
 
   ## flow_log database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #flow-log-ttl-hour:
   #  l4-flow-log: 72
   #  l7-flow-log: 72
@@ -670,11 +670,11 @@ ingester:
   #  flush-timeout: 5    # timeout of table writing
 
   ## resource/k8s event table data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #event-ttl-hour: 720
 
   ## alert event table data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #alert-event-ttl-hour: 720
 
   ## file event data write config
@@ -685,7 +685,7 @@ ingester:
   #  flush-timeout: 5    # 超时写入时间
 
   ## file event table data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #file-event-ttl-hour: 168
 
   ## pcap data write config
@@ -696,7 +696,7 @@ ingester:
   #  flush-timeout: 5   # 超时写入时间
 
   ## pcap database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #pcap-ttl-hour: 72
 
   ## pcap decoder queue count/size
@@ -711,7 +711,7 @@ ingester:
   #  flush-timeout: 5    # timeout of table writing
 
   ## profile process database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #profile-ttl-hour: 72
 
   ## profile compression algorithm, default is zstd, empty string for not compress
@@ -735,7 +735,7 @@ ingester:
   #prometheus-decoder-queue-size: 4096
 
   ## prometheus database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #prometheus-ttl-hour: 168
 
   ## prometheus label request/response msg max size (unit: bytes)
@@ -764,7 +764,7 @@ ingester:
   #application-log-decoder-queue-size: 4096
 
   ## app log database data retention time(unit: hour)
-  ## Note: This configuration is only valid when DeepFlow is run for the first time or the ClickHouse tables have not yet been created
+  ## Note: This configuration is only valid when ZeroTrace is run for the first time or the ClickHouse tables have not yet been created
   #application-log-ttl-hour: 720
 
   #ck-disk-monitor:
@@ -796,7 +796,7 @@ ingester:
   ## ingester模块是否启用，默认启用, 若不启用(表示处于单独的控制器)
   #ingester-enabled: true
 
-  # whether to enable deepflow-aget syslog to write to files in syslog-directory
+  # whether to enable zerotrace-aget syslog to write to files in syslog-directory
   #agent-log-to-file: false
 
   ## udp socket receiver buffer: 64M
@@ -921,7 +921,7 @@ ingester:
   #    sasl-mechanism: PLAIN # currently only supports: PLAIN
   #    username: aaa
   #    password: bbb
-  #  topic:  # If the value is empty, use the value of `deepflow.$data-source` as the kafka topic (eg, `deepflow.flow_log.l7_flow_log`). If it is not empty, use the value as the kafka topic.
+  #  topic:  # If the value is empty, use the value of `zerotrace.$data-source` as the kafka topic (eg, `zerotrace.flow_log.l7_flow_log`). If it is not empty, use the value as the kafka topic.
   #- protocol: prometheus
   #  enabled: true
   #  # randomly select an address that can be sent successfully, prometheus address format as: http://127.0.0.1:9091/receive

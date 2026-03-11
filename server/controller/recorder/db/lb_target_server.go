@@ -17,8 +17,8 @@
 package db
 
 import (
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 type LBTargetServer struct {

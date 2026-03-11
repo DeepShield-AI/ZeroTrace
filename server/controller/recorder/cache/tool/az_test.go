@@ -19,8 +19,8 @@ package tool
 import (
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/common"
 	"github.com/stretchr/testify/assert"
 )
 

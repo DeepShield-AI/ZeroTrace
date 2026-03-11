@@ -17,10 +17,10 @@
 package message
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/common/metadata"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbModel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/tool"
+	"github.com/zerotraceio/zerotrace/server/controller/common/metadata"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbModel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/tool"
 )
 
 type Metadata struct {

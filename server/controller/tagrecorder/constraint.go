@@ -20,7 +20,7 @@ package tagrecorder
 import (
 	"time"
 
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 // 资源的MySQL orm对象

@@ -24,11 +24,11 @@ import (
 
 	"github.com/google/gopacket/layers"
 
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/datatype/prompb"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype/prompb"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const (

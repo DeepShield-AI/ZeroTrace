@@ -19,7 +19,7 @@ package flow_metrics
 import (
 	"net"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 )
 
 type UniversalTag struct {
@@ -71,9 +71,9 @@ func GenUniversalTagColumns(columns []*ckdb.Column) []*ckdb.Column {
 	columns = append(columns, ckdb.NewColumnWithGroupBy("pod_ns_id", ckdb.UInt16).SetComment("ip对应的容器命名空间ID"))
 	columns = append(columns, ckdb.NewColumnWithGroupBy("region_id", ckdb.UInt16).SetComment("ip对应的云平台区域ID"))
 	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_id", ckdb.UInt32).SetComment("ip对应的容器pod优先的资源ID, 取值优先级为pod_id -> pod_node_id -> l3_device_id"))
-	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_id", ckdb.UInt32).SetComment("ip对应的服务优先的资源ID, 取值优先级为service_id  -> pod_node_id -> l3_device_id"))
-	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+	columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 	//columns = append(columns, ckdb.NewColumnWithGroupBy("signal_source", ckdb.UInt16).SetComment("信号源"))
 	columns = append(columns, ckdb.NewColumnWithGroupBy("service_id", ckdb.UInt32).SetComment("ip对应的服务ID"))
 	columns = append(columns, ckdb.NewColumnWithGroupBy("subnet_id", ckdb.UInt16).SetComment("ip对应的子网ID(0: 未找到)"))

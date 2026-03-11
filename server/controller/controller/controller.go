@@ -26,33 +26,33 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	servercommon "github.com/deepflowio/deepflow/server/common"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/db/redis"
-	"github.com/deepflowio/deepflow/server/controller/election"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	"github.com/deepflowio/deepflow/server/controller/grpc"
-	_ "github.com/deepflowio/deepflow/server/controller/grpc/controller"
-	_ "github.com/deepflowio/deepflow/server/controller/grpc/synchronizer"
-	"github.com/deepflowio/deepflow/server/controller/http"
-	"github.com/deepflowio/deepflow/server/controller/http/router"
-	"github.com/deepflowio/deepflow/server/controller/manager"
-	"github.com/deepflowio/deepflow/server/controller/monitor"
-	"github.com/deepflowio/deepflow/server/controller/monitor/license"
-	"github.com/deepflowio/deepflow/server/controller/native_field"
-	"github.com/deepflowio/deepflow/server/controller/prometheus"
-	"github.com/deepflowio/deepflow/server/controller/recorder"
-	"github.com/deepflowio/deepflow/server/controller/recorder/event"
-	"github.com/deepflowio/deepflow/server/controller/report"
-	"github.com/deepflowio/deepflow/server/controller/statsd"
-	"github.com/deepflowio/deepflow/server/controller/tagrecorder"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	_ "github.com/deepflowio/deepflow/server/controller/trisolaris/services/grpc/agentdebug"
-	_ "github.com/deepflowio/deepflow/server/controller/trisolaris/services/grpc/healthcheck"
-	_ "github.com/deepflowio/deepflow/server/controller/trisolaris/services/http/cache"
-	_ "github.com/deepflowio/deepflow/server/controller/trisolaris/services/http/upgrade"
+	servercommon "github.com/zerotraceio/zerotrace/server/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/redis"
+	"github.com/zerotraceio/zerotrace/server/controller/election"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc"
+	_ "github.com/zerotraceio/zerotrace/server/controller/grpc/controller"
+	_ "github.com/zerotraceio/zerotrace/server/controller/grpc/synchronizer"
+	"github.com/zerotraceio/zerotrace/server/controller/http"
+	"github.com/zerotraceio/zerotrace/server/controller/http/router"
+	"github.com/zerotraceio/zerotrace/server/controller/manager"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/license"
+	"github.com/zerotraceio/zerotrace/server/controller/native_field"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/event"
+	"github.com/zerotraceio/zerotrace/server/controller/report"
+	"github.com/zerotraceio/zerotrace/server/controller/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/tagrecorder"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	_ "github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/grpc/agentdebug"
+	_ "github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/grpc/healthcheck"
+	_ "github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/http/cache"
+	_ "github.com/zerotraceio/zerotrace/server/controller/trisolaris/services/http/upgrade"
 )
 
 var log = logging.MustGetLogger("controller")
@@ -67,7 +67,7 @@ func Start(ctx context.Context, configPath, serverLogFile string, shared *server
 	serverCfg.Load(configPath)
 	cfg := &serverCfg.ControllerConfig
 	bytes, _ := yaml.Marshal(cfg)
-	log.Info("==================== Launching DeepFlow-Server-Controller ====================")
+	log.Info("==================== Launching ZeroTrace-Server-Controller ====================")
 	log.Infof("controller config:\n%s", string(bytes))
 	setGlobalConfig(cfg)
 

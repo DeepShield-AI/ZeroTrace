@@ -20,8 +20,8 @@ import (
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	common "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	common "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
 )
 
 func getRemote(ctx context.Context) string {

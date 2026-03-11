@@ -1,4 +1,4 @@
-USE deepflow;
+USE zerotrace;
 
 CREATE TABLE IF NOT EXISTS ch_pod_ns_cloud_tags (
     `id`            INTEGER NOT NULL PRIMARY KEY,

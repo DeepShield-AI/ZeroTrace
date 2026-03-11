@@ -278,7 +278,7 @@ impl Guard {
         cgroups_disabled: bool,
     ) -> Result<Self, &'static str> {
         let Ok(pid) = get_current_pid() else {
-            return Err("get the process' pid failed: {}, deepflow-agent restart...");
+            return Err("get the process' pid failed: {}, zerotrace-agent restart...");
         };
         Ok(Self {
             config,
@@ -418,7 +418,7 @@ impl Guard {
                 exception_handler.set(Exception::FreeMemExceeded);
                 *under_sys_memory_limit = true;
                 error!(
-                    "current system {:?} memory percentage is less than the 70% of sys_memory_limit, current system memory percentage={}%, sys_memory_limit={}%, deepflow-agent restart...",
+                    "current system {:?} memory percentage is less than the 70% of sys_memory_limit, current system memory percentage={}%, sys_memory_limit={}%, zerotrace-agent restart...",
                     sys_memory_metric, current_memory_percentage, sys_memory_limit
                 );
                 crate::utils::clean_and_exit(-1);
@@ -495,7 +495,7 @@ impl Guard {
                     let guard_interval = config.load().guard_interval.as_secs();
                     let (timeout, interval) = feed.timeout(Duration::from_secs(guard_interval << 1));
                     if timeout {
-                        error!("The guard thread (circuit breakers) feeds the watchdog thread every {} seconds. Unfortunately, it has now been discovered that the feed has not been updated for over {} seconds. The location of the last feed is: {}, restart deepflow-agent ...", guard_interval, interval.as_secs(), feed);
+                        error!("The guard thread (circuit breakers) feeds the watchdog thread every {} seconds. Unfortunately, it has now been discovered that the feed has not been updated for over {} seconds. The location of the last feed is: {}, restart zerotrace-agent ...", guard_interval, interval.as_secs(), feed);
                         sleep(Duration::from_secs(1));
                         std::process::exit(-1);
                     }
@@ -601,7 +601,7 @@ impl Guard {
                             feed.add(FeedTitle::CheckCpu1);
                             if !Self::check_cpu(system.clone(), pid.clone(), cpu_limit) {
                                 if over_cpu_limit {
-                                    error!("cpu usage over cpu limit twice, deepflow-agent restart...");
+                                    error!("cpu usage over cpu limit twice, zerotrace-agent restart...");
                                     crate::utils::clean_and_exit(-1);
                                     break;
                                 } else {
@@ -616,7 +616,7 @@ impl Guard {
                         feed.add(FeedTitle::CheckCpu2);
                         if !Self::check_cpu(system.clone(), pid.clone(), cpu_limit) {
                             if over_cpu_limit {
-                                error!("cpu usage over cpu limit twice, deepflow-agent restart...");
+                                error!("cpu usage over cpu limit twice, zerotrace-agent restart...");
                                 crate::utils::clean_and_exit(-1);
                                 break;
                             } else {
@@ -656,7 +656,7 @@ impl Guard {
                                 if memory_usage >= memory_limit {
                                     if over_memory_limit {
                                         error!(
-                                    "memory usage over memory limit twice, current={}, memory_limit={}, deepflow-agent restart...",
+                                    "memory usage over memory limit twice, current={}, memory_limit={}, zerotrace-agent restart...",
                                     ByteSize::b(memory_usage).to_string_as(true), ByteSize::b(memory_limit).to_string_as(true)
                                     );
                                         crate::utils::clean_and_exit(-1);
@@ -690,7 +690,7 @@ impl Guard {
                                 thread_num, thread_limit
                             );
                             if thread_num > thread_limit * 2 {
-                                error!("the number of thread exceeds the limit by 2 times, deepflow-agent restart...");
+                                error!("the number of thread exceeds the limit by 2 times, zerotrace-agent restart...");
                                 crate::utils::clean_and_exit(NORMAL_EXIT_WITH_RESTART);
                                 break;
                             }
@@ -752,7 +752,7 @@ impl Guard {
                                     warn!("opened sockets:\n{}", SocketInfo { tcp, tcp6, udp, udp6 });
                                 }
                                 Some(last) if last.elapsed() > config.max_sockets_tolerate_interval => {
-                                    warn!("the number of socket exceeds the limit longer than {:?}, deepflow-agent restart...", config.max_sockets_tolerate_interval);
+                                    warn!("the number of socket exceeds the limit longer than {:?}, zerotrace-agent restart...", config.max_sockets_tolerate_interval);
                                     warn!("opened sockets:\n{}", SocketInfo { tcp, tcp6, udp, udp6 });
                                     crate::utils::clean_and_exit(NORMAL_EXIT_WITH_RESTART);
                                     break;

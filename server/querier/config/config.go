@@ -25,10 +25,10 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	tracemap "github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/config"
-	prometheus "github.com/deepflowio/deepflow/server/querier/app/prometheus/config"
-	tracing_adapter "github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/config"
-	profile "github.com/deepflowio/deepflow/server/querier/profile/config"
+	tracemap "github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/config"
+	prometheus "github.com/zerotraceio/zerotrace/server/querier/app/prometheus/config"
+	tracing_adapter "github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/config"
+	profile "github.com/zerotraceio/zerotrace/server/querier/profile/config"
 )
 
 var log = logging.MustGetLogger("clickhouse")
@@ -49,11 +49,11 @@ type QuerierConfig struct {
 	Clickhouse                      Clickhouse                    `yaml:"clickhouse"`
 	Profile                         profile.ProfileConfig         `yaml:"profile"`
 	Tracemap                        tracemap.TraceMapConfig       `yaml:"trace-map"`
-	DeepflowApp                     DeepflowApp                   `yaml:"deepflow-app"`
+	ZerotraceApp                     ZerotraceApp                   `yaml:"zerotrace-app"`
 	Prometheus                      prometheus.Prometheus         `yaml:"prometheus"`
 	ExternalAPM                     []tracing_adapter.ExternalAPM `yaml:"external-apm"`
 	Language                        string                        `default:"en" yaml:"language"`
-	OtelEndpoint                    string                        `default:"http://deepflow-agent/api/v1/otel/trace" yaml:"otel-endpoint"`
+	OtelEndpoint                    string                        `default:"http://zerotrace-agent/api/v1/otel/trace" yaml:"otel-endpoint"`
 	Limit                           string                        `default:"10000" yaml:"limit"`
 	TimeFillLimit                   int                           `default:"20" yaml:"time-fill-limit"`
 	PrometheusCacheUpdateInterval   int                           `default:"60" yaml:"prometheus-cache-update-interval"`
@@ -63,8 +63,8 @@ type QuerierConfig struct {
 	AutoCustomTags                  []AutoCustomTags              `yaml:"auto-custom-tags" binding:"omitempty,dive"`
 }
 
-type DeepflowApp struct {
-	Host string `default:"deepflow-app" yaml:"host"`
+type ZerotraceApp struct {
+	Host string `default:"zerotrace-app" yaml:"host"`
 	Port string `default:"20418" yaml:"port"`
 }
 

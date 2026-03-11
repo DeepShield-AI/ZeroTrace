@@ -17,8 +17,8 @@
 package common
 
 import (
-	"github.com/deepflowio/deepflow/message/agent"
-	api "github.com/deepflowio/deepflow/message/trident"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/trident"
 )
 
 const (

@@ -21,11 +21,11 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
-	"github.com/deepflowio/deepflow/server/controller/http/service/rebalance"
-	"github.com/deepflowio/deepflow/server/controller/monitor/config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/rebalance"
+	"github.com/zerotraceio/zerotrace/server/controller/monitor/config"
 )
 
 var (

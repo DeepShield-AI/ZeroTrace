@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	debugcmd "github.com/deepflowio/deepflow/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	debugcmd "github.com/zerotraceio/zerotrace/server/libs/debug"
 )
 
 const (

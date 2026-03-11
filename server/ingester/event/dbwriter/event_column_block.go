@@ -20,8 +20,8 @@ import (
 	"unsafe"
 
 	"github.com/ClickHouse/ch-go/proto"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
 )
 
 type EventBlock struct {

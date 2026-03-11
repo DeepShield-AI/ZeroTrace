@@ -17,9 +17,9 @@
 package pubsub
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message/types"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message/types"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.pubsub")

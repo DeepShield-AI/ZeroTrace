@@ -19,7 +19,7 @@ package client
 import (
 	"reflect"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 )
 
 type Series struct {

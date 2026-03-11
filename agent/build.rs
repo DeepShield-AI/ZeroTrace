@@ -66,7 +66,7 @@ fn get_branch() -> Result<String> {
 struct EnvCommand(&'static str, Vec<&'static str>);
 
 fn set_build_info() -> Result<()> {
-    println!("cargo:rustc-env=AGENT_NAME=deepflow-agent-ce");
+    println!("cargo:rustc-env=AGENT_NAME=zerotrace-agent-ce");
     println!("cargo:rustc-env=BRANCH={}", get_branch()?);
     println!(
         "cargo:rustc-env=COMPILE_TIME={}",
@@ -112,7 +112,7 @@ fn set_libtrace_rerun_files() -> Result<()> {
                             return false;
                         }
                         match name {
-                            "deepflow_jattach_bin.c" | "deepflow_ebpfctl_bin.c" => return false,
+                            "zerotrace_jattach_bin.c" | "zerotrace_ebpfctl_bin.c" => return false,
                             _ => (),
                         }
                         return true;

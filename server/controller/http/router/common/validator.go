@@ -25,9 +25,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/schema"
 
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/model"
 )
 
 const (

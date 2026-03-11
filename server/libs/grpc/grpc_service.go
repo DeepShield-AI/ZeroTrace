@@ -23,9 +23,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 	"github.com/google/gopacket/layers"
 )
 

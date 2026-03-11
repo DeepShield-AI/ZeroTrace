@@ -23,9 +23,9 @@ import (
 	"net"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
 
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
 )
 
 type MonitorOperator interface {

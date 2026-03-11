@@ -24,12 +24,12 @@ import (
 	"time"
 	"unsafe"
 
-	exportercommon "github.com/deepflowio/deepflow/server/ingester/exporters/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	utag "github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/libs/app"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	exportercommon "github.com/zerotraceio/zerotrace/server/ingester/exporters/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	utag "github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/app"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 	"github.com/prometheus/prometheus/prompb"
 )
 

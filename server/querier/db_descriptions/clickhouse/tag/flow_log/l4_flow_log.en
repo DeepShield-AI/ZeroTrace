@@ -100,8 +100,8 @@ init_ipid             , Initial IPID                      ,
 signal_source         , Signal Source                     ,
 tap                   , Traffic Access Point              , Deprecated，please use capture_network_type.
 capture_network_type  , Network Location                  , The network location for capturing traffic uses a fixed value (Cloud Network) to represent intra-cloud traffic, while other values indicate traditional IDC traffic (supports up to 254 custom values to represent locations of traffic mirroring).
-vtap                  , DeepFlow Agent                    , Deprecated，please use agent.
-agent                 , DeepFlow Agent                    ,
+vtap                  , ZeroTrace Agent                    , Deprecated，please use agent.
+agent                 , ZeroTrace Agent                    ,
 nat_source            , NAT Source                        ,
 tap_port              , TAP Port Identifier               , Deprecated, please use capture_nic.
 tap_port_name         , TAP Port Name                     , Deprecated, please use capture_nic_name.

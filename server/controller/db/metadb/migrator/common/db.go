@@ -21,9 +21,9 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/types"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/types"
 )
 
 type DBConfig struct {

@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
 )
 
 func TestCustomTagMeterMetaEncodeDecode(t *testing.T) {

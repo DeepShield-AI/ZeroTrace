@@ -26,7 +26,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
 )

@@ -23,8 +23,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	prometheuscfg "github.com/deepflowio/deepflow/server/controller/prometheus/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	prometheuscfg "github.com/zerotraceio/zerotrace/server/controller/prometheus/config"
 )
 
 var (

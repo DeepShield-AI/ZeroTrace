@@ -725,7 +725,7 @@ mod tests {
     use super::*;
 
     use crate::common::endpoint::{
-        EndpointData, EndpointDataPov, EndpointInfo, EPC_DEEPFLOW, EPC_INTERNET,
+        EndpointData, EndpointDataPov, EndpointInfo, EPC_ZEROTRACE, EPC_INTERNET,
     };
     use crate::common::flow::{CloseType, PacketDirection};
     use crate::config::UserConfig;
@@ -935,7 +935,7 @@ mod tests {
         let ep = EndpointDataPov::new(Arc::new(EndpointData {
             src_info: EndpointInfo {
                 real_ip: Ipv4Addr::UNSPECIFIED.into(),
-                l2_epc_id: EPC_DEEPFLOW,
+                l2_epc_id: EPC_ZEROTRACE,
                 l3_epc_id: 1,
                 l2_end: false,
                 l3_end: false,
@@ -947,7 +947,7 @@ mod tests {
             },
             dst_info: EndpointInfo {
                 real_ip: Ipv4Addr::UNSPECIFIED.into(),
-                l2_epc_id: EPC_DEEPFLOW,
+                l2_epc_id: EPC_ZEROTRACE,
                 l3_epc_id: EPC_INTERNET,
                 l2_end: false,
                 l3_end: false,

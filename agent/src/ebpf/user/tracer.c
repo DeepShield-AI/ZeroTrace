@@ -47,7 +47,7 @@
 #include "extended/extended.h"
 #include "profile/perf_profiler.h"
 
-#include "deepflow_ebpfctl_bin.c"
+#include "zerotrace_ebpfctl_bin.c"
 
 /*
  * Sleep duration (in seconds) before retrying CPU binding if it fails.
@@ -617,19 +617,19 @@ int load_ebpf_object(struct ebpf_object *obj)
 			    ("Check the selinux status, if found SELinux"
 			     " 'status: enabled' and 'Current mode:"
 			     "enforcing', please try the following way "
-			     "to solve:\n" "1 Create file 'deepflow-agent.te',"
-			     "contents:\n\n" "module deepflow-agent 1.0;\n"
+			     "to solve:\n" "1 Create file 'zerotrace-agent.te',"
+			     "contents:\n\n" "module zerotrace-agent 1.0;\n"
 			     "require {\n" "  type container_runtime_t;\n"
 			     "  class bpf { map_create map_read "
 			     "map_write prog_load prog_run };\n"
 			     "}\nallow container_runtime_t self:"
 			     "bpf { map_create map_read map_write "
 			     "prog_load prog_run };\n\n"
-			     "2 checkmodule -M -m -o deepflow-agent.mod"
-			     " deepflow-agent.te\n"
-			     "3 semodule_package -o deepflow-agent.pp "
-			     "-m deepflow-agent.mod\n"
-			     "4 semodule -i deepflow-agent.pp\n"
+			     "2 checkmodule -M -m -o zerotrace-agent.mod"
+			     " zerotrace-agent.te\n"
+			     "3 semodule_package -o zerotrace-agent.pp "
+			     "-m zerotrace-agent.mod\n"
+			     "4 semodule -i zerotrace-agent.pp\n"
 			     "5 restart pods\n");
 		}
 
@@ -908,7 +908,7 @@ static struct ebpf_link *exec_attach_kprobe(struct ebpf_prog *prog, char *name,
 	else
 		fn_name = name + strlen("kprobe/");
 
-	snprintf(ev_name, sizeof(ev_name), "%s_deepflow_%s", isret ? "r" : "p",
+	snprintf(ev_name, sizeof(ev_name), "%s_zerotrace_%s", isret ? "r" : "p",
 		 fn_name);
 	ret =
 	    program__attach_kprobe(prog, isret, pid, fn_name, ev_name,
@@ -2252,10 +2252,10 @@ static int ebpf_tools_install(void)
 		}
 	}
 
-	if (gen_file_from_mem((const char *)deepflow_ebpfctl_bin,
-			      sizeof(deepflow_ebpfctl_bin),
+	if (gen_file_from_mem((const char *)zerotrace_ebpfctl_bin,
+			      sizeof(zerotrace_ebpfctl_bin),
 			      (const char *)CTLBIN_INSTALL_PATH)) {
-		ebpf_warning("deepflow-ebpfctl tool (%s) generate failed.\n",
+		ebpf_warning("zerotrace-ebpfctl tool (%s) generate failed.\n",
 			     CTLBIN_INSTALL_PATH);
 		return (-1);
 	}

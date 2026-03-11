@@ -19,11 +19,11 @@ package agentsynchronize
 import (
 	"fmt"
 
-	api "github.com/deepflowio/deepflow/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
 	context "golang.org/x/net/context"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
 )
 
 type KubernetesClusterIDEvent struct {

@@ -81,7 +81,7 @@ func (c *Config) InitFromDaMeng(dmCfg DMConfig) {
 
 type commonConfig struct {
 	UserName     string `default:"root" yaml:"user-name"`
-	UserPassword string `default:"deepflow" yaml:"user-password"`
+	UserPassword string `default:"zerotrace" yaml:"user-password"`
 
 	TimeOut             uint16 `default:"30" yaml:"timeout"`
 	DropDatabaseEnabled bool   `default:"false" yaml:"drop-database-enabled"`
@@ -106,7 +106,7 @@ func (c commonConfig) fullfillConfig(cfg *Config) {
 
 type MySQLConfig struct {
 	Enabled                bool   `default:"true" yaml:"enabled"`
-	Database               string `default:"deepflow" yaml:"database"`
+	Database               string `default:"zerotrace" yaml:"database"`
 	Host                   string `default:"mysql" yaml:"host"`
 	Port                   uint32 `default:"30130" yaml:"port"`
 	ProxyHost              string `default:"" yaml:"proxy-host"`
@@ -114,7 +114,7 @@ type MySQLConfig struct {
 	AutoIncrementIncrement uint32 `default:"1" yaml:"auto_increment_increment"`
 	// commonConfig
 	UserName     string `default:"root" yaml:"user-name"`
-	UserPassword string `default:"deepflow" yaml:"user-password"`
+	UserPassword string `default:"zerotrace" yaml:"user-password"`
 
 	TimeOut             uint16 `default:"30" yaml:"timeout"`
 	DropDatabaseEnabled bool   `default:"false" yaml:"drop-database-enabled"`
@@ -148,7 +148,7 @@ func (c MySQLConfig) FullfillConfig(cfg *Config) {
 
 type PostgreSQLConfig struct {
 	Enabled   bool   `default:"false" yaml:"enabled"`
-	Database  string `default:"deepflow" yaml:"database"`
+	Database  string `default:"zerotrace" yaml:"database"`
 	Schema    string `default:"public" yaml:"schema"`
 	Host      string `default:"postgresql" yaml:"host"`
 	Port      uint32 `default:"5432" yaml:"port"`
@@ -156,7 +156,7 @@ type PostgreSQLConfig struct {
 	ProxyPort uint32 `default:"0" yaml:"proxy-port"`
 	// commonConfig
 	UserName     string `default:"root" yaml:"user-name"`
-	UserPassword string `default:"deepflow" yaml:"user-password"`
+	UserPassword string `default:"zerotrace" yaml:"user-password"`
 
 	TimeOut             uint16 `default:"30" yaml:"timeout"`
 	DropDatabaseEnabled bool   `default:"false" yaml:"drop-database-enabled"`
@@ -190,14 +190,14 @@ func (c PostgreSQLConfig) FullfillConfig(cfg *Config) {
 
 type DMConfig struct {
 	Enabled   bool   `default:"false" yaml:"enabled"`
-	Schema    string `default:"deepflow" yaml:"schema"`
+	Schema    string `default:"zerotrace" yaml:"schema"`
 	Host      string `default:"dameng" yaml:"host"`
 	Port      uint32 `default:"5236" yaml:"port"`
 	ProxyHost string `default:"" yaml:"proxy-host"`
 	ProxyPort uint32 `default:"0" yaml:"proxy-port"`
 	// commonConfig
 	UserName     string `default:"root" yaml:"user-name"`
-	UserPassword string `default:"deepflow" yaml:"user-password"`
+	UserPassword string `default:"zerotrace" yaml:"user-password"`
 
 	DSN                 string `default:"" yaml:"dsn"`
 	TimeOut             uint16 `default:"30" yaml:"timeout"`

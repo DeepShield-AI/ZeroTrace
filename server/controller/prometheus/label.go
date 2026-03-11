@@ -25,11 +25,11 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/controller/grpc/statsd"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/cache"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/common"
+	"github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/controller/grpc/statsd"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/cache"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
 )
 
 func newLabelResponse(version uint32) *trident.PrometheusLabelResponse {

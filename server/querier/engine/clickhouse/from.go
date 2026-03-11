@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 type Table struct {
@@ -35,7 +35,7 @@ func (t *Table) Format(m *view.Model) {
 }
 
 func GetVirtualTableFilter(db, table string) (view.Node, bool) {
-	if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_DEEPFLOW_TENANT}, db) {
+	if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_EXT_METRICS, chCommon.DB_NAME_ZEROTRACE_TENANT}, db) {
 		filter := fmt.Sprintf("virtual_table_name='%s'", table)
 		return &view.Expr{Value: "(" + filter + ")"}, true
 	}

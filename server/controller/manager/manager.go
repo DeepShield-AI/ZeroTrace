@@ -25,16 +25,16 @@ import (
 
 	mapset "github.com/deckarep/golang-set"
 
-	cloudcfg "github.com/deepflowio/deepflow/server/controller/cloud/config"
-	gathermodel "github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/model"
-	"github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/manager/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder"
-	recordercfg "github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	cloudcfg "github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	gathermodel "github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/model"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/manager/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder"
+	recordercfg "github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("manager")

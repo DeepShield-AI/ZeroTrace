@@ -18,8 +18,8 @@ package app
 import (
 	"github.com/ClickHouse/ch-go/proto"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
 )
 
 type DocumentFlowBlock struct {

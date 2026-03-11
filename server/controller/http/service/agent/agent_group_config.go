@@ -28,16 +28,16 @@ import (
 	"gopkg.in/yaml.v3"
 	"gorm.io/gorm"
 
-	agentconf "github.com/deepflowio/deepflow/server/agent_config"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	httpmodel "github.com/deepflowio/deepflow/server/controller/http/model"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
-	querierConfig "github.com/deepflowio/deepflow/server/querier/config"
+	agentconf "github.com/zerotraceio/zerotrace/server/agent_config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	httpmodel "github.com/zerotraceio/zerotrace/server/controller/http/model"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
+	querierConfig "github.com/zerotraceio/zerotrace/server/querier/config"
 )
 
 var (

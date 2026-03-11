@@ -17,7 +17,7 @@
 package synchronize
 
 import (
-	api "github.com/deepflowio/deepflow/message/trident"
+	api "github.com/zerotraceio/zerotrace/message/trident"
 )
 
 var (

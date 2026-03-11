@@ -1,7 +1,7 @@
 # 远程执行系统总结 (REMOTE EXECUTION SUMMARY)
 
 ## 概述
-DeepFlow远程执行系统是一个基于gRPC双向流的分布式命令执行框架，实现了Controller与Agent之间的实时通信和命令执行。系统支持心跳检测、超时处理、并发安全等企业级特性。
+ZeroTrace远程执行系统是一个基于gRPC双向流的分布式命令执行框架，实现了Controller与Agent之间的实时通信和命令执行。系统支持心跳检测、超时处理、并发安全等企业级特性。
 
 ## 核心组件
 
@@ -218,4 +218,4 @@ func (r *CMDRespManager) AppendContent(data []byte) {
 - 配置热更新支持
 
 ---
-*本文档基于DeepFlow v2024版本分析，涵盖remote_execute.go和agent_cmd.go的核心实现*
+*本文档基于ZeroTrace v2024版本分析，涵盖remote_execute.go和agent_cmd.go的核心实现*

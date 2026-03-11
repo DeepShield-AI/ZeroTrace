@@ -17,7 +17,7 @@
 package agent
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("http.router.agent")

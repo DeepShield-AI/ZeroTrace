@@ -21,10 +21,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/statsd"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/libs/stats/pb"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/statsd"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/stats/pb"
 )
 
 var (
@@ -127,7 +127,7 @@ func (v *VTapWeightCounter) SendStats(vtapName string) {
 		OrgId:              uint32(v.ORGID),
 		TeamId:             uint32(v.TeamID),
 		Timestamp:          uint64(time.Now().Unix()),
-		Name:               "deepflow_server_agent_analyzer_alloc",
+		Name:               "zerotrace_server_agent_analyzer_alloc",
 		TagNames:           []string{"host"},
 		TagValues:          []string{vtapName},
 		MetricsFloatNames:  []string{"is_analyzer_changed", "weight"},

@@ -30,7 +30,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/deepflowio/deepflow/message/controller"
+	"github.com/zerotraceio/zerotrace/message/controller"
 )
 
 var CAMD5 string

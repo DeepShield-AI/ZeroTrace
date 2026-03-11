@@ -22,7 +22,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/deepflowio/deepflow/message/agent"
+	"github.com/zerotraceio/zerotrace/message/agent"
 )
 
 var offsetInterval uint64 = 1000000

@@ -23,9 +23,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
 )
 
 func GetContextOrgDB(ctx *gin.Context) (*metadb.DB, error) {

@@ -23,7 +23,7 @@ use log::error;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use signal_hook::{consts::TERM_SIGNALS, iterator::Signals};
 
-use ::deepflow_agent::*;
+use ::zerotrace_agent::*;
 
 #[derive(Parser)]
 struct Opts {
@@ -32,11 +32,11 @@ struct Opts {
         short = 'f',
         visible_short_alias = 'c',
         long,
-        default_value = "/etc/deepflow-agent.yaml"
+        default_value = "/etc/zerotrace-agent.yaml"
     )]
     config_file: String,
 
-    /// Enable standalone mode, default config path is /etc/deepflow-agent-standalone.yaml
+    /// Enable standalone mode, default config path is /etc/zerotrace-agent-standalone.yaml
     #[clap(long)]
     standalone: bool,
 
@@ -67,11 +67,11 @@ struct Opts {
 
     /// Run agent in sidecar mode.
     /// Environment variable `CTRL_NETWORK_INTERFACE` must be specified and
-    /// optionally `K8S_POD_IP_FOR_DEEPFLOW` can be set to override ip address.
+    /// optionally `K8S_POD_IP_FOR_ZEROTRACE` can be set to override ip address.
     #[clap(long)]
     sidecar: bool,
 
-    /// Disable cgroups, deepflow-agent will default to checking the CPU and memory resource usage in a loop every 10 seconds to prevent resource usage from exceeding limits.
+    /// Disable cgroups, zerotrace-agent will default to checking the CPU and memory resource usage in a loop every 10 seconds to prevent resource usage from exceeding limits.
     #[clap(long)]
     cgroups_disabled: bool,
 }
@@ -97,7 +97,7 @@ fn wait_on_signals() {}
 
 // 版本信息
 const VERSION_INFO: &'static trident::VersionInfo = &trident::VersionInfo {
-    // agent发行版名称。通常用于区分社区版或企业版。如：deepflow-agent-ce (社区版), deepflow-agent-ee (企业版)。
+    // agent发行版名称。通常用于区分社区版或企业版。如：zerotrace-agent-ce (社区版), zerotrace-agent-ee (企业版)。
     name: env!("AGENT_NAME"),
     // git分支名。指示当前代码构建自哪个分支。
     branch: env!("BRANCH"),

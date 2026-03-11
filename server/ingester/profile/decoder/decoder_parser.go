@@ -24,11 +24,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/deepflowio/deepflow/server/ingester/profile/common"
-	"github.com/deepflowio/deepflow/server/ingester/profile/dbwriter"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
-	"github.com/deepflowio/deepflow/server/libs/grpc"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/profile/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/profile/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/grpc"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 	"github.com/klauspost/compress/zstd"
 	"github.com/pyroscope-io/pyroscope/pkg/storage"
 )

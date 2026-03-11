@@ -1,3 +1,3 @@
-module github.com/deepflowio/deepflow/server/controller/cloud/tencent/expand
+module github.com/zerotraceio/zerotrace/server/controller/cloud/tencent/expand
 
 go 1.18

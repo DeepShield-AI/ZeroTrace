@@ -22,9 +22,9 @@ import (
 	mapset "github.com/deckarep/golang-set/v2"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/controller"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/common"
+	"github.com/zerotraceio/zerotrace/message/controller"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
 )
 
 type metricLabelNameKey struct {

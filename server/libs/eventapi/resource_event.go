@@ -16,7 +16,7 @@
 
 package eventapi
 
-import "github.com/deepflowio/deepflow/server/libs/pool"
+import "github.com/zerotraceio/zerotrace/server/libs/pool"
 
 const (
 	RESOURCE_EVENT_TYPE_CREATE            = "create"

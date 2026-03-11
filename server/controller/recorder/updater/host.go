@@ -17,14 +17,14 @@
 package updater
 
 import (
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/diffbase"
-	"github.com/deepflowio/deepflow/server/controller/recorder/db"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message/types"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/diffbase"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/db"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message/types"
 )
 
 // HostMessageFactory Host资源的消息工厂
@@ -86,7 +86,7 @@ func (h *Host) generateDBItemToAdd(cloudItem *cloudmodel.Host) (*metadbmodel.Hos
 		MemTotal:   cloudItem.MemTotal,
 		ExtraInfo:  cloudItem.ExtraInfo,
 		UserName:   "root",
-		UserPasswd: "deepflow",
+		UserPasswd: "zerotrace",
 		State:      ctrlrcommon.HOST_STATE_COMPLETE,
 		AZ:         cloudItem.AZLcuuid,
 		Region:     cloudItem.RegionLcuuid,

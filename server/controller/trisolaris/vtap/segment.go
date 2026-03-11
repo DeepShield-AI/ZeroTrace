@@ -17,12 +17,12 @@
 package vtap
 
 import (
-	"github.com/deepflowio/deepflow/message/agent"
-	"github.com/deepflowio/deepflow/message/trident"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	"github.com/zerotraceio/zerotrace/message/trident"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 /*

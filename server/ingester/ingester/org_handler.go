@@ -20,17 +20,17 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/prometheus"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/prometheus"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
 )
 
 var CleanDatabaseList = []string{
-	"application_log", "deepflow_admin", "deepflow_tenant", "event", "ext_metrics",
+	"application_log", "zerotrace_admin", "zerotrace_tenant", "event", "ext_metrics",
 	"flow_log", "flow_metrics", "flow_tag",
 	"profile", "prometheus"}
 
@@ -67,7 +67,7 @@ func (o *OrgHandler) DropOrg(orgId uint16) error {
 	return o.dropOrgDatabase(orgId)
 }
 
-// FIXME: After clearing the Org data, if the same Org ID is created again later, data writing will fail. You can restart deepflow-server to solve it.
+// FIXME: After clearing the Org data, if the same Org ID is created again later, data writing will fail. You can restart zerotrace-server to solve it.
 func (o *OrgHandler) dropOrgDatabase(orgId uint16) error {
 	if ckdb.IsDefaultOrgID(orgId) {
 		return fmt.Errorf("can not drop default org id: %d", orgId)

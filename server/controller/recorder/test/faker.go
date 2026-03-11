@@ -23,9 +23,9 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/uuid"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
 )
 
 func RandID() int {

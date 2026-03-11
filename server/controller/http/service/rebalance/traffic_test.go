@@ -23,10 +23,10 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/http/service/rebalance/mocks"
-	"github.com/deepflowio/deepflow/server/controller/model"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/rebalance/mocks"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
 )
 
 func TestAZInfo_rebalanceAnalyzer(t *testing.T) {
@@ -456,7 +456,7 @@ var (
 					467756308
 				],
 				[
-					"deepflow-agent-gnzz6",
+					"zerotrace-agent-gnzz6",
 					0
 				]
 			]
@@ -511,7 +511,7 @@ func Test_parseBody(t *testing.T) {
 				"analyzer22-V82":                114210549428,
 				"Automation-Public-Debug-W2523": 0,
 				"ydx-H12":                       467756308,
-				"deepflow-agent-gnzz6":          0,
+				"zerotrace-agent-gnzz6":          0,
 			},
 			wantErr: false,
 		},
@@ -553,7 +553,7 @@ func Test_AnalyzerInfo_RebalanceAnalyzerByTraffic(t *testing.T) {
 				mockDB.EXPECT().Get().Return(nil).AnyTimes()
 				mockQuerier := mocks.NewMockQuerier(ctl)
 				vtapNameToTraffic1 := map[string]int64{
-					"deepflow-agent-kvdfq":          0,
+					"zerotrace-agent-kvdfq":          0,
 					"analyzer23-V80":                1143803380205,
 					"node25-V98":                    257133899165,
 					"controller21-V81":              2003650739777,

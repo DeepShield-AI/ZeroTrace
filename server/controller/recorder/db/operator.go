@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	rcommon "github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/db/idmng"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	rcommon "github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/db/idmng"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.db")

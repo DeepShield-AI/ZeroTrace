@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
 )
 
 type AppMeter struct {

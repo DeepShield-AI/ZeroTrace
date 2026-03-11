@@ -21,10 +21,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
 )
 
 type TSDBDiscovery struct {

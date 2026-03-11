@@ -21,7 +21,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
 )
 
 /*

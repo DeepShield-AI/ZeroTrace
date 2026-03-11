@@ -17,13 +17,13 @@
 package dbwriter
 
 import (
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	flow_metrics "github.com/deepflowio/deepflow/server/libs/flow-metrics"
-	"github.com/deepflowio/deepflow/server/libs/nativetag"
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	flow_metrics "github.com/zerotraceio/zerotrace/server/libs/flow-metrics"
+	"github.com/zerotraceio/zerotrace/server/libs/nativetag"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const (
@@ -59,12 +59,12 @@ func (m *ExtMetrics) IsValid() bool {
 func (m *ExtMetrics) DatabaseName() string {
 	switch m.MsgType {
 	case datatype.MESSAGE_TYPE_DFSTATS:
-		return DEEPFLOW_TENANT_DB
+		return ZEROTRACE_TENANT_DB
 	case datatype.MESSAGE_TYPE_SERVER_DFSTATS:
 		if ckdb.IsValidOrgID(m.RawOrgId) {
-			return DEEPFLOW_TENANT_DB
+			return ZEROTRACE_TENANT_DB
 		} else {
-			return DEEPFLOW_ADMIN_DB
+			return ZEROTRACE_ADMIN_DB
 		}
 	default:
 		return EXT_METRICS_DB
@@ -74,12 +74,12 @@ func (m *ExtMetrics) DatabaseName() string {
 func (m *ExtMetrics) TableName() string {
 	switch m.MsgType {
 	case datatype.MESSAGE_TYPE_DFSTATS:
-		return DEEPFLOW_TENANT_COLLECTOR_TABLE
+		return ZEROTRACE_TENANT_COLLECTOR_TABLE
 	case datatype.MESSAGE_TYPE_SERVER_DFSTATS:
 		if ckdb.IsValidOrgID(m.RawOrgId) {
-			return DEEPFLOW_TENANT_COLLECTOR_TABLE
+			return ZEROTRACE_TENANT_COLLECTOR_TABLE
 		} else {
-			return DEEPFLOW_ADMIN_SERVER_TABLE
+			return ZEROTRACE_ADMIN_SERVER_TABLE
 		}
 	default:
 		return EXT_METRICS_TABLE
@@ -93,12 +93,12 @@ func (m *ExtMetrics) VirtualTableName() string {
 func (m *ExtMetrics) NativeTagVersion() uint32 {
 	switch m.MsgType {
 	case datatype.MESSAGE_TYPE_DFSTATS:
-		return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.DEEPFLOW_TENANT)
+		return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.ZEROTRACE_TENANT)
 	case datatype.MESSAGE_TYPE_SERVER_DFSTATS:
 		if ckdb.IsValidOrgID(m.RawOrgId) {
-			return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.DEEPFLOW_TENANT)
+			return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.ZEROTRACE_TENANT)
 		} else {
-			return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.DEEPFLOW_ADMIN)
+			return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.ZEROTRACE_ADMIN)
 		}
 	default:
 		return nativetag.GetTableNativeTagsVersion(m.OrgId, nativetag.EXT_METRICS)

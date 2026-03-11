@@ -8,7 +8,7 @@ sources:
   internal_metrics:
     type: internal_metrics
     scrape_interval_secs: 10
-    namespace: ${K8S_NAMESPACE_FOR_DEEPFLOW}
+    namespace: ${K8S_NAMESPACE_FOR_ZEROTRACE}
   socket_dial_input:
     type: demo_logs
     interval: 10
@@ -20,7 +20,7 @@ transforms:
     inputs:
     - internal_metrics
     source: |-
-      .tags.instance = "${K8S_NODE_IP_FOR_DEEPFLOW}"
+      .tags.instance = "${K8S_NODE_IP_FOR_ZEROTRACE}"
   internal_metrics_dispatch:
     type: route
     inputs:

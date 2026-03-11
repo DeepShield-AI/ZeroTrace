@@ -27,8 +27,8 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	api "github.com/deepflowio/deepflow/message/agent"
-	service "github.com/deepflowio/deepflow/server/controller/http/service/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
+	service "github.com/zerotraceio/zerotrace/server/controller/http/service/agent"
 )
 
 const (

@@ -50,7 +50,7 @@
  * Agent_OnAttach will still be called multiple times with
  * different arguments.
  *
- * Be advised: Changing the protocol between jvmti agent and deepflow-jattach
+ * Be advised: Changing the protocol between jvmti agent and zerotrace-jattach
  *             will require bumping JAVA_AGENT_VERSION in Makefile.
  */
 

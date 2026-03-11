@@ -29,14 +29,14 @@ import (
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 
-	agentmessage "github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	libu "github.com/deepflowio/deepflow/server/libs/utils"
+	agentmessage "github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	libu "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const (

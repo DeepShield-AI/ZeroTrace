@@ -188,8 +188,8 @@ int check_and_clear_target_ns(int pid, bool check_in_use)
 {
 	/*
 	 * Delete files:
-	 *  path/.deepflow-java-symbols-pid<pid>.socket
-	 *  path/.deepflow-java-jvmti-logs-ipd<pid>.socket
+	 *  path/.zerotrace-java-symbols-pid<pid>.socket
+	 *  path/.zerotrace-java-jvmti-logs-ipd<pid>.socket
 	 *  path/df_java_agent.so
 	 *  path/df_java_agent_musl.so
 	 */
@@ -1431,13 +1431,13 @@ int java_attach(pid_t pid)
 	 * library as a JVMTI agent.*/
 	return attach(pid, buffer);
 
-	/* Resource cleanup is performed in the thread executing 'deepflow-jattach' */
+	/* Resource cleanup is performed in the thread executing 'zerotrace-jattach' */
 }
 
 /*
  * Command-line execution, for example:
  * cp ./df_java_agent_v2.so /tmp/
- * ./deepflow-jattach $PID
+ * ./zerotrace-jattach $PID
  */
 int main(int argc, char **argv)
 {

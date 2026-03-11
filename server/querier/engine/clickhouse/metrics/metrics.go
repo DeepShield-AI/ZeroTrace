@@ -24,11 +24,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	ckcommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	ckcommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
 
 	logging "github.com/op/go-logging"
 )
@@ -242,7 +242,7 @@ func GetMetrics(field, db, table, orgID string, nativeField map[string]*Metrics)
 		return metric, true
 	}
 	// dynamic metrics
-	if slices.Contains([]string{ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_APPLICATION_LOG, ckcommon.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{ckcommon.TABLE_NAME_L7_FLOW_LOG, ckcommon.TABLE_NAME_EVENT, ckcommon.TABLE_NAME_FILE_EVENT}, table) {
+	if slices.Contains([]string{ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_APPLICATION_LOG, ckcommon.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{ckcommon.TABLE_NAME_L7_FLOW_LOG, ckcommon.TABLE_NAME_EVENT, ckcommon.TABLE_NAME_FILE_EVENT}, table) {
 		fieldSplit := strings.Split(field, ".")
 		if len(fieldSplit) > 1 {
 			if fieldSplit[0] == "metrics" {
@@ -376,7 +376,7 @@ func GetMetricsDescriptionsByDBTable(db, table string, allMetrics map[string]*Me
 	values := make([]interface{}, len(allMetrics))
 	for field, metrics := range allMetrics {
 		// dynamic metrics
-		if (slices.Contains([]string{ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_APPLICATION_LOG, ckcommon.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{ckcommon.TABLE_NAME_L7_FLOW_LOG, ckcommon.TABLE_NAME_EVENT, ckcommon.TABLE_NAME_FILE_EVENT}, table)) && strings.Contains(field, "-") {
+		if (slices.Contains([]string{ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_APPLICATION_LOG, ckcommon.DB_NAME_EXT_METRICS}, db) || slices.Contains([]string{ckcommon.TABLE_NAME_L7_FLOW_LOG, ckcommon.TABLE_NAME_EVENT, ckcommon.TABLE_NAME_FILE_EVENT}, table)) && strings.Contains(field, "-") {
 			index := strings.LastIndex(field, "-")
 			field = field[:index]
 		}
@@ -417,7 +417,7 @@ func GetMetricsDescriptions(db, table, where, queryCacheTTL, orgID string, useQu
 	// show metrics on db
 	if table == "" {
 		var tables []interface{}
-		if slices.Contains([]string{ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_EXT_METRICS}, db) {
+		if slices.Contains([]string{ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_EXT_METRICS}, db) {
 			for _, extTables := range ckcommon.GetExtTables(db, where, queryCacheTTL, orgID, useQueryCache, ctx, nil) {
 				for i, extTable := range extTables.([]interface{}) {
 					if i == 0 {
@@ -688,7 +688,7 @@ func MergeMetrics(db string, table string, loadMetrics map[string]*Metrics) erro
 		metrics = PROMETHEUS_METRICS
 		replaceMetrics = PROMETHEUS_METRICS_REPLACE
 
-	case ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT:
+	case ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT:
 		metrics = EXT_METRICS
 	}
 	if metrics == nil {

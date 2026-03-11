@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 func TestAclSimple(t *testing.T) {

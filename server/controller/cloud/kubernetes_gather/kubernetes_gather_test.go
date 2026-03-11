@@ -27,13 +27,13 @@ import (
 	"github.com/agiledragon/gomonkey/v2"
 	. "github.com/smartystreets/goconvey/convey"
 
-	cloudconfig "github.com/deepflowio/deepflow/server/controller/cloud/config"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/genesis"
-	gcommon "github.com/deepflowio/deepflow/server/controller/genesis/common"
+	cloudconfig "github.com/zerotraceio/zerotrace/server/controller/cloud/config"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/genesis"
+	gcommon "github.com/zerotraceio/zerotrace/server/controller/genesis/common"
 )
 
 func TestKubernetes(t *testing.T) {

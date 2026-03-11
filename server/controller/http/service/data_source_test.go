@@ -51,11 +51,11 @@ func Test_getTableName(t *testing.T) {
 			want: "flow_log.l4_flow_log",
 		},
 		{
-			name: "deepflow_system",
+			name: "zerotrace_system",
 			args: args{
-				collection: "deepflow_system.*",
+				collection: "zerotrace_system.*",
 			},
-			want: "deepflow_system",
+			want: "zerotrace_system",
 		},
 	}
 	for _, tt := range tests {
@@ -124,12 +124,12 @@ func Test_getName(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "deepflow_system",
+			name: "zerotrace_system",
 			args: args{
 				interval:   0,
-				collection: "deepflow_system.*",
+				collection: "zerotrace_system.*",
 			},
-			want:    "deepflow_system",
+			want:    "zerotrace_system",
 			wantErr: false,
 		},
 		{

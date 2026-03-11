@@ -25,12 +25,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	chCommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/metrics"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/tag"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	chCommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/metrics"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/tag"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 const (
@@ -203,7 +203,7 @@ func processEnumField(field, db, table string, e *CHEngine) string {
 	tagEnum = strings.TrimSuffix(tagEnum, "_1")
 	tagDes, getTagOK := tag.GetTag(field, db, table, "enum")
 	enumTable := table
-	if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, db) {
+	if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, db) {
 		enumTable = chCommon.DB_TABLE_MAP[db][0]
 	}
 	tagDescription, tagOK := tag.TAG_DESCRIPTIONS[tag.TagDescriptionKey{
@@ -1074,7 +1074,7 @@ func (f *TagFunction) Trans(m *view.Model) view.Node {
 		tagEnum = strings.TrimSuffix(tagEnum, "_1")
 		tagDes, getTagOK := tag.GetTag(f.Args[0], f.DB, f.Table, f.Name)
 		enumTable := f.Table
-		if slices.Contains([]string{chCommon.DB_NAME_DEEPFLOW_ADMIN, chCommon.DB_NAME_DEEPFLOW_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, f.DB) {
+		if slices.Contains([]string{chCommon.DB_NAME_ZEROTRACE_ADMIN, chCommon.DB_NAME_ZEROTRACE_TENANT, chCommon.DB_NAME_PROMETHEUS, chCommon.DB_NAME_EXT_METRICS}, f.DB) {
 			enumTable = chCommon.DB_TABLE_MAP[f.DB][0]
 		}
 		tagDescription, tagOK := tag.TAG_DESCRIPTIONS[tag.TagDescriptionKey{

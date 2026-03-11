@@ -19,10 +19,10 @@ package event
 import (
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/controller/recorder/event/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/event/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 var (

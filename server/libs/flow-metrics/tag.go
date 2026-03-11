@@ -24,12 +24,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/datatype/prompb"
-	"github.com/deepflowio/deepflow/server/libs/flow-metrics/pb"
-	"github.com/deepflowio/deepflow/server/libs/pool"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype/prompb"
+	"github.com/zerotraceio/zerotrace/server/libs/flow-metrics/pb"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 	"github.com/google/gopacket/layers"
 )
 
@@ -245,7 +245,7 @@ func (d DirectionEnum) ToTAPSide() TAPSideEnum {
 // in the IDC.
 //
 // Note: For historical reasons, we use the confusing term VTAP to refer
-// to deepflow-agent, and agent_id to represent the id of a deepflow-agent.
+// to zerotrace-agent, and agent_id to represent the id of a zerotrace-agent.
 type TAPTypeEnum uint8
 
 const (
@@ -1079,20 +1079,20 @@ func GenTagColumns(code Code) []*ckdb.Column {
 
 	if code&Resource != 0 {
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_id", ckdb.UInt32).SetComment("ip对应的容器pod优先的资源ID, 取值优先级为pod_id -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_id", ckdb.UInt32).SetComment("ip对应的服务优先的资源ID, 取值优先级为service_id  -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 	}
 	if code&ResourcePath != 0 {
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_id_0", ckdb.UInt32).SetComment("ip0对应的容器pod优先的资源ID, 取值优先级为pod_id -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type_0", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type_0", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_id_0", ckdb.UInt32).SetComment("ip0对应的服务优先的资源ID, 取值优先级为service_id  -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type_0", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type_0", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_id_1", ckdb.UInt32).SetComment("ip1对应的容器pod优先的资源ID, 取值优先级为pod_id -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type_1", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_instance_type_1", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_id_1", ckdb.UInt32).SetComment("ip1对应的服务优先的资源ID, 取值优先级为service_id  -> pod_node_id -> l3_device_id"))
-		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type_1", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:DeepFlow抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
+		columns = append(columns, ckdb.NewColumnWithGroupBy("auto_service_type_1", ckdb.UInt8).SetComment("资源类型, 0:IP地址(无法对应资源), 0-100:deviceType(其中10:pod, 14:podNode), 101-200:ZeroTrace抽象出的资源(其中101:podGroup, 102:service), 201-255:其他"))
 	}
 
 	if code&SignalSource != 0 {

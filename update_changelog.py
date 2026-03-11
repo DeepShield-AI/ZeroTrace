@@ -10,8 +10,8 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Constants
-REPO_OWNER = "deepflowio"
-REPO_NAME = "deepflow"
+REPO_OWNER = "zerotraceio"
+REPO_NAME = "zerotrace"
 PR_TYPE_MAPPING = {
     "fix": "Bug Fix",
     "feat": "NEW FEATURE",
@@ -74,7 +74,7 @@ def update_changelog(changelog_file, categorized_prs, branch):
     if not os.path.exists(changelog_file):
         logging.info(f"{changelog_file} does not exist. Creating a new file.")
         with open(changelog_file, 'w', encoding='utf-8') as f:
-            f.write(f"### Table of Contents\n\n**[DeepFlow release {branch}](#{branch})**<br/>\n\n# Changelog\n\n### <a id=\"{branch}\"></a>DeepFlow release {branch}\n\n#### New Feature\n\n#### Bug Fix\n\n")
+            f.write(f"### Table of Contents\n\n**[ZeroTrace release {branch}](#{branch})**<br/>\n\n# Changelog\n\n### <a id=\"{branch}\"></a>ZeroTrace release {branch}\n\n#### New Feature\n\n#### Bug Fix\n\n")
 
     with open(changelog_file, 'r', encoding='utf-8') as f:
         content = f.read()

@@ -20,12 +20,12 @@ import (
 	"net"
 	"strings"
 
-	"github.com/deepflowio/deepflow/message/trident"
+	"github.com/zerotraceio/zerotrace/message/trident"
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/policy"
-	. "github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/policy"
+	. "github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("dropletpb")
@@ -62,7 +62,7 @@ func newPlatformData(vifData *trident.Interface, platform *datatype.PlatformData
 	if epcId > 0 {
 		epcId &= 0xffff
 	} else if epcId == 0 {
-		epcId = datatype.EPC_FROM_DEEPFLOW
+		epcId = datatype.EPC_FROM_ZEROTRACE
 	}
 
 	platform.Id = vifData.GetId()
@@ -271,7 +271,7 @@ func newCidr(data *trident.Cidr) *datatype.Cidr {
 	if epcId > 0 {
 		epcId &= 0xffff
 	} else if epcId == 0 {
-		epcId = datatype.EPC_FROM_DEEPFLOW
+		epcId = datatype.EPC_FROM_ZEROTRACE
 	}
 
 	return &datatype.Cidr{

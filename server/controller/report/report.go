@@ -27,8 +27,8 @@ import (
 	"github.com/op/go-logging"
 	"gorm.io/gorm"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 var log = logging.MustGetLogger("report")
@@ -58,7 +58,7 @@ func NewReportServer(db *gorm.DB) *ReportServer {
 }
 
 type ReportData struct {
-	DFUUID         string      `json:"deepflowDeploymentUUID"`
+	DFUUID         string      `json:"zerotraceDeploymentUUID"`
 	ServerRevCount string      `json:"serverRevCount"`
 	ServerCommitID string      `json:"serverCommitId"`
 	ServerBranch   string      `json:"serverBranch"`
@@ -157,7 +157,7 @@ func (r *ReportServer) report() {
 	go r.send()
 }
 
-var URL = "https://usage.deepflow.yunshan.net/api/v1/report"
+var URL = "https://usage.zerotrace.yunshan.net/api/v1/report"
 
 func (r *ReportServer) send() {
 	bodyStr, err := json.Marshal(r.ReportData)

@@ -3,10 +3,10 @@ package diffbase
 import (
 	"testing"
 
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/cache/tool"
-	"github.com/deepflowio/deepflow/server/controller/recorder/common"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/cache/tool"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/common"
 )
 
 func TestPodServiceExternalIPSync(t *testing.T) {

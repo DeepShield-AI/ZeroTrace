@@ -1484,7 +1484,7 @@ COMMENT ON COLUMN third_party_device.errno IS '1.Operate, 2.Install, 3.Uninstall
 COMMENT ON COLUMN third_party_device.mem_size IS 'Unit: MB';
 COMMENT ON COLUMN third_party_device.mem_used IS 'Unit: MB';
 COMMENT ON COLUMN third_party_device.disk_size IS 'Unit: GB';
-COMMENT ON COLUMN third_party_device.role IS '1. General Purpose, 2. Load Balancer, 3. Database, 4. Web Server, 5. APP Server, 6. Firewall, 7. Gateway, 8. VPN, 9. Storage, 10. WAF 13.DEEPFLOW_TOOL';
+COMMENT ON COLUMN third_party_device.role IS '1. General Purpose, 2. Load Balancer, 3. Database, 4. Web Server, 5. APP Server, 6. Firewall, 7. Gateway, 8. VPN, 9. Storage, 10. WAF 13.ZEROTRACE_TOOL';
 COMMENT ON COLUMN third_party_device.gateway IS 'gateway of the default route';
 COMMENT ON COLUMN third_party_device.raid_support IS 'must be a subset of RAID 0, 1, 5, 6, 10, 50, 60';
 

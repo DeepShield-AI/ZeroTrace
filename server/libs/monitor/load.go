@@ -19,8 +19,8 @@ package monitor
 import (
 	"github.com/shirou/gopsutil/load"
 
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 type LoadMonitor struct {

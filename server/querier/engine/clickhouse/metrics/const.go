@@ -19,8 +19,8 @@ package metrics
 import (
 	"encoding/json"
 
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/view"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/view"
 )
 
 // 指标量类型
@@ -52,8 +52,8 @@ var METRICS_ARRAY_NAME_MAP = map[string][]string{
 	"flow_log":                     []string{"metrics_names", "metrics_values"},
 	"application_log":              []string{"metrics_names", "metrics_values"},
 	"ext_metrics":                  []string{"metrics_float_names", "metrics_float_values"},
-	common.DB_NAME_DEEPFLOW_ADMIN:  []string{"metrics_float_names", "metrics_float_values"},
-	common.DB_NAME_DEEPFLOW_TENANT: []string{"metrics_float_names", "metrics_float_values"},
+	common.DB_NAME_ZEROTRACE_ADMIN:  []string{"metrics_float_names", "metrics_float_values"},
+	common.DB_NAME_ZEROTRACE_TENANT: []string{"metrics_float_names", "metrics_float_values"},
 }
 
 const (

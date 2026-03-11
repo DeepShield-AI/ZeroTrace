@@ -17,8 +17,8 @@
 package listener
 
 import (
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/constraint"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/constraint"
 )
 
 type Listener[CT constraint.CloudModel, MT metadbmodel.AssetResourceConstraint, BT constraint.DiffBase] interface {

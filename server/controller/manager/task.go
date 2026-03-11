@@ -23,13 +23,13 @@ import (
 
 	cmap "github.com/orcaman/concurrent-map/v2"
 
-	"github.com/deepflowio/deepflow/server/controller/cloud"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/manager/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/controller/cloud"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/manager/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
 )
 
 var recorderRefreshTryInterval = 5 // unit: s

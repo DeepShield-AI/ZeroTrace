@@ -1426,7 +1426,7 @@ impl Synchronizer {
                     Ok(None) => return,
                     Err(_) => {
                         agent_state.disable();
-                        warn!("as max escape time expired, deepflow-agent restart...");
+                        warn!("as max escape time expired, zerotrace-agent restart...");
                         // 与控制器失联的时间超过设置的逃逸时间，这里直接重启主要有两个原因：
                         // 1. 如果仅是停用系统无法回收全部的内存资源
                         // 2. 控制器地址可能是通过域明解析的，如果域明解析发生变更需要重启来触发重新解析
@@ -1646,7 +1646,7 @@ impl Synchronizer {
                 .await
             {
                 return Err(format!(
-                    "patch deepflow-agent k8s image failed, current_k8s_image: {:?}, error: {:?}",
+                    "patch zerotrace-agent k8s image failed, current_k8s_image: {:?}, error: {:?}",
                     &current_k8s_image, e
                 ));
             }
@@ -1679,7 +1679,7 @@ impl Synchronizer {
         }
 
         let binary_path = get_executable_path()
-            .map_err(|_| format!("Cannot get deepflow-agent path for this OS"))?;
+            .map_err(|_| format!("Cannot get zerotrace-agent path for this OS"))?;
         let mut temp_path = binary_path.clone();
         #[cfg(unix)]
         temp_path.set_extension("test");
@@ -1969,7 +1969,7 @@ impl Synchronizer {
                     } else {
                         match Self::upgrade(&running, &session, &revision, &id, &agent_state).await {
                             Ok(true) => {
-                                warn!("agent upgrade is successful and restarts normally, deepflow-agent restart...");
+                                warn!("agent upgrade is successful and restarts normally, zerotrace-agent restart...");
                                 crate::utils::clean_and_exit(NORMAL_EXIT_WITH_RESTART);
                                 return;
                             },

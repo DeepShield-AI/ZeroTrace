@@ -22,13 +22,13 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 	"gopkg.in/yaml.v2"
 
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/constraint"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/metadata"
-	"github.com/deepflowio/deepflow/server/libs/eventapi"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/constraint"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata"
+	"github.com/zerotraceio/zerotrace/server/libs/eventapi"
 )
 
 var (

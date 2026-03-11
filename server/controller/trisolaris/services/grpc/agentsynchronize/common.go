@@ -17,7 +17,7 @@
 package agentsynchronize
 
 import (
-	api "github.com/deepflowio/deepflow/message/agent"
+	api "github.com/zerotraceio/zerotrace/message/agent"
 )
 
 var (

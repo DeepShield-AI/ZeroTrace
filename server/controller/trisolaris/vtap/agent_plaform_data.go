@@ -22,10 +22,10 @@ import (
 	"strings"
 	"sync"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	metadata "github.com/deepflowio/deepflow/server/controller/trisolaris/metadata/agentmetadata"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	metadata "github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata/agentmetadata"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type AgentPlatformData struct {

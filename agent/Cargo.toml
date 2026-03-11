@@ -1,8 +1,8 @@
 [package]
-name = "deepflow-agent"
+name = "zerotrace-agent"
 version = "0.1.0"
 edition = "2021"
-default-run = "deepflow-agent"
+default-run = "zerotrace-agent"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -65,7 +65,7 @@ futures = "~0.3"
 grpc = { path = "plugins/grpc" }
 hex = "0.4.3"
 hostname = "0.3.1"
-hpack = { git = "https://github.com/deepflowio/hpack-rs/" }
+hpack = { git = "https://github.com/zerotraceio/hpack-rs/" }
 http = "0.2.5"
 http2 = { path = "plugins/http2" }
 humantime = "2.1"
@@ -129,7 +129,7 @@ cgroups-rs = "0.2.9"
 nix = "0.23"
 # As of procfs 0.16.0, Process::fd().iter() still not giving correct results on kernel 2.6.32
 # ref: https://github.com/eminence/procfs/pull/241
-procfs = { git = "https://github.com/deepflowio/procfs/" }
+procfs = { git = "https://github.com/zerotraceio/procfs/" }
 reorder = { path = "plugins/reorder" }
 
 [target.'cfg(target_os = "linux")'.dependencies]

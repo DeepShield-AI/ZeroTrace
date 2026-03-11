@@ -1,4 +1,4 @@
-module github.com/deepflowio/deepflow/message
+module github.com/zerotraceio/zerotrace/message
 
 go 1.18
 

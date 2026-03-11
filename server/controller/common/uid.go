@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"time"
 
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
 	logging "github.com/op/go-logging"
 	uuid "github.com/satori/go.uuid"
 )

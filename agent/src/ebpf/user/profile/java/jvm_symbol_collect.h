@@ -22,7 +22,7 @@
 #define UNIX_PATH_MAX 108
 #define JAVA_ADDR_STR_SIZE 13
 
-#define DF_JAVA_ATTACH_CMD "/usr/bin/deepflow-jattach"
+#define DF_JAVA_ATTACH_CMD "/usr/bin/zerotrace-jattach"
 
 /*
  * The address range of the 64-bit user space is from 0x0000000000000000
@@ -68,7 +68,7 @@ struct task_s {
 	struct list_head list;	/**< Task queue */
 	pid_t pid;		/**< Java process ID to be handled by the task */
 	u64 pid_start_time;	/**< Process start time; combined with `<pid + pid_start_time>` to uniquely identify a process */
-	bool is_local_mntns;	/**< Whether it is in the same mount namespace as deepflow-agent */
+	bool is_local_mntns;	/**< Whether it is in the same mount namespace as zerotrace-agent */
 	pthread_t thread;	/**< Thread handling the task */
 	void *(*func) (void *);	/**< Callback function for task processing */
 	bool need_refresh;	/**< Whether the file needs to be refreshed */
@@ -128,8 +128,8 @@ void clear_target_ns_tmp_file(const char *target_path);
  * @brief Cleans up files in the target namespace.
  * 
  * These files include:
- * - path/.deepflow-java-symbols-pid<pid>.socket
- * - path/.deepflow-java-jvmti-logs-pid<pid>.socket
+ * - path/.zerotrace-java-symbols-pid<pid>.socket
+ * - path/.zerotrace-java-jvmti-logs-pid<pid>.socket
  * - path/df_java_agent.so
  * - path/df_java_agent_musl.so
  *

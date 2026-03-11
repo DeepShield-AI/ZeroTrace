@@ -22,10 +22,10 @@ import (
 	mapset "github.com/deckarep/golang-set/v2"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/cache"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/cache"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("prometheus.synchronizer")

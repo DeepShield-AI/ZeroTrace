@@ -25,17 +25,17 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	"github.com/deepflowio/deepflow/server/ingester/droplet/profiler"
-	"github.com/deepflowio/deepflow/server/ingester/droplet/queue"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/ingester/prometheus/decoder"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/codec"
-	"github.com/deepflowio/deepflow/server/libs/debug"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
-	"github.com/deepflowio/deepflow/server/libs/tracetree"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/droplet/profiler"
+	"github.com/zerotraceio/zerotrace/server/ingester/droplet/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/prometheus/decoder"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/codec"
+	"github.com/zerotraceio/zerotrace/server/libs/debug"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
+	"github.com/zerotraceio/zerotrace/server/libs/tracetree"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func RegisterIngesterCommand(root *cobra.Command) {
@@ -84,7 +84,7 @@ func RegisterIngesterCommand(root *cobra.Command) {
 			{Cmd: "on", Helper: "start continuous profiler"},
 			{Cmd: "off", Helper: "stop continuous profiler"},
 			{Cmd: "status", Helper: "get continuous profiler status"},
-			{Cmd: "set-server-address [url]", Helper: "set continuous profiler server address, default: http://deepflow-agent/api/v1/profile. need to restart continuous profiler to take effect"},
+			{Cmd: "set-server-address [url]", Helper: "set continuous profiler server address, default: http://zerotrace-agent/api/v1/profile. need to restart continuous profiler to take effect"},
 			{Cmd: "set-profile-types [cpu][,inuse_objects][,alloc_objects][,inuse_space][,alloc_space][,goroutines][,mutex_count][,mutex_duration][,block_count][,block_duration]", Helper: "default continuous profiler profile types: cpu,inuse_objects,alloc_objects,inuse_space,alloc_space. need to restart continuous profiler to take effect"},
 		},
 	))
@@ -136,7 +136,7 @@ func RegisterIngesterCommand(root *cobra.Command) {
 
 	profileCmd.AddCommand(debug.ClientRegisterSimple(ingesterctl.CMD_PLATFORMDATA_PROFILE, debug.CmdHelper{"platformData [filter]", "show profile platform data statistics"}, nil))
 
-	root.GenBashCompletionFile("/usr/share/bash-completion/completions/deepflow-ctl")
+	root.GenBashCompletionFile("/usr/share/bash-completion/completions/zerotrace-ctl")
 }
 
 // 从字符串中解析出所有时间(大于100000000)

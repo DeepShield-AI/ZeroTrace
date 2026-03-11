@@ -21,7 +21,7 @@ use std::{fs, io};
 use clap::Parser;
 use tonic::{codec::Streaming, transport::Server, Request, Response, Status};
 
-use deepflow_agent::config::UserConfig;
+use zerotrace_agent::config::UserConfig;
 use public::proto::agent::*;
 
 #[derive(Debug, Default, Clone, PartialEq, clap::ValueEnum)]

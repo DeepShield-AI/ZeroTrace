@@ -19,15 +19,15 @@ package pcap
 import (
 	"time"
 
-	dropletqueue "github.com/deepflowio/deepflow/server/ingester/droplet/queue"
-	"github.com/deepflowio/deepflow/server/ingester/ingesterctl"
-	"github.com/deepflowio/deepflow/server/ingester/pcap/config"
-	"github.com/deepflowio/deepflow/server/ingester/pcap/dbwriter"
-	"github.com/deepflowio/deepflow/server/ingester/pcap/decoder"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	libqueue "github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/receiver"
+	dropletqueue "github.com/zerotraceio/zerotrace/server/ingester/droplet/queue"
+	"github.com/zerotraceio/zerotrace/server/ingester/ingesterctl"
+	"github.com/zerotraceio/zerotrace/server/ingester/pcap/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/pcap/dbwriter"
+	"github.com/zerotraceio/zerotrace/server/ingester/pcap/decoder"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	libqueue "github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/receiver"
 )
 
 type Pcaper struct {

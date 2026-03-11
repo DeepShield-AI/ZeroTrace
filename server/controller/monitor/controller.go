@@ -23,13 +23,13 @@ import (
 
 	mapset "github.com/deckarep/golang-set"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	mconfig "github.com/deepflowio/deepflow/server/controller/monitor/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	mconfig "github.com/zerotraceio/zerotrace/server/controller/monitor/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
 )
 
 type dbAndIP struct {

@@ -17,7 +17,7 @@
 package message
 
 import (
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 type AddedRegions struct {

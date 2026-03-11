@@ -32,18 +32,18 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbmgr"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/metadata"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/pushmanager"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbmgr"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/metadata"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/pushmanager"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.node")
@@ -56,7 +56,7 @@ type NodeInfo struct {
 	tsdbToID                  map[string]uint32
 	controllerToNATIP         map[string]string
 	controllerToPodIP         map[string]string
-	localServers              *atomic.Value // []*trident.DeepFlowServerInstanceInfo
+	localServers              *atomic.Value // []*trident.ZeroTraceServerInstanceInfo
 	platformData              *atomic.Value // *metaData.PlatformData
 	localRegion               *string
 	localAZs                  []string
@@ -85,7 +85,7 @@ type NodeInfo struct {
 func NewNodeInfo(db *gorm.DB, metaData *metadata.MetaData, cfg *config.Config, orgID int, pctx context.Context) *NodeInfo {
 	ctx, cancel := context.WithCancel(pctx)
 	localServers := &atomic.Value{}
-	localServers.Store([]*trident.DeepFlowServerInstanceInfo{})
+	localServers.Store([]*trident.ZeroTraceServerInstanceInfo{})
 	platformData := &atomic.Value{}
 	platformData.Store(metadata.NewPlatformData("", "", 0, 0))
 	nodeInfo := &NodeInfo{
@@ -279,13 +279,13 @@ func (n *NodeInfo) generateControllerInfo() {
 		}
 	}
 
-	localServers := make([]*trident.DeepFlowServerInstanceInfo, 0, len(dbControllers))
+	localServers := make([]*trident.ZeroTraceServerInstanceInfo, 0, len(dbControllers))
 	controllerToNATIP := make(map[string]string)
 	controllerToPodIP := make(map[string]string)
 	for _, controller := range dbControllers {
 		if controller.State != HOST_STATE_EXCEPTION {
 			if _, ok := localIPs[controller.IP]; ok {
-				server := &trident.DeepFlowServerInstanceInfo{
+				server := &trident.ZeroTraceServerInstanceInfo{
 					PodName:  proto.String(controller.PodName),
 					NodeName: proto.String(controller.NodeName),
 				}
@@ -467,15 +467,15 @@ func (n *NodeInfo) GetControllerPodIP(ip string) string {
 	return n.controllerToPodIP[ip]
 }
 
-func (n *NodeInfo) updateLocalServers(servers []*trident.DeepFlowServerInstanceInfo) {
+func (n *NodeInfo) updateLocalServers(servers []*trident.ZeroTraceServerInstanceInfo) {
 	n.localServers.Store(servers)
 }
 
-func (n *NodeInfo) GetLocalControllers() []*trident.DeepFlowServerInstanceInfo {
+func (n *NodeInfo) GetLocalControllers() []*trident.ZeroTraceServerInstanceInfo {
 	if n == nil {
 		return nil
 	}
-	return n.localServers.Load().([]*trident.DeepFlowServerInstanceInfo)
+	return n.localServers.Load().([]*trident.ZeroTraceServerInstanceInfo)
 }
 
 func (n *NodeInfo) updateTSDBInfo() {

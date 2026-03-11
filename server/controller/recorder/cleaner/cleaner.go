@@ -23,14 +23,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/recorder/common"
-	"github.com/deepflowio/deepflow/server/controller/recorder/config"
-	"github.com/deepflowio/deepflow/server/controller/recorder/pubsub/message"
-	tagrecorderHealer "github.com/deepflowio/deepflow/server/controller/tagrecorder/healer"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/common"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/config"
+	"github.com/zerotraceio/zerotrace/server/controller/recorder/pubsub/message"
+	tagrecorderHealer "github.com/zerotraceio/zerotrace/server/controller/tagrecorder/healer"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("recorder.cleaner")

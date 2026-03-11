@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
 
 	"github.com/spf13/cobra"
 )
@@ -52,7 +52,7 @@ func controllerSubCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list controller info",
-		Example: "deepflow-ctl server controller list",
+		Example: "zerotrace-ctl server controller list",
 		Run: func(cmd *cobra.Command, args []string) {
 			listController(cmd)
 		},
@@ -113,7 +113,7 @@ func ingesterSubCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list ingester info",
-		Example: "deepflow-ctl server ingester list",
+		Example: "zerotrace-ctl server ingester list",
 		Run: func(cmd *cobra.Command, args []string) {
 			listIngerter(cmd)
 		},

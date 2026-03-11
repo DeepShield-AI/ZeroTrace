@@ -40,8 +40,8 @@ func TestUpgrade(t *testing.T) {
 				bytes: []byte(`max_millicpus: 1000
 static_config:
   os-proc-regex:
-    - match-regex: deepflow-.*
-    - match-regex: deepflow-server.*
+    - match-regex: zerotrace-.*
+    - match-regex: zerotrace-server.*
       action: drop
   l7-log-blacklist:
     HTTP:
@@ -57,9 +57,9 @@ static_config:
 inputs:
   proc:
     process_matcher:
-      - match_regex: deepflow-.*
+      - match_regex: zerotrace-.*
       - ignore: true
-        match_regex: deepflow-server.*
+        match_regex: zerotrace-server.*
 processors:
   request_log:
     filters:
@@ -133,12 +133,12 @@ static_config:
 static_config:
   ebpf:
     uprobe-process-name-regexs:
-      golang-symbol: deepflow-.*`),
+      golang-symbol: zerotrace-.*`),
 			},
 			want: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: deepflow-.*
+      - match_regex: zerotrace-.*
         only_with_tag: true
     symbol_table:
       golang_specific:
@@ -163,14 +163,14 @@ static_config:
     - match-regex: test-.*
   ebpf:
     uprobe-process-name-regexs:
-      golang-symbol: deepflow-.*`),
+      golang-symbol: zerotrace-.*`),
 			},
 			want: []byte(`inputs:
   proc:
     process_matcher:
       - match_regex: test-.*
         only_with_tag: true
-      - match_regex: deepflow-.*
+      - match_regex: zerotrace-.*
         only_with_tag: true
     symbol_table:
       golang_specific:
@@ -212,12 +212,12 @@ static_config:
 				bytes: []byte(`static_config:
   ebpf:
     uprobe-process-name-regexs:
-      golang-symbol: deepflow-.*`),
+      golang-symbol: zerotrace-.*`),
 			},
 			want: []byte(`inputs:
   proc:
     process_matcher:
-      - match_regex: deepflow-.*
+      - match_regex: zerotrace-.*
     symbol_table:
       golang_specific:
         enabled: true
@@ -643,7 +643,7 @@ func TestConvDictDataKey(t *testing.T) {
 			name: "case01",
 			args: args{
 				data: map[string]interface{}{
-					"match_regex": "deepflow-*",
+					"match_regex": "zerotrace-*",
 					"ignore":      false,
 				},
 				convMap: map[string]interface{}{
@@ -655,7 +655,7 @@ func TestConvDictDataKey(t *testing.T) {
 				longKey: "inputs.proc.process_matcher",
 			},
 			want: map[string]interface{}{
-				"match-regex": "deepflow-*",
+				"match-regex": "zerotrace-*",
 				"action":      "accept",
 			},
 		},
@@ -706,12 +706,12 @@ func TestConvDictDataValue(t *testing.T) {
 			args: args{
 				data: []interface{}{
 					map[string]interface{}{
-						"match-regex": "deepflow-*",
+						"match-regex": "zerotrace-*",
 						"action":      "drop",
 					},
 					map[string]interface{}{
-						"match-regex":  "deepflow-*",
-						"rewrite-name": "deepflow",
+						"match-regex":  "zerotrace-*",
+						"rewrite-name": "zerotrace",
 					},
 				},
 				convMap: map[string]interface{}{
@@ -724,12 +724,12 @@ func TestConvDictDataValue(t *testing.T) {
 			},
 			want: []map[string]interface{}{
 				{
-					"match_regex": "deepflow-*",
+					"match_regex": "zerotrace-*",
 					"ignore":      true,
 				},
 				{
-					"match_regex":  "deepflow-*",
-					"rewrite_name": "deepflow",
+					"match_regex":  "zerotrace-*",
+					"rewrite_name": "zerotrace",
 				},
 			},
 		},

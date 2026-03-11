@@ -55,7 +55,7 @@ use super::{
 use crate::{
     common::{
         ebpf::EbpfType,
-        endpoint::{EndpointData, EndpointDataPov, EndpointInfo, EPC_DEEPFLOW, EPC_INTERNET},
+        endpoint::{EndpointData, EndpointDataPov, EndpointInfo, EPC_ZEROTRACE, EPC_INTERNET},
         enums::{CaptureNetworkType, EthernetType, HeaderType, IpProtocol, TcpFlags},
         flow::{
             CloseType, Flow, FlowKey, FlowMetricsPeer, FlowPerfStats, L4Protocol, L7PerfStats,
@@ -2766,7 +2766,7 @@ pub fn _new_meta_packet<'a>() -> MetaPacket<'a> {
             is_local_mac: false,
             is_local_ip: false,
 
-            l2_epc_id: EPC_DEEPFLOW,
+            l2_epc_id: EPC_ZEROTRACE,
             l3_epc_id: 1,
         },
         dst_info: EndpointInfo {
@@ -2779,7 +2779,7 @@ pub fn _new_meta_packet<'a>() -> MetaPacket<'a> {
             is_local_mac: false,
             is_local_ip: false,
 
-            l2_epc_id: EPC_DEEPFLOW,
+            l2_epc_id: EPC_ZEROTRACE,
             l3_epc_id: EPC_INTERNET,
         },
     })));

@@ -59,12 +59,12 @@ pub type Checker = Box<dyn Fn() -> Result<()>>;
 
 pub const IN_CONTAINER: &str = "IN_CONTAINER";
 // K8S environment node ip environment variable
-const K8S_NODE_IP_FOR_DEEPFLOW: &str = "K8S_NODE_IP_FOR_DEEPFLOW";
+const K8S_NODE_IP_FOR_ZEROTRACE: &str = "K8S_NODE_IP_FOR_ZEROTRACE";
 const ENV_INTERFACE_NAME: &str = "CTRL_NETWORK_INTERFACE";
-const K8S_POD_IP_FOR_DEEPFLOW: &str = "K8S_POD_IP_FOR_DEEPFLOW";
-const K8S_NODE_NAME_FOR_DEEPFLOW: &str = "K8S_NODE_NAME_FOR_DEEPFLOW";
+const K8S_POD_IP_FOR_ZEROTRACE: &str = "K8S_POD_IP_FOR_ZEROTRACE";
+const K8S_NODE_NAME_FOR_ZEROTRACE: &str = "K8S_NODE_NAME_FOR_ZEROTRACE";
 pub const K8S_WATCH_POLICY: &str = "K8S_WATCH_POLICY";
-const K8S_NAMESPACE_FOR_DEEPFLOW: &str = "K8S_NAMESPACE_FOR_DEEPFLOW";
+const K8S_NAMESPACE_FOR_ZEROTRACE: &str = "K8S_NAMESPACE_FOR_ZEROTRACE";
 
 // no longer used
 const ONLY_WATCH_K8S_RESOURCE: &str = "ONLY_WATCH_K8S_RESOURCE";
@@ -157,7 +157,7 @@ pub fn controller_ip_check(ips: &[String]) {
     }
 
     error!(
-        "controller ip({:?}) is not support both IPv4 and IPv6, deepflow-agent restart...",
+        "controller ip({:?}) is not support both IPv4 and IPv6, zerotrace-agent restart...",
         ips
     );
 
@@ -171,7 +171,7 @@ pub fn trident_process_check(process_threshold: u32) {
         Ok(num) => {
             if num > process_threshold {
                 error!(
-                    "the number of process exceeds the limit({} > {}), deepflow-agent restart...",
+                    "the number of process exceeds the limit({} > {}), zerotrace-agent restart...",
                     num, process_threshold
                 );
                 crate::utils::clean_and_exit(-1);
@@ -210,17 +210,17 @@ pub fn is_tt_workload(agent_type: AgentType) -> bool {
 }
 
 pub fn get_k8s_local_node_ip() -> Option<IpAddr> {
-    match env::var(K8S_NODE_IP_FOR_DEEPFLOW) {
+    match env::var(K8S_NODE_IP_FOR_ZEROTRACE) {
         Ok(v) => match v.parse::<IpAddr>() {
             Ok(ip) => {
                 return Some(ip);
             }
-            Err(e) => warn!("parse K8S_NODE_IP_FOR_DEEPFLOW string to ip failed: {}", e),
+            Err(e) => warn!("parse K8S_NODE_IP_FOR_ZEROTRACE string to ip failed: {}", e),
         },
         Err(e) => {
             if let VarError::NotUnicode(_) = &e {
                 warn!(
-                    "parse K8S_NODE_IP_FOR_DEEPFLOW environment variable failed: {}",
+                    "parse K8S_NODE_IP_FOR_ZEROTRACE environment variable failed: {}",
                     e
                 );
             }
@@ -241,12 +241,12 @@ pub fn running_in_k8s() -> bool {
 
 pub fn get_env() -> String {
     let items = vec![
-        K8S_NODE_IP_FOR_DEEPFLOW,
+        K8S_NODE_IP_FOR_ZEROTRACE,
         ENV_INTERFACE_NAME,
-        K8S_POD_IP_FOR_DEEPFLOW,
+        K8S_POD_IP_FOR_ZEROTRACE,
         IN_CONTAINER,
         K8S_WATCH_POLICY,
-        K8S_NAMESPACE_FOR_DEEPFLOW,
+        K8S_NAMESPACE_FOR_ZEROTRACE,
     ];
     items
         .into_iter()
@@ -276,7 +276,7 @@ impl KubeWatchPolicy {
     pub fn from_env() -> Self {
         // ONLY_WATCH_K8S_RESOURCE no longer supported
         if env::var_os(ONLY_WATCH_K8S_RESOURCE).is_some() {
-            error!("Environment variable ONLY_WATCH_K8S_RESOURCE is not longer supported, use K8S_WATCH_POLICY=watch-only instead! deepflow-agent restart...");
+            error!("Environment variable ONLY_WATCH_K8S_RESOURCE is not longer supported, use K8S_WATCH_POLICY=watch-only instead! zerotrace-agent restart...");
             thread::sleep(Duration::from_secs(60));
             crate::utils::clean_and_exit(-1);
             return KubeWatchPolicy::Normal;
@@ -305,7 +305,7 @@ pub fn running_in_only_watch_k8s_mode() -> bool {
 }
 
 pub fn get_k8s_namespace() -> String {
-    env::var(K8S_NAMESPACE_FOR_DEEPFLOW).unwrap_or("deepflow".to_owned())
+    env::var(K8S_NAMESPACE_FOR_ZEROTRACE).unwrap_or("zerotrace".to_owned())
 }
 
 pub fn get_mac_by_name(src_interface: String) -> u32 {
@@ -324,9 +324,9 @@ pub fn get_mac_by_name(src_interface: String) -> u32 {
 pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
     // Steps to find ctrl ip and mac:
     // 1. If environment variable `ENV_INTERFACE_NAME` exists, use it as ctrl interface
-    //    a) Use environment variable `K8S_POD_IP_FOR_DEEPFLOW` as ctrl ip if it exists
+    //    a) Use environment variable `K8S_POD_IP_FOR_ZEROTRACE` as ctrl ip if it exists
     //    b) If not, find addresses on the ctrl interface
-    // 2. Use env.K8S_NODE_IP_FOR_DEEPFLOW as the ctrl_ip reported by deepflow-agent if available
+    // 2. Use env.K8S_NODE_IP_FOR_ZEROTRACE as the ctrl_ip reported by zerotrace-agent if available
     // 3. Find ctrl ip and mac from controller address
     // CTRL_NETWORK_INTERFACE 通常在 K8s DaemonSet yaml 中配置
     // 如果有，直接查找该网卡
@@ -338,14 +338,14 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
             )));
         };
         // 确定 IP 地址
-        let ips = match env::var(K8S_POD_IP_FOR_DEEPFLOW) {
+        let ips = match env::var(K8S_POD_IP_FOR_ZEROTRACE) {
             // A. 优先使用 K8s Downward API 注入的 Pod IP
             Ok(ips) => ips
                 .split(",")
                 .filter_map(|s| match s.parse::<IpAddr>() {
                     Ok(ip) => Some(ip),
                     _ => {
-                        warn!("ip {} in env {} invalid", s, K8S_POD_IP_FOR_DEEPFLOW);
+                        warn!("ip {} in env {} invalid", s, K8S_POD_IP_FOR_ZEROTRACE);
                         None
                     }
                 })
@@ -379,7 +379,7 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
     };
     // 使用 K8s Node IP
     // Agent 以 HostNetwork 模式运行在 K8s Node 上，直接使用 Node IP。
-    // 也是使用K8S_POD_IP_FOR_DEEPFLOW环境变量
+    // 也是使用K8S_POD_IP_FOR_ZEROTRACE环境变量
     if let Some(ip) = get_k8s_local_node_ip() {
         let ctrl_mac = get_mac_by_ip(ip);
         if let Ok(mac) = ctrl_mac {
@@ -441,7 +441,7 @@ pub fn get_ctrl_ip_and_mac(dest: &IpAddr) -> Result<(IpAddr, MacAddr)> {
         return Ok((ip, mac));
     }
     Err(Error::Environment(
-        "failed getting control ip and mac, deepflow-agent restart...".to_owned(),
+        "failed getting control ip and mac, zerotrace-agent restart...".to_owned(),
     ))
 }
 

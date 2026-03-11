@@ -101,7 +101,7 @@ OBJS := user/elf.o \
 	user/profile/java/jvm_symbol_collect.o \
 	user/profile/java/collect_symbol_files.o
 
-JAVA_TOOL := deepflow-jattach
+JAVA_TOOL := zerotrace-jattach
 JAVA_AGENT_VERSION := 2
 JAVA_AGENT_GNU_SO := df_java_agent_v$(JAVA_AGENT_VERSION).so
 JAVA_AGENT_MUSL_SO := df_java_agent_musl_v$(JAVA_AGENT_VERSION).so
@@ -119,8 +119,8 @@ endif
 CFLAGS += $(JAVA_AGENT_MACROS)
 
 CTLSRC := user/utils.c user/ctrl_tracer.c user/ctrl.c user/log.c
-CTLBIN := deepflow-ebpfctl
-CTLBIN_C := user/deepflow_ebpfctl_bin.c
+CTLBIN := zerotrace-ebpfctl
+CTLBIN_C := user/zerotrace_ebpfctl_bin.c
 
 # trace-utils header
 CFLAGS += -I../../crates/trace-utils/src
@@ -259,17 +259,17 @@ tools: $(CTLBIN)
 
 $(CTLBIN_C): $(CTLBIN) tools/bintobuffer
 	$(call msg,CTLBIN_C,$(CTLBIN_C))
-	$(Q)./tools/bintobuffer $(CTLBIN) ./$@ deepflow_ebpfctl_bin 
+	$(Q)./tools/bintobuffer $(CTLBIN) ./$@ zerotrace_ebpfctl_bin 
 
 $(CTLBIN): $(CTLSRC) 
-	$(call msg,TOOLS,deepflow-ebpfctl)
+	$(call msg,TOOLS,zerotrace-ebpfctl)
 	$(Q)$(CC) $(CFLAGS) --static -g -O2 $(CTLSRC) -o $@ -lelf -lz -lpthread
 
 $(JAVA_TOOL): $(JAVA_AGENT_SO) user/log.c user/utils.c user/mem.c user/vec.c user/profile/java/jvm_symbol_collect.c libs/jattach/build/libjattach.a
 	$(call msg,TOOLS,$@)
 	@$(GNU_CC) $(CFLAGS) -DJAVA_AGENT_ATTACH_TOOL user/log.c user/utils.c user/mem.c user/vec.c user/profile/java/jvm_symbol_collect.c libs/jattach/build/libjattach.a -o $@ -ldl -lpthread
-	@rm -rf user/profile/deepflow_jattach_bin.c
-	@./tools/bintobuffer ./$@ user/profile/deepflow_jattach_bin.c deepflow_jattach_bin
+	@rm -rf user/profile/zerotrace_jattach_bin.c
+	@./tools/bintobuffer ./$@ user/profile/zerotrace_jattach_bin.c zerotrace_jattach_bin
 
 libs/jattach/build/libjattach.a:
 	$(call msg,MAKE,$@)
@@ -348,7 +348,7 @@ clean:
 	$(Q)$(MAKE) -C kernel clean --no-print-directory
 	$(Q)$(MAKE) -C test clean --no-print-directory
 	$(Q)$(MAKE) -C libs/jattach clean --no-print-directory
-	$(Q)rm -rf $(ELFFILES) data deepflow-ebpfctl $(STATIC_OBJDIR) $(LIBTRACE) *.a
+	$(Q)rm -rf $(ELFFILES) data zerotrace-ebpfctl $(STATIC_OBJDIR) $(LIBTRACE) *.a
 	$(Q)rm -rf .profiler .socket-tracer
 	$(Q)rm -rf samples/rust/socket-tracer/target
 	$(Q)rm -rf samples/rust/profiler/target

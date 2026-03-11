@@ -38,8 +38,8 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
 )
 
 func RegisterVPCCommend() *cobra.Command {
@@ -55,7 +55,7 @@ func RegisterVPCCommend() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list vpc info",
-		Example: "deepflow-ctl vpc list -o yaml",
+		Example: "zerotrace-ctl vpc list -o yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := listVPC(cmd, args, listOutput); err != nil {
 				fmt.Println(err)

@@ -23,10 +23,10 @@ import (
 	"sync"
 	"time"
 
-	agentmessage "github.com/deepflowio/deepflow/message/agent"
-	ctrlcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	agentmessage "github.com/zerotraceio/zerotrace/message/agent"
+	ctrlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 type RemoteExecReq struct {
@@ -370,7 +370,7 @@ func GetCMDAndNamespace(timeout, orgID, agentID int) (*RemoteExecResp, error) {
 }
 
 func RunAgentCMD(timeout, orgID, agentID int, req *agentmessage.RemoteExecRequest, CMD string) (string, error) {
-	serverLog := fmt.Sprintf("The deepflow-server is unable to execute the `%s` command."+
+	serverLog := fmt.Sprintf("The zerotrace-server is unable to execute the `%s` command."+
 		" Detailed error information is as follows:\n\n", CMD)
 	dbInfo, err := metadb.GetDB(orgID)
 	if err != nil {
@@ -406,7 +406,7 @@ func RunAgentCMD(timeout, orgID, agentID int, req *agentmessage.RemoteExecReques
 				return "", fmt.Errorf("%sagent(key: %s, name: %s) command manager is lost", key, agent.Name)
 			}
 			if msg := GetErrormessage(key, requestID); msg != "" {
-				return GetContent(key, requestID), fmt.Errorf("The deepflow-agent is unable to execute the `%s` command."+
+				return GetContent(key, requestID), fmt.Errorf("The zerotrace-agent is unable to execute the `%s` command."+
 					" Detailed error information is as follows:\n\n%s", CMD, msg)
 			}
 			content = GetContent(key, requestID)

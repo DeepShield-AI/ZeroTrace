@@ -39,9 +39,9 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
-	"github.com/deepflowio/deepflow/cli/ctl/example"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/example"
 )
 
 type SubDomainType uint8
@@ -61,7 +61,7 @@ func RegisterSubDomainCommand() *cobra.Command {
 	listCmd := &cobra.Command{
 		Use:     "list [name]",
 		Short:   "list subdomain info",
-		Example: "deepflow-ctl subdomain list",
+		Example: "zerotrace-ctl subdomain list",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := listSubDomain(cmd, args, listOutput); err != nil {
 				fmt.Println(err)
@@ -73,7 +73,7 @@ func RegisterSubDomainCommand() *cobra.Command {
 	exampleCmd := &cobra.Command{
 		Use:     "example",
 		Short:   "example subdomain create yaml",
-		Example: "deepflow-ctl subdomain example",
+		Example: "zerotrace-ctl subdomain example",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Printf(string(example.YamlSubDomain))
 		},
@@ -83,7 +83,7 @@ func RegisterSubDomainCommand() *cobra.Command {
 	createCmd := &cobra.Command{
 		Use:     "create",
 		Short:   "create subdomain",
-		Example: "deepflow-ctl subdomain create -f filename",
+		Example: "zerotrace-ctl subdomain create -f filename",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := createSubDomain(cmd, createFilename); err != nil {
 				fmt.Println(err)
@@ -99,7 +99,7 @@ func RegisterSubDomainCommand() *cobra.Command {
 	updateCmd := &cobra.Command{
 		Use:     "update",
 		Short:   "update subdomain",
-		Example: "deepflow-ctl subdomain update -f ${file_name} ${cluster_id}",
+		Example: "zerotrace-ctl subdomain update -f ${file_name} ${cluster_id}",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := updateSubDomain(cmd, args, updateFilename); err != nil {
 				fmt.Println(err)
@@ -114,7 +114,7 @@ func RegisterSubDomainCommand() *cobra.Command {
 	deleteCmd := &cobra.Command{
 		Use:     "delete [lcuuid]",
 		Short:   "delete subdomain",
-		Example: "deepflow-ctl subdomain delete ${cluster_id}",
+		Example: "zerotrace-ctl subdomain delete ${cluster_id}",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := deleteSubDomain(cmd, args); err != nil {
 				fmt.Println(err)

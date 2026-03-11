@@ -1,3 +1,3 @@
-module github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/edition
+module github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/edition
 
 go 1.18

@@ -19,8 +19,8 @@ package common
 import (
 	// "fmt"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 type ORG struct {

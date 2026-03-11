@@ -17,9 +17,9 @@
 package diffbase
 
 import (
-	cloudmodel "github.com/deepflowio/deepflow/server/controller/cloud/model"
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	cloudmodel "github.com/zerotraceio/zerotrace/server/controller/cloud/model"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 func (b *DataSet) AddPodReplicaSet(dbItem *metadbmodel.PodReplicaSet, seq int) {

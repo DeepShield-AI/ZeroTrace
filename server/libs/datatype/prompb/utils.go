@@ -17,7 +17,7 @@
 package prompb
 
 import (
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 func (m *WriteRequest) ResetWithBufferReserved() {

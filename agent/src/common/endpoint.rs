@@ -22,7 +22,7 @@ use super::platform_data::PlatformData;
 pub const EPC_UNKNOWN: i32 = 0;
 pub const EPC_ANY: i32 = -1;
 pub const EPC_INTERNET: i32 = -2;
-pub const EPC_DEEPFLOW: i32 = -3;
+pub const EPC_ZEROTRACE: i32 = -3;
 pub const GROUP_INTERNET: i32 = -2;
 
 bitflags! {

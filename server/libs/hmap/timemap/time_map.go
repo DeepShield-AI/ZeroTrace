@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/deepflowio/deepflow/server/libs/hmap/keyhash"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap/keyhash"
 )
 
 const (

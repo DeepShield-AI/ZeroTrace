@@ -25,8 +25,8 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 const ORG_TABLE = "org"

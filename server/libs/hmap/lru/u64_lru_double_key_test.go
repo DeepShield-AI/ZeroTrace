@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/deepflowio/deepflow/server/libs/hmap"
+	"github.com/zerotraceio/zerotrace/server/libs/hmap"
 )
 
 const (

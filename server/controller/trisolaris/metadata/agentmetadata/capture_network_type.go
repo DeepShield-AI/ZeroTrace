@@ -21,8 +21,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/dbcache"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbcache"
 )
 
 type CaptureNetworkTypeOP struct {

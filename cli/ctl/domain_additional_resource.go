@@ -24,7 +24,7 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
 )
 
 func RegisterDomainAdditionalResourceCommand() *cobra.Command {
@@ -40,7 +40,7 @@ func RegisterDomainAdditionalResourceCommand() *cobra.Command {
 	apply := &cobra.Command{
 		Use:     "apply",
 		Short:   "apply domain additional resource file",
-		Example: "deepflow-ctl domain additional-resource apply -f xxx.yaml, use example to see yaml templete",
+		Example: "zerotrace-ctl domain additional-resource apply -f xxx.yaml, use example to see yaml templete",
 		Run: func(cmd *cobra.Command, args []string) {
 			applyDomainAdditionalResource(cmd, args, applyFilename)
 		},
@@ -60,7 +60,7 @@ func RegisterDomainAdditionalResourceCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list",
 		Short:   "list domain additional resource",
-		Example: "deepflow-ctl domain additional-resource list",
+		Example: "zerotrace-ctl domain additional-resource list",
 		Run: func(cmd *cobra.Command, args []string) {
 			if resourceName != "" && resourceType == "" {
 				fmt.Printf("please enter resource type, resource name(%v)\n", resourceName)

@@ -31,11 +31,11 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/deepflowio/deepflow/server/querier/app/prometheus/cache"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/app/prometheus/cache"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
 )
 
 // prometheusReader's lifecycle is belong to each query through api
@@ -72,7 +72,7 @@ func (p *prometheusReader) promReaderExecute(ctx context.Context, req *prompb.Re
 	}(req)
 
 	// should get cache result immediately
-	// for DeepFlow Native metrics, don't use cache
+	// for ZeroTrace Native metrics, don't use cache
 	cacheAvailable := config.Cfg.Prometheus.Cache.RemoteReadCache && !strings.Contains(metricName, "__")
 	if cacheAvailable {
 		var hit cache.CacheHit

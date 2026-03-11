@@ -19,12 +19,12 @@ package migrator
 import (
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbcommon "github.com/deepflowio/deepflow/server/controller/db/metadb/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/edition"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/session"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbcommon "github.com/zerotraceio/zerotrace/server/controller/db/metadb/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/edition"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/session"
 )
 
 var log = logging.MustGetLogger("db.metadb.migrator")

@@ -16,7 +16,7 @@
 
 package metadata
 
-import "github.com/deepflowio/deepflow/message/trident"
+import "github.com/zerotraceio/zerotrace/message/trident"
 
 // GProcessInfoProto is only used to send to the ingester module.
 type GProcessInfoProto struct {

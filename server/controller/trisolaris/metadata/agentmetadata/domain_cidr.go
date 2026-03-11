@@ -17,7 +17,7 @@
 package agentmetadata
 
 import (
-	"github.com/deepflowio/deepflow/message/agent"
+	"github.com/zerotraceio/zerotrace/message/agent"
 )
 
 type DomainCIDRProto struct {

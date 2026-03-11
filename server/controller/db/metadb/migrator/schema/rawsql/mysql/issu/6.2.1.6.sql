@@ -1,4 +1,4 @@
-USE deepflow;
+USE zerotrace;
 
 CREATE TABLE IF NOT EXISTS ch_chost_cloud_tag (
     `id`            INTEGER NOT NULL,

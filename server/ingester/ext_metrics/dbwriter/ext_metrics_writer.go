@@ -24,15 +24,15 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/ingester/common"
-	baseconfig "github.com/deepflowio/deepflow/server/ingester/config"
-	"github.com/deepflowio/deepflow/server/ingester/ext_metrics/config"
-	"github.com/deepflowio/deepflow/server/ingester/flow_tag"
-	"github.com/deepflowio/deepflow/server/ingester/pkg/ckwriter"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/common"
+	baseconfig "github.com/zerotraceio/zerotrace/server/ingester/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/ext_metrics/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/flow_tag"
+	"github.com/zerotraceio/zerotrace/server/ingester/pkg/ckwriter"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("ext_metrics.dbwriter")
@@ -42,26 +42,26 @@ const (
 	EXT_METRICS_DB    = "ext_metrics"
 	EXT_METRICS_TABLE = "metrics"
 
-	DEEPFLOW_ADMIN_DB           = "deepflow_admin"
-	DEEPFLOW_ADMIN_SERVER_TABLE = "deepflow_server"
+	ZEROTRACE_ADMIN_DB           = "zerotrace_admin"
+	ZEROTRACE_ADMIN_SERVER_TABLE = "zerotrace_server"
 
-	DEEPFLOW_TENANT_DB              = "deepflow_tenant"
-	DEEPFLOW_TENANT_COLLECTOR_TABLE = "deepflow_collector"
+	ZEROTRACE_TENANT_DB              = "zerotrace_tenant"
+	ZEROTRACE_TENANT_COLLECTOR_TABLE = "zerotrace_collector"
 )
 
 type WriterDBID uint8
 
 const (
 	EXT_METRICS_DB_ID WriterDBID = iota
-	DEEPFLOW_TENANT_DB_ID
-	DEEPFLOW_ADMIN_DB_ID
+	ZEROTRACE_TENANT_DB_ID
+	ZEROTRACE_ADMIN_DB_ID
 	MAX_DB_ID
 )
 
 var writerDbStrings = []string{
 	EXT_METRICS_DB_ID:     EXT_METRICS_DB,
-	DEEPFLOW_TENANT_DB_ID: DEEPFLOW_TENANT_DB,
-	DEEPFLOW_ADMIN_DB_ID:  DEEPFLOW_ADMIN_DB,
+	ZEROTRACE_TENANT_DB_ID: ZEROTRACE_TENANT_DB,
+	ZEROTRACE_ADMIN_DB_ID:  ZEROTRACE_ADMIN_DB,
 }
 
 func (t WriterDBID) String() string {
@@ -200,7 +200,7 @@ func NewExtMetricsWriter(
 	s := &ExtMetrics{}
 	s.Timestamp = uint32(time.Now().Unix())
 	s.MsgType = msgType
-	if flowTagTablePrefix == DEEPFLOW_TENANT_DB {
+	if flowTagTablePrefix == ZEROTRACE_TENANT_DB {
 		s.OrgId, s.RawOrgId = ckdb.DEFAULT_ORG_ID, ckdb.DEFAULT_ORG_ID
 	}
 	table := s.GenCKTable(w.ckdbCluster, w.ckdbStoragePolicy, config.Base.CKDB.Type, w.ttl, ckdb.GetColdStorage(w.ckdbColdStorages, s.DatabaseName(), s.TableName()))

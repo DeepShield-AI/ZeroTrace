@@ -23,12 +23,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"github.com/deepflowio/deepflow/server/controller/config"
-	metadbcfg "github.com/deepflowio/deepflow/server/controller/db/metadb/config"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/model"
-	"github.com/deepflowio/deepflow/server/controller/http/service"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	metadbcfg "github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/model"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service"
 )
 
 type ORGData struct {

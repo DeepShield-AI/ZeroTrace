@@ -23,12 +23,12 @@ import (
 	"github.com/golang/protobuf/proto"
 	context "golang.org/x/net/context"
 
-	api "github.com/deepflowio/deepflow/message/trident"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/pushmanager"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	api "github.com/zerotraceio/zerotrace/message/trident"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/pushmanager"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("trisolaris.synchronize")
@@ -147,7 +147,7 @@ func (e *TSDBEvent) AnalyzerSync(ctx context.Context, in *api.SyncRequest) (*api
 		VersionPlatformData:     proto.Uint64(versionPlatformData),
 		VersionGroups:           proto.Uint64(versionGroups),
 		VersionAcls:             proto.Uint64(versionPolicy),
-		DeepflowServerInstances: localServers,
+		ZerotraceServerInstances: localServers,
 		AnalyzerConfig:          configure,
 	}, nil
 }
@@ -218,7 +218,7 @@ func (e *TSDBEvent) pushResponse(in *api.SyncRequest) (*api.SyncResponse, error)
 		VersionPlatformData:     proto.Uint64(versionPlatformData),
 		VersionGroups:           proto.Uint64(versionGroups),
 		VersionAcls:             proto.Uint64(versionPolicy),
-		DeepflowServerInstances: localServers,
+		ZerotraceServerInstances: localServers,
 		AnalyzerConfig:          configure,
 	}, nil
 }

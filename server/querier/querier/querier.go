@@ -27,20 +27,20 @@ import (
 	logging "github.com/op/go-logging"
 	yaml "gopkg.in/yaml.v2"
 
-	servercommon "github.com/deepflowio/deepflow/server/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	distributed_tracing "github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/router"
-	"github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/service/tracemap"
-	prometheus_router "github.com/deepflowio/deepflow/server/querier/app/prometheus/router"
-	tracing_adapter "github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/router"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/trans_prometheus"
-	profile_router "github.com/deepflowio/deepflow/server/querier/profile/router"
-	"github.com/deepflowio/deepflow/server/querier/router"
-	"github.com/deepflowio/deepflow/server/querier/statsd"
+	servercommon "github.com/zerotraceio/zerotrace/server/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	distributed_tracing "github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/router"
+	"github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/service/tracemap"
+	prometheus_router "github.com/zerotraceio/zerotrace/server/querier/app/prometheus/router"
+	tracing_adapter "github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/router"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/trans_prometheus"
+	profile_router "github.com/zerotraceio/zerotrace/server/querier/profile/router"
+	"github.com/zerotraceio/zerotrace/server/querier/router"
+	"github.com/zerotraceio/zerotrace/server/querier/statsd"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
@@ -54,7 +54,7 @@ func Start(configPath, serverLogFile string, shared *servercommon.ControllerInge
 	config.ControllerCfg = &ServerCfg.ControllerConfig
 	cfg := ServerCfg.QuerierConfig
 	bytes, _ := yaml.Marshal(cfg)
-	log.Info("==================== Launching DeepFlow-Server-Querier ====================")
+	log.Info("==================== Launching ZeroTrace-Server-Querier ====================")
 	log.Infof("querier config:\n%s", string(bytes))
 
 	// get ck version

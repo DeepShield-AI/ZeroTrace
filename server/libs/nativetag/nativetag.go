@@ -24,8 +24,8 @@ import (
 
 	"github.com/ClickHouse/ch-go/proto"
 
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 var log = logger.MustGetLogger("nativetag")
@@ -37,8 +37,8 @@ const (
 	EVENT_EVENT
 	EVENT_FILE_EVENT
 	L7_FLOW_LOG
-	DEEPFLOW_ADMIN
-	DEEPFLOW_TENANT
+	ZEROTRACE_ADMIN
+	ZEROTRACE_TENANT
 	EXT_METRICS
 	PROFILE
 
@@ -50,8 +50,8 @@ var NativeTagDatabaseNames = [MAX_NATIVE_TAG_TABLE]string{
 	EVENT_EVENT:      "event",
 	EVENT_FILE_EVENT: "event",
 	L7_FLOW_LOG:      "flow_log",
-	DEEPFLOW_ADMIN:   "deepflow_admin",
-	DEEPFLOW_TENANT:  "deepflow_tenant",
+	ZEROTRACE_ADMIN:   "zerotrace_admin",
+	ZEROTRACE_TENANT:  "zerotrace_tenant",
 	EXT_METRICS:      "ext_metrics",
 	PROFILE:          "profile",
 }
@@ -61,8 +61,8 @@ var NativeTagTableNames = [MAX_NATIVE_TAG_TABLE]string{
 	EVENT_EVENT:      "event",
 	EVENT_FILE_EVENT: "file_event",
 	L7_FLOW_LOG:      "l7_flow_log",
-	DEEPFLOW_ADMIN:   "deepflow_server",
-	DEEPFLOW_TENANT:  "deepflow_collector",
+	ZEROTRACE_ADMIN:   "zerotrace_server",
+	ZEROTRACE_TENANT:  "zerotrace_collector",
 	EXT_METRICS:      "metrics",
 	PROFILE:          "in_process",
 }

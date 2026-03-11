@@ -16,7 +16,7 @@
 
 package model
 
-import "github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/config"
+import "github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/config"
 
 type TraceAdapter interface {
 	GetTrace(traceID string, c *config.ExternalAPM) (*ExTrace, error)

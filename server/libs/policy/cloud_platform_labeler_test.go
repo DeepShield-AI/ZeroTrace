@@ -20,7 +20,7 @@ import (
 	"net"
 	"testing"
 
-	. "github.com/deepflowio/deepflow/server/libs/datatype"
+	. "github.com/zerotraceio/zerotrace/server/libs/datatype"
 )
 
 var (

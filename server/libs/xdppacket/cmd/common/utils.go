@@ -28,7 +28,7 @@ import (
 	"github.com/google/gopacket/layers"
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 const PKT_CNT_INFINITE = 0

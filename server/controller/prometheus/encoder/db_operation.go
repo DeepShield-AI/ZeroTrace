@@ -19,8 +19,8 @@ package encoder
 import (
 	"gorm.io/gorm/clause"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/constraint"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/constraint"
 )
 
 func addBatch[T constraint.OperateBatchModel](db *metadb.DB, toAdd []*T, resourceType string) error {

@@ -27,11 +27,11 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	ctlcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/querier/common"
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
-	ckcommon "github.com/deepflowio/deepflow/server/querier/engine/clickhouse/common"
+	ctlcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/querier/common"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
+	ckcommon "github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/common"
 )
 
 var log = logging.MustGetLogger("clickhouse.tag")
@@ -55,9 +55,9 @@ var AUTO_CUSTOM_TAG_NAMES = []string{}
 var AUTO_CUSTOM_TAG_MAP = map[string][]string{}
 var AUTO_CUSTOM_TAG_CHECK_MAP = map[string][]string{}
 
-var tagNativeTagDB = []string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_PROFILE, ckcommon.DB_NAME_PROMETHEUS}
+var tagNativeTagDB = []string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_PROFILE, ckcommon.DB_NAME_PROMETHEUS}
 var noCustomTagTable = []string{"traffic_policy", "l4_packet", "l7_packet", "alert_event"}
-var noCustomTagDB = []string{ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT}
+var noCustomTagDB = []string{ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT}
 
 var tagTypeToOperators = map[string][]string{
 	"resource":        []string{"=", "!=", "IN", "NOT IN", "LIKE", "NOT LIKE", "REGEXP", "NOT REGEXP"},
@@ -749,7 +749,7 @@ func GetStaticTagDescriptions(db, table string) (response *common.Result, err er
 		Values: []interface{}{},
 	}
 	for _, key := range TAG_DESCRIPTION_KEYS {
-		if key.DB != db || (key.Table != table && !slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_PROMETHEUS}, db)) {
+		if key.DB != db || (key.Table != table && !slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_PROMETHEUS}, db)) {
 			continue
 		}
 		tag, _ := TAG_DESCRIPTIONS[key]
@@ -789,7 +789,7 @@ func GetStaticTagDescriptions(db, table string) (response *common.Result, err er
 		}
 	}
 
-	if slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_PROMETHEUS}, db) || table == ckcommon.TABLE_NAME_IN_PROCESS {
+	if slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_PROMETHEUS}, db) || table == ckcommon.TABLE_NAME_IN_PROCESS {
 		response.Values = append(response.Values, []interface{}{
 			"tag", "tag", "tag", "tag", "tag", "tag", "map",
 			"Native Tag", []string{}, []bool{true, true, true}, "tag", "tag", "tag", "", false, []string{}, "",
@@ -954,7 +954,7 @@ func GetDynamicTagDescriptions(db, table, rawSql, queryCacheTTL, orgID string, u
 	}
 
 	// 查询外部字段
-	if !slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_FLOW_LOG, ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_EVENT, ckcommon.DB_NAME_PROFILE, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_APPLICATION_LOG, "_prometheus"}, db) || (db == ckcommon.DB_NAME_FLOW_LOG && table != ckcommon.TABLE_NAME_L7_FLOW_LOG) || (db == ckcommon.DB_NAME_PROFILE && table != ckcommon.TABLE_NAME_IN_PROCESS) {
+	if !slices.Contains([]string{ckcommon.DB_NAME_EXT_METRICS, ckcommon.DB_NAME_FLOW_LOG, ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_EVENT, ckcommon.DB_NAME_PROFILE, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_APPLICATION_LOG, "_prometheus"}, db) || (db == ckcommon.DB_NAME_FLOW_LOG && table != ckcommon.TABLE_NAME_L7_FLOW_LOG) || (db == ckcommon.DB_NAME_PROFILE && table != ckcommon.TABLE_NAME_IN_PROCESS) {
 		return response, nil
 	}
 	externalChClient := client.Client{
@@ -1373,7 +1373,7 @@ func GetTagValues(db, table, sql, queryCacheTTL, orgID, language string, useQuer
 			}
 		}
 	}
-	if slices.Contains([]string{ckcommon.DB_NAME_DEEPFLOW_ADMIN, ckcommon.DB_NAME_DEEPFLOW_TENANT, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_EXT_METRICS}, db) {
+	if slices.Contains([]string{ckcommon.DB_NAME_ZEROTRACE_ADMIN, ckcommon.DB_NAME_ZEROTRACE_TENANT, ckcommon.DB_NAME_PROMETHEUS, ckcommon.DB_NAME_EXT_METRICS}, db) {
 		table = ckcommon.DB_TABLE_MAP[db][0]
 	}
 	tagDescription, ok := TAG_DESCRIPTIONS[TagDescriptionKey{

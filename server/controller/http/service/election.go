@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/controller/election"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/election"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
 )
 
 func GetLeaderInfo() (resp map[string]string, err error) {

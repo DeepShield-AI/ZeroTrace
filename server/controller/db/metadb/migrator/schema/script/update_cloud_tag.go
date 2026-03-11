@@ -25,7 +25,7 @@ import (
 	"github.com/klauspost/compress/zlib"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 // associate sql issu 6.4.1.1

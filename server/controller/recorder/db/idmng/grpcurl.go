@@ -24,9 +24,9 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc"
 
-	api "github.com/deepflowio/deepflow/message/controller"
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/libs/logger"
+	api "github.com/zerotraceio/zerotrace/message/controller"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
 )
 
 func GetMasterGRPCConn() (*grpc.ClientConn, error) {

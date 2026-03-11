@@ -25,10 +25,10 @@ import (
 	"skywalking.apache.org/repo/goapi/query"
 
 	"github.com/baidubce/bce-sdk-go/util/log"
-	"github.com/deepflowio/deepflow/server/libs/datatype"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/common"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/config"
-	"github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/model"
+	"github.com/zerotraceio/zerotrace/server/libs/datatype"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/common"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/config"
+	"github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/model"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
 	"github.com/op/go-logging"
@@ -216,7 +216,7 @@ func (s *SkyWalkingAdapter) generateSwUniqueID(segmentID string, spanID int, sta
 }
 
 func (s *SkyWalkingAdapter) swSpanIDToDFSpanID(segmentID string, spanID int) string {
-	// DeepFlow use segmentID-spanID as DeepFlow spanID
+	// ZeroTrace use segmentID-spanID as ZeroTrace spanID
 	if spanID == -1 {
 		return ""
 	}

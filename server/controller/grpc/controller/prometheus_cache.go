@@ -21,9 +21,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	api "github.com/deepflowio/deepflow/message/controller"
-	grpcserver "github.com/deepflowio/deepflow/server/controller/grpc"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/cache"
+	api "github.com/zerotraceio/zerotrace/message/controller"
+	grpcserver "github.com/zerotraceio/zerotrace/server/controller/grpc"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/cache"
 )
 
 type prometheusService struct{}

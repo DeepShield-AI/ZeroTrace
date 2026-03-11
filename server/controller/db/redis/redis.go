@@ -41,7 +41,7 @@ type Config struct {
 	PcapExpireInterval        int      `default:"1800" yaml:"pcap_expire_interval"`
 	Host                      []string `default:"" yaml:"host"` // TODO add default value
 	Port                      uint32   `default:"6379" yaml:"port"`
-	Password                  string   `default:"deepflow" yaml:"password"`
+	Password                  string   `default:"zerotrace" yaml:"password"`
 	TimeOut                   uint32   `default:"30" yaml:"timeout"`
 	Enabled                   bool     `default:"false" yaml:"enabled"`
 	ClusterEnabled            bool     `default:"false" yaml:"cluster_enabled"`

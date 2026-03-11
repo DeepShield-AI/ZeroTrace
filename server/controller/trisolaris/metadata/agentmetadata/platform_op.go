@@ -25,10 +25,10 @@ import (
 	"github.com/golang/protobuf/proto"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/common"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/common"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type PlatformDataOP struct {

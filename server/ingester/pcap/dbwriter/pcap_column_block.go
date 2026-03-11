@@ -17,7 +17,7 @@ package dbwriter
 
 import (
 	"github.com/ClickHouse/ch-go/proto"
-	"github.com/deepflowio/deepflow/server/libs/ckdb"
+	"github.com/zerotraceio/zerotrace/server/libs/ckdb"
 )
 
 type PcapStoreBlock struct {

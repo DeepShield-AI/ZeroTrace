@@ -22,15 +22,15 @@ import (
 
 	logging "github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/ingester/exporters/common"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/config"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/enum_translation"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/kafka_exporter"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/otlp_exporter"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/prometheus_exporter"
-	"github.com/deepflowio/deepflow/server/ingester/exporters/universal_tag"
-	"github.com/deepflowio/deepflow/server/libs/queue"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/common"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/config"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/enum_translation"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/kafka_exporter"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/otlp_exporter"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/prometheus_exporter"
+	"github.com/zerotraceio/zerotrace/server/ingester/exporters/universal_tag"
+	"github.com/zerotraceio/zerotrace/server/libs/queue"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 )
 
 var log = logging.MustGetLogger("exporters")

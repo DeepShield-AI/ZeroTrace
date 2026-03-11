@@ -1,4 +1,4 @@
-module github.com/deepflowio/deepflow/server
+module github.com/zerotraceio/zerotrace/server
 
 go 1.24.0
 
@@ -6,28 +6,28 @@ toolchain go1.24.4
 
 replace (
 	cloud.google.com/go => cloud.google.com/go v0.103.0
-	github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/expand => ./controller/cloud/kubernetes_gather/expand
-	github.com/deepflowio/deepflow/server/controller/cloud/platform => ./controller/cloud/platform
-	github.com/deepflowio/deepflow/server/controller/cloud/tencent/expand => ./controller/cloud/tencent/expand
-	github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/edition => ./controller/db/metadb/migrator/edition
-	github.com/deepflowio/deepflow/server/controller/db/metadb/session/edition => ./controller/db/metadb/session/edition
-	github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/edition => ./controller/db/metadb/sqladapter/edition
-	github.com/deepflowio/deepflow/server/controller/genesis/store/sync/redis => ./controller/genesis/store/sync/redis
-	github.com/deepflowio/deepflow/server/controller/http/appender => ./controller/http/appender
-	github.com/deepflowio/deepflow/server/controller/http/service/agentlicense => ./controller/http/service/agentlicense
-	github.com/deepflowio/deepflow/server/controller/http/service/configuration => ./controller/http/service/configuration
-	github.com/deepflowio/deepflow/server/controller/monitor/license => ./controller/monitor/license
-	github.com/deepflowio/deepflow/server/controller/monitor/vtap/version => ./controller/monitor/vtap/version
-	github.com/deepflowio/deepflow/server/controller/native_field => ./controller/native_field
-	github.com/deepflowio/deepflow/server/ingester/config/configdefaults => ./ingester/config/configdefaults
-	github.com/deepflowio/deepflow/server/ingester/flow_log/log_data/dd_import => ./ingester/flow_log/log_data/dd_import
-	github.com/deepflowio/deepflow/server/ingester/flow_log/log_data/sw_import => ./ingester/flow_log/log_data/sw_import
-	github.com/deepflowio/deepflow/server/libs/logger/blocker => ./libs/logger/blocker
-	github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/service/tracemap => ./querier/app/distributed_tracing/service/tracemap
-	github.com/deepflowio/deepflow/server/querier/app/prometheus/router/packet_adapter => ./querier/app/prometheus/router/packet_adapter
-	github.com/deepflowio/deepflow/server/querier/app/prometheus/service/packet_wrapper => ./querier/app/prometheus/service/packet_wrapper
-	github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/service/packet_service => ./querier/app/tracing-adapter/service/packet_service
-	github.com/deepflowio/deepflow/server/querier/engine/clickhouse/packet_batch => ./querier/engine/clickhouse/packet_batch
+	github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/expand => ./controller/cloud/kubernetes_gather/expand
+	github.com/zerotraceio/zerotrace/server/controller/cloud/platform => ./controller/cloud/platform
+	github.com/zerotraceio/zerotrace/server/controller/cloud/tencent/expand => ./controller/cloud/tencent/expand
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/edition => ./controller/db/metadb/migrator/edition
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/session/edition => ./controller/db/metadb/session/edition
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/edition => ./controller/db/metadb/sqladapter/edition
+	github.com/zerotraceio/zerotrace/server/controller/genesis/store/sync/redis => ./controller/genesis/store/sync/redis
+	github.com/zerotraceio/zerotrace/server/controller/http/appender => ./controller/http/appender
+	github.com/zerotraceio/zerotrace/server/controller/http/service/agentlicense => ./controller/http/service/agentlicense
+	github.com/zerotraceio/zerotrace/server/controller/http/service/configuration => ./controller/http/service/configuration
+	github.com/zerotraceio/zerotrace/server/controller/monitor/license => ./controller/monitor/license
+	github.com/zerotraceio/zerotrace/server/controller/monitor/vtap/version => ./controller/monitor/vtap/version
+	github.com/zerotraceio/zerotrace/server/controller/native_field => ./controller/native_field
+	github.com/zerotraceio/zerotrace/server/ingester/config/configdefaults => ./ingester/config/configdefaults
+	github.com/zerotraceio/zerotrace/server/ingester/flow_log/log_data/dd_import => ./ingester/flow_log/log_data/dd_import
+	github.com/zerotraceio/zerotrace/server/ingester/flow_log/log_data/sw_import => ./ingester/flow_log/log_data/sw_import
+	github.com/zerotraceio/zerotrace/server/libs/logger/blocker => ./libs/logger/blocker
+	github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/service/tracemap => ./querier/app/distributed_tracing/service/tracemap
+	github.com/zerotraceio/zerotrace/server/querier/app/prometheus/router/packet_adapter => ./querier/app/prometheus/router/packet_adapter
+	github.com/zerotraceio/zerotrace/server/querier/app/prometheus/service/packet_wrapper => ./querier/app/prometheus/service/packet_wrapper
+	github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/service/packet_service => ./querier/app/tracing-adapter/service/packet_service
+	github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/packet_batch => ./querier/engine/clickhouse/packet_batch
 	github.com/ionos-cloud/sdk-go/v6 => github.com/ionos-cloud/sdk-go/v6 v6.1.0
 )
 
@@ -57,29 +57,29 @@ require (
 	github.com/cornelk/hashmap v1.0.8
 	github.com/deckarep/golang-set v1.8.0
 	github.com/deckarep/golang-set/v2 v2.1.0
-	github.com/deepflowio/deepflow/message v0.0.0-20260128034251-1f75015861fc
-	github.com/deepflowio/deepflow/server/controller/cloud/kubernetes_gather/expand v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/cloud/platform v0.0.0-20220727111425-3ab2abb8d80b
-	github.com/deepflowio/deepflow/server/controller/cloud/tencent/expand v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/db/metadb/migrator/edition v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/db/metadb/session/edition v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/db/metadb/sqladapter/edition v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/genesis/store/sync/redis v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/http/appender v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/http/service/agentlicense v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/monitor/license v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/monitor/vtap/version v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/controller/native_field v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/ingester/config/configdefaults v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/ingester/flow_log/log_data/dd_import v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/ingester/flow_log/log_data/sw_import v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/libs/logger/blocker v0.0.0-20240822020041-cdaf0f82ce6f
-	github.com/deepflowio/deepflow/server/querier/app/distributed_tracing/service/tracemap v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/querier/app/prometheus/router/packet_adapter v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/querier/app/prometheus/service/packet_wrapper v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/querier/app/tracing-adapter/service/packet_service v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/deepflow/server/querier/engine/clickhouse/packet_batch v0.0.0-00010101000000-000000000000
-	github.com/deepflowio/tempopb v0.0.0-20230215110519-15853baf3a79
+	github.com/zerotraceio/zerotrace/message v0.0.0-20260128034251-1f75015861fc
+	github.com/zerotraceio/zerotrace/server/controller/cloud/kubernetes_gather/expand v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/cloud/platform v0.0.0-20220727111425-3ab2abb8d80b
+	github.com/zerotraceio/zerotrace/server/controller/cloud/tencent/expand v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/migrator/edition v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/session/edition v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/db/metadb/sqladapter/edition v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/genesis/store/sync/redis v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/http/appender v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/http/service/agentlicense v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/monitor/license v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/monitor/vtap/version v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/controller/native_field v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/ingester/config/configdefaults v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/ingester/flow_log/log_data/dd_import v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/ingester/flow_log/log_data/sw_import v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/libs/logger/blocker v0.0.0-20240822020041-cdaf0f82ce6f
+	github.com/zerotraceio/zerotrace/server/querier/app/distributed_tracing/service/tracemap v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/querier/app/prometheus/router/packet_adapter v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/querier/app/prometheus/service/packet_wrapper v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/querier/app/tracing-adapter/service/packet_service v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/packet_batch v0.0.0-00010101000000-000000000000
+	github.com/zerotraceio/tempopb v0.0.0-20230215110519-15853baf3a79
 	github.com/docker/go-units v0.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis/v9 v9.0.0-rc.2
@@ -326,4 +326,4 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.6.0 // indirect
 )
 
-replace github.com/deepflowio/deepflow/message => ../message
+replace github.com/zerotraceio/zerotrace/message => ../message

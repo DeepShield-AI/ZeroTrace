@@ -6,10 +6,10 @@ import (
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/stretchr/testify/assert"
 
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/dbcache"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/dbcache"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 func TestCustomServiceMerging(t *testing.T) {

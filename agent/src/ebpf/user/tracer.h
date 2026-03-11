@@ -46,7 +46,7 @@
 #include <regex.h>
 #include "config.h"
 
-#define CTLBIN_INSTALL_PATH  "/usr/bin/deepflow-ebpfctl"
+#define CTLBIN_INSTALL_PATH  "/usr/bin/zerotrace-ebpfctl"
 
 #define PERF_PAGE_DEF_SZ 4096
 

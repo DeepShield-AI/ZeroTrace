@@ -17,10 +17,10 @@
 package agentmetadata
 
 import (
-	"github.com/deepflowio/deepflow/message/agent"
-	. "github.com/deepflowio/deepflow/server/controller/common"
-	models "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	. "github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/message/agent"
+	. "github.com/zerotraceio/zerotrace/server/controller/common"
+	models "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	. "github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type TInterfaces []*agent.Interface

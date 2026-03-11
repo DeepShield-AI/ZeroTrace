@@ -22,11 +22,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/profile/common"
-	"github.com/deepflowio/deepflow/server/querier/profile/model"
-	"github.com/deepflowio/deepflow/server/querier/profile/service"
-	"github.com/deepflowio/deepflow/server/querier/router"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/common"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/model"
+	"github.com/zerotraceio/zerotrace/server/querier/profile/service"
+	"github.com/zerotraceio/zerotrace/server/querier/router"
 )
 
 func ProfileRouter(e *gin.Engine, cfg *config.QuerierConfig) {

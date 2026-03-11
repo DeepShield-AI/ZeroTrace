@@ -23,8 +23,8 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
 
-	"github.com/deepflowio/deepflow/cli/ctl/common"
-	"github.com/deepflowio/deepflow/cli/ctl/common/table"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common"
+	"github.com/zerotraceio/zerotrace/cli/ctl/common/table"
 )
 
 func RegisterAgentGroupCommand() *cobra.Command {
@@ -40,7 +40,7 @@ func RegisterAgentGroupCommand() *cobra.Command {
 	list := &cobra.Command{
 		Use:     "list [name]",
 		Short:   "list agent-group info",
-		Example: "deepflow-ctl agent-group list deepflow-agent-group",
+		Example: "zerotrace-ctl agent-group list zerotrace-agent-group",
 		Run: func(cmd *cobra.Command, args []string) {
 			listAgentGroup(cmd, args, listOutput)
 		},
@@ -51,7 +51,7 @@ func RegisterAgentGroupCommand() *cobra.Command {
 	create := &cobra.Command{
 		Use:     "create <name>",
 		Short:   "create agent-group",
-		Example: "deepflow-ctl agent-group create deepflow-agent-group",
+		Example: "zerotrace-ctl agent-group create zerotrace-agent-group",
 		Run: func(cmd *cobra.Command, args []string) {
 			createAgentGroup(cmd, args, groupID)
 		},
@@ -61,7 +61,7 @@ func RegisterAgentGroupCommand() *cobra.Command {
 	delete := &cobra.Command{
 		Use:     "delete [name]",
 		Short:   "delete agent-group",
-		Example: "deepflow-ctl agent-group delete deepflow-agent-group",
+		Example: "zerotrace-ctl agent-group delete zerotrace-agent-group",
 		Run: func(cmd *cobra.Command, args []string) {
 			deleteAgentGroup(cmd, args)
 		},

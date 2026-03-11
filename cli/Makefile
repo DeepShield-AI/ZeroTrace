@@ -1,6 +1,6 @@
-MESSAGE = github.com/deepflowio/deepflow/message
-LIBS = github.com/deepflowio/deepflow/server/libs
-SERVER = github.com/deepflowio/deepflow/server
+MESSAGE = github.com/zerotraceio/zerotrace/message
+LIBS = github.com/zerotraceio/zerotrace/server/libs
+SERVER = github.com/zerotraceio/zerotrace/server
 SERVER_LIBS = ../server/libs
 MSG = ../message/
 REV_COUNT = $(shell git rev-list --count HEAD)
@@ -34,7 +34,7 @@ vendor:
 .PHONY: cli
 cli: vendor
 	go generate ./...
-	go build -mod vendor ${FLAGS} -o bin/deepflow-ctl${BINARY_SUFFIX} cmd/ctl/main.go
+	go build -mod vendor ${FLAGS} -o bin/zerotrace-ctl${BINARY_SUFFIX} cmd/ctl/main.go
 
 .PHONY: clean
 clean:

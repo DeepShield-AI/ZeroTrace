@@ -23,9 +23,9 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 
-	"github.com/deepflowio/deepflow/server/libs/logger"
-	"github.com/deepflowio/deepflow/server/mcp/config"
-	"github.com/deepflowio/deepflow/server/mcp/handle"
+	"github.com/zerotraceio/zerotrace/server/libs/logger"
+	"github.com/zerotraceio/zerotrace/server/mcp/config"
+	"github.com/zerotraceio/zerotrace/server/mcp/handle"
 )
 
 var defaultRegion string
@@ -41,7 +41,7 @@ func NewMCPServer(configPath string) *MCPServer {
 	cfg.Load(configPath)
 
 	mcpServer := server.NewMCPServer(
-		"deepflow mcp server",
+		"zerotrace mcp server",
 		"1.0.0",
 		server.WithToolCapabilities(true),
 		server.WithRecovery(),
@@ -64,7 +64,7 @@ func NewMCPServer(configPath string) *MCPServer {
 }
 
 func (s *MCPServer) Start() {
-	log.Info("==================== Launching DeepFlow MCP Server ====================")
+	log.Info("==================== Launching ZeroTrace MCP Server ====================")
 
 	httpServer := server.NewStreamableHTTPServer(s.server)
 	if err := httpServer.Start(fmt.Sprintf(":%d", s.port)); err != nil {

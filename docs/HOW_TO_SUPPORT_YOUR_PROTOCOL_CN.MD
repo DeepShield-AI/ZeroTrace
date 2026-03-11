@@ -1,15 +1,15 @@
-# DeepFlow 协议开发文档
+# ZeroTrace 协议开发文档
 
-这里是 DeepFlow 的协议开发文档，帮助开发者在 DeepFlow 中快速添加应用层协议。
+这里是 ZeroTrace 的协议开发文档，帮助开发者在 ZeroTrace 中快速添加应用层协议。
 
 ## 1. 了解包处理过程
 
-在 deepflow-agent 中，数据包从原始字节到应用层结构，会经过以下阶段，其中主要用涉及到的结构和接口有：
+在 zerotrace-agent 中，数据包从原始字节到应用层结构，会经过以下阶段，其中主要用涉及到的结构和接口有：
 - L7Protocol：源码位于 [l7_protocol.rs](../agent/crates/public/src/l7_protocol.rs)，用于标识协议常量。
 - L7ProtocolParser：源码位于 [l7_protocol_log.rs](../agent/src/common/l7_protocol_log.rs)，这个 trait 主要用于协议判断和解析出 L7ProtocolInfo。
 - L7ProtocolInfo：源码位于 [l7_protocol_info.rs](../agent/src/common/l7_protocol_info.rs)，这个结构由 L7ProtocolParser 解析出来，并且用于后续会话聚合。
 - L7ProtocolInfoInterface：源码位于 [l7_protocol_info.rs](../agent/src/common/l7_protocol_info.rs)，L7ProtocolInfo 都需要实现这个接口。
-- L7ProtocolSendLog：源码位于 [pb_adapter.rs](../agent/src/flow_generator/protocol_logs/pb_adapter.rs)，统一发送到 deepflow-server 的结构。
+- L7ProtocolSendLog：源码位于 [pb_adapter.rs](../agent/src/flow_generator/protocol_logs/pb_adapter.rs)，统一发送到 zerotrace-server 的结构。
 
 整体流程大概是：
 ```mermaid
@@ -34,12 +34,12 @@ graph TB;
 
 ## 2. 如何开发
 
-在 deepflow-agent 中开发的大致步骤：
+在 zerotrace-agent 中开发的大致步骤：
 1. 在 [l7_protocol.rs](../agent/crates/public/src/l7_protocol.rs) 添加对应协议名称和协议号。
 2. L7ProtocolParser::parse_payload() 需要返回 L7ProtocolInfo，所以需要先定义一个结构，实现 L7ProtocolInfoInterface 接口并且添加到 [l7_protocol_info.rs](../agent/src/common/l7_protocol_info.rs) L7ProtocolInfo 这个枚举。
 3. 实现 L7ProtocolParserInterface 接口，并添加到 [l7_protocol_log.rs](../agent/src/common/l7_protocol_log.rs) 中的 `impl_protocol_parser!` 宏。
 
-在 deepflow-server 中只需增加一个常量用于搜索提示即可。
+在 zerotrace-server 中只需增加一个常量用于搜索提示即可。
 
 ## 3. 看一个例子
 
@@ -112,7 +112,7 @@ impl impl From<PostgreInfo> for L7ProtocolSendLog {
 }
 ```
 
-L7ProtocolSendLog 结构，主要用于将不同的应用层协议转换成统一的结构发送到 deepflow-server：
+L7ProtocolSendLog 结构，主要用于将不同的应用层协议转换成统一的结构发送到 zerotrace-server：
 ```rust
 pub struct L7ProtocolSendLog {
     // 请求长度，不需要可以填 None
@@ -314,9 +314,9 @@ impl_protocol_parser! {
 }
 ```
 
-## 4. deepflow-server 中添加协议常量和名称（可选）
+## 4. zerotrace-server 中添加协议常量和名称（可选）
 
-在 deepflow-server 添加协议常量和名称，用于搜索。这一步是可选操作，如果省略这一步，所有新增协议的协议名称都会记录为unknown，流日志中只能通过协议号搜索。
+在 zerotrace-server 添加协议常量和名称，用于搜索。这一步是可选操作，如果省略这一步，所有新增协议的协议名称都会记录为unknown，流日志中只能通过协议号搜索。
 
 ### 4.1.
 
@@ -346,7 +346,7 @@ func (p L7Protocol) String() string {
 
 ```
 
-### 4.2. 在 deepflow-server 中增加常量
+### 4.2. 在 zerotrace-server 中增加常量
 
 为 Querier 增加协议常量定义：[l7_protocol](../server/querier/db_descriptions/clickhouse/tag/enum/l7_protocol)
 

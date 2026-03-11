@@ -20,8 +20,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/deepflowio/deepflow/server/libs/stats"
-	"github.com/deepflowio/deepflow/server/libs/utils"
+	"github.com/zerotraceio/zerotrace/server/libs/stats"
+	"github.com/zerotraceio/zerotrace/server/libs/utils"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/v3/cpu"
@@ -29,7 +29,7 @@ import (
 	"github.com/shirou/gopsutil/v3/process"
 )
 
-const ENV_K8S_NODE_IP = "K8S_NODE_IP_FOR_DEEPFLOW"
+const ENV_K8S_NODE_IP = "K8S_NODE_IP_FOR_ZEROTRACE"
 const DEFAULT_HOST = "127.0.0.1"
 
 func (m *Monitor) GetCpuPercent() float64 {
@@ -110,7 +110,7 @@ func NewMonitor(paths []string) (*Monitor, error) {
 		process: p,
 	}
 	myNodeIP, _ := os.LookupEnv(ENV_K8S_NODE_IP)
-	// If DeepFlow is not in K8S deployment mode, this environment variable may not exist, and myNodeIP is set to DEFAULT_HOST
+	// If ZeroTrace is not in K8S deployment mode, this environment variable may not exist, and myNodeIP is set to DEFAULT_HOST
 	if myNodeIP == "" {
 		myNodeIP = DEFAULT_HOST
 	}

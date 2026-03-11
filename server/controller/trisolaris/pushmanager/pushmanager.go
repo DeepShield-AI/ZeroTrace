@@ -19,7 +19,7 @@ package pushmanager
 import (
 	"sync"
 
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type PushManager struct {

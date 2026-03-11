@@ -1,3 +1,3 @@
-module github.com/deepflowio/deepflow/server/controller/native_field
+module github.com/zerotraceio/zerotrace/server/controller/native_field
 
 go 1.18

@@ -21,12 +21,12 @@ import (
 
 	"github.com/op/go-logging"
 
-	"github.com/deepflowio/deepflow/server/controller/db/metadb/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb/config"
 )
 
 var log = logging.MustGetLogger("db.metadb.common")
 
-// ORGIDToDatabaseName convert organization id to database name, format: 0002_deepflow
+// ORGIDToDatabaseName convert organization id to database name, format: 0002_zerotrace
 func ORGIDToDatabaseName(id int) string {
 	return fmt.Sprintf(DATABASE_PREFIX_ALIGNMENT, id) + NON_DEFAULT_ORG_DATABASE_SUFFIX
 }

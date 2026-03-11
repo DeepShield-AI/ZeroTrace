@@ -25,10 +25,10 @@ import (
 
 	cmap "github.com/orcaman/concurrent-map/v2"
 
-	ctrlrcommon "github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	"github.com/deepflowio/deepflow/server/controller/prometheus/common"
-	prometheuscfg "github.com/deepflowio/deepflow/server/controller/prometheus/config"
+	ctrlrcommon "github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	"github.com/zerotraceio/zerotrace/server/controller/prometheus/common"
+	prometheuscfg "github.com/zerotraceio/zerotrace/server/controller/prometheus/config"
 )
 
 func GetCache(orgID int) (*Cache, error) {

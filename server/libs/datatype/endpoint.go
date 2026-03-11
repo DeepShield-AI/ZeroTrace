@@ -21,11 +21,11 @@ import (
 	"net"
 	"reflect"
 
-	"github.com/deepflowio/deepflow/server/libs/pool"
+	"github.com/zerotraceio/zerotrace/server/libs/pool"
 )
 
 const (
-	EPC_FROM_DEEPFLOW = -1
+	EPC_FROM_ZEROTRACE = -1
 	EPC_FROM_INTERNET = -2 // 当流量在所有平台数据建立的map中都无法查询到对应的epcId时，epc为-2, 在函数ModifyInternetEpcId中修改
 	EPC_UNKNOWN       = 0
 	GROUP_INTERNET    = -2 // Trisolaris下发使用固定值，策略匹配不做特殊处理
@@ -33,13 +33,13 @@ const (
 
 var (
 	INVALID_ENDPOINT_INFO                   = new(EndpointInfo)
-	INVALID_ENDPOINT_INFO_L3EPCID           = &EndpointInfo{L3EpcId: EPC_FROM_DEEPFLOW}
+	INVALID_ENDPOINT_INFO_L3EPCID           = &EndpointInfo{L3EpcId: EPC_FROM_ZEROTRACE}
 	INVALID_ENDPOINT_INFO_L2END             = &EndpointInfo{L2End: true}
 	INVALID_ENDPOINT_INFO_L3END             = &EndpointInfo{L3End: true}
 	INVALID_ENDPOINT_INFO_L2AND3END         = &EndpointInfo{L2End: true, L3End: true}
-	INVALID_ENDPOINT_INFO_L2END_L3EPCID     = &EndpointInfo{L2End: true, L3EpcId: EPC_FROM_DEEPFLOW}
-	INVALID_ENDPOINT_INFO_L3END_L3EPCID     = &EndpointInfo{L3End: true, L3EpcId: EPC_FROM_DEEPFLOW}
-	INVALID_ENDPOINT_INFO_L2AND3END_L3EPCID = &EndpointInfo{L2End: true, L3End: true, L3EpcId: EPC_FROM_DEEPFLOW}
+	INVALID_ENDPOINT_INFO_L2END_L3EPCID     = &EndpointInfo{L2End: true, L3EpcId: EPC_FROM_ZEROTRACE}
+	INVALID_ENDPOINT_INFO_L3END_L3EPCID     = &EndpointInfo{L3End: true, L3EpcId: EPC_FROM_ZEROTRACE}
+	INVALID_ENDPOINT_INFO_L2AND3END_L3EPCID = &EndpointInfo{L2End: true, L3End: true, L3EpcId: EPC_FROM_ZEROTRACE}
 	INVALID_ENDPOINT_DATA                   = &EndpointData{SrcInfo: INVALID_ENDPOINT_INFO, DstInfo: INVALID_ENDPOINT_INFO}
 	INVALID_ENDPOINT_DATA_L3EPCID           = &EndpointData{SrcInfo: INVALID_ENDPOINT_INFO_L3EPCID, DstInfo: INVALID_ENDPOINT_INFO_L3EPCID}
 )

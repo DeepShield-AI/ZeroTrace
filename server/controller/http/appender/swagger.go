@@ -17,7 +17,7 @@
 package appender
 
 import (
-	"github.com/deepflowio/deepflow/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
 )
 
 func SetSwaggerConfig(cfg *config.ControllerConfig) {}

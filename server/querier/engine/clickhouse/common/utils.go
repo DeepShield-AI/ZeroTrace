@@ -28,8 +28,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deepflowio/deepflow/server/querier/config"
-	"github.com/deepflowio/deepflow/server/querier/engine/clickhouse/client"
+	"github.com/zerotraceio/zerotrace/server/querier/config"
+	"github.com/zerotraceio/zerotrace/server/querier/engine/clickhouse/client"
 	logging "github.com/op/go-logging"
 	"github.com/xwb1989/sqlparser"
 )
@@ -175,7 +175,7 @@ func GetDatasourceInterval(db string, table string, name string, orgID string) (
 		} else if table == TABLE_NAME_VTAP_ACL {
 			tsdbType = TABLE_NAME_VTAP_ACL
 		}
-	case DB_NAME_DEEPFLOW_ADMIN, DB_NAME_DEEPFLOW_TENANT, DB_NAME_EXT_METRICS, DB_NAME_PROMETHEUS:
+	case DB_NAME_ZEROTRACE_ADMIN, DB_NAME_ZEROTRACE_TENANT, DB_NAME_EXT_METRICS, DB_NAME_PROMETHEUS:
 		tsdbType = db
 	default:
 		return 1, nil
@@ -218,7 +218,7 @@ func GetExtTables(db, where, queryCacheTTL, orgID string, useQueryCache bool, ct
 		Context:  ctx,
 	}
 	sql := ""
-	if slices.Contains([]string{DB_NAME_EXT_METRICS, DB_NAME_DEEPFLOW_ADMIN, DB_NAME_DEEPFLOW_TENANT, DB_NAME_PROMETHEUS}, db) {
+	if slices.Contains([]string{DB_NAME_EXT_METRICS, DB_NAME_ZEROTRACE_ADMIN, DB_NAME_ZEROTRACE_TENANT, DB_NAME_PROMETHEUS}, db) {
 		if where != "" {
 			sql = fmt.Sprintf("SELECT table FROM flow_tag.%s_custom_field ", db) + " WHERE " + strings.Replace(where, " name ", " table ", -1) + " GROUP BY table"
 		} else {

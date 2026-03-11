@@ -19,7 +19,7 @@ package message
 import (
 	"time"
 
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
 )
 
 type Key struct {

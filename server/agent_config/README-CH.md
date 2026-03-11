@@ -2,7 +2,7 @@
 
 ## 资源限制 {#global.limits}
 
-控制 deepflow-agent 资源用量
+控制 zerotrace-agent 资源用量
 
 ### CPU 限制 {#global.limits.max_millicpus}
 
@@ -32,7 +32,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 使用 cgroups 来限制自身的 CPU 用量，
+zerotrace-agent 使用 cgroups 来限制自身的 CPU 用量，
 1 millicpu = 1 millicore = 0.001 core。
 
 ### 内存限制 {#global.limits.max_memory}
@@ -63,7 +63,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 使用 cgroups 限制自身的 memory 用量。
+zerotrace-agent 使用 cgroups 限制自身的 memory 用量。
 
 注意：
 - 专属采集器内存不受限制
@@ -98,7 +98,7 @@ global:
 
 **详细描述**:
 
-用于 deepflow-agent 控制自身运行日志的每小时回传数量，设置为 0 表示不设限制。
+用于 zerotrace-agent 控制自身运行日志的每小时回传数量，设置为 0 表示不设限制。
 
 ### 本地日志文件大小上限 {#global.limits.max_local_log_file_size}
 
@@ -128,7 +128,7 @@ global:
 
 **详细描述**:
 
-用于 deepflow-agent 控制自身运行日志在本地的存储量。
+用于 zerotrace-agent 控制自身运行日志在本地的存储量。
 
 ### 本地日志留存时间 {#global.limits.local_log_retention}
 
@@ -157,7 +157,7 @@ global:
 
 **详细描述**:
 
-用于 deepflow-agent 控制自身运行日志在本地的留存时长。
+用于 zerotrace-agent 控制自身运行日志在本地的留存时长。
 
 ### Socket 数量上限 {#global.limits.max_sockets}
 
@@ -187,7 +187,7 @@ global:
 
 **详细描述**:
 
-用于控制 deepflow-agent 可以打开的 socket 数量上限。
+用于控制 zerotrace-agent 可以打开的 socket 数量上限。
 超过限制时 agent 会重启。
 
 ### Socket 数量超限容忍时间 {#global.limits.max_sockets_tolerate_interval}
@@ -217,7 +217,7 @@ global:
 
 **详细描述**:
 
-用于控制 deepflow-agent 在 socket 数量超过上限后，重启前的容忍时间。
+用于控制 zerotrace-agent 在 socket 数量超过上限后，重启前的容忍时间。
 只有当 socket 数量持续超过上限达到该时间后才会触发重启。
 重启由 guard 模块触发，因此该值小于 guard-interval 时会导致立即重启。
 
@@ -250,7 +250,7 @@ global:
 
 **详细描述**:
 
-用于控制 deepflow-agent 创建的线程数量。
+用于控制 zerotrace-agent 创建的线程数量。
 - 当线程数量超过该限制值，会触发采集器异常告警。
 - 当线程数量超过该限制值的2倍，会触发采集器重启。
 
@@ -281,8 +281,8 @@ global:
 
 **详细描述**:
 
-用于控制名称为`deepflow-agent`的进程数量。
-若当前系统中名为`deepflow-agent`的进程数达到该限制值，则之后名为`deepflow-agent`的进程将会启动失败。
+用于控制名称为`zerotrace-agent`的进程数量。
+若当前系统中名为`zerotrace-agent`的进程数达到该限制值，则之后名为`zerotrace-agent`的进程将会启动失败。
 
 ### Core File 检查 {#global.alerts.check_core_file_disabled}
 
@@ -319,7 +319,7 @@ global:
 
 ## 熔断机制 {#global.circuit_breakers}
 
-控制 deepflow-agent 在一定的环境条件下停止运行或停止部分功能。
+控制 zerotrace-agent 在一定的环境条件下停止运行或停止部分功能。
 
 ### 系统空闲内存百分比 {#global.circuit_breakers.sys_memory_percentage}
 
@@ -396,7 +396,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 观测该内存指标的百分比
+zerotrace-agent 观测该内存指标的百分比
 
 ### 相对系统负载 {#global.circuit_breakers.relative_sys_load}
 
@@ -499,7 +499,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 默认每 10 秒监控一次所设定的系统负载指标项。
+zerotrace-agent 默认每 10 秒监控一次所设定的系统负载指标项。
 
 ### 发送吞吐 {#global.circuit_breakers.tx_throughput}
 
@@ -533,9 +533,9 @@ global:
 
 **详细描述**:
 
-如果流量分发所用网络接口的出方向吞吐量达到或超出此阈值，deepflow-agent 停止流量分发；
+如果流量分发所用网络接口的出方向吞吐量达到或超出此阈值，zerotrace-agent 停止流量分发；
 如果该网络接口的出方向吞吐量连续 5 个监控周期低于`(trigger_threshold -
-outputs.npb.max_tx_throughput)*90%`，deepflow-agent 恢复流量分发。
+outputs.npb.max_tx_throughput)*90%`，zerotrace-agent 恢复流量分发。
 
 注意：
 1. 取值为 0 时，该特性不生效；
@@ -570,7 +570,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 对流量分发所使用网络接口的出方向吞吐量指标的监控周期。
+zerotrace-agent 对流量分发所使用网络接口的出方向吞吐量指标的监控周期。
 
 ### 空闲磁盘 {#global.circuit_breakers.free_disk}
 
@@ -671,7 +671,7 @@ global:
 
 ## 调优 {#global.tunning}
 
-对 deepflow-agent 的运行进行调优。
+对 zerotrace-agent 的运行进行调优。
 
 ### CPU 亲和性 {#global.tunning.cpu_affinity}
 
@@ -700,7 +700,7 @@ global:
 
 **详细描述**:
 
-操作系统尽可能使用指定 ID 的 CPU 核运行 deepflow-agent 进程。无效的 ID 将被忽略。当前仅对
+操作系统尽可能使用指定 ID 的 CPU 核运行 zerotrace-agent 进程。无效的 ID 将被忽略。当前仅对
 dispatcher 线程生效。举例：
 ```yaml
 global:
@@ -735,7 +735,7 @@ global:
 
 **详细描述**:
 
-控制 deepflow-agent 进程的调度优先级。数值越小，调度优先级越高；数值越大，调度优先级越低。
+控制 zerotrace-agent 进程的调度优先级。数值越小，调度优先级越高；数值越大，调度优先级越低。
 
 ### 闲置内存修剪 {#global.tunning.idle_memory_trimming}
 
@@ -856,7 +856,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 将以配置的时间周期监控如下资源：
+zerotrace-agent 将以配置的时间周期监控如下资源：
 1. 系统空闲内存
 2. 系统负载
 3. agent 的线程数量（通过读取 /proc 目录下的文件信息获取）
@@ -865,7 +865,7 @@ deepflow-agent 将以配置的时间周期监控如下资源：
 
 ## NTP 时钟同步 {#global.ntp}
 
-此同步机制获取的时间仅供 deepflow-agent 进程内部使用，不影响主机时间。
+此同步机制获取的时间仅供 zerotrace-agent 进程内部使用，不影响主机时间。
 
 ### Enabled {#global.ntp.enabled}
 
@@ -893,7 +893,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 是否向 deepflow-server 做 NTP 同步的开关。
+zerotrace-agent 是否向 zerotrace-server 做 NTP 同步的开关。
 
 注意：开启 NTP 前控制器需要先开启 NTP 服务，直到完成同步时间后采集器才会继续运行。
 
@@ -924,7 +924,7 @@ global:
 
 **详细描述**:
 
-当 deepflow-agent 与 deepflow-server 之间的时间偏移大于此设置值时，agent 会自动重启。
+当 zerotrace-agent 与 zerotrace-server 之间的时间偏移大于此设置值时，agent 会自动重启。
 
 ### 最小时钟偏差 {#global.ntp.min_drift}
 
@@ -953,12 +953,12 @@ global:
 
 **详细描述**:
 
-当 deepflow-agent 与 deepflow-server 之间的时间偏移大于此设置值时，对 agent 的
+当 zerotrace-agent 与 zerotrace-server 之间的时间偏移大于此设置值时，对 agent 的
 时间戳进行纠正。
 
 ## 通信 {#global.communication}
 
-配置 deepflow-agent 的通信参数。
+配置 zerotrace-agent 的通信参数。
 
 ### 主动请求间隔 {#global.communication.proactive_request_interval}
 
@@ -987,7 +987,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 以设置的时间间隔周期性向 deepflow-server 请求配置数据和标签信息。
+zerotrace-agent 以设置的时间间隔周期性向 zerotrace-server 请求配置数据和标签信息。
 
 ### 最大逃逸时长 {#global.communication.max_escape_duration}
 
@@ -1016,7 +1016,7 @@ global:
 
 **详细描述**:
 
-`最大逃逸时长`是指 deepflow-agent 与 deepflow-server 失联后，自主运行的最长
+`最大逃逸时长`是指 zerotrace-agent 与 zerotrace-server 失联后，自主运行的最长
 时间；超过该时长后，仍未与 server 恢复联系，agent 自动进入 disabled 状态。
 
 ### Controller IP 地址 {#global.communication.proxy_controller_ip}
@@ -1045,7 +1045,7 @@ global:
 
 **详细描述**:
 
-用于设置 deepflow-agent 与 server 通信的控制面通信 IP；如果不设置本
+用于设置 zerotrace-agent 与 server 通信的控制面通信 IP；如果不设置本
 参数，server 下发自己的节点 IP 作为 server 端控制面通信IP。
 该参数通常用于 server 端使用负载均衡或虚 IP 对外提供服务的场景。
 
@@ -1076,7 +1076,7 @@ global:
 
 **详细描述**:
 
-用于设置 deepflow-server 向 deepflow-agent 下发的 server 端控制面通信端口。
+用于设置 zerotrace-server 向 zerotrace-agent 下发的 server 端控制面通信端口。
 
 ### Ingester IP 地址 {#global.communication.ingester_ip}
 
@@ -1104,7 +1104,7 @@ global:
 
 **详细描述**:
 
-用于设置 deepflow-server 向 deepflow-agent 下发的 server 端数据面通信 IP。
+用于设置 zerotrace-server 向 zerotrace-agent 下发的 server 端数据面通信 IP。
 
 ### Ingester 端口号 {#global.communication.ingester_port}
 
@@ -1133,7 +1133,7 @@ global:
 
 **详细描述**:
 
-用于设置 deepflow-server 向 deepflow-agent 下发的 server 端数据面通信端口。
+用于设置 zerotrace-server 向 zerotrace-agent 下发的 server 端数据面通信端口。
 
 ### gRPC Socket 缓冲区大小 {#global.communication.grpc_buffer_size}
 
@@ -1164,7 +1164,7 @@ global:
 
 **详细描述**:
 
-设置 deepflow-agent 的 gRPC socket 缓冲区大小。
+设置 zerotrace-agent 的 gRPC socket 缓冲区大小。
 
 ### 发送到 Ingester 的最大流量 {#global.communication.max_throughput_to_ingester}
 
@@ -1256,18 +1256,18 @@ global:
 
 **详细描述**:
 
-当 deepflow-agent 使用外部 IP 地址访问 deepflow-server 时，
-例如，当 deepflow-server 位于 NAT 网关后，或 deepflow-server 所在的主机有多个
-节点 IP 地址，不同的 deepflow-agent 需要访问不同的节点 IP 地址时，可以为每个
-deepflow-server 地址设置一个额外的 NAT IP，并将本参数设置为 `true`。
+当 zerotrace-agent 使用外部 IP 地址访问 zerotrace-server 时，
+例如，当 zerotrace-server 位于 NAT 网关后，或 zerotrace-server 所在的主机有多个
+节点 IP 地址，不同的 zerotrace-agent 需要访问不同的节点 IP 地址时，可以为每个
+zerotrace-server 地址设置一个额外的 NAT IP，并将本参数设置为 `true`。
 
 ## 自监控 {#global.self_monitoring}
 
-配置 deepflow-agent 自身诊断相关的参数。
+配置 zerotrace-agent 自身诊断相关的参数。
 
 ### 日志 {#global.self_monitoring.log}
 
-deepflow-agent 自身日志的相关配置参数。
+zerotrace-agent 自身日志的相关配置参数。
 
 #### 日志等级 {#global.self_monitoring.log.log_level}
 
@@ -1304,7 +1304,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 运行日志输出等级。
+zerotrace-agent 运行日志输出等级。
 
 也可以通过高级配置指定特定模块的日志等级，格式如下：
 
@@ -1317,7 +1317,7 @@ deepflow-agent 运行日志输出等级。
 例如：
 
 ```
-log_level: info,deepflow_agent::rpc::session=debug
+log_level: info,zerotrace_agent::rpc::session=debug
 ```
 
 将设置所有模块的日志等级为 INFO，并将 rpc::session 模块的日志等级设置为 DEBUG。
@@ -1339,7 +1339,7 @@ Upgrade from old version: `static_config.log-file`
 global:
   self_monitoring:
     log:
-      log_file: /var/log/deepflow-agent/deepflow-agent.log
+      log_file: /var/log/zerotrace-agent/zerotrace-agent.log
 ```
 
 **模式**:
@@ -1349,7 +1349,7 @@ global:
 
 **详细描述**:
 
-deepflow-agent 运行日志的写入位置。
+zerotrace-agent 运行日志的写入位置。
 
 #### 启用日志回传 {#global.self_monitoring.log.log_backhaul_enabled}
 
@@ -1378,11 +1378,11 @@ global:
 
 **详细描述**:
 
-开启后，deepflow-agent 将向 deepflow-server 回传运行日志。
+开启后，zerotrace-agent 将向 zerotrace-server 回传运行日志。
 
 ### 持续剖析 {#global.self_monitoring.profile}
 
-deepflow-agent 自身持续剖析数据配置参数
+zerotrace-agent 自身持续剖析数据配置参数
 
 #### Enabled {#global.self_monitoring.profile.enabled}
 
@@ -1412,12 +1412,12 @@ global:
 
 **详细描述**:
 
-该参数仅对 deepflow-trident 有效，对 deepflow-agent 无效。
+该参数仅对 zerotrace-trident 有效，对 zerotrace-agent 无效。
 开启后，支持对 Trident 持续剖析。
 
 ### 诊断 {#global.self_monitoring.debug}
 
-deepflow-agent 的诊断功能配置参数
+zerotrace-agent 的诊断功能配置参数
 
 #### Enabled {#global.self_monitoring.debug.enabled}
 
@@ -1446,7 +1446,7 @@ global:
 
 **详细描述**:
 
-禁用 / 启用 deepflow-agent 的诊断功能。
+禁用 / 启用 zerotrace-agent 的诊断功能。
 
 #### 本地 UDP 端口号 {#global.self_monitoring.debug.local_udp_port}
 
@@ -1476,7 +1476,7 @@ global:
 
 **详细描述**:
 
-该参数仅对 deepflow-trident 有效，对 deepflow-agent 无效。用于配置
+该参数仅对 zerotrace-trident 有效，对 zerotrace-agent 无效。用于配置
 trident 用于诊断的 UDP 监听端口，默认值为 `0` ，表示使用随机的端口。
 
 #### 启用调试指标 {#global.self_monitoring.debug.debug_metrics_enabled}
@@ -1507,7 +1507,7 @@ global:
 
 **详细描述**:
 
-该参数仅对 deepflow-trident 有效，对 deepflow-agent 无效。
+该参数仅对 zerotrace-trident 有效，对 zerotrace-agent 无效。
 
 ### Interval {#global.self_monitoring.interval}
 
@@ -1540,7 +1540,7 @@ statsd 时间间隔。
 
 ## 独立运行模式 {#global.standalone_mode}
 
-deepflow-agent 独立运行模式的相关参数
+zerotrace-agent 独立运行模式的相关参数
 
 ### 最大数据文件大小 {#global.standalone_mode.max_data_file_size}
 
@@ -1571,7 +1571,7 @@ global:
 **详细描述**:
 
 独立运行模式下，单个数据文件的最大值，当文件大小超过最大值时，数据将滚动覆盖。
-deepflow-agent 在独立运行模式下不受 deepflow-server 管理/控制，会将采集数据以文件
+zerotrace-agent 在独立运行模式下不受 zerotrace-server 管理/控制，会将采集数据以文件
 形式保存在本地磁盘中。目前支持 2 种数据：l4_flow_log 和 l7_flow_log，每种数据分开写入
 不同的数据文件，每种数据最多可产生 2 个数据文件。
 
@@ -1591,7 +1591,7 @@ Upgrade from old version: `static_config.standalone-data-file-dir`
 ```yaml
 global:
   standalone_mode:
-    data_file_dir: /var/log/deepflow-agent/
+    data_file_dir: /var/log/zerotrace-agent/
 ```
 
 **模式**:
@@ -1633,14 +1633,14 @@ inputs:
 
 **详细描述**:
 
-开启此配置后，deepflow-agent 会周期性将 `inputs.proc.process_matcher` 中指定的进程信息上报给 deepflow-server。
+开启此配置后，zerotrace-agent 会周期性将 `inputs.proc.process_matcher` 中指定的进程信息上报给 zerotrace-server。
 同步进程信息后，所有的 eBPF 观测数据都会自动注入`全局进程 ID`（`gprocess_id`）标签。
 
 注意：开启此功能时，需要同时在 `inputs.proc.process_matcher` 中进一步指定具体的进程列表，
 即 `inputs.proc.process_matcher.[*].enabled_features` 中需要包含 `proc.gprocess_info`。
 
 该参数仅对`云服务器`（CHOST_VM、CHOST_BM）和`容器`（K8S_VM、K8S_BM）类型的 agent 有效，
-在命令行下使用 `deepflow-ctl agent list` 可确定 agent 的具体类型。
+在命令行下使用 `zerotrace-ctl agent list` 可确定 agent 的具体类型。
 
 ### /proc 目录 {#inputs.proc.proc_dir_path}
 
@@ -1732,7 +1732,7 @@ inputs:
 
 **详细描述**:
 
-如果接口或进程的活跃时间低于该参数值，deepflow-agent 将不上报该接口或进程的信息。
+如果接口或进程的活跃时间低于该参数值，zerotrace-agent 将不上报该接口或进程的信息。
 
 ### Tag 提取 {#inputs.proc.tag_extraction}
 
@@ -1763,7 +1763,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 每次采集进程信息时，会执行配置的脚本命令，并从标准输出的 yaml 格式
+zerotrace-agent 每次采集进程信息时，会执行配置的脚本命令，并从标准输出的 yaml 格式
 中尝试获取进程的标签字段。yaml 格式的样例如下：
 ```yaml
 - pid: 1
@@ -1800,7 +1800,7 @@ Upgrade from old version: `static_config.os-app-tag-exec-user`
 inputs:
   proc:
     tag_extraction:
-      exec_username: deepflow
+      exec_username: zerotrace
 ```
 
 **模式**:
@@ -1810,7 +1810,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 执行 `script_command` 脚本命令的用户名。
+zerotrace-agent 执行 `script_command` 脚本命令的用户名。
 
 ### 进程黑名单 {#inputs.proc.process_blacklist}
 
@@ -1902,7 +1902,7 @@ inputs:
     - enabled_features:
       - ebpf.profile.on_cpu
       - proc.gprocess_info
-      match_regex: ^deepflow-
+      match_regex: ^zerotrace-
       only_in_container: false
     - enabled_features:
       - proc.gprocess_info
@@ -2297,12 +2297,12 @@ inputs:
 是否开启 Golang 特有符号表的解析能力。
 
 如果 Golang（版本 >= 1.13 and < 1.18条件下）进程运行时裁切了标准符号
-表，开启此开关后 deepflow-agent 将解析生成 Golang-specific 符号表以
+表，开启此开关后 zerotrace-agent 将解析生成 Golang-specific 符号表以
 完善 eBPF uprobe 数据，实现 Golang 程序的零侵扰调用链追踪。注意：开启
 该开关后，eBPF 程序初始化过程可能会持续 10 分钟以上的时间。
 
 配置方法：
-- 如果在 deepflow-agent 的运行日志中发现如下 warning：
+- 如果在 zerotrace-agent 的运行日志中发现如下 warning：
   ```
   [eBPF] WARNING: func resolve_bin_file() [user/go_tracer.c:558] Go process pid 1946
   [path: /proc/1946/root/usr/local/bin/kube-controller-manager] (version: go1.16). Not find any symbols!
@@ -2320,7 +2320,7 @@ inputs:
     nm: /proc/1946/root/usr/local/bin/kube-controller-manager: no symbols
     ```
 - 如果结果中出现 "no symbols"，则说明符号表缺失，需要开启 Golang 程序符号表解析开关.
-- deepflow-agent 启动阶段运行日志中出现类似下面的信息，说明 Golang 进程已经被成功 hook。
+- zerotrace-agent 启动阶段运行日志中出现类似下面的信息，说明 Golang 进程已经被成功 hook。
   ```
   [eBPF] INFO Uprobe [/proc/1946/root/usr/local/bin/kube-controller-manager] pid:1946 go1.16.0
   entry:0x25fca0 size:1952 symname:crypto/tls.(*Conn).Write probe_func:uprobe_go_tls_write_enter rets_count:0
@@ -2360,7 +2360,7 @@ inputs:
 
 **详细描述**:
 
-当 deepflow-agent 在 Java 进程的函数调用栈中发现未能解析的函数名时，将触发进程函数符号表的生成和符号缓存
+当 zerotrace-agent 在 Java 进程的函数调用栈中发现未能解析的函数名时，将触发进程函数符号表的生成和符号缓存
 的更新。当前 Java 符号文件是采用持续更新的方式，该 duration 用于控制推迟使用符号文件更新符号缓存的时间。
 原因是由于 Java 使用了 JIT 编译机制，编译符号生成有个预热阶段，为了获取更充足的 Java 符号需要推迟一段时间
 来更新 Java 符号的缓存，也可避免由于符号缺失而造成的频繁符号缓存刷新引起大量CPU资源消耗。
@@ -2396,7 +2396,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 将所有的 Java 符号表文件存放在'/tmp'目录下，该参数用于限制每一个 Java 符号表文件的
+zerotrace-agent 将所有的 Java 符号表文件存放在'/tmp'目录下，该参数用于限制每一个 Java 符号表文件的
 大小上限，以避免占用过多的节点磁盘空间。
 
 ## cBPF {#inputs.cbpf}
@@ -2437,13 +2437,13 @@ inputs:
 
 **详细描述**:
 
-`虚拟网络镜像`模式用于 deepflow-agent 无法直接采集流量的场景，比如：
+`虚拟网络镜像`模式用于 zerotrace-agent 无法直接采集流量的场景，比如：
 - k8s 的 macvlan 环境中，从 Node 网口接口采集 POD 流量；
 - Hyper-V 环境中，从宿主机的网络接口采集 VM 流量；
 - ESXi 环境中，通过 VDS/VSS 的本地 SPAN 采集 VM 流量；
 - DPDK 环境中，通过 DPDK ring buffer 采集 VM 流量。
 
-`物理网络镜像`模式（仅企业版支持）用于 deepflow-agent 从物理设备镜像采集流量的场景。
+`物理网络镜像`模式（仅企业版支持）用于 zerotrace-agent 从物理设备镜像采集流量的场景。
 
 ### 使用 AF_PACKET 采集 {#inputs.cbpf.af_packet}
 
@@ -2649,7 +2649,7 @@ inputs:
 
 **详细描述**:
 
-除默认网络 namespace 之外，deepflow-agent 还会根据此参数正则匹配额外的网络 namespace，
+除默认网络 namespace 之外，zerotrace-agent 还会根据此参数正则匹配额外的网络 namespace，
 在匹配命中的网络 namespace 中根据`inputs.cbpf.af_packet.interface_regex`正则匹配网络接口并采集流量。默认
 配置 `""` 表示仅采集默认网络 namesapce，不采集额外的网络 namespace 流量。
 
@@ -2769,9 +2769,9 @@ inputs:
 
 **详细描述**:
 
-此开关用于对特定 Linux 内核版本 BPF 功能诊断，打开此开关后 deepflow-agent 将不启用 Linux
+此开关用于对特定 Linux 内核版本 BPF 功能诊断，打开此开关后 zerotrace-agent 将不启用 Linux
 内核的 BPF 包过滤能力，而是获取全流量的数据包之后由采集器程序进行过滤。注意，打开此开关将明显
-增加 deepflow-agent 的资源消耗。
+增加 zerotrace-agent 的资源消耗。
 
 #### 跳过 NPB BPF {#inputs.cbpf.af_packet.skip_npb_bpf}
 
@@ -2839,7 +2839,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 所在的 Linux 操作系统的 AF_PACKET socket 版本号。
+zerotrace-agent 所在的 Linux 操作系统的 AF_PACKET socket 版本号。
 
 ##### 使能 Ring Blocks 配置 {#inputs.cbpf.af_packet.tunning.ring_blocks_enabled}
 
@@ -2901,7 +2901,7 @@ inputs:
 
 **详细描述**:
 
-配置此参数后，deepflow-agent 将分配指定数量的 block 用于 AF_PACKET，每个 block 的
+配置此参数后，zerotrace-agent 将分配指定数量的 block 用于 AF_PACKET，每个 block 的
 大小固定为 1 MByte。
 
 ##### Packet Fanout 路数 {#inputs.cbpf.af_packet.tunning.packet_fanout_count}
@@ -2933,7 +2933,7 @@ inputs:
 
 **详细描述**:
 
-当此配置值大于 1 时，deepflow-agent 将开启多个 dispatcher 线程，并把数据包分散到多个处理
+当此配置值大于 1 时，zerotrace-agent 将开启多个 dispatcher 线程，并把数据包分散到多个处理
 线程并行处理，弹性扩展 dispatcher 以优化网络应用的处理性能。增大此配置可以降低
 多核服务器的操作系统软中断数量，但会消耗更多的 CPU 和内存。
 
@@ -3387,7 +3387,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 采集数据包的速率上限。
+zerotrace-agent 采集数据包的速率上限。
 
 ### 预处理 {#inputs.cbpf.preprocess}
 
@@ -3429,7 +3429,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 需要对数据包解封装的隧道协议，仅企业版本支持解析 GRE 和 VXLAN-NSH。
+zerotrace-agent 需要对数据包解封装的隧道协议，仅企业版本支持解析 GRE 和 VXLAN-NSH。
 
 #### 隧道头剥离协议 {#inputs.cbpf.preprocess.tunnel_trim_protocols}
 
@@ -3465,7 +3465,7 @@ inputs:
 
 **详细描述**:
 
-流量镜像（虚拟或物理）模式下，deepflow-agent 需要剥离的隧道头协议类型。
+流量镜像（虚拟或物理）模式下，zerotrace-agent 需要剥离的隧道头协议类型。
 仅企业版支持解析 ERSPAN 和 TEB。
 
 #### TCP分段重组端口 {#inputs.cbpf.preprocess.packet_segmentation_reassembly}
@@ -3535,9 +3535,9 @@ inputs:
 
 **详细描述**:
 
-在 `inputs.cbpf.common.capture_mode` 为`物理网络镜像`模式下，deepflow-agent 通过镜像流量的外层 VLAN 标签识别并标记采集数据的
+在 `inputs.cbpf.common.capture_mode` 为`物理网络镜像`模式下，zerotrace-agent 通过镜像流量的外层 VLAN 标签识别并标记采集数据的
 TAP(Traffic Access Point)值。当流量外层 VLAN 标签没有对应的 TAP 值，或 VLAN pcp 值与
-`inputs.cbpf.af_packet.vlan_pcp_in_physical_mirror_traffic` 的配置不一致时，deepflow-agent 使用本参数值
+`inputs.cbpf.af_packet.vlan_pcp_in_physical_mirror_traffic` 的配置不一致时，zerotrace-agent 使用本参数值
 标记数据的 TAP 值。
 
 #### 禁用 Packet 去重 {#inputs.cbpf.physical_mirror.packet_dedup_disabled}
@@ -3568,7 +3568,7 @@ inputs:
 
 **详细描述**:
 
-当 `inputs.cbpf.common.capture_mode` 为`物理网络镜像`模式, 该参数配置为 `true` 时，deepflow-agent 将不对数据包做去重处理。
+当 `inputs.cbpf.common.capture_mode` 为`物理网络镜像`模式, 该参数配置为 `true` 时，zerotrace-agent 将不对数据包做去重处理。
 
 #### 专有云网关流量 {#inputs.cbpf.physical_mirror.private_cloud_gateway_traffic}
 
@@ -3598,7 +3598,7 @@ inputs:
 
 **详细描述**:
 
-当 `inputs.cbpf.common.capture_mode` 为 `物理网络镜像` 模式，该参数配置为 `true` 时，deepflow-agent 会将流量识别为 NFVGW 流量。
+当 `inputs.cbpf.common.capture_mode` 为 `物理网络镜像` 模式，该参数配置为 `true` 时，zerotrace-agent 会将流量识别为 NFVGW 流量。
 
 ## eBPF {#inputs.ebpf}
 
@@ -3742,7 +3742,7 @@ inputs:
   执行命令 `sudo nm /proc/<PID>/exe | grep SSL_write` 若包含 `SSL_write` 相关信息如：`0000000000502ac0 T SSL_write`
   则说明该进程正在使用静态编译的 openssl 库。
 
-启用后，deepflow-agent 将获取符合正则表达式匹配的进程信息，并 Hook openssl 库的相应加解密接口。
+启用后，zerotrace-agent 将获取符合正则表达式匹配的进程信息，并 Hook openssl 库的相应加解密接口。
 在日志中您会看到类似如下信息：
 ```
 [eBPF] INFO openssl uprobe, pid:1005, path:/proc/1005/root/usr/lib64/libssl.so.1.0.2k
@@ -3835,7 +3835,7 @@ Module: i40e
 上面的 "Driver: igb_uio" 说明是 DPDP 纳管的设备 (除此之外还有 "vfio-pci", "uio_pci_generic"
 也被 DPDK 纳管), 真实驱动是 'i40e' (从 'Module: i40e' 得到)
 
-可以使用 deepflow 提供的可持续剖析功能对 DPDK 应用做函数剖析查看具体接口名字，也可以使用 perf 命令
+可以使用 zerotrace 提供的可持续剖析功能对 DPDK 应用做函数剖析查看具体接口名字，也可以使用 perf 命令
 在agent所在节点上运行 `perf record -F97 -a -g -p <dpdk应用进程号> -- sleep 30`，
 `perf script | grep -E 'recv|xmit|rx|tx' | grep <drive_name>` (`drive_name` may be `ixgbe/i40e/mlx5`)
 来确认驱动接口。
@@ -4073,7 +4073,7 @@ inputs:
 
 **详细描述**:
 
-是否开启 TCP Option Tracing SockOps 程序，用于在满足条件的 TCP 连接上注入 DeepFlow 元数据（如进程 PID）。
+是否开启 TCP Option Tracing SockOps 程序，用于在满足条件的 TCP 连接上注入 ZeroTrace 元数据（如进程 PID）。
 注意：该功能依赖 cgroup v2（统一层级）和内核版本 > 5.10。在 cgroup v1 主机上 SockOps 绑定会失败.
 兼容性：已在 x86 上验证内核 > 5.10；arm 目前仅在 6.8 内核上测试。
 限制：PID 跟踪依赖per-CPU syscall map。CPU 拥堵、软中断可能在不同 CPU 运行时，注入的元数据可能缺失或过期。
@@ -4142,7 +4142,7 @@ inputs:
 
 **详细描述**:
 
-eBPF 数据的最大采集速率，设置为 `0` 表示不对 deepflow-agent 的 eBPF 数据采集速率做限制。
+eBPF 数据的最大采集速率，设置为 `0` 表示不对 zerotrace-agent 的 eBPF 数据采集速率做限制。
 
 ##### 禁用 syscall_trace_id 相关的计算 {#inputs.ebpf.socket.tunning.syscall_trace_id_disabled}
 
@@ -4312,7 +4312,7 @@ inputs:
 
 **详细描述**:
 
-配置后 deepflow-agent 将对指定应用协议的处理增加乱序重排过程。注意：（1）开启特性将消耗更多的内存，因此
+配置后 zerotrace-agent 将对指定应用协议的处理增加乱序重排过程。注意：（1）开启特性将消耗更多的内存，因此
 需关注 agent 内存用量；（2）配置`HTTP2`或`gRPC`会全部开启这两个协议
 
 ##### 乱序重排（OOOR）超时时间 {#inputs.ebpf.socket.preprocess.out_of_order_reassembly_timeout}
@@ -4343,7 +4343,7 @@ inputs:
 
 **详细描述**:
 
-OOOR 缓存的数据时间超时会直接输出, 可以根据采集器指标 `deepflow_agent_ebpf_collect.metrics.metrics.time_backtrack_max` 调整该参数。
+OOOR 缓存的数据时间超时会直接输出, 可以根据采集器指标 `zerotrace_agent_ebpf_collect.metrics.metrics.time_backtrack_max` 调整该参数。
 
 注意：增大该值会消耗更多的内存
 
@@ -4381,12 +4381,12 @@ inputs:
 
 **详细描述**:
 
-配置后 deepflow-agent 将对指定应用协议的处理增加分片重组过程，将多个 Syscall 的内容分片重组后再进行
+配置后 zerotrace-agent 将对指定应用协议的处理增加分片重组过程，将多个 Syscall 的内容分片重组后再进行
 协议解析，以增强应用协议的采集成功率。
 
 注意：
 1. 该特性的生效的前提条件是`out_of_order_reassembly_protocols`开启并生效；
-   - 支持协议：[https://www.deepflow.io/docs/zh/features/l7-protocols/overview/](https://www.deepflow.io/docs/zh/features/l7-protocols/overview/)
+   - 支持协议：[https://www.zerotrace.io/docs/zh/features/l7-protocols/overview/](https://www.zerotrace.io/docs/zh/features/l7-protocols/overview/)
 2. 配置`HTTP2`或`gRPC`会全部开启这两个协议
 
 ### File {#inputs.ebpf.file}
@@ -4468,7 +4468,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 所采集的文件 IO 事件的时延下限阈值，操作系统中时延低于此阈值
+zerotrace-agent 所采集的文件 IO 事件的时延下限阈值，操作系统中时延低于此阈值
 的文件 IO 事件将被忽略。
 
 ##### 启用虚拟文件采集 {#inputs.ebpf.file.io_event.enable_virtual_file_collect}
@@ -4497,7 +4497,7 @@ inputs:
 
 **详细描述**:
 
-当设置为 true 时，deepflow-agent 将采集发生在虚拟文件系统上的文件
+当设置为 true 时，zerotrace-agent 将采集发生在虚拟文件系统上的文件
 I/O 事件（例如 /proc、/sys、/run 等由内核动态生成的伪文件系统）。
 当设置为 false 时，将不会采集虚拟文件系统上的文件 I/O 事件。
 
@@ -4832,9 +4832,9 @@ inputs:
 
 **详细描述**:
 
-低于'最小阻塞时间'的 Off-CPU 数据将被 deepflow-agent 忽略，'最小阻塞时间'设置为 '0ns' 表示
+低于'最小阻塞时间'的 Off-CPU 数据将被 zerotrace-agent 忽略，'最小阻塞时间'设置为 '0ns' 表示
 采集所有的 Off-CPU 数据。由于 CPU 调度事件数量庞大（每秒可能超过一百万次），调小该参数将带来
-明显的资源开销，如果需要跟踪大时延的调度阻塞事件，建议调大该参数，以降低资源开销。另外，deepflow-agent
+明显的资源开销，如果需要跟踪大时延的调度阻塞事件，建议调大该参数，以降低资源开销。另外，zerotrace-agent
 不采集阻塞超过 1 小时的事件。
 
 #### Memory {#inputs.ebpf.profile.memory}
@@ -4903,7 +4903,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 聚合和上报内存剖析数据的间隔。
+zerotrace-agent 聚合和上报内存剖析数据的间隔。
 
 ##### 进程分配地址 LRU 长度 {#inputs.ebpf.profile.memory.allocated_addresses_lru_len}
 
@@ -4965,7 +4965,7 @@ inputs:
 
 为了匹配 mallocs 和 frees，内存剖析会在处理前对数据按时间戳排序。
 该参数是排序数组的长度。
-配置该选项时先按说明调整 `sort_interval` 参数，在参考采集器性能统计 `deepflow_agent_ebpf_memory_profiler` 中
+配置该选项时先按说明调整 `sort_interval` 参数，在参考采集器性能统计 `zerotrace_agent_ebpf_memory_profiler` 中
 `dequeued_by_length` 和 `dequeued_by_interval` 指标，在保证前者小于后者几倍的前提下适当调小该参数。
 
 ##### 排序间隔 {#inputs.ebpf.profile.memory.sort_interval}
@@ -4998,7 +4998,7 @@ inputs:
 
 为了匹配 mallocs 和 frees，内存剖析会在处理前对数据按时间戳排序。
 该参数控制排序数组中第一个和最后一个元素之间的时间间隔的最大值。
-配置该选项可以参考采集器性能统计 `deepflow_agent_ebpf_memory_profiler` 中
+配置该选项可以参考采集器性能统计 `zerotrace_agent_ebpf_memory_profiler` 中
 `time_backtracked` 指标，增大该参数使之为 0 即可。注意可能需要相应增大 `sort_length` 参数。
 
 ##### 队列大小 {#inputs.ebpf.profile.memory.queue_size}
@@ -5030,7 +5030,7 @@ inputs:
 **详细描述**:
 
 内存剖析组件内部的队列大小。
-配置该选项可以参考采集器性能统计 `deepflow_agent_ebpf_memory_profiler` 中
+配置该选项可以参考采集器性能统计 `zerotrace_agent_ebpf_memory_profiler` 中
 `overwritten` 和 `pending` 指标，增大该配置使得前者为 0，后者不高于该配置即可。
 
 #### 预处理 {#inputs.ebpf.profile.preprocess}
@@ -5064,7 +5064,7 @@ inputs:
 **详细描述**:
 
 发送数据之前压缩函数调用栈。压缩能够有效降低 agent 的内存开销、数据传输的带宽消耗、以及
-ingester 的 CPU 开销，但是 Agent 也会因此消耗更多的 CPU。测试表明，将deepflow-agent 自身的
+ingester 的 CPU 开销，但是 Agent 也会因此消耗更多的 CPU。测试表明，将zerotrace-agent 自身的
 on-cpu 函数调用栈压缩，可以将带宽消耗降低 `x` 倍，但会使得 agent 额外消耗 `y%` 的 CPU。
 
 #### 语言特定剖析 {#inputs.ebpf.profile.languages}
@@ -5189,7 +5189,7 @@ inputs:
 
 **详细描述**:
 
-以下 deepflow-agent 的 eBPF 数据采集队列大小（分别限制）：
+以下 zerotrace-agent 的 eBPF 数据采集队列大小（分别限制）：
 - 0-ebpf-to-ebpf-collector
 - 1-proc-event-to-sender
 - 1-profile-to-sender
@@ -5406,7 +5406,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 主动向 deepflow-server 上报/同步资源信息的时间间隔。
+zerotrace-agent 主动向 zerotrace-server 上报/同步资源信息的时间间隔。
 
 ### 启用云主机资源同步 {#inputs.resources.workload_resource_sync_enabled}
 
@@ -5432,7 +5432,7 @@ inputs:
 
 **详细描述**:
 
-开启开关后，deepflow-server 基于 deepflow-agent 上报的运行环境信息，生成一个云主机资源。
+开启开关后，zerotrace-server 基于 zerotrace-agent 上报的运行环境信息，生成一个云主机资源。
 用于无法通过云平台 API 同步云主机资源的场景，也可用于同步非云环境中普通物理服务器的资源信息。
 
 ### 采集专有云资源 {#inputs.resources.private_cloud}
@@ -5464,7 +5464,7 @@ inputs:
 
 **详细描述**:
 
-开启开关后，deepflow-agent 将采集 KVM 或 Linux 宿主机中的 VM 信息和网络信息，并上报/同步至 deepflow-server。
+开启开关后，zerotrace-agent 将采集 KVM 或 Linux 宿主机中的 VM 信息和网络信息，并上报/同步至 zerotrace-server。
 采集的信息包括：
 - raw_all_vm_xml
 - raw_vm_states
@@ -5507,7 +5507,7 @@ inputs:
 
 **详细描述**:
 
-配置 deepflow-agent 提取 VM 真实 MAC 地址的方法:
+配置 zerotrace-agent 提取 VM 真实 MAC 地址的方法:
 - 网卡 MAC 地址: 从 tap 接口的 MAC 地址中提取 VM 的 MAC 地址
 - 网卡名称: 从 tap 接口的名字中提取 MAC 地址
 - Qemu XML 文件: 从 VM XML 文件中提取 MAC 地址
@@ -5996,15 +5996,15 @@ inputs:
 
 **详细描述**:
 
-- passive: deepflow-agent 采集 ARP/ND 数据包 计算其他 POD 的 MAC 和 IP 信息。
-- active: deepflow-agent 通过 setns 进入其他 POD 的 netns 查询 MAC 和 IP 信息（部署
+- passive: zerotrace-agent 采集 ARP/ND 数据包 计算其他 POD 的 MAC 和 IP 信息。
+- active: zerotrace-agent 通过 setns 进入其他 POD 的 netns 查询 MAC 和 IP 信息（部署
   时需要 SYS_ADMIN 权限）。
-- adaptive: deepflow-agent 优先使用 active 模式获取其他 POD 的 MAC 和 IP 信息。
+- adaptive: zerotrace-agent 优先使用 active 模式获取其他 POD 的 MAC 和 IP 信息。
 
 ### 从控制器拉取资源 {#inputs.resources.pull_resource_from_controller}
 
-DeepFlow-server 从控制器拉取资源的配置。
-DeepFlow-agent 不会读取此部分。
+ZeroTrace-server 从控制器拉取资源的配置。
+ZeroTrace-agent 不会读取此部分。
 
 #### 云平台过滤器 {#inputs.resources.pull_resource_from_controller.domain_filter}
 
@@ -6039,9 +6039,9 @@ inputs:
 
 **详细描述**:
 
-在运行过程中 deepflow-agent 周期性从 deepflow-server 获取 IP、MAC 列表，用于
-向采集的观测数据注入标签。该参数可以控制向 deepflow-agent 发送的 IP、MAC 数据范围，
-以减少下发的数据量。当业务系统中不存在跨云平台的服务访问时，可以配置仅向 deepflow-agent
+在运行过程中 zerotrace-agent 周期性从 zerotrace-server 获取 IP、MAC 列表，用于
+向采集的观测数据注入标签。该参数可以控制向 zerotrace-agent 发送的 IP、MAC 数据范围，
+以减少下发的数据量。当业务系统中不存在跨云平台的服务访问时，可以配置仅向 zerotrace-agent
 下发本云平台的数据。参数的默认值为`0`，表示获取所有云平台的数据；也可以设置 lcuuid 列表，
 仅获取部分云平台的数据。
 
@@ -6072,9 +6072,9 @@ inputs:
 
 **详细描述**:
 
-运行过程中 deepflow-agent 周期性从 deepflow-server 获取 IP、MAC 列表，用于
-向采集的观测数据注入标签。该参数可以控制向 deepflow-agent 发送的 IP、MAC 数据范围，
-减少下发的数据量。当 Kubernetes 内部的 POD IP 不会直接与外部通信时，可以配置仅向 deepflow-agent
+运行过程中 zerotrace-agent 周期性从 zerotrace-server 获取 IP、MAC 列表，用于
+向采集的观测数据注入标签。该参数可以控制向 zerotrace-agent 发送的 IP、MAC 数据范围，
+减少下发的数据量。当 Kubernetes 内部的 POD IP 不会直接与外部通信时，可以配置仅向 zerotrace-agent
 下发本集群的 POD IP、MAC 数据。参数默认值为 `false`，表示发送全部。
 
 ## 集成 {#inputs.integration}
@@ -6105,7 +6105,7 @@ inputs:
 
 **详细描述**:
 
-开关开启后，deepflow-agent 将开启外部数据的接收服务接口，以集成来自 Prometheus、
+开关开启后，zerotrace-agent 将开启外部数据的接收服务接口，以集成来自 Prometheus、
 Telegraf、OpenTelemetry 和 Skywalking 的数据。
 
 ### 监听端口 {#inputs.integration.listen_port}
@@ -6135,7 +6135,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 外部数据接收服务的监听端口。
+zerotrace-agent 外部数据接收服务的监听端口。
 
 ### 压缩 {#inputs.integration.compression}
 
@@ -6166,8 +6166,8 @@ inputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对集成的追踪数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对集成的追踪数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 #### Profile {#inputs.integration.compression.profile}
 
@@ -6196,12 +6196,12 @@ inputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对集成的剖析数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对集成的剖析数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 ### Prometheus 额外 Label {#inputs.integration.prometheus_extra_labels}
 
-deepflow-agent 支持从 Prometheus RemoteWrite 的 http header 中获取额外的 label。
+zerotrace-agent 支持从 Prometheus RemoteWrite 的 http header 中获取额外的 label。
 
 #### Enabled {#inputs.integration.prometheus_extra_labels.enabled}
 
@@ -6290,7 +6290,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 对 Prometheus 额外 label 解析并采集时，key 字段长度总和的上限。
+zerotrace-agent 对 Prometheus 额外 label 解析并采集时，key 字段长度总和的上限。
 
 #### Label 值总长度限制 {#inputs.integration.prometheus_extra_labels.value_length}
 
@@ -6321,7 +6321,7 @@ inputs:
 
 **详细描述**:
 
-deepflow-agent 对 Prometheus 额外 label 解析并采集时，value 字段长度总和的上限。
+zerotrace-agent 对 Prometheus 额外 label 解析并采集时，value 字段长度总和的上限。
 
 ### 特性开关 {#inputs.integration.feature_control}
 
@@ -6480,10 +6480,10 @@ inputs:
 **详细描述**:
 
 Vector 组件的具体配置，所有可用配置可在此链接中查找：[vector.dev](https://vector.dev/docs/reference/configuration)
-以下提供一份抓取 kubernetes 日志、宿主机指标及 kubernetes kubelet 指标的示例，并将这些数据发送到 DeepFlow-Agent。
+以下提供一份抓取 kubernetes 日志、宿主机指标及 kubernetes kubelet 指标的示例，并将这些数据发送到 ZeroTrace-Agent。
 
 抓取主机指标
-`K8S_NODE_NAME_FOR_DEEPFLOW` 变量仅容器环境必须，非容器环境可以去掉
+`K8S_NODE_NAME_FOR_ZEROTRACE` 变量仅容器环境必须，非容器环境可以去掉
 ```yaml
 sources:
   host_metrics:
@@ -6496,8 +6496,8 @@ transforms:
     inputs:
     - host_metrics
     source: |
-      .tags.instance = "${K8S_NODE_IP_FOR_DEEPFLOW}"
-      host_name, _ = get_env_var("K8S_NODE_NAME_FOR_DEEPFLOW")
+      .tags.instance = "${K8S_NODE_IP_FOR_ZEROTRACE}"
+      host_name, _ = get_env_var("K8S_NODE_NAME_FOR_ZEROTRACE")
       if !is_empty(host_name) {
         .tags.host = host_name
       }
@@ -6545,7 +6545,7 @@ sources:
   cadvisor_metrics:
     type: prometheus_scrape
     endpoints:
-    - https://${K8S_NODE_IP_FOR_DEEPFLOW}:10250/metrics/cadvisor
+    - https://${K8S_NODE_IP_FOR_ZEROTRACE}:10250/metrics/cadvisor
     auth:
       strategy: bearer
       token: SECRET[kube_token.token]
@@ -6559,7 +6559,7 @@ sources:
   kubelet_metrics:
     type: prometheus_scrape
     endpoints:
-    - https://${K8S_NODE_IP_FOR_DEEPFLOW}:10250/metrics
+    - https://${K8S_NODE_IP_FOR_ZEROTRACE}:10250/metrics
     auth:
       strategy: bearer
       token: SECRET[kube_token.token]
@@ -6616,12 +6616,12 @@ sinks:
 
 ```
 
-抓取 kubernetes 日志(以采集 DeepFlow Pod 日志为例，若需要采集其他 Pod 日志可修改 `extra_label_selector` 并加上具体条件)
+抓取 kubernetes 日志(以采集 ZeroTrace Pod 日志为例，若需要采集其他 Pod 日志可修改 `extra_label_selector` 并加上具体条件)
 ```yaml
 data_dir: /vector-log-checkpoint
 sources:
   kubernetes_logs:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -6630,9 +6630,9 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component!=front-end"
+    extra_label_selector: "app=zerotrace,component!=front-end"
   kubernetes_logs_frontend:
-    self_node_name: ${K8S_NODE_NAME_FOR_DEEPFLOW}
+    self_node_name: ${K8S_NODE_NAME_FOR_ZEROTRACE}
     type: kubernetes_logs
     namespace_annotation_fields:
       namespace_labels: ""
@@ -6641,7 +6641,7 @@ sources:
     pod_annotation_fields:
       pod_annotations: ""
       pod_labels: ""
-    extra_label_selector: "app=deepflow,component=front-end"
+    extra_label_selector: "app=zerotrace,component=front-end"
 transforms:
   multiline_kubernetes_logs:
     type: reduce
@@ -6738,7 +6738,7 @@ sources:
   internal_metrics:
     type: internal_metrics
     scrape_interval_secs: 10
-    namespace: ${K8S_NAMESPACE_FOR_DEEPFLOW}
+    namespace: ${K8S_NAMESPACE_FOR_ZEROTRACE}
   socket_dial_input:
     type: demo_logs
     interval: 10
@@ -6750,7 +6750,7 @@ transforms:
     inputs:
     - internal_metrics
     source: |-
-      .tags.instance = "${K8S_NODE_IP_FOR_DEEPFLOW}"
+      .tags.instance = "${K8S_NODE_IP_FOR_ZEROTRACE}"
   internal_metrics_dispatch:
     type: route
     inputs:
@@ -6822,7 +6822,7 @@ processors:
 
 **详细描述**:
 
-设置为`0`时，deepflow-agent 根据 `global.limits.max_memory` 参数自动调整 Fast-path 字典大小。
+设置为`0`时，zerotrace-agent 根据 `global.limits.max_memory` 参数自动调整 Fast-path 字典大小。
 注意：实践中不应配置小于 8000 的值。
 
 #### 禁用 Fast-path {#processors.packet.policy.fast_path_disabled}
@@ -6852,7 +6852,7 @@ processors:
 
 **详细描述**:
 
-设置为 `true` 时，deepflow-agent 不启用 fast path。
+设置为 `true` 时，zerotrace-agent 不启用 fast path。
 
 #### Forward 表容量 {#processors.packet.policy.forward_table_capacity}
 
@@ -6882,7 +6882,7 @@ processors:
 
 **详细描述**:
 
-转发表大小，用来存储 MAC-IP 信息，调大该参数，deepflow-agent 将消耗更多的内存。
+转发表大小，用来存储 MAC-IP 信息，调大该参数，zerotrace-agent 将消耗更多的内存。
 
 #### 最大 First-path 层级 {#processors.packet.policy.max_first_path_level}
 
@@ -7009,7 +7009,7 @@ processors:
 
 **详细描述**:
 
-使用一个 8 bit 的 flag 对 deepflow-agent 采集上报的 TCP 报文时序数据内容进行控制，不同
+使用一个 8 bit 的 flag 对 zerotrace-agent 采集上报的 TCP 报文时序数据内容进行控制，不同
 的 bit 位代表不同 TCP 字段的采集开关：
 ```
 | FLAG | SEQ | ACK | PAYLOAD_SIZE | WINDOW_SIZE | OPT_MSS | OPT_WS | OPT_SACK |
@@ -7048,7 +7048,7 @@ processors:
 
 **详细描述**:
 
-设置 deepflow-agent 的 1-mini-meta-packet-to-pcap 队列大小。
+设置 zerotrace-agent 的 1-mini-meta-packet-to-pcap 队列大小。
 
 #### Sender 队列大小 {#processors.packet.pcap_stream.sender_queue_size}
 
@@ -7077,7 +7077,7 @@ processors:
 
 **详细描述**:
 
-设置 deepflow-agent 的 2-pcap-batch-to-sender 队列大小。
+设置 zerotrace-agent 的 2-pcap-batch-to-sender 队列大小。
 
 #### 每个 Flow 的缓冲区大小 {#processors.packet.pcap_stream.buffer_size_per_flow}
 
@@ -7310,7 +7310,7 @@ processors:
 
 **详细描述**:
 
-deepflow-agent 会周期性标记每一个<vpc, ip, protocol, port>四元组承载的应用协议类型，以加速
+zerotrace-agent 会周期性标记每一个<vpc, ip, protocol, port>四元组承载的应用协议类型，以加速
 后续数据的应用协议采集过程。为避免误判，应用协议类型的标记结果会周期性更新。该参数控制应用协议的更
 新周期。
 
@@ -7445,7 +7445,7 @@ processors:
 
 **详细描述**:
 
-deepflow-agent 仅对列表内的应用协议进行数据采集。通过该参数可以控制 agent 的数据采集范围以
+zerotrace-agent 仅对列表内的应用协议进行数据采集。通过该参数可以控制 agent 的数据采集范围以
 降低资源消耗。
 
 #### 协议特殊配置 {#processors.request_log.application_protocol_inference.protocol_special_config}
@@ -7913,7 +7913,7 @@ HTTP2: 1-65535
 
 注意：
 1. 该参数中，HTTP2 和 TLS 协议的配置仅对 Kprobe 有效，对 Uprobe 无效；
-   - 支持协议：[https://www.deepflow.io/docs/zh/features/l7-protocols/overview/](https://www.deepflow.io/docs/zh/features/l7-protocols/overview/)
+   - 支持协议：[https://www.zerotrace.io/docs/zh/features/l7-protocols/overview/](https://www.zerotrace.io/docs/zh/features/l7-protocols/overview/)
    - <mark>Oracle 和 TLS 仅在企业版中支持。</mark>
 2. 如需控制 `gRPC` 协议，请使用 `HTTP2` 配置。
 
@@ -8037,7 +8037,7 @@ the blacklist from being collected by the agent or included in application perfo
 It's recommended to only place non-business request logs like heartbeats or health checks in this
 blacklist. Including business request logs might lead to breaks in the distributed tracing tree.
 
-Supported protocols: https://www.deepflow.io/docs/features/l7-protocols/overview/
+Supported protocols: https://www.zerotrace.io/docs/features/l7-protocols/overview/
 
 <mark>Oracle and TLS is only supported in the Enterprise Edition.</mark>
 
@@ -8176,7 +8176,7 @@ processors:
 **详细描述**:
 
 配置该参数后，当系统中 DNS 响应异常为 `Non-Existent Domain`，且响应结果中的后缀与参数中的字段
-匹配时， deepflow-agent 会将 DNS 响应码置为`0`，响应状态置为`正常`。
+匹配时， zerotrace-agent 会将 DNS 响应码置为`0`，响应状态置为`正常`。
 该特性用于忽略特定的 `Non-Existent Domain` 类型的 DNS 响应，比如 K8s Pod 解析外部域名时，会将
 待解析域名与 cluster 内的域名后缀做拼接并多次尝试解析，因而会产生多次的 `Non-Existent Domain`
 的响应结果，干扰数据分析。
@@ -8206,7 +8206,7 @@ processors:
 
 **详细描述**:
 
-关闭后 deepflow-agent 将停止从 packet 数据生成调用日志。
+关闭后 zerotrace-agent 将停止从 packet 数据生成调用日志。
 
 ### 超时设置 {#processors.request_log.timeouts}
 
@@ -8238,7 +8238,7 @@ processors:
 
 **详细描述**:
 
-deepflow-agent 采集 TCP 承载的应用调用时等待响应消息的最大时长，如果响应与请求之间的时间差超过
+zerotrace-agent 采集 TCP 承载的应用调用时等待响应消息的最大时长，如果响应与请求之间的时间差超过
 该参数值，该次调用将被识别为超时。该参数需大于配置 `processors.request_log.timeouts.session_aggregate`
 中 TCP 类型的超时时间（例如 HTTP2 默认值 120s），并小于 3600s。
 
@@ -8270,7 +8270,7 @@ processors:
 
 **详细描述**:
 
-deepflow-agent 采集 UDP 承载的应用调用时等待响应消息的最大时长，如果响应与请求之间的时间差超过该参数值，该次调用将被识别为超时。
+zerotrace-agent 采集 UDP 承载的应用调用时等待响应消息的最大时长，如果响应与请求之间的时间差超过该参数值，该次调用将被识别为超时。
 该参数需大于配置 `processors.request_log.timeouts.session_aggregate` 中 UDP 类型的超时时间（例如 DNS 默认值 15s），并小于 300s。
 
 #### 会话合并窗口时长 {#processors.request_log.timeouts.session_aggregate_window_duration}
@@ -8434,7 +8434,7 @@ processors:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent 会尝试从 HTTP header 中匹配特征字段，并将匹配到
+配置该参数后，zerotrace-agent 会尝试从 HTTP header 中匹配特征字段，并将匹配到
 的结果填充到应用调用日志的`http_proxy_client`字段中，作为调用链追踪的特征值。
 如果指定多个值，优先级从前到后降低。插件重写的字段优先级最高。
 
@@ -8467,7 +8467,7 @@ processors:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent 会尝试从 HTTP header 中匹配特征字段，并将匹配到
+配置该参数后，zerotrace-agent 会尝试从 HTTP header 中匹配特征字段，并将匹配到
 的结果填充到应用调用日志的`x_request_id`字段中，作为调用链追踪的特征值。
 如果指定多个值，优先级从前到后降低。插件重写的字段优先级最高。
 
@@ -8531,7 +8531,7 @@ processors:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent 会尝试从 HTTP 和 RPC header 中匹配特征字段，并将匹配到
+配置该参数后，zerotrace-agent 会尝试从 HTTP 和 RPC header 中匹配特征字段，并将匹配到
 的结果填充到应用调用日志的`trace_id`字段中，作为调用链追踪的特征值。参数支持填写多个不同的
 特征字段，中间用`,`分隔。
 如果指定多个值，优先级从前到后降低。插件重写的字段优先级最高。
@@ -8602,7 +8602,7 @@ processors:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent 会尝试从 HTTP 和 RPC header 中匹配特征字段，并将匹配到
+配置该参数后，zerotrace-agent 会尝试从 HTTP 和 RPC header 中匹配特征字段，并将匹配到
 的结果填充到应用调用日志的`span_id`字段中，作为调用链追踪的特征值。参数支持填写多个不同的
 特征字段，中间用`,`分隔。
 如果指定多个值，优先级从前到后降低。插件重写的字段优先级最高。
@@ -8680,7 +8680,7 @@ processors:
 HTTP 协议的 endpoint 提取遵循如下规则：
 - 最长匹配原则：优先匹配最长的前缀；
 - 提取 URL 最前的数段（段数由参数确定，默认值为 2）作为 endpoint。
-比如，URL 为 `/a/b/c?query=xxx`，deepflow-agent 默认提取 `/a/b` 作为 endpoint。
+比如，URL 为 `/a/b/c?query=xxx`，zerotrace-agent 默认提取 `/a/b` 作为 endpoint。
 
 ###### URL 前缀 {#processors.request_log.tag_extraction.http_endpoint.match_rules.url_prefix}
 
@@ -8932,7 +8932,7 @@ processors:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent 将在采集时对特定应用协议的关键数据做脱敏处理。
+配置该参数后，zerotrace-agent 将在采集时对特定应用协议的关键数据做脱敏处理。
 脱敏字段主要包括：
 - 授权信息
 - 各类语句中的 value 信息
@@ -9133,12 +9133,12 @@ processors:
 
 如果某个时间槽中的 l7_flow_log 条目数量超过该配置，则该时间槽中 10% 的 l7_flow_log 条目将被
 LRU 策略淘汰以减少内存占用。注意，被淘汰的 l7_flow_log 条目不会被丢弃，而是作为单向的 request_log
-发送给 deepflow-server。
+发送给 zerotrace-server。
 
 以下指标可以作为调整该配置的参考数据：
-- Metric `deepflow_tenant.deepflow_agent_l7_session_aggr.cached-request-resource`
+- Metric `zerotrace_tenant.zerotrace_agent_l7_session_aggr.cached-request-resource`
   用于记录当前时刻所有时间槽中缓存的 request_resource 字段占用的总内存，单位为字节。
-- Metric `deepflow_tenant.deepflow_agent_l7_session_aggr.over-limit`
+- Metric `zerotrace_tenant.zerotrace_agent_l7_session_aggr.over-limit`
   用于记录达到 LRU 容量限制并触发淘汰的次数。
 
 #### 会话聚合最大条目数 {#processors.request_log.tunning.session_aggregate_max_entries}
@@ -9326,7 +9326,7 @@ processors:
 
 **详细描述**:
 
-deepflow-agent 有可能会错误的判断长流的方向，如果某个端口一定是服务端端口，
+zerotrace-agent 有可能会错误的判断长流的方向，如果某个端口一定是服务端端口，
 可配置在此处避免误判断。
 
 ##### 云流量忽略 MAC {#processors.flow_log.conntrack.flow_generation.cloud_traffic_ignore_mac}
@@ -9357,9 +9357,9 @@ processors:
 
 **详细描述**:
 
-默认情况下，对云流量采集做流聚合时，deepflow-agent 会校验 MAC 地址，如果同一位置、同一条流的
+默认情况下，对云流量采集做流聚合时，zerotrace-agent 会校验 MAC 地址，如果同一位置、同一条流的
 上、下行数据包中的 MAC 地址不一致（非对称），将导致会话的上、下行数据无法聚合为同一条流。开启此
-开关后，deepflow-agent 将在流聚合过程中不校验 MAC 地址。
+开关后，zerotrace-agent 将在流聚合过程中不校验 MAC 地址。
 
 ##### 忽略 L2End {#processors.flow_log.conntrack.flow_generation.ignore_l2_end}
 
@@ -9839,7 +9839,7 @@ outputs:
 
 **详细描述**:
 
-配置 deepflow-agent 向 deepflow-server 回传数据所用的 Socket 类型。在独立部署
+配置 zerotrace-agent 向 zerotrace-server 回传数据所用的 Socket 类型。在独立部署
 模式下，需配置为 FILE 类型，agent 将 l4_flow_log 和 l7_flow_log 写入本地文件。
 
 ### NPB Socket 类型 {#outputs.socket.npb_socket_type}
@@ -9935,7 +9935,7 @@ outputs:
 
 **详细描述**:
 
-当设置为 true 时，deepflow-agent 将使用多个套接字将数据发送到 Ingester，
+当设置为 true 时，zerotrace-agent 将使用多个套接字将数据发送到 Ingester，
 其发送性能更高，但会给防火墙带来更大的影响。
 
 ## 流日志及调用日志 {#outputs.flow_log}
@@ -10061,7 +10061,7 @@ outputs:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent将不采集列表中观测点的流日志（同时 TCP 时序数据、Pcap 数据
+配置该参数后，zerotrace-agent将不采集列表中观测点的流日志（同时 TCP 时序数据、Pcap 数据
 的采集也将被忽略）。默认值`[]`表示所有观测点均采集。
 
 #### 调用日志忽略的观测点 {#outputs.flow_log.filters.l7_ignored_observation_points}
@@ -10109,7 +10109,7 @@ outputs:
 
 **详细描述**:
 
-配置该参数后，deepflow-agent将不采集列表中观测点的应用调用日志。默认值`[]`表示所有观测点均采集。
+配置该参数后，zerotrace-agent将不采集列表中观测点的应用调用日志。默认值`[]`表示所有观测点均采集。
 
 ### 聚合器 {#outputs.flow_log.aggregators}
 
@@ -10178,7 +10178,7 @@ outputs:
 
 **详细描述**:
 
-deepflow-agent 每秒发送的 l4_flow_log 数量上限，实际产生的日志数量超过阈值时，将
+zerotrace-agent 每秒发送的 l4_flow_log 数量上限，实际产生的日志数量超过阈值时，将
 使用水库采样限制实际发送数量不超过阈值。
 
 #### 调用日志限速器 {#outputs.flow_log.throttles.l7_throttle}
@@ -10210,7 +10210,7 @@ outputs:
 
 **详细描述**:
 
-deepflow-agent 每秒发送的 l7_flow_log 数量上限，实际发送数量超出参数值后，将开启采样。
+zerotrace-agent 每秒发送的 l7_flow_log 数量上限，实际发送数量超出参数值后，将开启采样。
 
 ### 调优 {#outputs.flow_log.tunning}
 
@@ -10274,7 +10274,7 @@ outputs:
 
 **详细描述**:
 
-指标数据采集总开关。关闭后 deepflow-agent 将停止所有应用调用指标、网络指标、应用
+指标数据采集总开关。关闭后 zerotrace-agent 将停止所有应用调用指标、网络指标、应用
 调用日志、流日志、TCP 包时序数据、Pcap 数据的采集。
 
 ### 过滤器 {#outputs.flow_metrics.filters}
@@ -10306,7 +10306,7 @@ outputs:
 
 **详细描述**:
 
-开启功能后 deepflow-agent 将对非活跃的端口（仅接收数据，不发送数据）的指标数据采集
+开启功能后 zerotrace-agent 将对非活跃的端口（仅接收数据，不发送数据）的指标数据采集
 做聚合处理，所有非活跃端口的数据聚合生成一条'server_port = 0'的指标，而不再生成每个
 server_port 单独的指标。
 
@@ -10337,7 +10337,7 @@ outputs:
 
 **详细描述**:
 
-开启功能后 deepflow-agent 将对非活跃 IP（仅接收数据，不发送数据）的指标数据采集做聚合
+开启功能后 zerotrace-agent 将对非活跃 IP（仅接收数据，不发送数据）的指标数据采集做聚合
 处理，所有非活跃 IP 的数据聚合生成一条'ip = 0'的指标，而不再生成每个 IP 单独的指标。
 
 #### NPM 指标 {#outputs.flow_metrics.filters.npm_metrics}
@@ -10367,7 +10367,7 @@ outputs:
 
 **详细描述**:
 
-网络指标的采集开关。关闭后 deepflow-agent 停止采集除基本的吞吐类指标外的其他网络指标。
+网络指标的采集开关。关闭后 zerotrace-agent 停止采集除基本的吞吐类指标外的其他网络指标。
 
 #### NPM 活跃连接指标 {#outputs.flow_metrics.filters.npm_metrics_concurrent}
 
@@ -10394,7 +10394,7 @@ outputs:
 
 **详细描述**:
 
-当关闭时，deepflow-agent 不计算活跃连接指标。
+当关闭时，zerotrace-agent 不计算活跃连接指标。
 
 #### APM 指标 {#outputs.flow_metrics.filters.apm_metrics}
 
@@ -10423,7 +10423,7 @@ outputs:
 
 **详细描述**:
 
-应用调用指标的采集开关。关闭后 deepflow-agent 停止采集全部应用调用指标。
+应用调用指标的采集开关。关闭后 zerotrace-agent 停止采集全部应用调用指标。
 
 #### 秒粒度指标 {#outputs.flow_metrics.filters.second_metrics}
 
@@ -10452,7 +10452,7 @@ outputs:
 
 **详细描述**:
 
-秒级指标的采集开关。关闭后 deepflow-agent 将停止采集秒粒度的网络指标和应用调用指标。
+秒级指标的采集开关。关闭后 zerotrace-agent 将停止采集秒粒度的网络指标和应用调用指标。
 
 ### 调优 {#outputs.flow_metrics.tunning}
 
@@ -10707,7 +10707,7 @@ outputs:
 
 **详细描述**:
 
-开启开关后，deepflow-agent 在 NPB 分发时会剥离 overlay 原始数据包中的 VLAN 头。
+开启开关后，zerotrace-agent 在 NPB 分发时会剥离 overlay 原始数据包中的 VLAN 头。
 
 ### 最大 Tx 吞吐量 {#outputs.npb.max_tx_throughput}
 
@@ -10738,7 +10738,7 @@ outputs:
 
 **详细描述**:
 
-设置 deepflow-agent 做 NPB 分发的最大吞吐率。
+设置 zerotrace-agent 做 NPB 分发的最大吞吐率。
 
 ## 压缩 {#outputs.compression}
 
@@ -10766,8 +10766,8 @@ outputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对集成的应用日志数据进行压缩处理，压缩比例在 5:1~20:1 之间。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对集成的应用日志数据进行压缩处理，压缩比例在 5:1~20:1 之间。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 ### Pcap {#outputs.compression.pcap}
 
@@ -10793,8 +10793,8 @@ outputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对抓取的 Pcap 数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对抓取的 Pcap 数据进行压缩处理，压缩比例在 5:1~10:1 之间。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 ### 调用日志 {#outputs.compression.l7_flow_log}
 
@@ -10820,8 +10820,8 @@ outputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对调用日志进行压缩处理，压缩比例在 8:1 左右。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对调用日志进行压缩处理，压缩比例在 8:1 左右。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 ### 流日志 {#outputs.compression.l4_flow_log}
 
@@ -10847,8 +10847,8 @@ outputs:
 
 **详细描述**:
 
-开启后，deepflow-agent 将对网络流日志进行压缩处理。注意：
-开启此特性将增加 deepflow-agent 的 CPU 消耗。
+开启后，zerotrace-agent 将对网络流日志进行压缩处理。注意：
+开启此特性将增加 zerotrace-agent 的 CPU 消耗。
 
 # 插件 {#plugins}
 

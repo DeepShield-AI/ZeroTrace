@@ -28,17 +28,17 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/deepflowio/deepflow/server/controller/common"
-	"github.com/deepflowio/deepflow/server/controller/config"
-	"github.com/deepflowio/deepflow/server/controller/db/metadb"
-	metadbmodel "github.com/deepflowio/deepflow/server/controller/db/metadb/model"
-	httpcommon "github.com/deepflowio/deepflow/server/controller/http/common"
-	"github.com/deepflowio/deepflow/server/controller/http/common/response"
-	"github.com/deepflowio/deepflow/server/controller/http/service/rebalance"
-	"github.com/deepflowio/deepflow/server/controller/model"
-	monitorconf "github.com/deepflowio/deepflow/server/controller/monitor/config"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/refresh"
-	"github.com/deepflowio/deepflow/server/controller/trisolaris/utils"
+	"github.com/zerotraceio/zerotrace/server/controller/common"
+	"github.com/zerotraceio/zerotrace/server/controller/config"
+	"github.com/zerotraceio/zerotrace/server/controller/db/metadb"
+	metadbmodel "github.com/zerotraceio/zerotrace/server/controller/db/metadb/model"
+	httpcommon "github.com/zerotraceio/zerotrace/server/controller/http/common"
+	"github.com/zerotraceio/zerotrace/server/controller/http/common/response"
+	"github.com/zerotraceio/zerotrace/server/controller/http/service/rebalance"
+	"github.com/zerotraceio/zerotrace/server/controller/model"
+	monitorconf "github.com/zerotraceio/zerotrace/server/controller/monitor/config"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/refresh"
+	"github.com/zerotraceio/zerotrace/server/controller/trisolaris/utils"
 )
 
 type Agent struct {

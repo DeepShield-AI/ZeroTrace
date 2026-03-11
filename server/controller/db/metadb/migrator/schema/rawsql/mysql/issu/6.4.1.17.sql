@@ -7,7 +7,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_metric_name_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_metric_name'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_metric_name'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_metric_name_synced_at = '' THEN
@@ -16,7 +16,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_metric_label_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_metric_label'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_metric_label'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_metric_label_synced_at = '' THEN
@@ -25,7 +25,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_metric_target_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_metric_target'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_metric_target'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_metric_target_synced_at = '' THEN
@@ -34,7 +34,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_metric_app_label_layout_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_metric_app_label_layout'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_metric_app_label_layout'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_metric_app_label_layout_synced_at = '' THEN
@@ -43,7 +43,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_label_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_label'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_label'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_label_synced_at = '' THEN
@@ -52,7 +52,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_label_name_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_label_name'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_label_name'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_label_name_synced_at = '' THEN
@@ -61,7 +61,7 @@ BEGIN
 
     SELECT COLUMN_NAME INTO column_label_value_synced_at
     FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE TABLE_SCHEMA = 'deepflow' AND TABLE_NAME = 'prometheus_label_value'
+    WHERE TABLE_SCHEMA = 'zerotrace' AND TABLE_NAME = 'prometheus_label_value'
     AND COLUMN_NAME = 'synced_at';
 
     IF column_label_value_synced_at = '' THEN
