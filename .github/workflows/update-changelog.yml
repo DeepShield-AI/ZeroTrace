@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "Downloading update_changelog.py from the main branch..."
           rm -rf update_changelog.py || true
-          curl -O https://raw.githubusercontent.com/deepflowio/deepflow/main/update_changelog.py
+          curl -O https://raw.githubusercontent.com/zerotraceio/zerotrace/main/update_changelog.py
 
       - name: Run changelog update script
         if: steps.check_branch.outputs.branch_exists == 'true'

@@ -43,7 +43,7 @@ jobs:
           username: "${{ secrets.REGISTRY_ALIYUN_USER }}" 
           password: "${{ secrets.REGISTRY_PASS }}"
 
-      - name: Build and push deepflow agent env images
+      - name: Build and push zerotrace agent env images
         uses: docker/build-push-action@v2
         with:
           context: agent
@@ -90,7 +90,7 @@ jobs:
           username: "${{ secrets.REGISTRY_ALIYUN_USER }}" 
           password: "${{ secrets.REGISTRY_PASS }}"
 
-      - name: Build and push deepflow agent env image
+      - name: Build and push zerotrace agent env image
         uses: docker/build-push-action@v2
         with:
           context: agent

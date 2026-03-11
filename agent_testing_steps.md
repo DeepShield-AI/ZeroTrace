@@ -127,20 +127,20 @@ sudo systemctl restart docker
 
 拉取代码时需要包含子模块：
 ```bash
-git clone --recurse-submodules https://github.com/DeepShield-AI/zerotrace.git
-cd zerotrace
+git clone --recurse-submodules https://github.com/DeepShield-AI/ZeroTrace.git
+cd ZeroTrace
 ```
 
 ### 2.4 编译代码 (使用 Docker)
 
 在开始测试之前，需要先编译 `zerotrace-agent` 和 `zerotrace-agent-ctl`。推荐使用 Docker 进行编译，无需配置本地 Rust 环境。
 
-确保当前位于项目根目录 `zerotrace/`。
+确保当前位于项目根目录 `ZeroTrace/`。
 
 ```bash
 docker run --privileged --rm -it -v \
     $(pwd):/zerotrace 47.97.67.233:5000/deepshield/rust-build:cached bash -c \
-    "cd /zerotrace/agent && cargo build"
+    "cd /ZeroTrace/agent && cargo build"
 ```
 
 编译产物位于 `agent/target/debug/`：

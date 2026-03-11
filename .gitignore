@@ -39,12 +39,12 @@ target/
 /agent/src/ebpf/user/socket_trace_bpf_kylin.c
 /agent/src/ebpf/user/perf_profiler_bpf_common.c
 /agent/src/ebpf/user/af_packet_fanout_bpf_common.c
-/agent/src/ebpf/user/deepflow_ebpfctl_bin.c
+/agent/src/ebpf/user/zerotrace_ebpfctl_bin.c
 /agent/src/ebpf/user/profile/java_agent_so_gnu.c
 /agent/src/ebpf/user/profile/java_agent_so_musl.c
 /agent/src/ebpf/tools/bintobuffer
-/agent/src/ebpf/deepflow-jattach
-/agent/src/ebpf/user/profile/deepflow_jattach_bin.c
+/agent/src/ebpf/zerotrace-jattach
+/agent/src/ebpf/user/profile/zerotrace_jattach_bin.c
 /agent/src/ebpf/.profiler
 /agent/src/ebpf/.socket-tracer
 /agent/src/ebpf/samples/rust/profiler/target

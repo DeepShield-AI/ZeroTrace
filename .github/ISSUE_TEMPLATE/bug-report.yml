@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-name: DeepFlow bug report
+name: ZeroTrace bug report
 description: Suggest an idea for this project
 title: "[BUG] "
 labels: [ "bug" ]
@@ -21,30 +21,30 @@ body:
   - type: markdown
     attributes:
       value: |
-        <img src="https://github.com/deepflowio/deepflow/blob/main/docs/deepflow-logo.png?raw=true" alt="DeepFlow logo" height="90px" align="right" />
+        <img src="https://github.com/zerotraceio/zerotrace/blob/main/docs/zerotrace-logo.png?raw=true" alt="ZeroTrace logo" height="90px" align="right" />
 
         Thank you for finding the time to propose new feature!
 
-        We really appreciate the community efforts to improve DeepFlow.
+        We really appreciate the community efforts to improve ZeroTrace.
 
   - type: checkboxes
     attributes:
       label: Search before asking
       description: >
-        Please make sure to search in the [issues](https://github.com/deepflowio/deepflow/issues?q=is%3Aissue) first to see
+        Please make sure to search in the [issues](https://github.com/zerotraceio/zerotrace/issues?q=is%3Aissue) first to see
         whether the same feature was requested already.
       options:
         - label: >
-            I had searched in the [issues](https://github.com/deepflowio/deepflow/issues?q=is%3Aissue) and found no similar
+            I had searched in the [issues](https://github.com/zerotraceio/zerotrace/issues?q=is%3Aissue) and found no similar
             feature requirement.
           required: true
 
 
   - type: dropdown
     attributes:
-      label: DeepFlow Component
+      label: ZeroTrace Component
       description: |
-        What DeepFlow component are you using? DeepFlow  has many component, please make sure to choose the component that you found the bug. 
+        What ZeroTrace component are you using? ZeroTrace  has many component, please make sure to choose the component that you found the bug. 
       multiple: false
       options:
         - "Agent"
@@ -86,13 +86,13 @@ body:
 
   - type: textarea
     attributes:
-      label: DeepFlow version
+      label: ZeroTrace version
       description: >
         Please provide the version information to facilitate inspection.
         
-        **Output of `kubectl exec -it -n deepflow deploy/deepflow-server -- deepflow-server -v`:**
+        **Output of `kubectl exec -it -n zerotrace deploy/zerotrace-server -- zerotrace-server -v`:**
 
-        **Output of `kubectl exec -it -n deepflow ds/deepflow-agent -- deepflow-agent -v`:**
+        **Output of `kubectl exec -it -n zerotrace ds/zerotrace-agent -- zerotrace-agent -v`:**
 
       placeholder: >
         ```bash
@@ -105,11 +105,11 @@ body:
 
   - type: textarea
     attributes:
-      label: DeepFlow agent list
+      label: ZeroTrace agent list
       description: >
         Please provide the Kubernetes CNI information to facilitate inspection.
 
-        **Output of `deepflow-ctl agent list`:**
+        **Output of `zerotrace-ctl agent list`:**
       placeholder: >
         ```bash
 
@@ -163,7 +163,7 @@ body:
       description: >
         This is absolutely not required, but we are happy to guide you in the contribution process
         especially if you already have a good understanding of how to implement the feature.
-        DeepFlow is a totally community-driven project and we love to bring new contributors in.
+        ZeroTrace is a totally community-driven project and we love to bring new contributors in.
       options:
         - label: Yes I am willing to submit a PR!
 
@@ -174,7 +174,7 @@ body:
         that everyone agrees to it.
       options:
         - label: |
-            I agree to follow this project's [Code of Conduct](https://github.com/deepflowio/deepflow/blob/main/CODE_OF_CONDUCT.md)
+            I agree to follow this project's [Code of Conduct](https://github.com/zerotraceio/zerotrace/blob/main/CODE_OF_CONDUCT.md)
           required: true
 
   - type: markdown

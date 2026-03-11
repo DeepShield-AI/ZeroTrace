@@ -20,7 +20,7 @@ on:
 name: build agent
 
 env:
-  IMAGE: "deepflow-agent"
+  IMAGE: "zerotrace-agent"
 
 jobs:
   build_agent:
@@ -51,7 +51,7 @@ jobs:
           username: "${{ github.repository_owner }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Build  deepflow agent
+      - name: Build  zerotrace agent
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -80,7 +80,7 @@ jobs:
                   required_libs+=("${BASH_REMATCH[1]}")
               fi
           done < agent/README.md
-          dynamic_libs=$(ldd agent/output/target/release/deepflow-agent | awk '{print $1}' | xargs -n1 basename)
+          dynamic_libs=$(ldd agent/output/target/release/zerotrace-agent | awk '{print $1}' | xargs -n1 basename)
           echo "All dynamic dependency: ${dynamic_libs}"
           for lib in $dynamic_libs; do
               if [[ ! " ${required_libs[@]} " =~ " ${lib} " ]]; then
@@ -91,8 +91,8 @@ jobs:
 
       - name: Package code build results
         run: |
-          tar cvf agent-artifact-amd64.tar agent/output/target/release/deepflow-agent agent/output/target/release/deepflow-agent-ctl agent/output/src/ebpf/deepflow-ebpfctl
-          curl -o agent/output/target/release/ecapture https://deepflow-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/x86_64/ecapture
+          tar cvf agent-artifact-amd64.tar agent/output/target/release/zerotrace-agent agent/output/target/release/zerotrace-agent-ctl agent/output/src/ebpf/zerotrace-ebpfctl
+          curl -o agent/output/target/release/ecapture https://zerotrace-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/x86_64/ecapture
           chmod a+x agent/output/target/release/ecapture
 
       - name: Archive code build results
@@ -110,7 +110,7 @@ jobs:
       - name: build rpm
         run: |
           cd agent
-          rpmbuild -bb pkg/centos/deepflow-agent.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
+          rpmbuild -bb pkg/centos/zerotrace-agent.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
           zip -r -q artifacts-rpm.zip x86_64/*.rpm
 
       - name: build deb
@@ -119,44 +119,44 @@ jobs:
           mkdir -p pkg/debian/systemd/usr/sbin/
           mkdir -p pkg/debian/systemd/usr/bin/
           mkdir -p pkg/debian/systemd/usr/lib/x86_64-linux-gnu/
-          cp -af output/target/release/deepflow-agent pkg/debian/systemd/usr/sbin/
+          cp -af output/target/release/zerotrace-agent pkg/debian/systemd/usr/sbin/
           cp -af output/target/release/ecapture pkg/debian/systemd/usr/bin/
           cp -af docker/require/x86_64/libpcap.so.1 pkg/debian/systemd/usr/lib/x86_64-linux-gnu/
           mkdir -p pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/systemd/etc/systemd/system/
-          cp -af pkg/deepflow-agent.service pkg/debian/systemd/etc/systemd/system/
+          cp -af pkg/zerotrace-agent.service pkg/debian/systemd/etc/systemd/system/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/systemd/DEBIAN/control
-          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/systemd x86_64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
+          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/systemd x86_64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
           mkdir -p pkg/debian/upstart/usr/sbin/
           mkdir -p pkg/debian/upstart/usr/bin/
           mkdir -p pkg/debian/upstart/usr/lib/x86_64-linux-gnu/
-          cp -af output/target/release/deepflow-agent pkg/debian/upstart/usr/sbin/
+          cp -af output/target/release/zerotrace-agent pkg/debian/upstart/usr/sbin/
           cp -af output/target/release/ecapture pkg/debian/upstart/usr/bin/
           cp -af docker/require/x86_64/libpcap.so.1 pkg/debian/upstart/usr/lib/x86_64-linux-gnu/
           mkdir -p pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/upstart/etc/init/
-          cp -af pkg/deepflow-agent.conf pkg/debian/upstart/etc/init/
+          cp -af pkg/zerotrace-agent.conf pkg/debian/upstart/etc/init/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/upstart/DEBIAN/control
-          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/upstart x86_64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
+          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/upstart x86_64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
           zip -r -q artifacts-deb.zip x86_64/*.deb
 
       - name: build binary package
         run: |
           mkdir -p agent/bin-package
-          cp -raf agent/output/target/release/deepflow-agent agent/bin-package/
+          cp -raf agent/output/target/release/zerotrace-agent agent/bin-package/
           cd agent/bin-package/
-          tar -czvf deepflow-agent.tar.gz *
+          tar -czvf zerotrace-agent.tar.gz *
 
       - name: build TenCentBlueKing package
         run: |
-          cp -raf agent/output/target/release/deepflow-agent agent/pkg/TencentBlueKing/plugins_linux_x86_64/deepflow-agent/bin/
+          cp -raf agent/output/target/release/zerotrace-agent agent/pkg/TencentBlueKing/plugins_linux_x86_64/zerotrace-agent/bin/
           cd agent/pkg/TencentBlueKing/
-          sed -i "s/RELEASE_VERSION/${{ env.IMAGE_TAG_PREFIX }}/g" plugins_linux_x86_64/deepflow-agent/project.yaml
-          tar -czvf deepflow-agent.tgz *
+          sed -i "s/RELEASE_VERSION/${{ env.IMAGE_TAG_PREFIX }}/g" plugins_linux_x86_64/zerotrace-agent/project.yaml
+          tar -czvf zerotrace-agent.tgz *
 
       - uses: manyuanrong/setup-ossutil@v2.0
         with:
@@ -166,20 +166,20 @@ jobs:
 
       - name: upload agent artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/output/target/release/deepflow-agent-ctl oss://deepflow-ce/bin/ctl/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/deepflow-agent-ctl
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/deepflow-agent.tar.gz
-          ossutil cp -rf agent/pkg/TencentBlueKing/deepflow-agent.tgz oss://deepflow-ce/tencentblueking/agent/${{ env.IMAGE_TAG_PREFIX }}/deepflow-agent.tgz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/output/target/release/zerotrace-agent-ctl oss://zerotrace-ce/bin/ctl/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/zerotrace-agent-ctl
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/amd64/zerotrace-agent.tar.gz
+          ossutil cp -rf agent/pkg/TencentBlueKing/zerotrace-agent.tgz oss://zerotrace-ce/tencentblueking/agent/${{ env.IMAGE_TAG_PREFIX }}/zerotrace-agent.tgz
 
       - name: upload agent stable artifacts
         if: "startsWith(github.ref, 'refs/tags/')"
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/stable/linux/amd64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/stable/linux/amd64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/output/target/release/deepflow-agent-ctl oss://deepflow-ce/bin/ctl/stable/linux/amd64/deepflow-agent-ctl
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/stable/linux/amd64/deepflow-agent.tar.gz
-          ossutil cp -rf agent/pkg/TencentBlueKing/deepflow-agent.tgz oss://deepflow-ce/tencentblueking/agent/stable/deepflow-agent.tgz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/stable/linux/amd64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/stable/linux/amd64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/output/target/release/zerotrace-agent-ctl oss://zerotrace-ce/bin/ctl/stable/linux/amd64/zerotrace-agent-ctl
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/stable/linux/amd64/zerotrace-agent.tar.gz
+          ossutil cp -rf agent/pkg/TencentBlueKing/zerotrace-agent.tgz oss://zerotrace-ce/tencentblueking/agent/stable/zerotrace-agent.tgz
 
   build_agent_arm64:
     name: build agent arm64
@@ -212,7 +212,7 @@ jobs:
           username: "${{ github.repository_owner }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Build  deepflow agent
+      - name: Build  zerotrace agent
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -241,7 +241,7 @@ jobs:
                   required_libs+=("${BASH_REMATCH[1]}")
               fi
           done < agent/README.md
-          dynamic_libs=$(ldd agent/output/target/release/deepflow-agent | awk '{print $1}' | xargs -n1 basename)
+          dynamic_libs=$(ldd agent/output/target/release/zerotrace-agent | awk '{print $1}' | xargs -n1 basename)
           echo "All dynamic dependency: ${dynamic_libs}"
           for lib in $dynamic_libs; do
               if [[ ! " ${required_libs[@]} " =~ " ${lib} " ]]; then
@@ -252,8 +252,8 @@ jobs:
 
       - name: Package code build results
         run: |
-          tar cvf agent-artifact-arm64.tar agent/output/target/release/deepflow-agent agent/output/target/release/deepflow-agent-ctl agent/output/src/ebpf/deepflow-ebpfctl
-          curl -o agent/output/target/release/ecapture https://deepflow-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/aarch64/ecapture
+          tar cvf agent-artifact-arm64.tar agent/output/target/release/zerotrace-agent agent/output/target/release/zerotrace-agent-ctl agent/output/src/ebpf/zerotrace-ebpfctl
+          curl -o agent/output/target/release/ecapture https://zerotrace-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/aarch64/ecapture
           chmod a+x agent/output/target/release/ecapture
 
       - name: Archive code build results
@@ -271,7 +271,7 @@ jobs:
       - name: build rpm
         run: |
           cd agent
-          rpmbuild -bb pkg/centos/deepflow-agent-arm64.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
+          rpmbuild -bb pkg/centos/zerotrace-agent-arm64.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
           zip -r -q artifacts-rpm.zip aarch64/*.rpm
 
       - name: build deb
@@ -280,41 +280,41 @@ jobs:
           mkdir -p pkg/debian/systemd/usr/sbin/
           mkdir -p pkg/debian/systemd/usr/bin/
           mkdir -p pkg/debian/systemd/lib/aarch64-linux-gnu/
-          cp -af output/target/release/deepflow-agent pkg/debian/systemd/usr/sbin/
+          cp -af output/target/release/zerotrace-agent pkg/debian/systemd/usr/sbin/
           cp -af output/target/release/ecapture pkg/debian/systemd/usr/bin/
           cp -af docker/require/aarch64/libpcap.so.1 pkg/debian/systemd/lib/aarch64-linux-gnu/
           mkdir -p pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/systemd/etc/systemd/system/
-          cp -af pkg/deepflow-agent.service pkg/debian/systemd/etc/systemd/system/
+          cp -af pkg/zerotrace-agent.service pkg/debian/systemd/etc/systemd/system/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/systemd/DEBIAN/control
-          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/systemd aarch64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
+          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/systemd aarch64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
           mkdir -p pkg/debian/upstart/usr/sbin/
           mkdir -p pkg/debian/upstart/usr/bin/
           mkdir -p pkg/debian/upstart/lib/aarch64-linux-gnu/
-          cp -af output/target/release/deepflow-agent pkg/debian/upstart/usr/sbin/
+          cp -af output/target/release/zerotrace-agent pkg/debian/upstart/usr/sbin/
           cp -af output/target/release/ecapture pkg/debian/upstart/usr/bin/
           cp -af docker/require/aarch64/libpcap.so.1 pkg/debian/upstart/lib/aarch64-linux-gnu/
           mkdir -p pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/upstart/etc/init/
-          cp -af pkg/deepflow-agent.conf pkg/debian/upstart/etc/init/
+          cp -af pkg/zerotrace-agent.conf pkg/debian/upstart/etc/init/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/upstart/DEBIAN/control
-          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/upstart aarch64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
+          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/upstart aarch64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
           zip -r -q artifacts-deb.zip aarch64/*.deb
 
       - name: build binary package
         run: |
           mkdir -p agent/bin-package
-          cp -raf agent/output/target/release/deepflow-agent agent/bin-package/
+          cp -raf agent/output/target/release/zerotrace-agent agent/bin-package/
           cd agent/bin-package/
-          tar -czvf deepflow-agent.tar.gz *
+          tar -czvf zerotrace-agent.tar.gz *
 
       - name: Arm64 package results
         run: |
-          tar cvf package-artifact-arm64.tar  agent/artifacts-rpm.zip agent/artifacts-deb.zip agent/bin-package/deepflow-agent.tar.gz agent/output/target/release/deepflow-agent-ctl
+          tar cvf package-artifact-arm64.tar  agent/artifacts-rpm.zip agent/artifacts-deb.zip agent/bin-package/zerotrace-agent.tar.gz agent/output/target/release/zerotrace-agent-ctl
 
       - name: Archive Arm64 package results
         uses: actions/upload-artifact@v4
@@ -373,9 +373,9 @@ jobs:
           tar xvf agent-artifact-amd64.tar -C x86_64
           tar xvf agent-artifact-arm64.tar -C aarch64
           tar xvf package-artifact-arm64.tar
-          curl -o x86_64/agent/output/target/release/ecapture https://deepflow-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/x86_64/ecapture
+          curl -o x86_64/agent/output/target/release/ecapture https://zerotrace-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/x86_64/ecapture
           chmod a+x x86_64/agent/output/target/release/ecapture
-          curl -o aarch64/agent/output/target/release/ecapture https://deepflow-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/aarch64/ecapture
+          curl -o aarch64/agent/output/target/release/ecapture https://zerotrace-ce.oss-cn-beijing.aliyuncs.com/pkg/compile/aarch64/ecapture
           chmod a+x aarch64/agent/output/target/release/ecapture
 
       - name: Log in to GitHub Docker Registry
@@ -388,7 +388,7 @@ jobs:
       - name: Log in to Docker Registry
         uses: docker/login-action@v2
         with:
-          username: "deepflowce"
+          username: "zerotracece"
           password: "${{ secrets.REGISTRY_PASS }}"
 
       - name: Log in to ALIYUN HongKong Docker Registry
@@ -404,7 +404,7 @@ jobs:
           echo "IMAGE_TAG=$(git rev-list --count HEAD)" >> $GITHUB_ENV
       - name: qemu workaround
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes -c yes
-      - name: Build and push deepflow agent images to ghcr and dockerhub
+      - name: Build and push zerotrace agent images to ghcr and dockerhub
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -412,11 +412,11 @@ jobs:
           file: agent/docker/dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "ghcr.io/${{ github.repository_owner }}/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "ghcr.io/${{ github.repository_owner }}/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
-            "deepflowce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "ghcr.io/${{ github.repository_owner }}/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "ghcr.io/${{ github.repository_owner }}/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "zerotracece/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
 
-      - name: Build and push deepflow agent images to hongkong aliyun
+      - name: Build and push zerotrace agent images to hongkong aliyun
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -424,8 +424,8 @@ jobs:
           file: agent/docker/dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "registry.cn-hongkong.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "registry.cn-hongkong.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "registry.cn-hongkong.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "registry.cn-hongkong.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
 
       - name: Log in to ALIYUN Docker Registry
         uses: docker/login-action@v2
@@ -434,7 +434,7 @@ jobs:
           username: "${{ secrets.REGISTRY_ALIYUN_USER }}"
           password: "${{ secrets.REGISTRY_PASS }}"
 
-      - name: Build and push deepflow agent images to beijing aliyun
+      - name: Build and push zerotrace agent images to beijing aliyun
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -442,8 +442,8 @@ jobs:
           file: agent/docker/dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "registry.cn-beijing.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "registry.cn-beijing.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "registry.cn-beijing.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "registry.cn-beijing.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
 
       - uses: manyuanrong/setup-ossutil@v2.0
         with:
@@ -453,18 +453,18 @@ jobs:
 
       - name: upload agent artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/output/target/release/deepflow-agent-ctl oss://deepflow-ce/bin/ctl/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/deepflow-agent-ctl
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/deepflow-agent.tar.gz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/output/target/release/zerotrace-agent-ctl oss://zerotrace-ce/bin/ctl/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/zerotrace-agent-ctl
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/arm64/zerotrace-agent.tar.gz
 
       - name: upload agent stable artifacts
         if: "startsWith(github.ref, 'refs/tags/')"
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/stable/linux/arm64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/stable/linux/arm64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/output/target/release/deepflow-agent-ctl oss://deepflow-ce/bin/ctl/stable/linux/arm64/deepflow-agent-ctl
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/stable/linux/arm64/deepflow-agent.tar.gz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/stable/linux/arm64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/stable/linux/arm64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/output/target/release/zerotrace-agent-ctl oss://zerotrace-ce/bin/ctl/stable/linux/arm64/zerotrace-agent-ctl
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/stable/linux/arm64/zerotrace-agent.tar.gz
 
   build_agent_static_link:
     name: build agent static link
@@ -495,7 +495,7 @@ jobs:
           username: "${{ github.repository_owner }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Build  deepflow agent
+      - name: Build  zerotrace agent
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -514,45 +514,45 @@ jobs:
       - name: build rpm
         run: |
           cd agent
-          rpmbuild -bb pkg/centos/deepflow-agent-static-link.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
+          rpmbuild -bb pkg/centos/zerotrace-agent-static-link.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
           zip -r -q artifacts-rpm.zip x86_64/*.rpm
 
       - name: build deb
         run: |
           cd agent
           mkdir -p pkg/debian/systemd/usr/sbin/
-          cp -af output/target/x86_64-unknown-linux-musl/release/deepflow-agent pkg/debian/systemd/usr/sbin/
+          cp -af output/target/x86_64-unknown-linux-musl/release/zerotrace-agent pkg/debian/systemd/usr/sbin/
           mkdir -p pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/systemd/etc/systemd/system/
-          cp -af pkg/deepflow-agent.service pkg/debian/systemd/etc/systemd/system/
+          cp -af pkg/zerotrace-agent.service pkg/debian/systemd/etc/systemd/system/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/systemd/DEBIAN/control
-          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/systemd x86_64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
+          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/systemd x86_64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
           mkdir -p pkg/debian/upstart/usr/sbin/
-          cp -af output/target/x86_64-unknown-linux-musl/release/deepflow-agent pkg/debian/upstart/usr/sbin/
+          cp -af output/target/x86_64-unknown-linux-musl/release/zerotrace-agent pkg/debian/upstart/usr/sbin/
           mkdir -p pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/upstart/etc/init/
-          cp -af pkg/deepflow-agent.conf pkg/debian/upstart/etc/init/
+          cp -af pkg/zerotrace-agent.conf pkg/debian/upstart/etc/init/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/upstart/DEBIAN/control
-          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/upstart x86_64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
+          dpkg-deb -Zxz --no-uniform-compression -b pkg/debian/upstart x86_64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
           zip -r -q artifacts-deb.zip x86_64/*.deb
 
       - name: build binary package
         run: |
           mkdir -p agent/bin-package
-          cp -raf agent/output/target/x86_64-unknown-linux-musl/release/deepflow-agent agent/bin-package/
+          cp -raf agent/output/target/x86_64-unknown-linux-musl/release/zerotrace-agent agent/bin-package/
           cd agent/bin-package/
-          tar -czvf deepflow-agent.tar.gz *
+          tar -czvf zerotrace-agent.tar.gz *
 
       - name: build TenCentBlueKing package
         run: |
-          cp -raf agent/output/target/x86_64-unknown-linux-musl/release/deepflow-agent agent/pkg/TencentBlueKing/plugins_linux_x86_64/deepflow-agent/bin/
+          cp -raf agent/output/target/x86_64-unknown-linux-musl/release/zerotrace-agent agent/pkg/TencentBlueKing/plugins_linux_x86_64/zerotrace-agent/bin/
           cd agent/pkg/TencentBlueKing/
-          sed -i "s/RELEASE_VERSION/${{ env.IMAGE_TAG_PREFIX }}/g" plugins_linux_x86_64/deepflow-agent/project.yaml
-          tar -czvf deepflow-agent.tgz *
+          sed -i "s/RELEASE_VERSION/${{ env.IMAGE_TAG_PREFIX }}/g" plugins_linux_x86_64/zerotrace-agent/project.yaml
+          tar -czvf zerotrace-agent.tgz *
 
       - uses: manyuanrong/setup-ossutil@v2.0
         with:
@@ -562,17 +562,17 @@ jobs:
 
       - name: upload agent artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/deepflow-agent.tar.gz
-          ossutil cp -rf agent/pkg/TencentBlueKing/deepflow-agent.tgz oss://deepflow-ce/tencentblueking/agent/static-link/${{ env.IMAGE_TAG_PREFIX }}/deepflow-agent.tgz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/amd64/zerotrace-agent.tar.gz
+          ossutil cp -rf agent/pkg/TencentBlueKing/zerotrace-agent.tgz oss://zerotrace-ce/tencentblueking/agent/static-link/${{ env.IMAGE_TAG_PREFIX }}/zerotrace-agent.tgz
 
       - name: upload agent stable artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/stable/linux/static-link/amd64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/stable/linux/static-link/amd64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/stable/linux/static-link/amd64/deepflow-agent.tar.gz
-          ossutil cp -rf agent/pkg/TencentBlueKing/deepflow-agent.tgz oss://deepflow-ce/tencentblueking/agent/static-link/stable/deepflow-agent.tgz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/stable/linux/static-link/amd64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/stable/linux/static-link/amd64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/stable/linux/static-link/amd64/zerotrace-agent.tar.gz
+          ossutil cp -rf agent/pkg/TencentBlueKing/zerotrace-agent.tgz oss://zerotrace-ce/tencentblueking/agent/static-link/stable/zerotrace-agent.tgz
 
   build_agent_arm64_static_link:
     name: build agent arm64 static link
@@ -606,7 +606,7 @@ jobs:
           username: "${{ github.repository_owner }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Build  deepflow agent
+      - name: Build  zerotrace agent
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -625,42 +625,42 @@ jobs:
       - name: build rpm
         run: |
           cd agent
-          rpmbuild -bb pkg/centos/deepflow-agent-arm64-static-link.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
+          rpmbuild -bb pkg/centos/zerotrace-agent-arm64-static-link.spec -D '_rpmdir .' --buildroot $(pwd)/.rpmbuild
           zip -r -q artifacts-rpm.zip aarch64/*.rpm
 
       - name: build deb
         run: |
           cd agent
           mkdir -p pkg/debian/systemd/usr/sbin/
-          cp -af output/target/aarch64-unknown-linux-musl/release/deepflow-agent pkg/debian/systemd/usr/sbin/
+          cp -af output/target/aarch64-unknown-linux-musl/release/zerotrace-agent pkg/debian/systemd/usr/sbin/
           mkdir -p pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/systemd/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/systemd/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/systemd/etc/systemd/system/
-          cp -af pkg/deepflow-agent.service pkg/debian/systemd/etc/systemd/system/
+          cp -af pkg/zerotrace-agent.service pkg/debian/systemd/etc/systemd/system/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/systemd/DEBIAN/control
-          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/systemd aarch64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
+          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/systemd aarch64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.systemd.deb
           mkdir -p pkg/debian/upstart/usr/sbin/
-          cp -af output/target/aarch64-unknown-linux-musl/release/deepflow-agent pkg/debian/upstart/usr/sbin/
+          cp -af output/target/aarch64-unknown-linux-musl/release/zerotrace-agent pkg/debian/upstart/usr/sbin/
           mkdir -p pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/
-          cp -af config/deepflow-agent.yaml pkg/debian/upstart/etc/deepflow-agent.yaml.sample
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/
+          cp -af config/zerotrace-agent.yaml pkg/debian/upstart/etc/zerotrace-agent.yaml.sample
           mkdir -p pkg/debian/upstart/etc/init/
-          cp -af pkg/deepflow-agent.conf pkg/debian/upstart/etc/init/
+          cp -af pkg/zerotrace-agent.conf pkg/debian/upstart/etc/init/
           sed -i "s/Version.*/Version: 1.0-${{ env.IMAGE_TAG }}/g" pkg/debian/upstart/DEBIAN/control
-          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/upstart aarch64/deepflow-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
+          dpkg-deb  -Zxz --no-uniform-compression -b pkg/debian/upstart aarch64/zerotrace-agent-1.0-${{ env.IMAGE_TAG }}.upstart.deb
           zip -r -q artifacts-deb.zip aarch64/*.deb
 
       - name: build binary package
         run: |
           mkdir -p agent/bin-package
-          cp -raf agent/output/target/aarch64-unknown-linux-musl/release/deepflow-agent agent/bin-package/
+          cp -raf agent/output/target/aarch64-unknown-linux-musl/release/zerotrace-agent agent/bin-package/
           cd agent/bin-package/
-          tar -czvf deepflow-agent.tar.gz *
+          tar -czvf zerotrace-agent.tar.gz *
 
       - name: Arm64 package results
         run: |
-          tar cvf package-artifact-arm64.tar  agent/artifacts-rpm.zip agent/artifacts-deb.zip agent/bin-package/deepflow-agent.tar.gz agent/output/target/aarch64-unknown-linux-musl/release/deepflow-agent-ctl
+          tar cvf package-artifact-arm64.tar  agent/artifacts-rpm.zip agent/artifacts-deb.zip agent/bin-package/zerotrace-agent.tar.gz agent/output/target/aarch64-unknown-linux-musl/release/zerotrace-agent-ctl
 
       - name: Archive Arm64 package results
         uses: actions/upload-artifact@v4
@@ -702,12 +702,12 @@ jobs:
 
       - name: upload agent artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/deepflow-agent.tar.gz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/${{ env.IMAGE_TAG_PREFIX }}/linux/static-link/arm64/zerotrace-agent.tar.gz
 
       - name: upload agent stable artifacts
         run: |
-          ossutil cp -rf agent/artifacts-rpm.zip oss://deepflow-ce/rpm/agent/stable/linux/static-link/arm64/deepflow-agent-rpm.zip
-          ossutil cp -rf agent/artifacts-deb.zip oss://deepflow-ce/deb/agent/stable/linux/static-link/arm64/deepflow-agent-deb.zip
-          ossutil cp -rf agent/bin-package/deepflow-agent.tar.gz  oss://deepflow-ce/bin/agent/stable/linux/static-link/arm64/deepflow-agent.tar.gz
+          ossutil cp -rf agent/artifacts-rpm.zip oss://zerotrace-ce/rpm/agent/stable/linux/static-link/arm64/zerotrace-agent-rpm.zip
+          ossutil cp -rf agent/artifacts-deb.zip oss://zerotrace-ce/deb/agent/stable/linux/static-link/arm64/zerotrace-agent-deb.zip
+          ossutil cp -rf agent/bin-package/zerotrace-agent.tar.gz  oss://zerotrace-ce/bin/agent/stable/linux/static-link/arm64/zerotrace-agent.tar.gz

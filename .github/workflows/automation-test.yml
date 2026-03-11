@@ -3,11 +3,11 @@ name: automation test
 on:
   workflow_dispatch:
     inputs:
-      DEEPFLOW_SERVER_IMAGE_TAG:
+      ZEROTRACE_SERVER_IMAGE_TAG:
         description: 'server image tag'
         required: true
         default: 'latest'
-      DEEPFLOW_AGENT_IMAGE_TAG:
+      ZEROTRACE_AGENT_IMAGE_TAG:
         description: 'agent image tag'
         required: true
         default: 'latest'
@@ -16,7 +16,7 @@ on:
         required: false
         default: '6'
       DF_ENV_NUMBER:
-        description: 'Deepflow env number, recommend 1-3'
+        description: 'Zerotrace env number, recommend 1-3'
         required: false
         default: '1'
       TEST_CASE:
@@ -41,15 +41,15 @@ jobs:
     steps:
     - name: Check Server And Agent Image
       run: |
-        server_tag="${{ github.event.inputs.DEEPFLOW_SERVER_IMAGE_TAG }}"
-        server=$(skopeo inspect docker://registry.cn-hongkong.aliyuncs.com/deepflow-ce/deepflow-server:${server_tag} 2>&1 | grep "Error parsing image name" || :)
+        server_tag="${{ github.event.inputs.ZEROTRACE_SERVER_IMAGE_TAG }}"
+        server=$(skopeo inspect docker://registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotrace-server:${server_tag} 2>&1 | grep "Error parsing image name" || :)
         if [ -n "$server" ]; then
           echo "Get Server Image Failed: "
           echo "$server"
           exit 1
         fi
-        agent_tag="${{ github.event.inputs.DEEPFLOW_AGENT_IMAGE_TAG }}"
-        agent=$(skopeo inspect docker://registry.cn-hongkong.aliyuncs.com/deepflow-ce/deepflow-agent:${agent_tag} 2>&1 | grep "Error parsing image name" || :)
+        agent_tag="${{ github.event.inputs.ZEROTRACE_AGENT_IMAGE_TAG }}"
+        agent=$(skopeo inspect docker://registry.cn-hongkong.aliyuncs.com/zerotrace-ce/zerotrace-agent:${agent_tag} 2>&1 | grep "Error parsing image name" || :)
         if [ -n "$agent" ]; then
           echo "Get Agent Image Failed: "
           echo "$agent"
@@ -77,8 +77,8 @@ jobs:
         echo "WORKER_NUMBER=${{ github.event.inputs.WORKER_NUMBER }}" >> $GITHUB_ENV
         echo "DF_ENV_NUMBER=${{ github.event.inputs.DF_ENV_NUMBER }}" >> $GITHUB_ENV
         echo "TEST_CASE=${{ github.event.inputs.TEST_CASE }}" >> $GITHUB_ENV
-        echo "DEEPFLOW_SERVER_IMAGE_TAG=${{ github.event.inputs.DEEPFLOW_SERVER_IMAGE_TAG }}" >> $GITHUB_ENV
-        echo "DEEPFLOW_AGENT_IMAGE_TAG=${{ github.event.inputs.DEEPFLOW_AGENT_IMAGE_TAG }}" >> $GITHUB_ENV
+        echo "ZEROTRACE_SERVER_IMAGE_TAG=${{ github.event.inputs.ZEROTRACE_SERVER_IMAGE_TAG }}" >> $GITHUB_ENV
+        echo "ZEROTRACE_AGENT_IMAGE_TAG=${{ github.event.inputs.ZEROTRACE_AGENT_IMAGE_TAG }}" >> $GITHUB_ENV
         echo "DF_TEST_BRANCH=${{ github.event.inputs.DF_TEST_BRANCH }}" >> $GITHUB_ENV
         echo "DEBUG=${{ github.event.inputs.DEBUG }}" >> $GITHUB_ENV
         echo "AUTOMATION_TEST_TOKEN=${{ secrets.AUTOMATION_TEST_TOKEN }}" >> $GITHUB_ENV

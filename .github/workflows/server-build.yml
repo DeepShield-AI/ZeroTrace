@@ -20,7 +20,7 @@ on:
         type: string
 
 env:
-  IMAGE: "deepflow-server"
+  IMAGE: "zerotrace-server"
 
 jobs:
   build_server:
@@ -92,7 +92,7 @@ jobs:
       - name: Log in to Docker Registry
         uses: docker/login-action@v2
         with:
-          username: "deepflowce"
+          username: "zerotracece"
           password: "${{ secrets.REGISTRY_PASS }}"
 
       - name: Log in to ALIYUN HongKong Docker Registry
@@ -113,7 +113,7 @@ jobs:
           echo "IMAGE_TAG_PREFIX=${{ github.ref_name }}"|sed 's|=main$|=latest|' >> $GITHUB_ENV
           echo "IMAGE_TAG=$(git rev-list --count HEAD)" >> $GITHUB_ENV
 
-      - name: Build and push deepflow server images to ghcr and dockerhub
+      - name: Build and push zerotrace server images to ghcr and dockerhub
         uses: docker/build-push-action@v2
         with:
           context: server
@@ -121,11 +121,11 @@ jobs:
           file: server/Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "ghcr.io/${{ github.repository_owner }}/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "ghcr.io/${{ github.repository_owner }}/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
-            "deepflowce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "ghcr.io/${{ github.repository_owner }}/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "ghcr.io/${{ github.repository_owner }}/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "zerotracece/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
 
-      - name: Build and push deepflow server images to hongkong aliyun
+      - name: Build and push zerotrace server images to hongkong aliyun
         uses: docker/build-push-action@v2
         with:
           context: server
@@ -133,8 +133,8 @@ jobs:
           file: server/Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "registry.cn-hongkong.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "registry.cn-hongkong.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "registry.cn-hongkong.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "registry.cn-hongkong.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
 
       - name: Log in to ALIYUN Docker Registry
         uses: docker/login-action@v2
@@ -143,7 +143,7 @@ jobs:
           username: "${{ secrets.REGISTRY_ALIYUN_USER }}"
           password: "${{ secrets.REGISTRY_PASS }}"
 
-      - name: Build and push deepflow server images to beijing aliyun
+      - name: Build and push zerotrace server images to beijing aliyun
         uses: docker/build-push-action@v2
         with:
           context: server
@@ -151,5 +151,5 @@ jobs:
           file: server/Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            "registry.cn-beijing.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
-            "registry.cn-beijing.aliyuncs.com/deepflow-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
+            "registry.cn-beijing.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}-${{ env.IMAGE_TAG }}"
+            "registry.cn-beijing.aliyuncs.com/zerotrace-ce/${{ env.IMAGE }}:${{ env.IMAGE_TAG_PREFIX }}"
