@@ -1479,3 +1479,131 @@ if_index: 712 mac: 00:aa:94:55:9f:5e
 [[38;5;208m2026-03-11 15:35:31.054060 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
 [2026-03-11 16:03:42.158570 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 655 entries in the process cache and cleaned up 0 invalid process records.
 [2026-03-11 16:03:42.174612 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 16:14:58.237745 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049848071B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 16:14:58.274979 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 16:14:58.281699 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 16:25:59.387368 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 1541029 NAME node
+[2026-03-11 16:34:11.731741 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117980 exceed reclaim_map_max 117964,reclaim map
+[2026-03-11 16:34:12.573394 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 197 trace map reclaim_count :117795
+[[38;5;196m2026-03-11 16:39:08.472428 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051051379B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 16:39:08.472644 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 16:39:08.479140 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-11 17:03:42.898199 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 657 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 17:03:42.913481 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 17:11:22.130021 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049051675B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 17:11:22.130408 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 17:11:22.136897 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 17:35:52.418540 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050771963B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 17:35:52.431878 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 17:35:52.438077 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-11 17:43:55.677770 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051035285B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 17:43:55.678146 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 17:43:55.684636 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 18:00:22.836349 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1054116339B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 18:00:22.836737 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 18:00:22.843047 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 18:03:43.382327 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 642 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 18:03:43.382692 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 18:16:49.742295 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051886774B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 18:16:49.742739 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 18:16:49.748818 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-11 18:24:18.030093 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117964 exceed reclaim_map_max 117964,reclaim map
+[2026-03-11 18:24:18.619430 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 203 trace map reclaim_count :117776
+[[38;5;196m2026-03-11 18:33:06.864323 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050477833B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 18:33:06.864692 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 18:33:06.870879 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 19:03:44.145553 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 640 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 19:03:44.165013 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 19:05:40.284880 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051662967B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 19:05:40.285092 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 19:05:40.291457 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 19:21:57.129138 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049469489B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 19:21:57.145673 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 19:21:57.153440 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-11 19:38:24.448239 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1053394873B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 19:38:24.465720 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 19:38:24.474619 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 19:54:31.299991 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050875675B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 19:54:31.330549 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 19:54:31.339327 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 20:03:44.762865 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 640 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 20:03:44.763441 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 20:10:48.305480 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049970786B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 20:10:48.305976 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 20:10:48.312324 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-11 20:14:22.055931 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117964 exceed reclaim_map_max 117964,reclaim map
+[2026-03-11 20:14:22.621367 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 201 trace map reclaim_count :117774
+[[38;5;196m2026-03-11 20:27:15.333290 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1048719485B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 20:27:15.333490 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 20:27:15.339592 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-11 20:43:32.636590 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1048955416B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 20:43:32.648991 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 20:43:32.655175 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 20:59:49.491696 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1048670959B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 20:59:49.515375 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 20:59:49.524255 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 21:03:45.445546 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 640 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 21:03:45.445841 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[[38;5;196m2026-03-11 21:32:13.541178 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049563670B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 21:32:13.565117 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 21:32:13.565373 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent_rCURRENT.log[0m
+[[38;5;208m2026-03-11 21:32:13.575657 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 21:48:30.734237 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1048857955B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 21:48:30.734646 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 21:48:30.740829 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 22:03:46.277730 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 640 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 22:03:46.288801 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 83 entries in the mount info cache, occupies 508619 bytes of memory.
+[2026-03-11 22:04:26.401350 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117964 exceed reclaim_map_max 117964,reclaim map
+[2026-03-11 22:04:26.891074 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 194 trace map reclaim_count :117780
+[[38;5;196m2026-03-11 22:04:57.536526 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1048828651B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 22:04:57.536742 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 22:04:57.542921 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-11 22:19:32.434618 +00:00] INFO [src/ebpf/user/mount.c:484] Create mount information: pid 2532338 mntns_id 4026536548 entry_count 106 proc_count 1 refcount 0 bytes_count 12569 bytes
+[[38;5;196m2026-03-11 22:21:14.424269 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050282551B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 22:21:14.424786 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 22:21:14.436438 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-11 22:37:31.996887 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049788367B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 22:37:31.997322 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 22:37:32.003714 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 22:53:58.943986 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051633220B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 22:53:58.967031 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 22:53:58.975749 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 23:03:46.875328 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 634 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-11 23:03:46.894464 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 84 entries in the mount info cache, occupies 521188 bytes of memory.
+[[38;5;196m2026-03-11 23:10:26.461107 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050769433B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 23:10:26.461323 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 23:10:26.467446 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-11 23:26:33.312754 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050120327B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 23:26:33.320633 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 23:26:33.326970 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-11 23:54:31.441252 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117972 exceed reclaim_map_max 117964,reclaim map
+[2026-03-11 23:54:31.948514 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 189 trace map reclaim_count :117792
+[[38;5;196m2026-03-11 23:59:27.381161 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1049381853B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-11 23:59:27.381387 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-11 23:59:27.387560 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-12 00:03:47.592192 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 644 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-12 00:03:47.593097 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 84 entries in the mount info cache, occupies 521188 bytes of memory.
+[[38;5;196m2026-03-12 00:15:54.723764 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1050660404B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 00:15:54.747701 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:339] [38;5;208mremove log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-12 00:32:21.985148 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1055459820B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 00:32:21.985571 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 00:32:21.985729 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent_r2026-03-11_11-01-27.log.gz[0m
+[[38;5;208m2026-03-12 00:32:21.991975 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-12 00:48:28.851616 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1052283720B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 00:48:28.885467 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 00:48:28.894269 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-12 01:03:48.166140 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 634 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-12 01:03:48.167006 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 84 entries in the mount info cache, occupies 521188 bytes of memory.
+[[38;5;196m2026-03-12 01:04:56.019040 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051313002B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 01:04:56.019333 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 01:04:56.019585 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent_r2026-03-11_11-01-27.log.gz[0m
+[[38;5;208m2026-03-12 01:04:56.028193 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[[38;5;196m2026-03-12 01:21:23.220772 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1052307800B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 01:21:23.248732 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 01:21:23.257005 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[[38;5;196m2026-03-12 01:37:29.980964 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1051661724B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 01:37:30.013077 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 01:37:30.013343 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent_r2026-03-11_11-01-27.log.gz[0m
+[[38;5;208m2026-03-12 01:37:30.020523 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
+[2026-03-12 01:44:36.709421 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117965 exceed reclaim_map_max 117964,reclaim map
+[2026-03-12 01:44:37.337512 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 196 trace map reclaim_count :117778
