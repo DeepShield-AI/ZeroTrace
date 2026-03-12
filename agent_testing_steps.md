@@ -140,7 +140,7 @@ cd ZeroTrace
 ```bash
 docker run --privileged --rm -it -v \
     $(pwd):/zerotrace 47.97.67.233:5000/deepshield/rust-build:cached bash -c \
-    "cd /ZeroTrace/agent && cargo build"
+    "cd /zerotrace/agent && cargo build"
 ```
 
 编译产物位于 `agent/target/debug/`：

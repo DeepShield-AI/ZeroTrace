@@ -1607,3 +1607,13 @@ if_index: 712 mac: 00:aa:94:55:9f:5e
 [[38;5;208m2026-03-12 01:37:30.020523 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l4_flow_log.pre[0m
 [2026-03-12 01:44:36.709421 +00:00] INFO [src/ebpf/user/socket.c:1545] Current trace map used 117965 exceed reclaim_map_max 117964,reclaim map
 [2026-03-12 01:44:37.337512 +00:00] INFO [src/ebpf/user/socket.c:1467] [reclaim_trace_map] curr_trace_count 196 trace map reclaim_count :117778
+[[38;5;196m2026-03-12 01:52:17.448039 +00:00[0m] [38;5;196mERROR[0m [src/utils/guard.rs:577] [38;5;196mlog files' size is over log_file_size_limit, current: 1055462011B, log_file_size_limit: 1048576000B[0m
+[[38;5;208m2026-03-12 01:52:17.448277 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/zerotrace-agent.log[0m
+[[38;5;208m2026-03-12 01:52:17.458907 +00:00[0m] [38;5;208mWARN[0m [src/utils/guard.rs:328] [38;5;208mtruncate log file: /var/log/zerotrace-agent/l7_flow_log.pre[0m
+[2026-03-12 01:59:17.590628 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 3112834 NAME node
+[2026-03-12 02:03:14.714765 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 3119607 NAME node
+[2026-03-12 02:03:48.788656 +00:00] INFO [src/ebpf/user/proc.c:915] Checked 662 entries in the process cache and cleaned up 0 invalid process records.
+[2026-03-12 02:03:48.788968 +00:00] INFO [src/ebpf/user/mount.c:563] Checked 84 entries in the mount info cache, occupies 521188 bytes of memory.
+[2026-03-12 02:05:02.195224 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 3123950 NAME node
+[2026-03-12 02:08:04.849253 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 3118831 NAME pet
+[2026-03-12 02:17:19.749639 +00:00] INFO [src/ebpf/user/proc.c:609] cache update PID 3160050 NAME python
