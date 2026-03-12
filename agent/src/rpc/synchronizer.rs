@@ -549,7 +549,7 @@ impl Status {
     ) -> (bool, bool, bool) {
         let mut has_invalid_log = false;
 
-        self.proxy_ip = if user_config.global.communication.proxy_controller_ip.len() > 0 {
+        self.proxy_ip = if user_config.global.communication.proxy_controller_ip.len() > 0 && user_config.global.communication.proxy_controller_ip != "127.0.0.1" {
             Some(user_config.global.communication.proxy_controller_ip.clone())
         } else {
             Some(static_config.controller_ip.clone())

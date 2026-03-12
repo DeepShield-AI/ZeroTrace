@@ -405,6 +405,29 @@ SUBCOMMANDS:
 - `l3_epc_id: -2`: 表示未匹配到云资源 VPC。
 这验证了策略模块正在工作，即使没有下发具体的 ACL。
 
+### 3.7 `cpu` 命令
+**功能**: 获取 Agent 绑定的 CPU 和资源分配信息。
+
+**帮助信息**:
+```text
+USAGE:
+    zerotrace-agent-ctl cpu <SUBCOMMAND>
+
+SUBCOMMANDS:
+    show         
+```
+
+**测试命令 (Show)**:
+```bash
+./agent/target/debug/zerotrace-agent-ctl -p <PORT> cpu show
+```
+
+**预期结果**:
+```text
+[{"name":"cpu_info","value":"CPU ID: 0, Usage: ..."}]
+```
+**分析**: 将返回 Agent 被分配的具体 CPU 核心和运行信息，便于调试资源隔离特性。
+
 ### 3.7 `ebpf` 命令
 **功能**: 调试 eBPF 探针采集的数据。
 

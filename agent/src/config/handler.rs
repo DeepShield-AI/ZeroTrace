@@ -1929,16 +1929,17 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
         let (static_config, conf) = conf;
         let controller_ip = static_config.controller_ips[0].parse::<IpAddr>().unwrap();
         // 目标ip没设置就发送到本地回环
-        let dest_ip = if conf.global.communication.ingester_ip.len() > 0 {
+        let dest_ip = if conf.global.communication.ingester_ip.len() > 0 && conf.global.communication.ingester_ip != "127.0.0.1" {
             conf.global.communication.ingester_ip.clone()
         } else {
             match controller_ip {
-                IpAddr::V4(_) => Ipv4Addr::UNSPECIFIED.to_string(),
+                IpAddr::V4(_) => static_config.controller_ips[0].clone(),
                 IpAddr::V6(_) => Ipv6Addr::UNSPECIFIED.to_string(),
             }
         };
         // 代理控制器，用于在特殊网络环境下通过代理连接server
-        let proxy_controller_ip = if conf.global.communication.proxy_controller_ip.len() > 0 {
+        let proxy_controller_port = if conf.global.communication.proxy_controller_port != 0 && conf.global.communication.proxy_controller_port != 30035 { conf.global.communication.proxy_controller_port } else { static_config.controller_port };
+        let proxy_controller_ip = if conf.global.communication.proxy_controller_ip.len() > 0 && conf.global.communication.proxy_controller_ip != "127.0.0.1" {
             conf.global.communication.proxy_controller_ip.clone()
         } else {
             static_config.controller_ips[0].clone()
@@ -1950,13 +1951,13 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
             conf.get_af_packet_blocks(conf.inputs.cbpf.common.capture_mode, max_memory);
         let capture_socket_type = conf.inputs.cbpf.af_packet.tunning.socket_version;
         let config = ModuleConfig {
-            enabled: conf.global.common.enabled,
+            enabled: true,
             user_config: conf.clone(),
             // 抓包模式
             capture_mode: conf.inputs.cbpf.common.capture_mode,
             // 诊断配置
             diagnose: DiagnoseConfig {
-                enabled: conf.global.common.enabled,
+                enabled: true,
                 libvirt_xml_path: conf
                     .inputs
                     .resources
@@ -2116,7 +2117,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 analyzer_ip: dest_ip.clone(),
                 analyzer_port: conf.global.communication.ingester_port,
                 proxy_controller_ip,
-                proxy_controller_port: conf.global.communication.proxy_controller_port,
+                proxy_controller_port,
                 // BPF 过滤规则
                 capture_bpf: conf.inputs.cbpf.af_packet.extra_bpf_filter.clone(),
                 max_memory,
@@ -2126,7 +2127,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 capture_mode: conf.inputs.cbpf.common.capture_mode,
                 region_id: conf.global.common.region_id,
                 pod_cluster_id: conf.global.common.pod_cluster_id,
-                enabled: conf.global.common.enabled,
+                enabled: true,
                 npb_dedup_enabled: conf.outputs.npb.traffic_global_dedup,
                 // Bond 接口聚合配置
                 bond_group: if conf.inputs.cbpf.af_packet.bond_interfaces.is_empty() {
@@ -2345,7 +2346,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 },
                 #[cfg(target_os = "windows")]
                 os_proc_scan_conf: OsProcScanConfig {},
-                agent_enabled: conf.global.common.enabled,
+                agent_enabled: true,
                 #[cfg(target_os = "linux")]
                 extra_netns_regex: conf.inputs.cbpf.af_packet.extra_netns_regex.to_string(),
             },
@@ -2474,7 +2475,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
                 log_threshold: conf.global.limits.max_log_backhaul_rate,
                 log_retention: conf.global.limits.local_log_retention.as_secs() as u32,
                 rsyslog_enabled: {
-                    if dest_ip == Ipv4Addr::UNSPECIFIED.to_string()
+                    if dest_ip == static_config.controller_ips[0].clone() && dest_ip == Ipv4Addr::UNSPECIFIED.to_string()
                         || dest_ip == Ipv6Addr::UNSPECIFIED.to_string()
                     {
                         info!("analyzer_ip not set, remote log disabled");
@@ -2581,7 +2582,7 @@ impl TryFrom<(Config, UserConfig)> for ModuleConfig {
             // 端口配置
             port_config: PortConfig {
                 analyzer_port: conf.global.communication.ingester_port,
-                proxy_controller_port: conf.global.communication.proxy_controller_port,
+                proxy_controller_port,
             },
         };
         Ok(config)
@@ -3104,6 +3105,8 @@ impl ConfigHandler {
         let static_config = &self.static_config;
         let config = &mut candidate_config.user_config;
         let mut new_config: ModuleConfig = (static_config.clone(), user_config).try_into().unwrap();
+        new_config.enabled = true;
+        new_config.user_config.global.common.enabled = true;
         let mut callbacks: Vec<fn(&ConfigHandler, &mut AgentComponents)> = vec![];
         let mut restart_dispatcher = false;
         let mut restart_agent = false;

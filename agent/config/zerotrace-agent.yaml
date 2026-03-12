@@ -1,9 +1,21 @@
+ingester_ip:
+  - 202.112.237.37
+
+proxy_controller_ip:
+  - 202.112.237.37
+
+proxy_controller_port: 
+  - 30035
+
+analyzer_ip:
+  - 202.112.237.37
+
 ## controller ip
 controller-ips:
-  - 127.0.0.1
+  - 202.112.237.37
 
 ## controller listen port
-#controller-port: 30035
+controller-port: 30035
 ## controller security authenticate port
 #controller-tls-port: 30135
 

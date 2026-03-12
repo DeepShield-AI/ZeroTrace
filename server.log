@@ -1,0 +1,7 @@
+nohup: ignoring input
+2026-03-12 02:38:59.442 [INFO][0m [zerotrace-server] main.go:82 deepflow-server config: {LogFile:/var/log/zerotrace/server.log LogLevel:info ContinuousProfile:{Enabled:false ServerAddress:http://deepflow-agent/api/v1/profile ProfileTypes:[cpu inuse_objects alloc_objects inuse_space alloc_space] MutexRate:5 BlockRate:5 LogEnabled:true} Profiler:false MaxCPUs:0 MonitorPaths:[/ /mnt /var/log] FreeOSMemoryManager:{Enabled:false Interval:3600}}
+2026-03-12 02:38:59.442 [INFO][0m [zerotrace-server] config.go:105 FreeOSMemory() interval execution disabled
+2026-03-12 02:38:59.442 [INFO][0m [./server/bin/zerotrace-server] udp.go:202 DebugListener <:::39527>
+2026-03-12 02:38:59.444 [INFO][0m [mcp] mcp.go:66 ==================== Launching DeepFlow MCP Server ====================
+[33m2026-03-12 02:38:59.445 [WARN][0m [config] config.go:253 controller-ips is empty
+[31m2026-03-12 02:38:59.445 [ERRO][0m [config] config.go:333 Can't get pod namespace env K8S_NAMESPACE_FOR_DEEPFLOW
