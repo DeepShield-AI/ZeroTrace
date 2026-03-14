@@ -942,16 +942,29 @@ impl Trident {
 		)?;
 		monitor.start();
 
-		// 注册 CPU 指标采集器
+		// 注册主机指标采集器
 		// 通过 stats_collector 统一管理，自动适配:
 		// - Standalone 模式: 写入本地文件
 		// - Managed 模式: 发送至远端服务器
-		stats_collector.register_countable(
-			&stats::NoTagModule("host_cpu"),
-			stats::Countable::Owned(Box::new(
-				crate::metric::host_metric::CpuMetricCollector::new(),
-			)),
-		);
+		{
+			use crate::metric::host_metric::*;
+			stats_collector.register_countable(
+				&stats::NoTagModule("host_cpu"),
+				stats::Countable::Owned(Box::new(CpuMetricCollector::new())),
+			);
+			stats_collector.register_countable(
+				&stats::NoTagModule("host_memory"),
+				stats::Countable::Owned(Box::new(MemoryMetricCollector::new())),
+			);
+			stats_collector.register_countable(
+				&stats::NoTagModule("host_disk"),
+				stats::Countable::Owned(Box::new(DiskMetricCollector::new())),
+			);
+			stats_collector.register_countable(
+				&stats::NoTagModule("host_network"),
+				stats::Countable::Owned(Box::new(NetworkMetricCollector::new())),
+			);
+		}
 
 		#[cfg(target_os = "linux")]
 		let (libvirt_xml_extractor, platform_synchronizer, sidecar_poller, api_watcher) = {

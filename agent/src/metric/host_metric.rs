@@ -19,6 +19,9 @@ use std::sync::Mutex;
 use log::warn;
 
 use crate::metric::cpu::{CpuState, CpuTimes};
+use crate::metric::disk;
+use crate::metric::memory;
+use crate::metric::network;
 use crate::utils::stats::{Counter, CounterType, CounterValue, OwnedCountable};
 
 /// CPU metrics collector that implements RefCountable for integration
@@ -175,6 +178,217 @@ impl OwnedCountable for CpuMetricCollector {
     }
 }
 
+// =============================================================================
+// Memory Metrics Collector
+// =============================================================================
+
+pub struct MemoryMetricCollector;
+
+impl MemoryMetricCollector {
+    pub fn new() -> Self {
+        Self
+    }
+}
+
+impl OwnedCountable for MemoryMetricCollector {
+    fn closed(&self) -> bool {
+        false
+    }
+
+    fn get_counters(&self) -> Vec<Counter> {
+        let info = match memory::MemInfo::collect() {
+            Ok(info) => info,
+            Err(e) => {
+                warn!("Failed to collect memory metrics: {}", e);
+                return vec![];
+            }
+        };
+
+        vec![
+            ("mem_total_kb", CounterType::Gauged, CounterValue::Unsigned(info.mem_total)),
+            ("mem_free_kb", CounterType::Gauged, CounterValue::Unsigned(info.mem_free)),
+            ("mem_available_kb", CounterType::Gauged, CounterValue::Unsigned(info.mem_available)),
+            ("mem_used_kb", CounterType::Gauged, CounterValue::Unsigned(info.used_kb())),
+            ("mem_usage_pct", CounterType::Gauged, CounterValue::Float(info.usage_pct())),
+            ("mem_buffers_kb", CounterType::Gauged, CounterValue::Unsigned(info.buffers)),
+            ("mem_cached_kb", CounterType::Gauged, CounterValue::Unsigned(info.cached)),
+            ("mem_swap_cached_kb", CounterType::Gauged, CounterValue::Unsigned(info.swap_cached)),
+            ("mem_active_kb", CounterType::Gauged, CounterValue::Unsigned(info.active)),
+            ("mem_inactive_kb", CounterType::Gauged, CounterValue::Unsigned(info.inactive)),
+            ("mem_active_anon_kb", CounterType::Gauged, CounterValue::Unsigned(info.active_anon)),
+            ("mem_inactive_anon_kb", CounterType::Gauged, CounterValue::Unsigned(info.inactive_anon)),
+            ("mem_active_file_kb", CounterType::Gauged, CounterValue::Unsigned(info.active_file)),
+            ("mem_inactive_file_kb", CounterType::Gauged, CounterValue::Unsigned(info.inactive_file)),
+            ("mem_swap_total_kb", CounterType::Gauged, CounterValue::Unsigned(info.swap_total)),
+            ("mem_swap_free_kb", CounterType::Gauged, CounterValue::Unsigned(info.swap_free)),
+            ("mem_swap_used_kb", CounterType::Gauged, CounterValue::Unsigned(info.swap_used_kb())),
+            ("mem_swap_usage_pct", CounterType::Gauged, CounterValue::Float(info.swap_usage_pct())),
+            ("mem_dirty_kb", CounterType::Gauged, CounterValue::Unsigned(info.dirty)),
+            ("mem_writeback_kb", CounterType::Gauged, CounterValue::Unsigned(info.writeback)),
+            ("mem_anon_pages_kb", CounterType::Gauged, CounterValue::Unsigned(info.anon_pages)),
+            ("mem_mapped_kb", CounterType::Gauged, CounterValue::Unsigned(info.mapped)),
+            ("mem_shmem_kb", CounterType::Gauged, CounterValue::Unsigned(info.shmem)),
+            ("mem_slab_kb", CounterType::Gauged, CounterValue::Unsigned(info.slab)),
+            ("mem_sreclaimable_kb", CounterType::Gauged, CounterValue::Unsigned(info.sreclaimable)),
+            ("mem_sunreclaim_kb", CounterType::Gauged, CounterValue::Unsigned(info.sunreclaim)),
+            ("mem_kernel_stack_kb", CounterType::Gauged, CounterValue::Unsigned(info.kernel_stack)),
+            ("mem_page_tables_kb", CounterType::Gauged, CounterValue::Unsigned(info.page_tables)),
+            ("mem_commit_limit_kb", CounterType::Gauged, CounterValue::Unsigned(info.commit_limit)),
+            ("mem_committed_as_kb", CounterType::Gauged, CounterValue::Unsigned(info.committed_as)),
+            ("mem_vmalloc_used_kb", CounterType::Gauged, CounterValue::Unsigned(info.vmalloc_used)),
+            ("mem_hugepages_total", CounterType::Gauged, CounterValue::Unsigned(info.hugepages_total)),
+            ("mem_hugepages_free", CounterType::Gauged, CounterValue::Unsigned(info.hugepages_free)),
+            ("mem_hugepagesize_kb", CounterType::Gauged, CounterValue::Unsigned(info.hugepagesize)),
+        ]
+    }
+}
+
+// =============================================================================
+// Disk Metrics Collector
+// =============================================================================
+
+pub struct DiskMetricCollector {
+    prev_stats: Mutex<Option<Vec<disk::DiskStat>>>,
+}
+
+impl DiskMetricCollector {
+    pub fn new() -> Self {
+        Self {
+            prev_stats: Mutex::new(None),
+        }
+    }
+}
+
+impl OwnedCountable for DiskMetricCollector {
+    fn closed(&self) -> bool {
+        false
+    }
+
+    fn get_counters(&self) -> Vec<Counter> {
+        let current = match disk::collect_diskstats() {
+            Ok(stats) => stats,
+            Err(e) => {
+                warn!("Failed to collect disk metrics: {}", e);
+                return vec![];
+            }
+        };
+
+        let mut prev_guard = self.prev_stats.lock().unwrap();
+        let mut metrics = Vec::new();
+
+        // Report per-device absolute and delta metrics
+        for dev in &current {
+            // Skip ram/loop devices
+            if dev.name.starts_with("ram") || dev.name.starts_with("loop") {
+                continue;
+            }
+
+            metrics.push(("disk_read_completed", CounterType::Gauged, CounterValue::Unsigned(dev.read_completed)));
+            metrics.push(("disk_read_merged", CounterType::Gauged, CounterValue::Unsigned(dev.read_merged)));
+            metrics.push(("disk_sectors_read", CounterType::Gauged, CounterValue::Unsigned(dev.sectors_read)));
+            metrics.push(("disk_read_time_ms", CounterType::Gauged, CounterValue::Unsigned(dev.read_time_ms)));
+            metrics.push(("disk_write_completed", CounterType::Gauged, CounterValue::Unsigned(dev.write_completed)));
+            metrics.push(("disk_write_merged", CounterType::Gauged, CounterValue::Unsigned(dev.write_merged)));
+            metrics.push(("disk_sectors_written", CounterType::Gauged, CounterValue::Unsigned(dev.sectors_written)));
+            metrics.push(("disk_write_time_ms", CounterType::Gauged, CounterValue::Unsigned(dev.write_time_ms)));
+            metrics.push(("disk_ios_in_progress", CounterType::Gauged, CounterValue::Unsigned(dev.ios_in_progress)));
+            metrics.push(("disk_io_time_ms", CounterType::Gauged, CounterValue::Unsigned(dev.io_time_ms)));
+            metrics.push(("disk_weighted_io_time_ms", CounterType::Gauged, CounterValue::Unsigned(dev.weighted_io_time_ms)));
+            // Read/Write bytes (sectors * 512)
+            metrics.push(("disk_read_bytes", CounterType::Gauged, CounterValue::Unsigned(dev.sectors_read * 512)));
+            metrics.push(("disk_write_bytes", CounterType::Gauged, CounterValue::Unsigned(dev.sectors_written * 512)));
+
+            // Delta-based throughput if we have a previous snapshot
+            if let Some(ref prev_list) = *prev_guard {
+                if let Some(prev_dev) = prev_list.iter().find(|d| d.name == dev.name) {
+                    let read_delta = dev.sectors_read.saturating_sub(prev_dev.sectors_read) * 512;
+                    let write_delta = dev.sectors_written.saturating_sub(prev_dev.sectors_written) * 512;
+                    let read_ops_delta = dev.read_completed.saturating_sub(prev_dev.read_completed);
+                    let write_ops_delta = dev.write_completed.saturating_sub(prev_dev.write_completed);
+                    metrics.push(("disk_read_bytes_delta", CounterType::Counted, CounterValue::Unsigned(read_delta)));
+                    metrics.push(("disk_write_bytes_delta", CounterType::Counted, CounterValue::Unsigned(write_delta)));
+                    metrics.push(("disk_read_ops_delta", CounterType::Counted, CounterValue::Unsigned(read_ops_delta)));
+                    metrics.push(("disk_write_ops_delta", CounterType::Counted, CounterValue::Unsigned(write_ops_delta)));
+                }
+            }
+        }
+
+        *prev_guard = Some(current);
+        metrics
+    }
+}
+
+// =============================================================================
+// Network Metrics Collector
+// =============================================================================
+
+pub struct NetworkMetricCollector {
+    prev_stats: Mutex<Option<Vec<network::NetDevStat>>>,
+}
+
+impl NetworkMetricCollector {
+    pub fn new() -> Self {
+        Self {
+            prev_stats: Mutex::new(None),
+        }
+    }
+}
+
+impl OwnedCountable for NetworkMetricCollector {
+    fn closed(&self) -> bool {
+        false
+    }
+
+    fn get_counters(&self) -> Vec<Counter> {
+        let current = match network::collect_netdev() {
+            Ok(stats) => stats,
+            Err(e) => {
+                warn!("Failed to collect network metrics: {}", e);
+                return vec![];
+            }
+        };
+
+        let mut prev_guard = self.prev_stats.lock().unwrap();
+        let mut metrics = Vec::new();
+
+        for iface in &current {
+            // Receive metrics
+            metrics.push(("net_rx_bytes", CounterType::Gauged, CounterValue::Unsigned(iface.rx_bytes)));
+            metrics.push(("net_rx_packets", CounterType::Gauged, CounterValue::Unsigned(iface.rx_packets)));
+            metrics.push(("net_rx_errors", CounterType::Gauged, CounterValue::Unsigned(iface.rx_errors)));
+            metrics.push(("net_rx_dropped", CounterType::Gauged, CounterValue::Unsigned(iface.rx_dropped)));
+            metrics.push(("net_rx_fifo", CounterType::Gauged, CounterValue::Unsigned(iface.rx_fifo)));
+            metrics.push(("net_rx_frame", CounterType::Gauged, CounterValue::Unsigned(iface.rx_frame)));
+            metrics.push(("net_rx_compressed", CounterType::Gauged, CounterValue::Unsigned(iface.rx_compressed)));
+            metrics.push(("net_rx_multicast", CounterType::Gauged, CounterValue::Unsigned(iface.rx_multicast)));
+            // Transmit metrics
+            metrics.push(("net_tx_bytes", CounterType::Gauged, CounterValue::Unsigned(iface.tx_bytes)));
+            metrics.push(("net_tx_packets", CounterType::Gauged, CounterValue::Unsigned(iface.tx_packets)));
+            metrics.push(("net_tx_errors", CounterType::Gauged, CounterValue::Unsigned(iface.tx_errors)));
+            metrics.push(("net_tx_dropped", CounterType::Gauged, CounterValue::Unsigned(iface.tx_dropped)));
+            metrics.push(("net_tx_fifo", CounterType::Gauged, CounterValue::Unsigned(iface.tx_fifo)));
+            metrics.push(("net_tx_colls", CounterType::Gauged, CounterValue::Unsigned(iface.tx_colls)));
+            metrics.push(("net_tx_carrier", CounterType::Gauged, CounterValue::Unsigned(iface.tx_carrier)));
+            metrics.push(("net_tx_compressed", CounterType::Gauged, CounterValue::Unsigned(iface.tx_compressed)));
+
+            // Delta-based throughput
+            if let Some(ref prev_list) = *prev_guard {
+                if let Some(prev_iface) = prev_list.iter().find(|i| i.name == iface.name) {
+                    metrics.push(("net_rx_bytes_delta", CounterType::Counted, CounterValue::Unsigned(iface.rx_bytes.saturating_sub(prev_iface.rx_bytes))));
+                    metrics.push(("net_tx_bytes_delta", CounterType::Counted, CounterValue::Unsigned(iface.tx_bytes.saturating_sub(prev_iface.tx_bytes))));
+                    metrics.push(("net_rx_packets_delta", CounterType::Counted, CounterValue::Unsigned(iface.rx_packets.saturating_sub(prev_iface.rx_packets))));
+                    metrics.push(("net_tx_packets_delta", CounterType::Counted, CounterValue::Unsigned(iface.tx_packets.saturating_sub(prev_iface.tx_packets))));
+                    metrics.push(("net_rx_errors_delta", CounterType::Counted, CounterValue::Unsigned(iface.rx_errors.saturating_sub(prev_iface.rx_errors))));
+                    metrics.push(("net_tx_errors_delta", CounterType::Counted, CounterValue::Unsigned(iface.tx_errors.saturating_sub(prev_iface.tx_errors))));
+                }
+            }
+        }
+
+        *prev_guard = Some(current);
+        metrics
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -183,22 +397,18 @@ mod tests {
     fn test_cpu_metric_collector_first_collect() {
         let collector = CpuMetricCollector::new();
         let counters = collector.get_counters();
-        // First collection: no delta metrics, only absolute counters
         assert!(!counters.is_empty());
         let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
         assert!(names.contains(&"context_switches"));
         assert!(names.contains(&"boot_time"));
         assert!(names.contains(&"cpu_count"));
-        // No delta metrics on first run
         assert!(!names.contains(&"cpu_user_pct"));
     }
 
     #[test]
     fn test_cpu_metric_collector_second_collect() {
         let collector = CpuMetricCollector::new();
-        // First collect seeds the state
         let _ = collector.get_counters();
-        // Second collect should produce delta metrics
         let counters = collector.get_counters();
         let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
         assert!(names.contains(&"cpu_user_pct"));
@@ -213,5 +423,59 @@ mod tests {
         for (_, v) in &pcts {
             assert_eq!(*v, 0.0);
         }
+    }
+
+    #[test]
+    fn test_memory_metric_collector() {
+        let collector = MemoryMetricCollector::new();
+        let counters = collector.get_counters();
+        assert!(!counters.is_empty());
+        let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
+        assert!(names.contains(&"mem_total_kb"));
+        assert!(names.contains(&"mem_free_kb"));
+        assert!(names.contains(&"mem_usage_pct"));
+        assert!(names.contains(&"mem_swap_total_kb"));
+    }
+
+    #[test]
+    fn test_disk_metric_collector() {
+        let collector = DiskMetricCollector::new();
+        let counters = collector.get_counters();
+        // Should have some disk metrics (at least on Linux)
+        if !counters.is_empty() {
+            let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
+            assert!(names.contains(&"disk_read_completed") || names.contains(&"disk_read_bytes"));
+        }
+    }
+
+    #[test]
+    fn test_disk_metric_collector_delta() {
+        let collector = DiskMetricCollector::new();
+        let _ = collector.get_counters();
+        let counters = collector.get_counters();
+        if !counters.is_empty() {
+            let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
+            assert!(names.contains(&"disk_read_bytes_delta"));
+        }
+    }
+
+    #[test]
+    fn test_network_metric_collector() {
+        let collector = NetworkMetricCollector::new();
+        let counters = collector.get_counters();
+        assert!(!counters.is_empty());
+        let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
+        assert!(names.contains(&"net_rx_bytes"));
+        assert!(names.contains(&"net_tx_bytes"));
+    }
+
+    #[test]
+    fn test_network_metric_collector_delta() {
+        let collector = NetworkMetricCollector::new();
+        let _ = collector.get_counters();
+        let counters = collector.get_counters();
+        let names: Vec<&str> = counters.iter().map(|c| c.0).collect();
+        assert!(names.contains(&"net_rx_bytes_delta"));
+        assert!(names.contains(&"net_tx_bytes_delta"));
     }
 }
