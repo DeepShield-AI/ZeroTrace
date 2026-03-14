@@ -17,3 +17,4 @@
 pub mod document;
 pub mod meter;
 pub mod cpu;
+pub mod host_metric;

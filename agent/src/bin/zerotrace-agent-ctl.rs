@@ -342,7 +342,7 @@ impl Controller {
                     return Ok(());
                 };
                 match res {
-                    CpuMessage::Context(s) => println!("{:?}", s),
+                    CpuMessage::Context(s) => println!("{}", s),
                     CpuMessage::Err(e) => println!("{}", e),
                     _ => unreachable!(),
                 }
