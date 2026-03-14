@@ -48,6 +48,7 @@
 - `docs`: 文档变更
 - `style`: 代码格式修改（不影响逻辑）
 - `refactor`: 重构（既不是新增功能也不是修复 bug 的代码变动）
+- `perf`: 性能优化
 - `test`: 新增或修改测试
 - `chore`: 构建过程或辅助工具的变动
 
@@ -143,3 +144,61 @@ git push -f origin dev/yourname/feature-name
 - **代码提交**：遵循小颗粒度和 `Conventional Commits` 规范。
 - **代码合并**：永远通过 PR 发起，且**必须经过 Code Review**。
 - **稳定版本**：只有完全通过测试的代码才能进入 `main` 分支。
+
+## 7. 特殊情况：如何将老 `main` 分支上的错误提交迁移到标准流程？
+
+如果在规范建立之前，或者不小心在本地的其他电脑上的旧 `main` 分支上直接做了修改，且需要接入到现在的标准 `dev` 流程中，请按照以下方案操作：
+
+### 场景 A：改动已经 Commit 并 Push 到了远端旧分支
+
+如果你的改动对应着远端某个分支上特定的一个或多个 Commit，可以使用 `git cherry-pick` 将代码“摘取”到新流程中。
+
+1. **同步最新标准分支并创建个人分支**：
+   ```bash
+   git checkout dev
+   git pull origin dev
+   git checkout -b dev/yourname/migrate-old-feature
+   ```
+
+2. **摘取旧的特定提交**：
+   去 GitHub 上找到你之前那次提交的 Commit Hash（例如 `a1b2c3d4`）。
+   ```bash
+   # 确保本地有远端的最新提交记录
+   git fetch origin main 
+   
+   # 摘取该特定提交的内容应用到当前分支
+   git cherry-pick a1b2c3d4
+   
+   # （如果有多个连续提交，可以使用范围摘取：git cherry-pick start_hash^..end_hash）
+   ```
+
+3. **解决冲突并推送提 PR**：
+   如果有冲突，IDE 中解决后执行 `git add .` 和 `git cherry-pick --continue`。完成后直接 push 当前分支并向 `dev` 提 PR 即可。
+
+### 场景 B：在另一台电脑/服务器上有尚未提交（Uncommitted）的代码
+
+如果你在某台服务器的旧 `main` 分支写了代码，但是**还没有 commit**，可以通过 `stash` 转移：
+
+1. **在有改动的机器上暂存修改**：
+   ```bash
+   git stash
+   ```
+
+2. **拉取最新的 `dev` 并新建个人分支**：
+   ```bash
+   git fetch origin dev
+   git checkout origin/dev -b dev/yourname/my-feature
+   ```
+
+3. **将暂存的修改弹出到新的规范分支上**：
+   ```bash
+   git stash pop
+   ```
+
+4. **按照标准流程提交**：
+   ```bash
+   git add .
+   git commit -m "feat: 迁移旧代码接入标准流程"
+   git push origin dev/yourname/my-feature
+   ```
+   然后去 GitHub 仓库页面提 PR。
