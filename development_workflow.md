@@ -28,12 +28,12 @@
   - `dev` 分支应当保持相对稳定，但允许存在尚未发布的新特性。
   - 定期将测试稳定后的 `dev` 分支合并到 `main` 分支。
 
-### 2.3 个人特性/修复分支 (`dev/<username>/<feature-name>`)
+### 2.3 个人特性/修复分支 (`<username>/<feature-name>`)
 - **定位**：每个开发人员的独立工作区。
 - **规则**：
-  - 命名规范推荐为：`dev/姓名首字母/功能简述`（例如：`dev/zhangsan/fix-agent-bpf`）或 `feature/<feature-name>`。
-  - **修复 Bug 分支**：`bugfix/<username>/<bug-name>` 或 `hotfix/<username>/<bug-name>`。
-  - **文档更新分支**：`docs/<username>/<doc-name>`。
+  - 命名规范推荐为：`姓名首字母/功能简述`（例如：`zhangsan/fix-agent-bpf`）或 `feature/<feature-name>`。
+  - **修复 Bug 分支**：`<username>/<bug-name>` 或 `<username>/<bug-name>`。
+  - **文档更新分支**：`<username>/<doc-name>`。
   - 从最新的 `dev` 分支检出。
   - 开发完成后，向 `dev` 分支发起 Pull Request (PR)。
 
@@ -70,7 +70,7 @@ git checkout dev
 git pull origin dev
 
 # 创建并切换到个人的开发分支
-git checkout -b dev/yourname/feature-name
+git checkout -b yourname/feature-name
 ```
 
 ### Step 2: 开发与提交 (Commit)
@@ -88,7 +88,7 @@ git commit -m "feat: 你的提交说明"
 
 ```bash
 # 将本地分支推送到 GitHub
-git push origin dev/yourname/feature-name
+git push origin yourname/feature-name
 ```
 然后去 GitHub 仓库页面，针对 `dev` 分支发起一个 Pull Request (PR)。
 
@@ -123,7 +123,7 @@ git checkout dev
 git pull origin dev
 
 # 切换回自己的分支
-git checkout dev/yourname/feature-name
+git checkout yourname/feature-name
 
 # 将自己的修改"变基"到最新的 dev 之上
 git rebase dev
@@ -135,7 +135,7 @@ git rebase --continue
 ```
 解决冲突并测试无误后，你可能需要强制推送（如果之前已经 push 过这个分支）：
 ```bash
-git push -f origin dev/yourname/feature-name
+git push -f origin yourname/feature-name
 ```
 
 ## 6. 总结核心原则
@@ -187,7 +187,7 @@ git push -f origin dev/yourname/feature-name
 2. **拉取最新的 `dev` 并新建个人分支**：
    ```bash
    git fetch origin dev
-   git checkout origin/dev -b dev/yourname/my-feature
+   git checkout origin/dev -b yourname/my-feature
    ```
 
 3. **将暂存的修改弹出到新的规范分支上**：
@@ -199,6 +199,6 @@ git push -f origin dev/yourname/feature-name
    ```bash
    git add .
    git commit -m "feat: 迁移旧代码接入标准流程"
-   git push origin dev/yourname/my-feature
+   git push origin yourname/my-feature
    ```
    然后去 GitHub 仓库页面提 PR。

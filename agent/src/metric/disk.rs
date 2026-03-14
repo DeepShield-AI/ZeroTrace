@@ -18,9 +18,11 @@ use std::fmt;
 use std::fs;
 use std::io;
 
+use bincode::{Decode, Encode};
+
 /// Disk I/O statistics from /proc/diskstats
 /// See: https://www.kernel.org/doc/Documentation/ABI/testing/procfs-diskstats
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Encode, Decode, PartialEq)]
 pub struct DiskStat {
     pub major: u64,
     pub minor: u64,
