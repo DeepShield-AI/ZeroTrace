@@ -650,9 +650,8 @@ impl Trident {
 		// 在托管模式下，Agent 启动时尚未从控制器获取完整的配置（包括分析器/数据节点 IP）。
 		// 此处提前启动 StatsCollector，以便在获取配置的过程中也能收集 Agent 自身的运行指标（如 CPU/内存、日志计数等）。
 		// 此时发送的目标 IP 可能尚未确定（默认为 0.0.0.0 或控制器 IP），待配置同步完成后会自动更新。
-		if matches!(config.agent_mode, RunningMode::Managed) {
-			stats_collector.start();
-		}
+		// Standalone 模式也需要启动 stats_collector，用于采集主机指标并写入本地文件
+		stats_collector.start();
 
 		// 注册日志计数器
 		// stats_collector 负责收集 Agent 内部的各种统计指标 (Self-Monitoring)。

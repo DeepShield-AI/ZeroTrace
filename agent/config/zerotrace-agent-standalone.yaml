@@ -1,0 +1,7 @@
+global:
+  standalone_mode:
+    data_file_dir: /tmp/zerotrace-standalone/
+    max_data_file_size: 209715200
+  self_monitoring:
+    log:
+      log_file: /tmp/zerotrace-standalone/zerotrace-agent.log

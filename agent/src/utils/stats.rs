@@ -127,6 +127,37 @@ impl Sendable for ArcBatch {
     fn message_type(&self) -> SendMessageType {
         SendMessageType::ZerotraceStats
     }
+
+    fn file_name(&self) -> &str {
+        "zerotrace_stats"
+    }
+
+    fn to_kv_string(&self, kv_string: &mut String) {
+        use std::fmt::Write;
+        let batch = &self.0;
+        let _ = write!(kv_string, "{{\"name\":\"{}_{}\"", STATS_PREFIX, batch.module);
+        let _ = write!(kv_string, ",\"timestamp\":{}", batch.timestamp);
+        // tags
+        let mut has_host = false;
+        for (k, v) in &batch.tags {
+            if *k == "host" {
+                has_host = true;
+            }
+            let _ = write!(kv_string, ",\"tag.{}\":\"{}\"", k, v);
+        }
+        if !has_host {
+            let _ = write!(kv_string, ",\"tag.host\":\"{}\"", batch.hostname);
+        }
+        // metrics
+        for (name, _counter_type, value) in &batch.points {
+            match value {
+                CounterValue::Signed(v) => { let _ = write!(kv_string, ",\"{}\":{}", name, v); },
+                CounterValue::Unsigned(v) => { let _ = write!(kv_string, ",\"{}\":{}", name, v); },
+                CounterValue::Float(v) => { let _ = write!(kv_string, ",\"{}\":{:.6}", name, v); },
+            }
+        }
+        kv_string.push_str("}\n");
+    }
 }
 
 pub struct NoTagModule(pub &'static str);
