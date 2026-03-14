@@ -40,6 +40,9 @@ use super::ebpf::{EbpfDebugger, EbpfMessage};
 use super::platform::{PlatformDebugger, PlatformMessage};
 use super::{
     cpu::{CpuDebugger, CpuMessage},
+    disk::{DiskDebugger, DiskMessage},
+    memory::{MemoryDebugger, MemoryMessage},
+    network::{NetworkDebugger, NetworkMessage},
     policy::{PolicyDebugger, PolicyMessage},
     rpc::{RpcDebugger, RpcMessage},
     Beacon, Message, Module, BEACON_INTERVAL, BEACON_INTERVAL_MIN, ZEROTRACE_AGENT_BEACON,
@@ -68,6 +71,9 @@ struct ModuleDebuggers {
     #[cfg(all(target_os = "linux", feature = "libtrace"))]
     pub ebpf: EbpfDebugger,
     pub cpu: CpuDebugger,
+    pub memory: MemoryDebugger,
+    pub disk: DiskDebugger,
+    pub network: NetworkDebugger,
 }
 
 /// 调试器主结构
@@ -622,6 +628,36 @@ impl Debugger {
                     _ => return Err(Error::InvalidMessage("Invalid CpuMessage".to_string())),
                 }
             }
+            Module::Memory => {
+                let req: Message<MemoryMessage> =
+                    decode_from_std_read(&mut payload, serialize_conf)?;
+                let debugger = &debuggers.memory;
+
+                match req.into_inner() {
+                    MemoryMessage::Show => debugger.show(conn.0, conn.1, serialize_conf),
+                    _ => return Err(Error::InvalidMessage("Invalid MemoryMessage".to_string())),
+                }
+            }
+            Module::Disk => {
+                let req: Message<DiskMessage> =
+                    decode_from_std_read(&mut payload, serialize_conf)?;
+                let debugger = &debuggers.disk;
+
+                match req.into_inner() {
+                    DiskMessage::Show => debugger.show(conn.0, conn.1, serialize_conf),
+                    _ => return Err(Error::InvalidMessage("Invalid DiskMessage".to_string())),
+                }
+            }
+            Module::Network => {
+                let req: Message<NetworkMessage> =
+                    decode_from_std_read(&mut payload, serialize_conf)?;
+                let debugger = &debuggers.network;
+
+                match req.into_inner() {
+                    NetworkMessage::Show => debugger.show(conn.0, conn.1, serialize_conf),
+                    _ => return Err(Error::InvalidMessage("Invalid NetworkMessage".to_string())),
+                }
+            }
             _ => warn!("invalid module or invalid request, skip it"),
         }
 
@@ -648,6 +684,9 @@ impl Debugger {
             #[cfg(all(target_os = "linux", feature = "libtrace"))]
             ebpf: EbpfDebugger::new(),
             cpu: CpuDebugger::new(),
+            memory: MemoryDebugger::new(),
+            disk: DiskDebugger::new(),
+            network: NetworkDebugger::new(),
         };
 
         Self {

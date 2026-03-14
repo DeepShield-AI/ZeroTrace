@@ -19,8 +19,10 @@ use std::fmt;
 use std::fs;
 use std::io;
 
+use bincode::{Decode, Encode};
+
 /// Memory information from /proc/meminfo (values in kB)
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Encode, Decode, PartialEq)]
 pub struct MemInfo {
     pub mem_total: u64,
     pub mem_free: u64,

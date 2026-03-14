@@ -33,8 +33,8 @@ use zerotrace_agent::debug::EbpfMessage;
 #[cfg(target_os = "linux")]
 use zerotrace_agent::debug::PlatformMessage;
 use zerotrace_agent::debug::{
-    Beacon, Client, CpuMessage, Message, Module, PolicyMessage, RpcMessage, DEBUG_QUEUE_IDLE_TIMEOUT,
-    ZEROTRACE_AGENT_BEACON,
+    Beacon, Client, CpuMessage, DiskMessage, MemoryMessage, Message, Module, NetworkMessage,
+    PolicyMessage, RpcMessage, DEBUG_QUEUE_IDLE_TIMEOUT, ZEROTRACE_AGENT_BEACON,
 };
 use public::{consts::DEFAULT_CONTROLLER_PORT, debug::QueueMessage};
 
@@ -74,6 +74,12 @@ enum ControllerCmd {
     List,
     /// 获取 CPU 信息
     Cpu(CpuCmd),
+    /// 获取内存信息
+    Memory(MemoryCmd),
+    /// 获取磁盘信息
+    Disk(DiskCmd),
+    /// 获取网络信息
+    Network(NetworkCmd),
 }
 
 #[derive(Debug, Parser)]
@@ -84,6 +90,39 @@ struct CpuCmd {
 
 #[derive(Subcommand, Debug)]
 enum CpuSubCmd {
+    Show,
+}
+
+#[derive(Debug, Parser)]
+struct MemoryCmd {
+    #[clap(subcommand)]
+    subcmd: MemorySubCmd,
+}
+
+#[derive(Subcommand, Debug)]
+enum MemorySubCmd {
+    Show,
+}
+
+#[derive(Debug, Parser)]
+struct DiskCmd {
+    #[clap(subcommand)]
+    subcmd: DiskSubCmd,
+}
+
+#[derive(Subcommand, Debug)]
+enum DiskSubCmd {
+    Show,
+}
+
+#[derive(Debug, Parser)]
+struct NetworkCmd {
+    #[clap(subcommand)]
+    subcmd: NetworkSubCmd,
+}
+
+#[derive(Subcommand, Debug)]
+enum NetworkSubCmd {
     Show,
 }
 
@@ -322,6 +361,9 @@ impl Controller {
             #[cfg(all(target_os = "linux", feature = "libtrace"))]
             ControllerCmd::Ebpf(c) => self.ebpf(c),
             ControllerCmd::Cpu(c) => self.cpu(c),
+            ControllerCmd::Memory(c) => self.memory(c),
+            ControllerCmd::Disk(c) => self.disk(c),
+            ControllerCmd::Network(c) => self.network(c),
         }
     }
 
@@ -344,6 +386,92 @@ impl Controller {
                 match res {
                     CpuMessage::Context(s) => println!("{}", s),
                     CpuMessage::Err(e) => println!("{}", e),
+                    _ => unreachable!(),
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn memory(&self, c: MemoryCmd) -> Result<()> {
+        if self.port.is_none() {
+            return Err(anyhow!(ERR_PORT_MSG));
+        }
+
+        let mut client = self.new_client()?;
+        match c.subcmd {
+            MemorySubCmd::Show => {
+                client.send_to(Message {
+                    module: Module::Memory,
+                    msg: MemoryMessage::Show,
+                })?;
+
+                let Ok(res) = client.recv::<MemoryMessage>() else {
+                    return Ok(());
+                };
+                match res {
+                    MemoryMessage::Context(s) => println!("{}", s),
+                    MemoryMessage::Err(e) => println!("{}", e),
+                    _ => unreachable!(),
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn disk(&self, c: DiskCmd) -> Result<()> {
+        if self.port.is_none() {
+            return Err(anyhow!(ERR_PORT_MSG));
+        }
+
+        let mut client = self.new_client()?;
+        match c.subcmd {
+            DiskSubCmd::Show => {
+                client.send_to(Message {
+                    module: Module::Disk,
+                    msg: DiskMessage::Show,
+                })?;
+
+                let Ok(res) = client.recv::<DiskMessage>() else {
+                    return Ok(());
+                };
+                match res {
+                    DiskMessage::Context(stats) => {
+                        for stat in &stats {
+                            println!("{}", stat);
+                        }
+                    }
+                    DiskMessage::Err(e) => println!("{}", e),
+                    _ => unreachable!(),
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn network(&self, c: NetworkCmd) -> Result<()> {
+        if self.port.is_none() {
+            return Err(anyhow!(ERR_PORT_MSG));
+        }
+
+        let mut client = self.new_client()?;
+        match c.subcmd {
+            NetworkSubCmd::Show => {
+                client.send_to(Message {
+                    module: Module::Network,
+                    msg: NetworkMessage::Show,
+                })?;
+
+                let Ok(res) = client.recv::<NetworkMessage>() else {
+                    return Ok(());
+                };
+                match res {
+                    NetworkMessage::Context(stats) => {
+                        for stat in &stats {
+                            println!("{}", stat);
+                        }
+                    }
+                    NetworkMessage::Err(e) => println!("{}", e),
                     _ => unreachable!(),
                 }
             }

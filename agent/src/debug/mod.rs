@@ -15,8 +15,11 @@
  */
 
 mod debugger;
+mod disk;
 #[cfg(all(target_os = "linux", feature = "libtrace"))]
 mod ebpf;
+mod memory;
+mod network;
 #[cfg(target_os = "linux")]
 mod platform;
 mod policy;
@@ -32,6 +35,9 @@ pub use platform::PlatformMessage;
 pub use policy::PolicyMessage;
 pub use rpc::{ConfigResp, RpcMessage};
 pub use cpu::CpuMessage;
+pub use memory::MemoryMessage;
+pub use disk::DiskMessage;
+pub use network::NetworkMessage;
 
 use std::str;
 use std::time::Duration;
@@ -70,6 +76,12 @@ pub enum Module {
     Ebpf,
     /// CPU 指标调试
     Cpu,
+    /// 内存指标调试
+    Memory,
+    /// 磁盘指标调试
+    Disk,
+    /// 网络指标调试
+    Network,
 }
 
 impl Default for Module {

@@ -1,7 +1,11 @@
 global:
+  communication:
+    proactive_request_interval: 5s
   standalone_mode:
     data_file_dir: /tmp/zerotrace-standalone/
     max_data_file_size: 209715200
   self_monitoring:
+    debug:
+      local_udp_port: 30033
     log:
       log_file: /tmp/zerotrace-standalone/zerotrace-agent.log

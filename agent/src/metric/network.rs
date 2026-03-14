@@ -18,8 +18,10 @@ use std::fmt;
 use std::fs;
 use std::io;
 
+use bincode::{Decode, Encode};
+
 /// Network interface statistics from /proc/net/dev
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Encode, Decode, PartialEq)]
 pub struct NetDevStat {
     pub name: String,
     // Receive
