@@ -7,7 +7,7 @@
 `zerotrace-agent-ctl` 是 ZeroTrace Agent 的命令行调试工具，通过 UDP 协议与 Agent 通信。
 
 **工作原理**:
-- Agent 启动时会随机监听一个 UDP 端口（日志中显示为 `debugger listening on`）。
+- Agent 启动时监听一个 UDP 端口用于调试通信（可在配置文件中通过 `global.self_monitoring.debug.local_udp_port` 指定固定端口，默认为 0 即随机端口）。
 - `ctl` 工具需要通过 `-p` 参数指定该端口进行连接。
 - 只有 `list` 命令使用固定的 UDP 30035 端口监听广播。
 
@@ -150,19 +150,30 @@ docker run --privileged --rm -it -v \
 ### 2.5 启动 Agent (Standalone 模式)
 在后台启动 Agent，并开启 INFO 级别日志以便查看调试端口。
 
+> **注意**: 必须加 `--standalone` 参数，否则 Agent 会尝试以 Managed 模式连接控制器并 Abort。
+
 ```bash
 # 杀死可能存在的旧进程
 sudo pkill zerotrace-agent
 
-# 启动 Agent
-sudo RUST_LOG=info ./agent/target/debug/zerotrace-agent --standalone -f ./agent/config/zerotrace-agent.yaml > agent.log 2>&1 &
+# 使用 standalone 专用配置启动 Agent (已配置固定调试端口 30033)
+sudo RUST_LOG=info ./agent/target/debug/zerotrace-agent --standalone \
+    -f ./agent/config/zerotrace-agent-standalone.yaml > agent.log 2>&1 &
 ```
 
+> **Standalone 配置说明** (`agent/config/zerotrace-agent-standalone.yaml`):
+> - `global.communication.proactive_request_interval: 5s` — 缩短配置同步间隔，加快组件初始化
+> - `global.self_monitoring.debug.local_udp_port: 30033` — 固定调试端口，无需从日志中查找
+> - `global.standalone_mode.data_file_dir` — 指标数据写入的本地目录
+
 ### 2.6 获取调试端口
-Agent 启动后会随机监听一个 UDP 端口用于调试。需要从日志中获取该端口号。
+
+如果使用上述 standalone 配置文件，调试端口固定为 **30033**，可直接使用。
+
+如果使用默认配置（随机端口），需要从日志中获取端口号：
 
 ```bash
-# 等待几秒钟让 Agent 初始化
+# 等待组件初始化（首次配置同步间隔，默认 60s，standalone 配置已缩短为 5s）
 sleep 15
 
 # 查找监听端口
@@ -170,6 +181,10 @@ grep "debugger listening on" agent.log
 # 输出示例: [INFO] debugger listening on: [::]:3314
 ```
 *记下这个端口号（例如 3314），后续命令中将用 `3314` 代替。*
+
+> **排查提示**: 如果看不到 `debugger listening on`，可能是组件尚未初始化完成。
+> 在 standalone 模式下，配置同步需要至少一轮 `proactive_request_interval`
+> 才能触发组件创建并启动 Debugger。
 
 ### 2.7 生成测试流量 (可选)
 为了测试 `ebpf` 和 `policy monitor` 功能，建议在本地生成一些网络流量。
@@ -207,6 +222,10 @@ SUBCOMMANDS:
     platform    get information about the k8s platform
     policy      get information about the policy
     ebpf        get information about the ebpf
+    cpu         获取 CPU 信息
+    memory      获取内存信息
+    disk        获取磁盘信息
+    network     获取网络信息
 ```
 
 ### 3.2 `list` 命令
@@ -406,7 +425,7 @@ SUBCOMMANDS:
 这验证了策略模块正在工作，即使没有下发具体的 ACL。
 
 ### 3.7 `cpu` 命令
-**功能**: 获取 Agent 绑定的 CPU 和资源分配信息。
+**功能**: 查看主机 CPU 状态，包括各核心使用率、上下文切换次数、进程数等。
 
 **帮助信息**:
 ```text
@@ -414,21 +433,116 @@ USAGE:
     zerotrace-agent-ctl cpu <SUBCOMMAND>
 
 SUBCOMMANDS:
-    show         
+    show    显示 CPU 状态
 ```
 
-**测试命令 (Show)**:
+**测试命令**:
 ```bash
-./agent/target/debug/zerotrace-agent-ctl -p <PORT> cpu show
+./agent/target/debug/zerotrace-agent-ctl -p 30033 cpu show
 ```
 
 **预期结果**:
 ```text
-[{"name":"cpu_info","value":"CPU ID: 0, Usage: ..."}]
+CPU Total:  user=2.50% nice=0.00% system=1.20% idle=96.00% iowait=0.28% irq=0.00% softirq=0.02% steal=0.00% guest=0.00% guest_nice=0.00%
+CPU     0:  user=3.10% nice=0.00% system=1.50% idle=95.10% ...
+CPU     1:  user=2.20% nice=0.00% system=1.00% idle=96.60% ...
+...
+Context Switches: 42671955950
+Boot Time:        1769097332
+Processes:        53237351
+Procs Running:    3
+Procs Blocked:    0
 ```
-**分析**: 将返回 Agent 被分配的具体 CPU 核心和运行信息，便于调试资源隔离特性。
+**分析**: 显示从 `/proc/stat` 采集的 CPU 使用率分布（按核心）和系统级统计指标。
 
-### 3.7 `ebpf` 命令
+### 3.8 `memory` 命令
+**功能**: 查看主机内存使用情况，包括物理内存、Swap、缓存等。
+
+**帮助信息**:
+```text
+USAGE:
+    zerotrace-agent-ctl memory <SUBCOMMAND>
+
+SUBCOMMANDS:
+    show    显示内存状态
+```
+
+**测试命令**:
+```bash
+./agent/target/debug/zerotrace-agent-ctl -p 30033 memory show
+```
+
+**预期结果**:
+```text
+MemTotal:       65841124 kB
+MemFree:        17420476 kB
+MemAvailable:   48654356 kB
+MemUsed:        17186768 kB (26.1%)
+Buffers:        1801096 kB
+Cached:         25745480 kB
+SwapCached:     0 kB
+Active:         18194240 kB
+Inactive:       23155968 kB
+SwapTotal:      0 kB
+SwapFree:       0 kB
+SwapUsed:       0 kB (0.0%)
+Dirty:          1012 kB
+Slab:           5827168 kB
+KernelStack:    26768 kB
+PageTables:     74360 kB
+```
+**分析**: 显示从 `/proc/meminfo` 采集的内存信息，包含已用百分比和 Swap 使用率。
+
+### 3.9 `disk` 命令
+**功能**: 查看主机磁盘 I/O 统计信息。
+
+**帮助信息**:
+```text
+USAGE:
+    zerotrace-agent-ctl disk <SUBCOMMAND>
+
+SUBCOMMANDS:
+    show    显示磁盘状态
+```
+
+**测试命令**:
+```bash
+./agent/target/debug/zerotrace-agent-ctl -p 30033 disk show
+```
+
+**预期结果**:
+```text
+sda: reads=24572 writes=48690 io_time=42568ms read_bytes=784971264 write_bytes=845303808
+sdb: reads=1558 writes=0 io_time=4705ms read_bytes=33693696 write_bytes=0
+loop0: reads=717 writes=0 io_time=2736ms read_bytes=4741120 write_bytes=0
+```
+**分析**: 显示从 `/proc/diskstats` 采集的每个块设备的读写次数、I/O 时间和字节数。
+
+### 3.10 `network` 命令
+**功能**: 查看主机网络接口统计信息。
+
+**帮助信息**:
+```text
+USAGE:
+    zerotrace-agent-ctl network <SUBCOMMAND>
+
+SUBCOMMANDS:
+    show    显示网络状态
+```
+
+**测试命令**:
+```bash
+./agent/target/debug/zerotrace-agent-ctl -p 30033 network show
+```
+
+**预期结果**:
+```text
+lo: rx_bytes=2001 rx_packets=7 rx_errors=0 rx_dropped=0 tx_bytes=2001 tx_packets=7 tx_errors=0 tx_dropped=0
+eth0: rx_bytes=98765432 rx_packets=654321 rx_errors=10 rx_dropped=5 tx_bytes=87654321 tx_packets=543210 tx_errors=2 tx_dropped=1
+```
+**分析**: 显示从 `/proc/net/dev` 采集的每个网络接口的收发字节数、包数、错误和丢包统计。
+
+### 3.11 `ebpf` 命令
 **功能**: 调试 eBPF 探针采集的数据。
 
 **子命令详解**:
@@ -476,7 +590,28 @@ SEQ 849: ... HTTP/1.1 200 OK ...
 ./agent/target/debug/zerotrace-agent-ctl -p <PORT> ebpf cpdbg --duration 5
 ```
 
-## 4. 清理环境
+## 4. 主机指标快速验证
+
+以下脚本可一次性验证所有主机指标 CLI 命令：
+
+```bash
+PORT=30033
+CTL=./agent/target/debug/zerotrace-agent-ctl
+
+echo "=== CPU ==="
+$CTL -p $PORT cpu show
+echo ""
+echo "=== Memory ==="
+$CTL -p $PORT memory show
+echo ""
+echo "=== Disk ==="
+$CTL -p $PORT disk show
+echo ""
+echo "=== Network ==="
+$CTL -p $PORT network show
+```
+
+## 5. 清理环境
 
 测试完成后，请清理后台进程。
 
